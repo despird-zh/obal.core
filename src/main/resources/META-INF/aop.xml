@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+ <aspectj>
+
+            <aspects>
+
+              <!-- define a concrete aspect inline -->
+              <concrete-aspect name="com.obal.cache.aop.CacheAspectImpl"
+                               extends="com.obal.cache.aop.CacheAspect">
+                <pointcut name="cacheAfterPut" expression="@annotation(CacheablePut)"/>
+ 				<pointcut name="cacheAroundGet" expression="execution(* com.obal.test.aop..*.do*(..)) &amp;&amp; @annotation(CacheableGet)"/>
+                <pointcut name="cacheAfterDel" expression="@annotation(CacheableDel)"/>
+                
+              </concrete-aspect>
+              <concrete-aspect name="com.obal.audit.aop.AuditAspectImpl"
+                               extends="com.obal.audit.aop.AuditAspect">
+                
+                <pointcut name="beforeOperation" expression="execution(* com.obal.test.aop..*.do*(..)) &amp;&amp; @annotation(Auditable)"/>
+ 				<pointcut name="afterOperation" expression="execution(* com.obal.test.aop..*.do*(..)) &amp;&amp; @annotation(Auditable)"/>
+              </concrete-aspect>
+            </aspects>
+
+            <weaver options="-verbose -showWeaveInfo">
+
+			  <include within="com.obal.test.aop.*"/>
+			  
+              <!-- Do not weave types within the "bar" pakage 
+              <exclude within="bar.*"/>-->
+
+              <!-- Dump all types within the "com.foo.bar" package
+                   to the "./_ajdump" folder on disk (for diagnostic purposes) 
+              <dump within="com.obal.test.aop.*"/>-->
+
+            </weaver>
+
+</aspectj>
