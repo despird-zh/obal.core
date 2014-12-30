@@ -231,19 +231,27 @@ public class EntityManager {
 		metaMap.put(me.getEntityName(), me.getEntityMeta());
 		schemaMap.put(me.getEntityName(), me);
 		/** ---------- obal.traceable ------------- */
-		meta = new EntityMeta(EntityConstants.ENTITY_TRACEABLE);
-		meta.setSchemaClass(GenericEntity.class.getName());
+		EntityMeta traceable = new EntityMeta(EntityConstants.ENTITY_TRACEABLE);
+		traceable.setSchemaClass(GenericEntity.class.getName());
 		attr = new EntityAttr("i_creator","c0","creator");
-		meta.addAttr(attr);
+		traceable.addAttr(attr);
 		attr = new EntityAttr("i_modifier","c0","modifier");
-		meta.addAttr(attr);
+		traceable.addAttr(attr);
 		attr = new EntityAttr("i_newcreate",AttrType.DATE,"c0","newcreate");
-		meta.addAttr(attr);
+		traceable.addAttr(attr);
 		attr = new EntityAttr("i_lastmodify",AttrType.DATE,"c0","lastmodify");
-		meta.addAttr(attr);
-		GenericEntity te = new GenericEntity(meta);
+		traceable.addAttr(attr);
+		GenericEntity te = new GenericEntity(traceable);
 		metaMap.put(te.getEntityName(), te.getEntityMeta());
 		schemaMap.put(te.getEntityName(), te);
+		/** ---------- obal.accesscontrol ------------- */
+		EntityMeta acl = new EntityMeta(EntityConstants.ENTITY_ACCESSCONTROL);
+		acl.setSchemaClass(GenericEntity.class.getName());
+		attr = new EntityAttr("i_acl","c0","acl");
+		acl.addAttr(attr);
+		GenericEntity aclentity = new GenericEntity(acl);
+		metaMap.put(aclentity.getEntityName(), aclentity.getEntityMeta());
+		schemaMap.put(aclentity.getEntityName(), aclentity);
 	}
 
 }

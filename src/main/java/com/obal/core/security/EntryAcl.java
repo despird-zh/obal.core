@@ -5,9 +5,10 @@ import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import com.obal.core.CoreConstants;
-
+import com.obal.exception.SecurityException;
 /**
  * EntryAcl is the entry access control list, item of it is access control setting for visitor
  * 
@@ -181,5 +182,57 @@ public class EntryAcl {
 		}
 		
 		return sumAces;
+	}
+	
+	private static ObjectMapper jsonMapper = null;
+	
+	/**
+	 * Read json string into EntryAcl object
+	 * 
+	 * @param aclJsonStr the acl json String
+	 * @return EntryAcl the acl object
+	 **/
+	public static EntryAcl readJson(String aclJsonStr)throws SecurityException{
+		
+		EntryAcl entryAcl = null;
+		if(null == jsonMapper){
+			
+			jsonMapper = new ObjectMapper();
+		}		
+		try {
+			
+			entryAcl = jsonMapper.readValue(aclJsonStr, EntryAcl.class);
+			
+		} catch (Exception e) {
+
+			throw new SecurityException("Error when parse acl from json:{}", e, aclJsonStr);
+		}
+		
+		return entryAcl;
+	}
+	
+	/**
+	 * Write entry acl object into json string
+	 * 
+	 * @param entryAcl the entry acl object
+	 * @return String the json string of entry acl
+	 **/
+	public static String writeJson(EntryAcl entryAcl)throws SecurityException{
+		
+		String jsonStr = null;
+		if(null == jsonMapper){
+			
+			jsonMapper = new ObjectMapper();
+		}
+		try {
+			
+			jsonStr = jsonMapper.writeValueAsString(entryAcl);
+			
+		} catch (Exception e) {
+			
+			throw new SecurityException("Error when wrap acl to json:{}", e, jsonStr);
+		}
+		
+		return jsonStr;
 	}
 }

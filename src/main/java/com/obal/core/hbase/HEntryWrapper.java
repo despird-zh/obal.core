@@ -38,6 +38,9 @@ import org.slf4j.LoggerFactory;
 
 import com.obal.core.EntryKey;
 import com.obal.core.ITraceable;
+import com.obal.core.security.EntryAcl;
+import com.obal.core.security.IAccessControl;
+import com.obal.exception.SecurityException;
 import com.obal.exception.WrapperException;
 import com.obal.meta.EntityAttr;
 import com.obal.meta.EntityConstants;
@@ -407,7 +410,6 @@ public abstract class HEntryWrapper<GB extends EntryKey> {
 	 * @return Object the raw object. 
 	 **/	
 	public abstract Put parse(List<EntityAttr> attrs, GB entryInfo)throws WrapperException;
-
 	
 	/**
 	 * Wrap the rawentry into bean object
@@ -459,7 +461,7 @@ public abstract class HEntryWrapper<GB extends EntryKey> {
 	 * @param put the Put operation
 	 * @param traceInfo the traceable object
 	 **/
-	public void parseTraceable(Put put, ITraceable traceInfo){
+	public void parseTraceable(Put put, ITraceable traceInfo) throws WrapperException{
 		
 		List<EntityAttr> attrs = EntityManager.getInstance().getEntityMeta(EntityConstants.ENTITY_TRACEABLE).getAllAttrs();
 		for(EntityAttr attr: attrs){
@@ -485,5 +487,53 @@ public abstract class HEntryWrapper<GB extends EntryKey> {
 				continue;
 			}
 		}
+	}
+	
+	/**
+	 * Wrap the access Control into entry object. 
+	 * 
+	 * @param aclEntry the access control entry
+	 * @param rawEntry the raw entry 
+	 **/
+	public void wrapAccessControl(IAccessControl aclEntry, Result rawEntry) throws WrapperException{
+		
+		List<EntityAttr> attrs = EntityManager.getInstance().getEntityMeta(EntityConstants.ENTITY_ACCESSCONTROL).getAllAttrs();
+		EntityAttr attr = attrs.get(0);
+		
+		byte[] column = attr.getColumn().getBytes();
+		byte[] qualifier = attr.getQualifier().getBytes();
+		byte[] cell = rawEntry.getValue(column, qualifier);
+			
+		String val = (String)getPrimitiveValue(attr, cell);
+		
+		EntryAcl acl;
+		try {
+			acl = EntryAcl.readJson(val);
+			aclEntry.setEntryAcl(acl);	
+		} catch (SecurityException e) {
+			throw new WrapperException("Error set EntryAcl on Entry object.",e); 
+		}
+			
+	}
+	
+	/**
+	 * Parse the AccessControl 
+	 *  
+	 **/
+	public void parseAccessControl(Put put, IAccessControl aclEntry)throws WrapperException{
+		
+		List<EntityAttr> attrs = EntityManager.getInstance().getEntityMeta(EntityConstants.ENTITY_ACCESSCONTROL).getAllAttrs();
+		EntityAttr attr = attrs.get(0);
+		
+		EntryAcl acl = aclEntry.getEntryAcl();
+		String jsonStr = "";
+		try {
+			jsonStr = EntryAcl.writeJson(acl);
+		} catch (SecurityException e) {
+			
+			throw new WrapperException("Error write EntryAcl object to Entry attribute.",e); 
+		}
+		putPrimitiveValue(put, attr, jsonStr);
+
 	}
 }

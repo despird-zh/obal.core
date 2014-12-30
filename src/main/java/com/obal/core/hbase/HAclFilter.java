@@ -79,7 +79,7 @@ public class HAclFilter extends FilterBase {
 		String acl = Bytes.toString(buffer, valueOffset, valueLength);
 
 		EntryAcl ea = null;
-		ObjectMapper mapper = new ObjectMapper();
+		
 		try {
 			ea = mapper.readValue(acl, EntryAcl.class);
 			
