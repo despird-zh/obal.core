@@ -24,7 +24,7 @@
 		<echo message="---[ Building Hbase Side Core jar ]---"/>
         <jar jarfile="${dir.java.ext}/${obal.core.jar}" >
 			<fileset dir="${dir.java.class}">
-				<include name="**/obal/core/**/*.*"/>
+				<include name="**/obal/**/*.*"/>
 			</fileset>
 			<manifest>
 				<attribute name="Application-Name" value="obal.core.library"/>

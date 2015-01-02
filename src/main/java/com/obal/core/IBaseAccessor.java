@@ -25,6 +25,8 @@ package com.obal.core;
  * <p>If accessor is embedded one, it's resource is copied from other accssor.
  * normally release method will not touch shared resources.
  * </p> 
+ * 
+ * @author despird
  **/
 public interface IBaseAccessor {
 
