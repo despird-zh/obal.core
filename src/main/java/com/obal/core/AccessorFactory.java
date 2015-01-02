@@ -29,6 +29,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.obal.core.accessor.AccessorContext;
 import com.obal.core.accessor.EntityAccessor;
 import com.obal.core.accessor.GenericAccessor;
 import com.obal.core.security.Principal;
@@ -213,10 +214,10 @@ public class AccessorFactory {
 	 * 
 	 * @param principal
 	 *            the principal
-	 * @param entryName
-	 *            the name of entry, eg. the map key of service class
+	 * @param entityName
+	 *            the name of entity, eg. the map key of service class
 	 **/
-	public <K> K buildEntityAccessor(Principal principal, String entryName)
+	public <K> K buildEntityAccessor(Principal principal, String entityName)
 			throws EntityException {
 
 		AccessorBuilder defaultBuilder = builderMap.get(this.defaultBuilder);
@@ -226,7 +227,8 @@ public class AccessorFactory {
 					"The Default AccessorBuilder instance:{} not existed.",
 					this.defaultBuilder);
 		}
-		K accessor = defaultBuilder.newEntityAccessor(entryName, principal);
+		K accessor = defaultBuilder.newEntityAccessor(principal, entityName );
+		// set other property as per builder
 		defaultBuilder.assembly(principal, (EntityAccessor<?>) accessor);
 		return accessor;
 	}
@@ -248,7 +250,7 @@ public class AccessorFactory {
 					"The Default AccessorBuilder instance:{} not existed.",
 					this.defaultBuilder);
 		}
-		K accessor = defaultBuilder.newGeneralAccessor(accessorName);
+		K accessor = defaultBuilder.newGenericAccessor(principal, accessorName);
 		defaultBuilder.assembly(principal, (GenericAccessor) accessor);
 		return accessor;
 	}
@@ -263,7 +265,7 @@ public class AccessorFactory {
 	 *            the name of entry
 	 **/
 	public <K> K buildEntityAccessor(IBaseAccessor mockupAccessor,
-			String entryName) throws EntityException {
+			String entityName) throws EntityException {
 
 		AccessorBuilder defaultBuilder = builderMap.get(this.defaultBuilder);
 		if (null == defaultBuilder) {
@@ -276,7 +278,7 @@ public class AccessorFactory {
 		if (mockupAccessor instanceof PrincipalAware)
 			principal = ((PrincipalAware) mockupAccessor).getPrincipal();
 
-		K accessor = defaultBuilder.newEntityAccessor(entryName, principal);
+		K accessor = defaultBuilder.newEntityAccessor( principal,entityName);
 		defaultBuilder.assembly(mockupAccessor, (IBaseAccessor) accessor);
 		return accessor;
 	}
@@ -300,7 +302,14 @@ public class AccessorFactory {
 					"The Default AccessorBuilder instance:{} not existed.",
 					this.defaultBuilder);
 		}
-		K accessor = defaultBuilder.newGeneralAccessor(accessorName);
+		// retrieve the principal from mock-up accessor
+		AccessorContext context = mockupAccessor.getAccessorContext();
+		if(context == null){
+			throw new EntityException(
+					"The Mockup Accessor[from {}]'s AccessorContext not existed.",
+					this.defaultBuilder);
+		}
+		K accessor = defaultBuilder.newGenericAccessor(context.getPrincipal(),accessorName);
 		defaultBuilder.assembly(mockupAccessor, (IBaseAccessor) accessor);
 		return accessor;
 	}
@@ -312,11 +321,11 @@ public class AccessorFactory {
 	 *            the builder name
 	 * @param principal
 	 *            the principal
-	 * @param entryName
-	 *            the name of entry, eg. the map key of service class
+	 * @param entityName
+	 *            the name of entity, eg. the map key of service class
 	 **/
 	public <K> K buildEntityAccessor(String builderName, Principal principal,
-			String entryName) throws EntityException {
+			String entityName) throws EntityException {
 
 		AccessorBuilder accessorbuilder = builderMap.get(builderName);
 		if (null == accessorbuilder) {
@@ -324,7 +333,7 @@ public class AccessorFactory {
 			throw new EntityException(
 					"The AccessorBuilder instance:{} not existed.", builderName);
 		}
-		K accessor = accessorbuilder.newEntityAccessor(entryName, principal);
+		K accessor = accessorbuilder.newEntityAccessor(principal,entityName);
 		accessorbuilder.assembly(principal, (EntityAccessor<?>) accessor);
 		return accessor;
 	}
@@ -348,7 +357,7 @@ public class AccessorFactory {
 			throw new EntityException(
 					"The AccessorBuilder instance:{} not existed.", builderName);
 		}
-		K accessor = accessorbuilder.newGeneralAccessor(accessorName);
+		K accessor = accessorbuilder.newGenericAccessor(principal,accessorName);
 		accessorbuilder.assembly(principal, (GenericAccessor) accessor);
 		return accessor;
 	}
@@ -362,11 +371,11 @@ public class AccessorFactory {
 	 *            the builder name
 	 * @param mockupAccessor
 	 *            the mock-up accessor instance
-	 * @param entryName
-	 *            the name of entry
+	 * @param entityName
+	 *            the name of entity
 	 **/
 	public <K> K buildEntityAccessor(String builderName,
-			IBaseAccessor mockupAccessor, String entryName)
+			IBaseAccessor mockupAccessor, String entityName)
 			throws EntityException {
 
 		AccessorBuilder accessorbuilder = builderMap.get(builderName);
@@ -375,11 +384,14 @@ public class AccessorFactory {
 			throw new EntityException(
 					"The AccessorBuilder instance:{} not existed.", builderName);
 		}
-		Principal principal = null;
-		if (mockupAccessor instanceof PrincipalAware)
-			principal = ((PrincipalAware) mockupAccessor).getPrincipal();
 
-		K accessor = accessorbuilder.newEntityAccessor(entryName, principal);
+		AccessorContext context = mockupAccessor.getAccessorContext();
+		if(context == null){
+			throw new EntityException(
+					"The Mockup Accessor[from {}]'s AccessorContext not existed.",
+					accessorbuilder.getBuilderName());
+		}
+		K accessor = accessorbuilder.newEntityAccessor(context.getPrincipal(),entityName,entityName);
 		accessorbuilder.assembly(mockupAccessor, (IBaseAccessor) accessor);
 		return accessor;
 	}
@@ -405,7 +417,13 @@ public class AccessorFactory {
 			throw new EntityException(
 					"The AccessorBuilder instance:{} not existed.", builderName);
 		}
-		K accessor = accessorbuilder.newGeneralAccessor(accessorName);
+		AccessorContext context = mockupAccessor.getAccessorContext();
+		if(context == null){
+			throw new EntityException(
+					"The Mockup Accessor[from {}]'s AccessorContext not existed.",
+					accessorbuilder.getBuilderName());
+		}
+		K accessor = accessorbuilder.newGenericAccessor(context.getPrincipal(), accessorName);
 		accessorbuilder.assembly(mockupAccessor, (IBaseAccessor) accessor);
 		return accessor;
 	}

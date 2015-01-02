@@ -30,19 +30,28 @@ import com.obal.meta.BaseEntity;
  **/
 public abstract class EntityAccessor<GB extends EntryKey> implements IEntityAccessor <GB>{
 
-	private BaseEntity entitySchema = null;// entry meta information holder
 	private boolean embed = false;
+	private ThreadLocal<AccessorContext> localContext = new ThreadLocal<AccessorContext>();
 	
 	/**
 	 * Constructor with entry schema information 
 	 * 
-	 * @param entitySchema the schema of entity
+	 * @param context the context that provides principal etc. 
 	 **/
-	public EntityAccessor(BaseEntity entitySchema){
+	public EntityAccessor(AccessorContext context){
 		
-		this.entitySchema = entitySchema;
+		localContext.set(context);
 	}
 	
+	public void setAccessorContext(AccessorContext context){
+		
+		localContext.set(context);
+	}
+	
+	public AccessorContext getAccessorContext(){
+		
+		return localContext.get();
+	}
 	/**
 	 * Get the entity schema  
 	 * 
@@ -50,29 +59,34 @@ public abstract class EntityAccessor<GB extends EntryKey> implements IEntityAcce
 	 **/
 	@Override
 	public BaseEntity getEntitySchema(){
-		
-		return this.entitySchema;
+		AccessorContext context = localContext.get();
+		return context == null? null:context.getEntitySchema();
 	}
 	
 	/**
 	 * Get the principal bound to the EntityAccessor object. 
 	 **/
 	public Principal getPrincipal(){
-		
-		return this.entitySchema == null? null:this.entitySchema.getPrincipal();
+		AccessorContext context = localContext.get();
+		return context == null? null:context.getPrincipal();
 	}
 	
 	/**
 	 * Release the entity schema and clear the principal in it.
 	 **/
 	public void release(){
-		
-		if(entitySchema != null){
+		// not embed accessor
+		if(localContext != null){
 			
-			entitySchema.clearPrincipal();
+			AccessorContext context = localContext.get();
+			// clear entity schema
+			BaseEntity schema = context.getEntitySchema();
+			schema.clearPrincipal();
+			
+			context.clear();// release objects.			
+			localContext.remove();
 			
 		}
-		entitySchema = null;
 	}
 		
 	public boolean isEmbed(){

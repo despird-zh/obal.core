@@ -35,6 +35,7 @@ import org.slf4j.LoggerFactory;
 import com.obal.core.AccessorFactory;
 import com.obal.core.EntryFilter;
 import com.obal.core.EntryKey;
+import com.obal.core.accessor.AccessorContext;
 import com.obal.core.accessor.RawEntry;
 import com.obal.core.hbase.HGenericAccessor;
 import com.obal.exception.AccessorException;
@@ -50,6 +51,10 @@ import com.obal.meta.accessor.IMetaGenericAccessor;
 import com.obal.util.AccessorUtils;
 
 public class MetaGenericAccessor extends HGenericAccessor implements IMetaGenericAccessor{
+
+	public MetaGenericAccessor(AccessorContext context) {
+		super(context);
+	}
 
 	static Logger LOGGER = LoggerFactory.getLogger(MetaGenericAccessor.class);
 	

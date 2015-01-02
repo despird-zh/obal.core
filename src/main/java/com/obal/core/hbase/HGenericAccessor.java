@@ -23,12 +23,17 @@ import java.io.IOException;
 
 import org.apache.hadoop.hbase.client.HConnection;
 
+import com.obal.core.accessor.AccessorContext;
 import com.obal.core.accessor.GenericAccessor;
 
 /**
- * Hbase General Accessor base class, it will hold HConnection object. 
+ * GenericAccessor base class, it will hold HConnection object. 
  **/
 public abstract class HGenericAccessor extends GenericAccessor implements HConnAware{
+
+	public HGenericAccessor(AccessorContext context) {
+		super(context);
+	}
 
 	private HConnection conn;	
 
@@ -49,6 +54,7 @@ public abstract class HGenericAccessor extends GenericAccessor implements HConnA
 			if (conn != null && !isEmbed())
 				this.conn.close();
 			
+			super.release();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

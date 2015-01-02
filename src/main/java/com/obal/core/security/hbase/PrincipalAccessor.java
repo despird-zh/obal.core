@@ -2,12 +2,17 @@ package com.obal.core.security.hbase;
 
 import java.util.List;
 
+import com.obal.core.accessor.AccessorContext;
 import com.obal.core.hbase.HGenericAccessor;
 import com.obal.core.security.Principal;
 import com.obal.core.security.accessor.IPrincipalAccessor;
 import com.obal.exception.AccessorException;
 
 public class PrincipalAccessor extends HGenericAccessor implements IPrincipalAccessor{
+
+	public PrincipalAccessor(AccessorContext context) {
+		super(context);
+	}
 
 	@Override
 	public Principal getPrincipalByAccount(String account)

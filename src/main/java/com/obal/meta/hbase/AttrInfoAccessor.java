@@ -22,6 +22,7 @@ package com.obal.meta.hbase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.obal.core.accessor.AccessorContext;
 import com.obal.core.accessor.RawEntry;
 import com.obal.core.hbase.HEntryWrapper;
 import com.obal.core.hbase.HEntityAccessor;
@@ -32,8 +33,8 @@ public class AttrInfoAccessor extends HEntityAccessor<RawEntry>{
 
 	public static Logger LOGGER = LoggerFactory.getLogger(AttrInfoAccessor.class);
 	
-	public AttrInfoAccessor(BaseEntity schema) {
-		super(schema);
+	public AttrInfoAccessor(AccessorContext context) {
+		super(context);
 	}
 
 	@Override

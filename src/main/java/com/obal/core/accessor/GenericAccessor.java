@@ -22,16 +22,27 @@ package com.obal.core.accessor;
 import com.obal.core.IBaseAccessor;
 import com.obal.core.security.Principal;
 import com.obal.core.security.PrincipalAware;
+import com.obal.meta.BaseEntity;
 
 /**
  * The interface general use Accessor, these accessor provides method not
  * constraint on certain entry. eg a method might operation on more than one
  * entry, we will write it in GeneralAccessor.
  **/
-public abstract class GenericAccessor implements IBaseAccessor,PrincipalAware {
+public abstract class GenericAccessor implements IBaseAccessor {
 	
 	/** thread local */
-	private ThreadLocal<Principal> localPrincipal = new ThreadLocal<Principal>();
+	private ThreadLocal<AccessorContext> localContext = new ThreadLocal<AccessorContext>();
+	
+	/**
+	 * Constructor with entry schema information 
+	 * 
+	 * @param context the context that provides principal etc. 
+	 **/
+	public GenericAccessor(AccessorContext context){
+		
+		localContext.set(context);
+	}
 	
 	private boolean embed = false;
 	
@@ -44,22 +55,32 @@ public abstract class GenericAccessor implements IBaseAccessor,PrincipalAware {
 		
 		this.embed = embed;
 	}
+	
+	public void setAccessorContext(AccessorContext context){
 		
-	@Override
-	public void setPrincipal(Principal principal){
-		
-		this.localPrincipal.set(principal);
+		localContext.set(context);
 	}
 	
-	@Override
-	public Principal getPrincipal(){
+	public AccessorContext getAccessorContext(){
 		
-		return this.localPrincipal.get();
+		return localContext.get();
 	}
 	
-	@Override
-	public void clearPrincipal(){
+	/**
+	 * Release the entity schema and clear the principal in it.
+	 **/
+	public void release(){
 		
-		this.localPrincipal.remove();
+		if(localContext != null){
+			AccessorContext context = localContext.get();
+			// clear entity schema
+			BaseEntity schema = context.getEntitySchema();
+			if(schema != null);
+				schema.clearPrincipal();
+			
+			context.clear();// release objects.			
+			localContext.remove();
+			
+		}
 	}
 }

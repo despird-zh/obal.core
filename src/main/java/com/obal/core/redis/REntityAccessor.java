@@ -32,6 +32,7 @@ import com.obal.core.AccessorFactory;
 import com.obal.core.CoreConstants;
 import com.obal.core.EntryFilter;
 import com.obal.core.EntryKey;
+import com.obal.core.accessor.AccessorContext;
 import com.obal.core.accessor.EntityAccessor;
 import com.obal.exception.AccessorException;
 import com.obal.meta.BaseEntity;
@@ -43,8 +44,8 @@ public abstract class REntityAccessor <GB extends EntryKey> extends EntityAccess
 	
 	private Jedis jedis;
 	
-	public REntityAccessor(BaseEntity entitySchema) {
-		super(entitySchema);
+	public REntityAccessor(AccessorContext context) {
+		super(context);
 	}
 
 	/**

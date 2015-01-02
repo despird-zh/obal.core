@@ -28,7 +28,7 @@ import com.obal.core.security.PrincipalAware;
 import com.obal.exception.MetaException;
 
 /**
- * EntrySchema is resonsible for generate Entry Key and decide the actual schema name before persistence or scan
+ * EntrySchema is responsible for generate Entry Key and decide the actual schema name before persistence or scan
  * <p>Because EntrySchema implements PrincipalAware, it can hold principal to enable some principal sensitive operation
  * eg. @link #getSchema . The principal is store in ThreadLocal, ie. it is thread safe</p>
  * <p>EntrySchema is managed by EntrySchemaManager</p>

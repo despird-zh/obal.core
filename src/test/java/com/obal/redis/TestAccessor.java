@@ -2,6 +2,7 @@ package com.obal.redis;
 
 import com.obal.core.EntryFilter;
 import com.obal.core.EntryKey;
+import com.obal.core.accessor.AccessorContext;
 import com.obal.core.redis.REntityAccessor;
 import com.obal.core.redis.REntryWrapper;
 import com.obal.core.redis.RRawWrapper;
@@ -10,9 +11,8 @@ import com.obal.meta.BaseEntity;
 
 public class TestAccessor extends REntityAccessor{
 
-	public TestAccessor(BaseEntity entitySchema) {
-		super(entitySchema);
-		// TODO Auto-generated constructor stub
+	public TestAccessor(AccessorContext context) {
+		super(context);
 	}
 
 	@Override

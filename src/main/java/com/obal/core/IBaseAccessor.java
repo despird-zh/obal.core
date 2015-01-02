@@ -19,6 +19,8 @@
  */
 package com.obal.core;
 
+import com.obal.core.accessor.AccessorContext;
+
 /**
  * Base interface for all Accessor class, it provides methods to 
  * release resource and indicate embedded one or not.
@@ -30,6 +32,9 @@ package com.obal.core;
  **/
 public interface IBaseAccessor {
 
+	public void setAccessorContext(AccessorContext context);
+	
+	public  AccessorContext getAccessorContext();
 	/**
 	 * get embed flag
 	 * @return flag 

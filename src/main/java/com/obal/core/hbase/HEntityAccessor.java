@@ -45,6 +45,7 @@ import org.slf4j.LoggerFactory;
 import com.obal.core.EntryFilter;
 import com.obal.core.EntryKey;
 import com.obal.core.ITraceable;
+import com.obal.core.accessor.AccessorContext;
 import com.obal.core.accessor.EntityAccessor;
 import com.obal.exception.AccessorException;
 import com.obal.exception.MetaException;
@@ -63,8 +64,8 @@ public abstract class HEntityAccessor<GB extends EntryKey> extends EntityAccesso
 	
 	Logger LOGGER = LoggerFactory.getLogger(HEntityAccessor.class);
 	
-	public HEntityAccessor(BaseEntity schema) {
-		super(schema);
+	public HEntityAccessor(AccessorContext context) {
+		super(context);
 	}
 
 	private HConnection conn;

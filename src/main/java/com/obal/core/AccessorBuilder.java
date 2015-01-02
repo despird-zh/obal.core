@@ -23,9 +23,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import com.obal.core.accessor.AccessorContext;
 import com.obal.core.accessor.EntityAccessor;
 import com.obal.core.accessor.GenericAccessor;
 import com.obal.core.security.Principal;
@@ -45,7 +47,7 @@ public abstract class AccessorBuilder {
 
 	private Properties accessorProp = null;
 	private String builderName = null;
-	
+	private Map<String, IBaseAccessor> accessorMap = new HashMap<String, IBaseAccessor>();
 	/**
 	 * Default Constructor 
 	 **/
@@ -103,18 +105,7 @@ public abstract class AccessorBuilder {
 		
 		return entryAccessorClazz;
 	}
-	
-	/**
-	 * get the accessor's class object
-	 * @param class the accessor name, here use clazz name as key
-	 * @return Class object of accessor
-	 **/
-	@Deprecated
-	protected Class<IBaseAccessor> getAccessorClass(Class<? extends GenericAccessor> clazz) throws EntityException{
 		
-		return getAccessorClass(clazz.getName());
-	}
-	
 	/**
 	 * Append accessor map to builder. 
 	 **/
@@ -139,14 +130,14 @@ public abstract class AccessorBuilder {
 	public abstract void assembly(IBaseAccessor mockupAccessor, IBaseAccessor... accessors) throws EntityException;
 
 	/**
-	 * create new EntryAccessor instance.
+	 * create new EntryAccessor instance. accessor name and entity name is same.
 	 * 
-	 * @param entityName 
 	 * @param principal
+	 * @param entityName  
 	 * 
 	 * @return K the EntityAccessor instance
 	 **/
-	protected <K> K newEntityAccessor(String entityName,Principal principal) throws EntityException{
+	protected <K> K newEntityAccessor(Principal principal,String entityName) throws EntityException{
 		
 		return newEntityAccessor(principal,entityName,entityName );
 	}	
@@ -160,49 +151,18 @@ public abstract class AccessorBuilder {
 	 * 
 	 * @return K the EntityAccessor instance
 	 **/
-	@SuppressWarnings("unchecked")
 	protected <K> K newEntityAccessor(Principal principal,String accessorName,String entityName) throws EntityException{
 		
-		K result = null;
-		
-		Class<?> clazz = this.getAccessorClass(accessorName);
-		
-		if(!EntityAccessor.class.isAssignableFrom(clazz))
-			throw new EntityException("The {}-{} is not a EntryAccessor sub class.",entityName, clazz.getName() );
-		
-		BaseEntity schema = null;
-		Constructor<K> constructor = null;
+		BaseEntity schema;
 		try {
-			
 			schema = EntityManager.getInstance().getEntitySchema(entityName, principal);
-			
-			constructor = (Constructor<K>)clazz.getConstructor(BaseEntity.class);			
-			result = constructor.newInstance(schema);
-			
 		} catch (MetaException e) {
 			
-			throw new EntityException("Fail get schema-{}",e, entityName);
-		}catch (SecurityException e) {
-
-			throw new EntityException("Fail build Accessor-{}",e, entityName);
-		} catch (NoSuchMethodException e) {
-
-			throw new EntityException("Fail build Accessor-{}",e, entityName);
-		} catch (IllegalArgumentException e) {
-
-			throw new EntityException("Fail build Accessor-{}",e, entityName);
-		} catch (InstantiationException e) {
-
-			throw new EntityException("Fail build Accessor-{}",e, entityName);
-		} catch (IllegalAccessException e) {
-
-			throw new EntityException("Fail build Accessor-{}",e, entityName);
-		} catch (InvocationTargetException e) {
-
-			throw new EntityException("Fail build Accessor-{}",e, entityName);
+			throw new EntityException("Error when fetch schema object:{}-{}",e,accessorName, entityName);
 		}
+		AccessorContext context = new AccessorContext(principal,schema);
 		
-		return result;
+		return newBaseAccessor(context, accessorName,false);
 	}
 	
 	/**
@@ -210,22 +170,43 @@ public abstract class AccessorBuilder {
 	 * 
 	 * @param accessorName 
 	 * 
-	 * @return K the generalaccessor instance
+	 * @return K the GenericAccessor instance
 	 **/
+	protected <K> K newGenericAccessor(Principal principal, String accessorName) throws EntityException{
+		
+		AccessorContext context = new AccessorContext(principal);
+		
+		return newBaseAccessor(context, accessorName,true);
+	}
+
 	@SuppressWarnings("unchecked")
-	protected <K> K newGeneralAccessor(String accessorName) throws EntityException{
+	private <K> K newBaseAccessor(AccessorContext context, String accessorName, boolean isGeneric) throws EntityException{
 		
 		K result = null;
 		
 		Class<?> clazz = this.getAccessorClass(accessorName);
 		
-		if(!GenericAccessor.class.isAssignableFrom(clazz))
-			throw new EntityException("The {}-{} is not a EntryAccessor sub class.",accessorName, clazz.getName() );
-
-		try {
-
-			result = (K)clazz.newInstance();
+		if(!GenericAccessor.class.isAssignableFrom(clazz) && isGeneric)
 			
+			throw new EntityException("The {}-{} is not a GenericAccessor sub class.",accessorName, clazz.getName() );
+		else if(!EntityAccessor.class.isAssignableFrom(clazz) && !isGeneric){
+			
+			throw new EntityException("The {}-{} is not a EntityAccessor sub class.",accessorName, clazz.getName() );
+		}
+		
+		Constructor<K> constructor = null;
+		try {
+			// find instance from cache map, not exist new one, otherwise return it directly
+			IBaseAccessor accessor = accessorMap.get(accessorName);
+			if(accessor == null){
+				constructor = (Constructor<K>)clazz.getConstructor(AccessorContext.class);
+				result = constructor.newInstance(context);
+				accessorMap.put(accessorName, (IBaseAccessor)result);
+			} else{
+				// initial context object.
+				accessor.setAccessorContext(context);
+				result = (K)accessor;
+			}
 		} catch (SecurityException e) {
 
 			throw new EntityException("Fail build Accessor-{}",e, accessorName);
@@ -238,33 +219,14 @@ public abstract class AccessorBuilder {
 		} catch (IllegalAccessException e) {
 
 			throw new EntityException("Fail build Accessor-{}",e, accessorName);
+		} catch (NoSuchMethodException e) {
+			
+			throw new EntityException("Fail build Accessor-{}",e, accessorName);
+		} catch (InvocationTargetException e) {
+			
+			throw new EntityException("Fail build Accessor-{}",e, accessorName);
 		} 
 		
 		return result;
-	}
-
-	/**
-	 * create new GeneralAccessor instance.
-	 * 
-	 * @param accessorClazz 
-	 * 
-	 * @return K the generalaccessor instance
-	 **/
-	protected <K> K newGeneralAccessor(Class<K> accessorClazz)  throws EntityException{
-		
-		return newGeneralAccessor(accessorClazz.getName());
-	}
-
-	/**
-	 * create new GeneralAccessor instance.
-	 * 
-	 * @param principal
-	 * @param accessorClazz 
-	 * 
-	 * @return K the generalaccessor instance
-	 **/
-	protected <K> K newGeneralAccessor(Principal principal, Class<K> accessorClazz)  throws EntityException{
-		
-		return newGeneralAccessor(accessorClazz.getName());
 	}
 }

@@ -129,7 +129,7 @@ public class HAccessorBuilder extends AccessorBuilder{
 				((HConnAware) accessor).setConnection(connection);		
 			}
 			
-			if((mockupAccessor instanceof HConnAware) 
+			if((mockupAccessor instanceof HAdminAware) 
 					&& (accessor instanceof HAdminAware)){
 
 				hBaseAdmin = ((HAdminAware) accessor).getAdmin();
@@ -137,7 +137,7 @@ public class HAccessorBuilder extends AccessorBuilder{
 		
 			}
 			
-			if((mockupAccessor instanceof HConnAware) 
+			if((mockupAccessor instanceof PrincipalAware) 
 					&& (accessor instanceof PrincipalAware)){
 				principal = ((PrincipalAware) accessor).getPrincipal();
 				((PrincipalAware) accessor).setPrincipal(principal);		
