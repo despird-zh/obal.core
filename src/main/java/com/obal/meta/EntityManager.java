@@ -111,11 +111,11 @@ public class EntityManager {
 	 * @throws MetaException the exception when create new EntrySchema instance
 	 **/
 	@SuppressWarnings("unchecked")
-	public BaseEntity getEntitySchema(String entityName, Principal principal) throws MetaException{
+	public BaseEntity getEntitySchema(String entityName) throws MetaException{
 		
 		BaseEntity schemainstance = schemaMap.get(entityName);
 		EntityMeta entitymeta = metaMap.get(entityName);
-		// entitymeta not exist then return null
+		// entity meta not exist then return null
 		if(entitymeta == null) 
 			throw new MetaException("The entity meta[{}] not exist.",entityName);
 		
@@ -134,12 +134,9 @@ public class EntityManager {
 				// cache instance into map
 				schemaMap.put(entityName, schemainstance);
 			}
-			
-			if(schemainstance != null && schemainstance instanceof PrincipalAware){
-				
-				((PrincipalAware)schemainstance).setPrincipal(principal);
-			}		
-			
+			else{
+				schemainstance.setEntityMeta(entitymeta);
+			}
 		} catch (ClassNotFoundException e) {
 			
 			throw new MetaException("The schema class-{} is not found", e ,entitymeta.getSchemaClass());

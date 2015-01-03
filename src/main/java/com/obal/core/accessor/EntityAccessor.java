@@ -80,9 +80,8 @@ public abstract class EntityAccessor<GB extends EntryKey> implements IEntityAcce
 			
 			AccessorContext context = localContext.get();
 			// clear entity schema
-			BaseEntity schema = context.getEntitySchema();
-			schema.clearPrincipal();
-			
+			//BaseEntity schema = context.getEntitySchema();
+
 			context.clear();// release objects.			
 			localContext.remove();
 			

@@ -74,10 +74,8 @@ public abstract class GenericAccessor implements IBaseAccessor {
 		if(localContext != null){
 			AccessorContext context = localContext.get();
 			// clear entity schema
-			BaseEntity schema = context.getEntitySchema();
-			if(schema != null);
-				schema.clearPrincipal();
-			
+			//BaseEntity schema = context.getEntitySchema();
+		
 			context.clear();// release objects.			
 			localContext.remove();
 			

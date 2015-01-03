@@ -93,7 +93,7 @@ public abstract class HEntityAccessor<GB extends EntryKey> extends EntityAccesso
 			if(null == super.getEntitySchema())
 				throw new AccessorException("The entity schema not set yet");
 			
-			key = super.getEntitySchema().newKey();
+			key = super.getEntitySchema().newKey(getAccessorContext().getPrincipal());
 		} catch (MetaException e) {
 			
 			throw new AccessorException("Error when generating entry key",e);
@@ -124,7 +124,7 @@ public abstract class HEntityAccessor<GB extends EntryKey> extends EntityAccesso
 				scan.setFilter(hfilter);
 			}
 			
-			table = conn.getTable(super.getEntitySchema().getSchemaBytes(null));
+			table = conn.getTable(super.getEntitySchema().getSchemaBytes(getAccessorContext().getPrincipal(),null));
 			
 			ResultScanner rs = table.getScanner(scan);
 			
@@ -177,7 +177,7 @@ public abstract class HEntityAccessor<GB extends EntryKey> extends EntityAccesso
         try {
         	byte[] column = attr.getColumn().getBytes();
         	byte[] qualifier = attr.getQualifier().getBytes();
-        	table = getConnection().getTable(entitySchema.getSchema(entryKey));
+        	table = getConnection().getTable(entitySchema.getSchema(getAccessorContext().getPrincipal(),entryKey));
         	Get get = new Get(entryKey.getBytes());
         	QualifierFilter qfilter = new QualifierFilter(CompareOp.GREATER,new BinaryPrefixComparator(qualifier));
         	get.setFilter(qfilter);
@@ -235,7 +235,7 @@ public abstract class HEntityAccessor<GB extends EntryKey> extends EntityAccesso
 		BaseEntity entrySchema = (BaseEntity)getEntitySchema();
         try {
         	
-           table = getConnection().getTable(entrySchema.getSchema(entryKey));
+           table = getConnection().getTable(entrySchema.getSchema(getAccessorContext().getPrincipal(),entryKey));
            Get get = new Get(entryKey.getBytes());
            
            Result r = table.get(get);
@@ -271,7 +271,7 @@ public abstract class HEntityAccessor<GB extends EntryKey> extends EntityAccesso
 		BaseEntity entitySchema = (BaseEntity)getEntitySchema();
 		EntityAttr attr = entitySchema.getEntityMeta().getAttr(attrName);
         try {  
-            table = getConnection().getTable(entitySchema.getSchema(entryKey));
+            table = getConnection().getTable(entitySchema.getSchema(getAccessorContext().getPrincipal(),entryKey));
             // support check.
             HEntryWrapper<GB> wrapper = (HEntryWrapper<GB>)this.getEntryWrapper();
 
@@ -329,7 +329,7 @@ public abstract class HEntityAccessor<GB extends EntryKey> extends EntityAccesso
 		EntryKey rtv = null;
 		BaseEntity entrySchema = (BaseEntity)getEntitySchema();
         try {  
-            table = getConnection().getTable(entrySchema.getSchema(entryInfo));
+            table = getConnection().getTable(entrySchema.getSchema(getAccessorContext().getPrincipal(),entryInfo));
             HEntryWrapper<GB> wrapper = this.getEntryWrapper();
  
             Put put = (Put)wrapper.parse(entrySchema.getEntityMeta().getAllAttrs(),entryInfo);
@@ -366,7 +366,7 @@ public abstract class HEntityAccessor<GB extends EntryKey> extends EntityAccesso
 			
 			List<Delete> list = new ArrayList<Delete>();
 			for(String key:rowkey){
-				table = getConnection().getTable(entrySchema.getSchema(key));
+				table = getConnection().getTable(entrySchema.getSchema(getAccessorContext().getPrincipal(),key));
 				if(StringUtils.isBlank(key)) continue;
 				
 				Delete d1 = new Delete(key.getBytes());  

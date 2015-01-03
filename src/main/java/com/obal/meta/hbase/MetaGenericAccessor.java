@@ -151,7 +151,7 @@ public class MetaGenericAccessor extends HGenericAccessor implements IMetaGeneri
 		
 		try {
 			attraccessor = AccessorFactory.getInstance().buildEntityAccessor(this, EntityConstants.ENTITY_META_ATTR);
-			EntryKey key = attraccessor.getEntitySchema().newKey();
+			EntryKey key = attraccessor.getEntitySchema().newKey(getAccessorContext().getPrincipal());
 			RawEntry minfo = new RawEntry(key);
 
 			minfo.put("i_attr_name", attr.getAttrName());
@@ -269,7 +269,7 @@ public class MetaGenericAccessor extends HGenericAccessor implements IMetaGeneri
 		MetaInfoAccessor metaAccr = null;
 		try {
 			metaAccr = AccessorFactory.getInstance().buildEntityAccessor(this, EntityConstants.ENTITY_META_INFO);
-			EntryKey key = metaAccr.getEntitySchema().newKey();
+			EntryKey key = metaAccr.getEntitySchema().newKey(getAccessorContext().getPrincipal());
 			RawEntry minfo = new RawEntry(key);
 
 			minfo.put("i_entity_name", meta.getEntityName());

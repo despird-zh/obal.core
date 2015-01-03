@@ -20,6 +20,7 @@
 package com.obal.meta;
 
 import com.obal.core.EntryKey;
+import com.obal.core.security.Principal;
 import com.obal.exception.MetaException;
 
 public class GenericEntity extends BaseEntity{
@@ -29,19 +30,19 @@ public class GenericEntity extends BaseEntity{
 	}
 
 	@Override
-	public String getSchema(EntryKey key) {
+	public String getSchema(Principal principal, EntryKey key) {
 		
 		return getEntityMeta().getEntityName();
 	}
 
 	@Override
-	public EntryKey newKey(Object... parameter) throws MetaException {
+	public EntryKey newKey(Principal principal, Object... parameter) throws MetaException {
 		
-		return newKey();
+		return newKey(principal);
 	}
 
 	@Override
-	public EntryKey newKey() throws MetaException {
+	public EntryKey newKey(Principal principal) throws MetaException {
 		
 		String key = String.valueOf(System.currentTimeMillis());		
 		return new EntryKey(getEntityMeta().getEntityName(),key);

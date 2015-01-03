@@ -65,7 +65,7 @@ public class EntityUtils {
 		
 		BaseEntity schema = null;
 		try {
-			schema = (BaseEntity) EntityManager.getInstance().getEntitySchema(entityName, principal);
+			schema = (BaseEntity) EntityManager.getInstance().getEntitySchema(entityName);
 		} catch (MetaException e) {
 			
 			LOGGER.error("Error when get schema instance from manager.",e);

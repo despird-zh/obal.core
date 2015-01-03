@@ -20,6 +20,7 @@
 package com.obal.audit.accessor;
 
 import com.obal.core.EntryKey;
+import com.obal.core.security.Principal;
 import com.obal.exception.MetaException;
 import com.obal.meta.BaseEntity;
 import com.obal.meta.EntityMeta;
@@ -31,19 +32,19 @@ public class AuditEntity extends BaseEntity{
 	}
 
 	@Override
-	public String getSchema(EntryKey key) {
+	public String getSchema(Principal principal, EntryKey key) {
 		
 		return "autit.info";
 	}
 
 	@Override
-	public EntryKey newKey(Object... parameter) {
+	public EntryKey newKey(Principal principal, Object... parameter) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public EntryKey newKey() throws MetaException {
+	public EntryKey newKey(Principal principal) throws MetaException {
 		// TODO Auto-generated method stub
 		return null;
 	}

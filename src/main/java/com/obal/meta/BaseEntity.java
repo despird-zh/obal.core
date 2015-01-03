@@ -24,7 +24,6 @@ import java.util.List;
 
 import com.obal.core.EntryKey;
 import com.obal.core.security.Principal;
-import com.obal.core.security.PrincipalAware;
 import com.obal.exception.MetaException;
 
 /**
@@ -38,11 +37,8 @@ import com.obal.exception.MetaException;
  * @see com.obal.core.security.PrincipalAware
  * @see EntityManager
  **/
-public abstract class BaseEntity implements PrincipalAware{
-	
-	/** threadlocal */
-	private ThreadLocal<Principal> localPrincipal = new ThreadLocal<Principal>();
-	
+public abstract class BaseEntity{
+
 	protected EntityMeta meta = null;
 	
 	/**
@@ -71,37 +67,38 @@ public abstract class BaseEntity implements PrincipalAware{
 	/**
 	 * Get the schema name  
 	 **/
-	public String getSchema(String entryKey){
+	public String getSchema(Principal principal,String entryKey){
 		
 		EntryKey key = new EntryKey(this.meta.getEntityName(), entryKey);
-		return getSchema(key);
+		return getSchema(principal, key);
 	}
 	
 	/**
 	 * Get the schema name, it indict the physical location to store entry data, eg. the table name
 	 * @return String the schema name
 	 **/
-	public abstract String getSchema(EntryKey entryKey);
+	public abstract String getSchema(Principal principal,EntryKey entryKey);
 	
 	/**
 	 * Generate new key with parameters
 	 * @return EntryKey the schema name
 	 **/
-	public abstract EntryKey newKey(Object... parameter)throws MetaException;
+	public abstract EntryKey newKey(Principal principal,Object... parameter)throws MetaException;
 	
 	/**
 	 * Generate new key
 	 * @return EntryKey the schema name
 	 **/
-	public abstract EntryKey newKey()throws MetaException;
+	public abstract EntryKey newKey(Principal principal)throws MetaException;
 	
 	/**
 	 * Get the schema name in byte[]
 	 * @see getSchema 
 	 **/
-	public byte[] getSchemaBytes(EntryKey entryKey){
+	public byte[] getSchemaBytes(Principal principal,EntryKey entryKey){
 		
-		return getSchema(entryKey) == null? null: getSchema(entryKey).getBytes();
+		String schema = getSchema(principal,entryKey);
+		return schema == null? null: schema.getBytes();
 	}
 	
 	/**
@@ -113,6 +110,10 @@ public abstract class BaseEntity implements PrincipalAware{
 		return this.meta;
 	}
 	
+	public void setEntityMeta(EntityMeta meta){
+		
+		this.meta = meta;
+	}
 	/**
 	 * Get the entry name
 	 * @return String entry name  
@@ -121,22 +122,5 @@ public abstract class BaseEntity implements PrincipalAware{
 		
 		return this.meta.getEntityName();
 	}
-	
-	@Override
-	public void setPrincipal(Principal principal){
-		
-		this.localPrincipal.set(principal);
-	}
-	
-	@Override
-	public Principal getPrincipal(){
-		
-		return this.localPrincipal.get();
-	}
-	
-	@Override
-	public void clearPrincipal(){
-		
-		this.localPrincipal.remove();
-	}
+
 }

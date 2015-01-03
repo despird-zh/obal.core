@@ -155,7 +155,7 @@ public abstract class AccessorBuilder {
 		
 		BaseEntity schema;
 		try {
-			schema = EntityManager.getInstance().getEntitySchema(entityName, principal);
+			schema = EntityManager.getInstance().getEntitySchema(entityName);
 		} catch (MetaException e) {
 			
 			throw new EntityException("Error when fetch schema object:{}-{}",e,accessorName, entityName);
