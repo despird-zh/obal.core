@@ -65,11 +65,21 @@ public abstract class BaseEntity{
 	}
 	
 	/**
+	 * Get the entity schema by entry key
+	 * @param entryKey the entry key
+	 * @return String the schema name of entity 
+	 **/
+	public String getSchema(String entryKey){
+		
+		return getSchema(null, entryKey);
+	}
+	
+	/**
 	 * Get the schema name  
 	 **/
 	public String getSchema(Principal principal,String entryKey){
 		
-		EntryKey key = new EntryKey(this.meta.getEntityName(), entryKey);
+		EntryKey key = new EntryKey(meta.getEntityName(), entryKey);
 		return getSchema(principal, key);
 	}
 	
@@ -110,17 +120,22 @@ public abstract class BaseEntity{
 		return this.meta;
 	}
 	
+	/**
+	 * Set EntityMeta to entity
+	 * @param meta the entity meta 
+	 **/
 	public void setEntityMeta(EntityMeta meta){
 		
 		this.meta = meta;
 	}
+	
 	/**
 	 * Get the entry name
 	 * @return String entry name  
 	 **/
 	public String getEntityName(){
 		
-		return this.meta.getEntityName();
+		return meta.getEntityName();
 	}
 
 }
