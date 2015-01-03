@@ -47,7 +47,7 @@ public abstract class AccessorBuilder {
 
 	private Properties accessorProp = null;
 	private String builderName = null;
-	private Map<String, IBaseAccessor> accessorMap = new HashMap<String, IBaseAccessor>();
+	
 	/**
 	 * Default Constructor 
 	 **/
@@ -196,17 +196,10 @@ public abstract class AccessorBuilder {
 		
 		Constructor<K> constructor = null;
 		try {
-			// find instance from cache map, not exist new one, otherwise return it directly
-			IBaseAccessor accessor = accessorMap.get(accessorName);
-			if(accessor == null){
+	
 				constructor = (Constructor<K>)clazz.getConstructor(AccessorContext.class);
 				result = constructor.newInstance(context);
-				accessorMap.put(accessorName, (IBaseAccessor)result);
-			} else{
-				// initial context object.
-				accessor.setAccessorContext(context);
-				result = (K)accessor;
-			}
+			
 		} catch (SecurityException e) {
 
 			throw new EntityException("Fail build Accessor-{}",e, accessorName);
