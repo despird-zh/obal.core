@@ -197,8 +197,8 @@ public abstract class AccessorBuilder {
 		Constructor<K> constructor = null;
 		try {
 	
-				constructor = (Constructor<K>)clazz.getConstructor(AccessorContext.class);
-				result = constructor.newInstance(context);
+			constructor = (Constructor<K>)clazz.getConstructor(AccessorContext.class);
+			result = constructor.newInstance(context);
 			
 		} catch (SecurityException e) {
 
