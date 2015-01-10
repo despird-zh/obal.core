@@ -54,6 +54,8 @@ public class EntityMeta implements ITraceable{
 	private List<String> schemas;
 	private EntryKey entryKey = null;
 	private Boolean traceable = false;
+	private Boolean accessControllable = false;
+	
 	/**
 	 * Entry Meta constructor 
 	 * 
@@ -355,6 +357,16 @@ public class EntityMeta implements ITraceable{
 		return this.traceable;
 	}
 
+	public void setAccessControllable(Boolean accessControllable){
+		
+		this.accessControllable = accessControllable;
+	}
+	
+	public Boolean getAccessControllable(){
+		
+		return this.accessControllable;
+	}
+	
 	private String creator;
 	private String modifier;
 	private Date newCreate;
