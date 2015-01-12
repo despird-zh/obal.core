@@ -35,8 +35,6 @@ import com.obal.core.EntryKey;
  **/
 public class RawEntry extends EntryInfo{
 
-	private static final long serialVersionUID = 1L;
-
 	Map<String, Object> kvmap = null;
 	
 	/**
@@ -54,7 +52,7 @@ public class RawEntry extends EntryInfo{
 	 * @param key the entry key 
 	 **/
 	public RawEntry(EntryKey key) {
-		super(key);
+		super(key.getEntityName(), key.getKey());
 	}
 	
 	/**

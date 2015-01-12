@@ -19,21 +19,20 @@
  */
 package com.obal.core;
 
-import java.io.Serializable;
-import java.util.Date;
-
 /**
- * Here will extend other attributes to entryInfo, As for the common information they are derived from
- * ITraceable interface.
+ * EntryInfo is the base class for all classes that be used to wrap the entry row
+ * It only provide methods to access the entry key. User will extends it as need.
+ * It not indicate the Traceable or AccessControllable feature.
  * 
  * @author despird
  * @version 0.1 2014-2-1 
  * 
- * @see ITraceable
+ * @see RawEntry
+ * @see RawAccessControlEntry
+ * @see RawTraceableEntry
+ * 
  **/
-public abstract class EntryInfo extends EntryKey implements ITraceable, Serializable{
-	
-	private static final long serialVersionUID = 1L;
+public abstract class EntryInfo extends EntryKey{
 	
 	/**
 	 * Constructor with entity name and entry key 
@@ -65,42 +64,5 @@ public abstract class EntryInfo extends EntryKey implements ITraceable, Serializ
 		
 		return new EntryKey(getEntityName(), getKey());
 	}
-	
-	private String creator ;
-	private String modifier ;
-	private Date newCreate;
-	private Date lastModify;
-
-	public String getCreator() {
-		return creator;
-	}
-
-	public void setCreator(String creator) {
-		this.creator = creator;
-	}
-
-	public String getModifier() {
-		return modifier;
-	}
-
-	public void setModifier(String modifier) {
-		this.modifier = modifier;
-	}
-
-	public Date getNewCreate() {
-		return newCreate;
-	}
-
-	public void setNewCreate(Date newCreate) {
-		this.newCreate = newCreate;
-	}
-
-	public Date getLastModify() {
-		return lastModify;
-	}
-
-	public void setLastModify(Date lastModify) {
-		this.lastModify = lastModify;
-	}	
 	
 }
