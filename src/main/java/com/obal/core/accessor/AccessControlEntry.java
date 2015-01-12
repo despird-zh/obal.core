@@ -11,8 +11,6 @@ import com.obal.core.security.IAccessControl;
 
 public abstract class AccessControlEntry extends EntryInfo implements ITraceable ,IAccessControl{
 
-	private static final long serialVersionUID = 1L;
-
 	private String creator;
 	private String modifier;
 	private Date newCreate;

@@ -8,8 +8,6 @@ import com.obal.core.EntryKey;
 
 public class RawAccessControlEntry extends AccessControlEntry{
 
-	private static final long serialVersionUID = 1L;
-
 	Map<String, Object> kvmap = null;
 	
 	public RawAccessControlEntry(EntryKey key) {

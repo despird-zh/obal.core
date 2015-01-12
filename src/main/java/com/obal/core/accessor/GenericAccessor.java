@@ -20,9 +20,6 @@
 package com.obal.core.accessor;
 
 import com.obal.core.IBaseAccessor;
-import com.obal.core.security.Principal;
-import com.obal.core.security.PrincipalAware;
-import com.obal.meta.BaseEntity;
 
 /**
  * The interface general use Accessor, these accessor provides method not

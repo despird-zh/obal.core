@@ -8,8 +8,6 @@ import com.obal.core.EntryKey;
 
 public class RawTraceableEntry extends TraceableEntry{
 
-	private static final long serialVersionUID = 1L;
-
 	Map<String, Object> kvmap = null;
 	
 	public RawTraceableEntry(EntryKey key) {

@@ -7,8 +7,6 @@ import com.obal.core.EntryKey;
 import com.obal.core.ITraceable;
 
 public abstract class TraceableEntry extends EntryInfo implements ITraceable{
-	
-	private static final long serialVersionUID = 1L;
 
 	private String creator;
 	private String modifier;

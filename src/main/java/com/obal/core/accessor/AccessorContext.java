@@ -68,6 +68,7 @@ public class AccessorContext {
 		values.put(key, value);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public <K> K getValue(String key){
 		
 		return (K) values.get(key);
