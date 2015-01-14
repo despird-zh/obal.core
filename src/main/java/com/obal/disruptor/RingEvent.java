@@ -58,7 +58,6 @@ public class RingEvent {
 	 **/
 	public final static EventFactory<RingEvent> EVENT_FACTORY = new EventFactory<RingEvent> (){
 		
-		@Override
 		public RingEvent newInstance() {
 
 			return new RingEvent();
