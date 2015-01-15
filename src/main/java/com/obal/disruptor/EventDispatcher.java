@@ -47,7 +47,7 @@ public class EventDispatcher {
 	 * default event disptacher
 	 **/
 	private EventDispatcher() {
-		setup();
+		initial();
 	}
 
 	/**
@@ -84,14 +84,14 @@ public class EventDispatcher {
 	 * Set up the disruptor
 	 **/
 	@SuppressWarnings("unchecked")
-	private void setup() {
+	private void initial() {
 		// Executor that will be used to construct new threads for consumers
 		this.executor = Executors.newCachedThreadPool();
 		// Specify the size of the ring buffer, must be power of 2.
 		int bufferSize = 1024;
-		EventFactory<RingEvent> auditbuilder = RingEvent.EVENT_FACTORY;
+		EventFactory<RingEvent> eventbuilder = RingEvent.EVENT_FACTORY;
 		// Construct the Disruptor
-		disruptor = new Disruptor<RingEvent>(auditbuilder, bufferSize, executor);
+		disruptor = new Disruptor<RingEvent>(eventbuilder, bufferSize, executor);
 
 		// Connect the handler
 		disruptor.handleEventsWith(handler);

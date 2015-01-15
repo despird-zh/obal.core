@@ -1,5 +1,7 @@
 package com.obal.core;
 
+import java.util.ArrayList;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,23 +13,20 @@ import com.obal.disruptor.EventDispatcher;
 import com.obal.exception.BaseException;
 import com.obal.meta.EntityManager;
 
-public class CoreManager {
+public class CoreManager implements ILifecycle{
 
 	static Logger LOGGER = LoggerFactory.getLogger(CoreManager.class);
 	
 	private static CoreManager coreInstance;
 	
-	private int state = -1;
-	
-	public static final int READY = 101;	
-	public static final int STARTING = 102;
-	public static final int STARTED = 103;
-	public static final int STOPED = 104;
+	private State state = State.UNKNOWN;
 	
 	private EventDispatcher eventDispatcher = null;
 	private EntityManager entityManager = null;
 	private EntityAdmin entityAdmin = null;
 	private CacheManager cacheManager = null;
+	
+	private ArrayList<LifecycleListener> listeners = new ArrayList<LifecycleListener>();
 	
 	private CoreManager(){
 		
@@ -45,7 +44,7 @@ public class CoreManager {
 		this.cacheManager = CacheManager.getInstance();
 	}
 	
-	public static void initial() throws BaseException{
+	public void initial() throws BaseException{
 		
 		if(null == coreInstance)
 			coreInstance = new CoreManager();
@@ -58,24 +57,55 @@ public class CoreManager {
 		
 		coreInstance.entityAdmin.loadEntityMeta();		
 		
-		coreInstance.state = READY;
+		coreInstance.state = State.INIT;
 	}
 	
-	public static void start() throws BaseException{
+	public void start() throws BaseException{
 		
 		coreInstance.eventDispatcher.start();
-		coreInstance.state = STARTED;
+		coreInstance.state = State.RUNNING;
 	}
 	
-	public static void stop()throws BaseException{
+	public void stop()throws BaseException{
 		
 		coreInstance.eventDispatcher.shutdown();
-		coreInstance.state = STOPED;
+		coreInstance.state = State.STOP;
 	}
 	
-	public static int state() throws BaseException{
+	public State state() {
 		
-		initial();
 		return coreInstance.state;
 	}
+
+	@Override
+	public void regListener(LifecycleListener listener) {
+
+		int count = listeners.size()-1;
+		while(count >=0){
+			
+			if( listeners.get(count).priority() == listener.priority() )
+				listeners.add(count, listener);
+			
+			else if( listeners.get(count).priority() > listener.priority() )
+				listeners.add( listener);
+			
+			else if(count == 0){
+				listeners.add(count, listener);
+			}
+			
+			count--;
+		}
+	}
+
+	@Override
+	public void unregListener(LifecycleListener listener) {
+		
+		listeners.remove(listener);
+	}
+
+	@Override
+	public void clearListener() {
+		listeners.clear();
+	}
+
 }
