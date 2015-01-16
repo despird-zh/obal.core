@@ -54,7 +54,8 @@ public class CoreManager implements ILifecycle{
 	
 	@Override
 	public void initial() throws BaseException{
-				
+		
+		dispatchEvent(State.BEFORE_INIT);
 		AuditHooker auditHooker = new AuditHooker();
 		this.eventDispatcher.regEventHooker(auditHooker);
 		
@@ -62,21 +63,26 @@ public class CoreManager implements ILifecycle{
 		this.eventDispatcher.regEventHooker(cacheHooker);
 		
 		this.entityAdmin.loadEntityMeta();		
-		
+		dispatchEvent(State.AFTER_INIT);
 		this.state = State.INIT;
 	}
 	
 	@Override
 	public void start() throws BaseException{
 		
+		dispatchEvent(State.BEFORE_START);
+		this.state = State.START;
 		this.eventDispatcher.start();
 		this.state = State.RUNNING;
+		dispatchEvent(State.AFTER_START);
 	}
 	
 	@Override
 	public void stop()throws BaseException{
 		
+		dispatchEvent(State.BEFORE_STOP);
 		this.eventDispatcher.shutdown();
+		dispatchEvent(State.AFTER_STOP);
 		this.state = State.STOP;
 	}
 	

@@ -10,10 +10,16 @@ public interface ILifecycle {
 	public static enum State{
 		
 		UNKNOWN,
+		BEFORE_INIT,
 		INIT,
+		AFTER_INIT,
+		BEFORE_START,
 		START,
+		AFTER_START,
 		RUNNING,
-		STOP
+		BEFORE_STOP,
+		STOP,
+		AFTER_STOP
 	}
 	
 	/**
