@@ -12,19 +12,30 @@ public abstract class LifecycleListener {
 		this.name = name;
 		this.priority = priority;
 	}
+	
 	private String name = "listener";
+	
 	private int priority = 0;
 	
+	/**
+	 * Get the priority of listener 
+	 **/
 	public int priority(){
 		
 		return priority;
 	}
 	
+	/**
+	 * Get the name of listener 
+	 **/
 	public String name(){
 		
 		return this.name;
 	}
 	
+	/**
+	 * Disgest event  
+	 **/
 	public abstract void onEvent(State event);
 	
 

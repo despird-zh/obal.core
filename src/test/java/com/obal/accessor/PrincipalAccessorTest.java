@@ -57,13 +57,13 @@ public class PrincipalAccessorTest extends BlankTester{
 		
 	protected void setUp() throws Exception {  
 		initLog4j();
-		CoreManager.initial();
-		CoreManager.start();
+		CoreManager.getInstance().initial();
+		CoreManager.getInstance().start();
 	    super.setUp();  
 	}  
 	  
 	protected void tearDown() throws Exception {  
-	    CoreManager.stop();
+	    CoreManager.getInstance().stop();
 		super.tearDown();  
 	} 
 }

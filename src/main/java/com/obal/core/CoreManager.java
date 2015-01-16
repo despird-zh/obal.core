@@ -33,8 +33,16 @@ public class CoreManager implements ILifecycle{
 		setup();
 	}
 	
+	public static CoreManager getInstance(){
+		
+		if(coreInstance == null)
+			coreInstance = new CoreManager();
+		
+		return coreInstance;
+	}
+	
 	private void setup(){
-		// initial the eventdispatcher
+		// initial the event dispatcher
 		this.eventDispatcher = EventDispatcher.getInstance();
 		// prepare the meta infor & attr data
 		this.entityManager = EntityManager.getInstance();
@@ -44,37 +52,38 @@ public class CoreManager implements ILifecycle{
 		this.cacheManager = CacheManager.getInstance();
 	}
 	
+	@Override
 	public void initial() throws BaseException{
-		
-		if(null == coreInstance)
-			coreInstance = new CoreManager();
-		
+				
 		AuditHooker auditHooker = new AuditHooker();
-		coreInstance.eventDispatcher.regEventHooker(auditHooker);
+		this.eventDispatcher.regEventHooker(auditHooker);
 		
 		CacheHooker<?> cacheHooker = new CacheHooker<EntryKey>();
-		coreInstance.eventDispatcher.regEventHooker(cacheHooker);
+		this.eventDispatcher.regEventHooker(cacheHooker);
 		
-		coreInstance.entityAdmin.loadEntityMeta();		
+		this.entityAdmin.loadEntityMeta();		
 		
-		coreInstance.state = State.INIT;
+		this.state = State.INIT;
 	}
 	
+	@Override
 	public void start() throws BaseException{
 		
-		coreInstance.eventDispatcher.start();
-		coreInstance.state = State.RUNNING;
+		this.eventDispatcher.start();
+		this.state = State.RUNNING;
 	}
 	
+	@Override
 	public void stop()throws BaseException{
 		
-		coreInstance.eventDispatcher.shutdown();
-		coreInstance.state = State.STOP;
+		this.eventDispatcher.shutdown();
+		this.state = State.STOP;
 	}
 	
+	@Override
 	public State state() {
 		
-		return coreInstance.state;
+		return this.state;
 	}
 
 	@Override
@@ -108,4 +117,13 @@ public class CoreManager implements ILifecycle{
 		listeners.clear();
 	}
 
+	private void dispatchEvent(State state){
+		
+		int count = this.listeners.size();
+		for(int i = 0 ; i < count ; i++){
+			
+			listeners.get(i).onEvent(state);
+		}
+		
+	}
 }
