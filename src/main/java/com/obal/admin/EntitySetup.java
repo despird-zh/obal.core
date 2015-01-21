@@ -2,8 +2,6 @@ package com.obal.admin;
 
 import com.obal.core.security.Principal;
 import com.obal.exception.AccessorException;
-import com.obal.meta.AttrMode;
-import com.obal.meta.AttrType;
 import com.obal.meta.EntityAttr;
 import com.obal.meta.EntityConstants;
 import com.obal.meta.EntityMeta;
@@ -67,9 +65,9 @@ public class EntitySetup {
 		meta.addAttr(attr);
 		attr = new EntityAttr("i_password", "c0", "password");
 		meta.addAttr(attr);
-		attr = new EntityAttr("i_groups", AttrMode.MAP, AttrType.STRING, "c1", "groups");
+		attr = new EntityAttr("i_groups", EntityAttr.AttrMode.MAP, EntityAttr.AttrType.STRING, "c1", "groups");
 		meta.addAttr(attr);
-		attr = new EntityAttr("i_roles", AttrMode.MAP, AttrType.STRING, "c1", "roles");
+		attr = new EntityAttr("i_roles", EntityAttr.AttrMode.MAP, EntityAttr.AttrType.STRING, "c1", "roles");
 		meta.addAttr(attr);
 		ea.setupSchema(meta);
 
@@ -85,9 +83,9 @@ public class EntitySetup {
 		meta.setTraceable(true);
 		EntityAttr attr = new EntityAttr("i_group_name", "c0", "groupname");
 		meta.addAttr(attr);
-		attr = new EntityAttr("i_users", AttrMode.MAP, AttrType.STRING, "c1","users");
+		attr = new EntityAttr("i_users", EntityAttr.AttrMode.MAP, EntityAttr.AttrType.STRING, "c1","users");
 		meta.addAttr(attr);
-		attr = new EntityAttr("i_groups", AttrMode.MAP, AttrType.STRING, "c1","groups");
+		attr = new EntityAttr("i_groups", EntityAttr.AttrMode.MAP, EntityAttr.AttrType.STRING, "c1","groups");
 		meta.addAttr(attr);
 		
 		ea.setupSchema(meta);
@@ -103,7 +101,7 @@ public class EntitySetup {
 		meta.setTraceable(true);
 		EntityAttr attr = new EntityAttr("i_role_name", "c0", "rolename");
 		meta.addAttr(attr);
-		attr = new EntityAttr("i_users", AttrMode.MAP, AttrType.STRING, "c1", "users");
+		attr = new EntityAttr("i_users", EntityAttr.AttrMode.MAP, EntityAttr.AttrType.STRING, "c1", "users");
 		meta.addAttr(attr);
 
 		ea.setupSchema(meta);

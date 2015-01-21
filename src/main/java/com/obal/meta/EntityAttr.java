@@ -33,6 +33,57 @@ import com.obal.core.ITraceable;
  **/
 public class EntityAttr implements ITraceable{
 
+	/**
+	 * The attribute support four kinds of value store mode:
+	 * MAP,LIST,SET,PRIMITIVE.
+	 *  
+	 * @author despird 
+	 **/
+	public static enum AttrMode {
+		
+		PRIMITIVE("PRIMITIVE"), // Primitive :int ,long etc single element
+		MAP("MAP"), // Map key-value pair
+		LIST("LIST"), // List the array of element
+		SET("SET"); // Set the array of element
+		
+		private String mode = null;
+		
+		/**
+		 * Hide Rtype default constructor 
+		 **/
+		private AttrMode(String mode){  
+			this.mode = mode;
+	    } 
+		
+		@Override
+		public String toString(){
+			return this.mode;
+		}
+	}
+	
+	public static enum AttrType {
+		
+		INTEGER("INTEGER"),
+		DOUBLE("DOUBLE"),
+		LONG("LONG"),
+		STRING("STRING"),
+		DATE("DATE"),
+		BOOL("BOOLEAN");
+		
+		private String type = null;
+		/**
+		 * Hide Rtype default constructor 
+		 **/
+		private AttrType(String type){  
+			this.type = type;
+	    } 
+		
+		@Override
+		public String toString(){
+			return this.type;
+		}
+	}
+	
 	public AttrType type = AttrType.STRING;
 	public AttrMode mode = AttrMode.PRIMITIVE;
 	
@@ -57,7 +108,7 @@ public class EntityAttr implements ITraceable{
 	 **/
 	public EntityAttr(String attrName, String column, String qualifier){
 		
-		this.type = AttrType.STRING;
+		
 		this.attrName = attrName;
 		this.column = column;
 		this.qualifier = qualifier;
@@ -123,8 +174,6 @@ public class EntityAttr implements ITraceable{
 	
 	/**
 	 * Get the Qualifier name 
-	 * 
-	 * 
 	 **/
 	public String getQualifier(){
 		

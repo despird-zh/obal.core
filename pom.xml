@@ -58,6 +58,11 @@
 	      <artifactId>commons-configuration</artifactId>  
 	      <version>${comm.config}</version>  
 	</dependency>  
+	<dependency>
+        <groupId>com.esotericsoftware</groupId>
+        <artifactId>kryo</artifactId>
+        <version>3.0.0</version>
+    </dependency>
   </dependencies >
   <build>
     <plugins>
@@ -84,7 +89,7 @@
 	       <version>2.10</version>
 	      <configuration>    
 	        <includes>    
-	          <include>**/*AuditTest.java</include> 
+	          <include>**/EntityAttrSerialTest.java</include> 
 	        </includes>    
 	      </configuration>    
 	  </plugin>

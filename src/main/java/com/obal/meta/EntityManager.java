@@ -187,21 +187,21 @@ public class EntityManager {
 		meta.addAttr(attr);
 		attr = new EntityAttr("i_qualifier", "c0", "qualifier");
 		meta.addAttr(attr);
-		attr = new EntityAttr("i_hidden", AttrType.BOOL, "c0", "hidden");
+		attr = new EntityAttr("i_hidden", EntityAttr.AttrType.BOOL, "c0", "hidden");
 		meta.addAttr(attr);
-		attr = new EntityAttr("i_readonly", AttrType.BOOL, "c0", "readonly");
+		attr = new EntityAttr("i_readonly", EntityAttr.AttrType.BOOL, "c0", "readonly");
 		meta.addAttr(attr);
-		attr = new EntityAttr("i_required", AttrType.BOOL, "c0", "required");
+		attr = new EntityAttr("i_required", EntityAttr.AttrType.BOOL, "c0", "required");
 		meta.addAttr(attr);
-		attr = new EntityAttr("i_primary", AttrType.BOOL, "c0", "primary");
+		attr = new EntityAttr("i_primary", EntityAttr.AttrType.BOOL, "c0", "primary");
 		meta.addAttr(attr);
 		attr = new EntityAttr("i_creator", "c0", "creator");
 		meta.addAttr(attr);
 		attr = new EntityAttr("i_modifier", "c0", "modifier");
 		meta.addAttr(attr);
-		attr = new EntityAttr("i_newcreate", AttrType.DATE, "c0", "newcreate");
+		attr = new EntityAttr("i_newcreate", EntityAttr.AttrType.DATE, "c0", "newcreate");
 		meta.addAttr(attr);
-		attr = new EntityAttr("i_lastmodify", AttrType.DATE, "c0", "lastmodify");
+		attr = new EntityAttr("i_lastmodify", EntityAttr.AttrType.DATE, "c0", "lastmodify");
 		meta.addAttr(attr);
 		attr = new EntityAttr("i_entity", "c1", "entity");
 		meta.addAttr(attr);
@@ -220,20 +220,20 @@ public class EntityManager {
 		meta.addAttr(attr);
 		attr = new EntityAttr("i_description", "c0", "description");
 		meta.addAttr(attr);
-		attr = new EntityAttr("i_traceable", AttrType.BOOL, "c0", "traceable");
+		attr = new EntityAttr("i_traceable", EntityAttr.AttrType.BOOL, "c0", "traceable");
 		meta.addAttr(attr);
 		attr = new EntityAttr("i_creator", "c0", "creator");
 		meta.addAttr(attr);
 		attr = new EntityAttr("i_modifier", "c0", "modifier");
 		meta.addAttr(attr);
-		attr = new EntityAttr("i_newcreate", AttrType.DATE, "c0", "newcreate");
+		attr = new EntityAttr("i_newcreate", EntityAttr.AttrType.DATE, "c0", "newcreate");
 		meta.addAttr(attr);
-		attr = new EntityAttr("i_lastmodify", AttrType.DATE, "c0", "lastmodify");
+		attr = new EntityAttr("i_lastmodify", EntityAttr.AttrType.DATE, "c0", "lastmodify");
 		meta.addAttr(attr);
-		attr = new EntityAttr("i_attributes", AttrMode.MAP, AttrType.STRING,
+		attr = new EntityAttr("i_attributes", EntityAttr.AttrMode.MAP, EntityAttr.AttrType.STRING,
 				"c1", "a");
 		meta.addAttr(attr);
-		attr = new EntityAttr("i_schemas", AttrMode.LIST, AttrType.STRING,
+		attr = new EntityAttr("i_schemas", EntityAttr.AttrMode.LIST, EntityAttr.AttrType.STRING,
 				"c1", "s");
 		meta.addAttr(attr);
 		GenericEntity me = new GenericEntity(meta);
@@ -245,9 +245,9 @@ public class EntityManager {
 		traceable.addAttr(attr);
 		attr = new EntityAttr("i_modifier", "c0", "modifier");
 		traceable.addAttr(attr);
-		attr = new EntityAttr("i_newcreate", AttrType.DATE, "c0", "newcreate");
+		attr = new EntityAttr("i_newcreate", EntityAttr.AttrType.DATE, "c0", "newcreate");
 		traceable.addAttr(attr);
-		attr = new EntityAttr("i_lastmodify", AttrType.DATE, "c0", "lastmodify");
+		attr = new EntityAttr("i_lastmodify", EntityAttr.AttrType.DATE, "c0", "lastmodify");
 		traceable.addAttr(attr);
 		GenericEntity te = new GenericEntity(traceable);
 		metaMap.put(te.getEntityName(), te.getEntityMeta());

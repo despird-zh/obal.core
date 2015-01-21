@@ -303,10 +303,10 @@ public class EntityMeta implements ITraceable{
 			EntityAttr attr = entry.getValue();
 			if(null == attr) 
 				continue;
-			else if(primitiveFlag && attr.mode == AttrMode.PRIMITIVE){
+			else if(primitiveFlag && attr.mode == EntityAttr.AttrMode.PRIMITIVE){
 				
 				attrs.add(attr);
-			}else if(!primitiveFlag && attr.mode != AttrMode.PRIMITIVE){
+			}else if(!primitiveFlag && attr.mode != EntityAttr.AttrMode.PRIMITIVE){
 				
 				attrs.add(attr);
 			}
