@@ -28,7 +28,7 @@ import com.obal.meta.BaseEntity;
  * Abstract EntryAccessor with EntrySchema information, it provides operation on
  * certain Entity
  **/
-public abstract class EntityAccessor<GB extends EntryKey> implements IEntityAccessor <GB>{
+public abstract class EntityAccessor<GB extends EntryInfo> implements IEntityAccessor <GB>{
 
 	private boolean embed = false;
 	private ThreadLocal<AccessorContext> localContext = new ThreadLocal<AccessorContext>();

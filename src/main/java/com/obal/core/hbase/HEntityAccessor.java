@@ -47,6 +47,7 @@ import com.obal.core.EntryKey;
 import com.obal.core.ITraceable;
 import com.obal.core.accessor.AccessorContext;
 import com.obal.core.accessor.EntityAccessor;
+import com.obal.core.accessor.EntryInfo;
 import com.obal.exception.AccessorException;
 import com.obal.exception.MetaException;
 import com.obal.exception.WrapperException;
@@ -60,7 +61,7 @@ import com.obal.meta.EntityAttr;
  * @version 0.1 2014-5-2
  * 
  **/
-public abstract class HEntityAccessor<GB extends EntryKey> extends EntityAccessor<GB> implements HConnAware {
+public abstract class HEntityAccessor<GB extends EntryInfo> extends EntityAccessor<GB> implements HConnAware {
 	
 	Logger LOGGER = LoggerFactory.getLogger(HEntityAccessor.class);
 	
@@ -329,7 +330,8 @@ public abstract class HEntityAccessor<GB extends EntryKey> extends EntityAccesso
 		EntryKey rtv = null;
 		BaseEntity entrySchema = (BaseEntity)getEntitySchema();
         try {  
-            table = getConnection().getTable(entrySchema.getSchema(getAccessorContext().getPrincipal(),entryInfo));
+        	EntryKey key = entryInfo.getEntryKey();
+            table = getConnection().getTable(entrySchema.getSchema(getAccessorContext().getPrincipal(),key.getKey()));
             HEntryWrapper<GB> wrapper = this.getEntryWrapper();
  
             Put put = (Put)wrapper.parse(entrySchema.getEntityMeta().getAllAttrs(),entryInfo);
@@ -340,12 +342,12 @@ public abstract class HEntityAccessor<GB extends EntryKey> extends EntityAccesso
         	}
             table.put(put);
         	table.flushCommits();
-        	rtv = entryInfo;
+        	rtv = entryInfo.getEntryKey();
         	
         } catch (IOException e) {  
-        	 throw new AccessorException("Error put entry row,key:{}",e,entryInfo.getKey());
+        	 throw new AccessorException("Error put entry row,key:{}",e,entryInfo.getEntryKey().toString());
         } catch (WrapperException e) {
-        	throw new AccessorException("Error put entry row,key:{}",e,entryInfo.getKey());
+        	throw new AccessorException("Error put entry row,key:{}",e,entryInfo.getEntryKey().toString());
 		}finally{
         	
         	try {

@@ -21,7 +21,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import com.lmax.disruptor.EventFactory;
-import com.obal.core.EntryInfo;
+import com.obal.core.accessor.EntryInfo;
 import com.obal.disruptor.EventPayload;
 
 public class AuditInfo extends EntryInfo implements EventPayload{
@@ -139,7 +139,7 @@ public class AuditInfo extends EntryInfo implements EventPayload{
 
 		String retValue = "";
 
-		retValue = "AuditEvent(key=" + this.getKey() + ", timestamp=" + this.timestamp
+		retValue = "AuditEvent(key=" + this.getEntryKey().getKey() + ", timestamp=" + this.timestamp
 				+ ", subject=" + this.subject + ", verb=" + this.verb
 				+ ", object=" + this.object + ", predicateMap = " + this.predicateMap 
 				+ ")";
@@ -155,9 +155,9 @@ public class AuditInfo extends EntryInfo implements EventPayload{
 	 **/
 	public void copy(AuditInfo fromOne){
 		
-		this.setKey(fromOne.getKey());
+		this.setEntryKey(fromOne.getEntryKey());
 		this.setTimestamp(fromOne.getTimestamp());
-		this.setEntityName(fromOne.getEntityName());
+	
 		this.setVerb(fromOne.getVerb());
 		this.setSubject(fromOne.getSubject());
 		this.setObject(fromOne.getObject());

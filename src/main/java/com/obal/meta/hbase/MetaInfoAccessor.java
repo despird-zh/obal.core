@@ -23,13 +23,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.obal.core.accessor.AccessorContext;
-import com.obal.core.accessor.RawEntry;
+import com.obal.core.accessor.EntryInfo;
 import com.obal.core.hbase.HEntryWrapper;
 import com.obal.core.hbase.HEntityAccessor;
 import com.obal.core.hbase.HRawWrapper;
 import com.obal.meta.BaseEntity;
 
-public class MetaInfoAccessor extends HEntityAccessor<RawEntry>{
+public class MetaInfoAccessor extends HEntityAccessor<EntryInfo>{
 
 	public MetaInfoAccessor(AccessorContext context) {
 		super(context);
@@ -38,7 +38,7 @@ public class MetaInfoAccessor extends HEntityAccessor<RawEntry>{
 	public static Logger LOGGER = LoggerFactory.getLogger(MetaInfoAccessor.class);
 
 	@Override
-	public HEntryWrapper<RawEntry> getEntryWrapper() {
+	public HEntryWrapper<EntryInfo> getEntryWrapper() {
 		
 		HRawWrapper wrapper = new HRawWrapper();		
 

@@ -37,6 +37,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.obal.core.EntryKey;
+import com.obal.core.IEntryInfo;
 import com.obal.core.ITraceable;
 import com.obal.core.security.EntryAcl;
 import com.obal.core.security.IAccessControl;
@@ -53,7 +54,7 @@ import com.obal.meta.EntityManager;
  * @author despird-zh
  * @version 0.1 2014-3-2
  **/
-public abstract class HEntryWrapper<GB extends EntryKey> {
+public abstract class HEntryWrapper<GB extends IEntryInfo> {
 
 	protected static ObjectMapper objectMapper = new ObjectMapper();
 	

@@ -1,25 +1,42 @@
 package com.obal.core.accessor;
 
 import java.util.Date;
+import java.util.List;
 
-import com.obal.core.EntryInfo;
 import com.obal.core.EntryKey;
 import com.obal.core.ITraceable;
+import com.obal.meta.EntityAttr;
 
-public abstract class TraceableEntry extends EntryInfo implements ITraceable{
+public class TraceableEntry extends EntryInfo implements ITraceable{
 
+	public TraceableEntry (){
+		
+		super();
+	}
+
+	public TraceableEntry (String entityName,String key){
+		
+		super();
+		EntryKey entryKey = new EntryKey(entityName,key);
+		this.setEntryKey(entryKey);
+	}
+	
+	public TraceableEntry (EntryKey entryKey){
+		
+		super();
+		this.setEntryKey(entryKey);
+	}
+	
+	public TraceableEntry(List<EntityAttr> attrs){
+		
+		super(attrs);
+		
+	}
+	
 	private String creator;
 	private String modifier;
 	private Date newCreate;
 	private Date lastModify;
-	
-	public TraceableEntry(EntryKey key) {
-		super(key);
-	}
-
-	public TraceableEntry(String entityName, String key) {
-		super(entityName, key);
-	}
 	
 	@Override
 	public String getCreator() {

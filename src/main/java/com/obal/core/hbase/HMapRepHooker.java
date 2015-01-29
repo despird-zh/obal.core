@@ -11,6 +11,7 @@ import org.apache.hadoop.io.DataOutputBuffer;
 import org.apache.hadoop.io.serializer.Deserializer;
 
 import com.obal.core.EntryKey;
+import com.obal.core.accessor.EntryInfo;
 import com.obal.disruptor.EventPayload;
 import com.obal.disruptor.EventType;
 import com.obal.disruptor.GenericHooker;
@@ -19,7 +20,7 @@ import com.obal.exception.RingEventException;
 import com.obal.exception.WrapperException;
 import com.obal.meta.EntityAttr;
 
-public class HMapRepHooker<K extends EntryKey> extends GenericHooker<DataOutputBuffer>{
+public class HMapRepHooker<K extends EntryInfo> extends GenericHooker<DataOutputBuffer>{
 
 	
 	List<K> resultList = new ArrayList<K>();

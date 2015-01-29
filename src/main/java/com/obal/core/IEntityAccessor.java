@@ -21,6 +21,7 @@ package com.obal.core;
 
 import java.util.List;
 
+import com.obal.core.accessor.EntryInfo;
 import com.obal.exception.AccessorException;
 import com.obal.meta.BaseEntity;
 /**
@@ -34,7 +35,7 @@ import com.obal.meta.BaseEntity;
  * @see EntryWrapper
  * @see EntryKey
  **/
-public interface IEntityAccessor <GB extends EntryKey> extends IBaseAccessor{
+public interface IEntityAccessor <GB extends EntryInfo> extends IBaseAccessor{
 	
 	/**
 	 * Generate new key for entity 

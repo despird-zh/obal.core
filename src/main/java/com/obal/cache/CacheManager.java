@@ -23,6 +23,7 @@ import com.obal.core.AccessorFactory;
 import com.obal.core.CoreConstants;
 import com.obal.core.EntryKey;
 import com.obal.core.IEntityAccessor;
+import com.obal.core.accessor.EntryInfo;
 import com.obal.core.security.Principal;
 import com.obal.disruptor.EventDispatcher;
 import com.obal.disruptor.EventType;
@@ -73,7 +74,7 @@ public class CacheManager{
 	 * @param entry the entry object to be cached.
 	 *  
 	 **/
-	public <K extends EntryKey> void cachePut(K entry){
+	public <K extends EntryInfo> void cachePut(K entry){
 		
 		CacheInfo data = new CacheInfo();
 		data.setPutEntryData(entry);
@@ -105,7 +106,7 @@ public class CacheManager{
 	 * @param entityName the entity name
 	 * @param key the key of entry data 
 	 **/
-	public <K extends EntryKey> K cacheGet(String entityName, String key){
+	public <K extends EntryInfo> K cacheGet(String entityName, String key){
 		
 		Principal principal = null;		
 		K cacheData = null;

@@ -21,6 +21,8 @@ package com.obal.core;
 
 import java.util.Date;
 
+import com.obal.core.accessor.EntryInfo;
+
 /**
  * ITraceable interface indicate the object holds tracing information. 
  * 

@@ -20,6 +20,7 @@
 package com.obal.cache;
 
 import com.obal.core.EntryKey;
+import com.obal.core.accessor.EntryInfo;
 import com.obal.disruptor.EventPayload;
 
 /**
@@ -70,7 +71,7 @@ public class CacheInfo implements EventPayload{
 	 * Set the setting of entry attribute put operation.
 	 *  
 	 **/
-	public void setPutEntryData(EntryKey entryInfo){
+	public void setPutEntryData(EntryInfo entryInfo){
 		
 		PutEntryData ped = new PutEntryData();
 		ped.entryInfo = entryInfo;
@@ -107,7 +108,7 @@ public class CacheInfo implements EventPayload{
     
     public static class PutEntryData{
     	
-    	public EntryKey entryInfo = null;
+    	public EntryInfo entryInfo = null;
     }
     
     public String operation(String operation){

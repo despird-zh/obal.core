@@ -17,7 +17,16 @@
  * under the License.
  * 
  */
-package com.obal.core;
+package com.obal.core.accessor;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.obal.core.EntryKey;
+import com.obal.core.IEntryInfo;
+import com.obal.meta.EntityAttr;
 
 /**
  * EntryInfo is the base class for all classes that be used to wrap the entry row
@@ -32,37 +41,43 @@ package com.obal.core;
  * @see RawTraceableEntry
  * 
  **/
-public abstract class EntryInfo extends EntryKey{
+public class EntryInfo extends GenericInfo implements IEntryInfo{
+
+	private EntryKey entryKey = null;
 	
-	/**
-	 * Constructor with entity name and entry key 
-	 * 
-	 * @param entityName the entity name
-	 * @param key the entry key
-	 **/
-	public EntryInfo(String entityName, String key){
+	public EntryInfo (){
 		
-		super(entityName, key);
+		super();
 	}
 
-	/**
-	 * Constructor with entry key 
-	 * 
-	 * @param key the entry key
-	 **/
-	public EntryInfo(EntryKey key){
+	public EntryInfo (String entityName,String key){
 		
-		super(key.getEntityName(), key.getKey());
+		super();
+		entryKey = new EntryKey(entityName,key);
 	}
 	
-	/**
-	 * Get the entry key
-	 * 
-	 * @return EntryKey the entry key
-	 **/
-	public EntryKey getEntryKey(){
+	public EntryInfo (EntryKey entryKey){
 		
-		return new EntryKey(getEntityName(), getKey());
+		super();
+		this.setEntryKey(entryKey);
 	}
 	
+	public EntryInfo(List<EntityAttr> attrs){
+		
+		super(attrs);
+		
+	}
+	
+	@Override
+	public EntryKey getEntryKey() {
+		
+		return this.entryKey;
+	}
+
+	@Override
+	public void setEntryKey(EntryKey entryKey) {
+		
+		this.entryKey = entryKey;
+	}
+
 }

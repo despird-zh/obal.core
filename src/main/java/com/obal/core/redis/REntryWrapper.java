@@ -36,10 +36,11 @@ import redis.clients.jedis.Jedis;
 
 import com.obal.core.CoreConstants;
 import com.obal.core.EntryKey;
+import com.obal.core.accessor.EntryInfo;
 import com.obal.exception.AccessorException;
 import com.obal.meta.EntityAttr;
 
-public abstract class REntryWrapper<GB extends EntryKey> {
+public abstract class REntryWrapper<GB extends EntryInfo> {
 
 	public static Logger LOGGER = LoggerFactory.getLogger(REntryWrapper.class);
 	/**

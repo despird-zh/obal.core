@@ -2,28 +2,18 @@ package com.obal.core.accessor;
 
 import java.util.Date;
 
-import com.obal.core.EntryInfo;
-import com.obal.core.EntryKey;
 import com.obal.core.ITraceable;
 import com.obal.core.security.EntryAce;
 import com.obal.core.security.EntryAcl;
 import com.obal.core.security.IAccessControl;
 
-public abstract class AccessControlEntry extends EntryInfo implements ITraceable ,IAccessControl{
+public class AccessControlEntry extends EntryInfo implements ITraceable ,IAccessControl{
 
 	private String creator;
 	private String modifier;
 	private Date newCreate;
 	private Date lastModify;
 	private EntryAcl entryAcl;
-	
-	public AccessControlEntry(EntryKey key) {
-		super(key);
-	}
-
-	public AccessControlEntry(String entityName, String key) {
-		super(entityName, key);
-	}
 	
 	@Override
 	public String getCreator() {

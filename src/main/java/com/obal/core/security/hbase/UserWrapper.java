@@ -66,11 +66,11 @@ public class UserWrapper extends HEntryWrapper<Principal>{
 	@Override
 	public Put parse(List<EntityAttr> attrs, Principal entryInfo)
 			throws WrapperException {
-		byte[] keybytes = entryInfo.getKeyBytes();
+		byte[] keybytes = entryInfo.getEntryKey().getKeyBytes();
 		if(keybytes == null)
 			throw new WrapperException("The entrykey's cannot be null");
 		
-		Put put = new Put(entryInfo.getKeyBytes());
+		Put put = new Put(keybytes);
 
         for(EntityAttr attr:attrs){
 			Object val = null;

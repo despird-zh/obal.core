@@ -34,11 +34,12 @@ import com.obal.core.EntryFilter;
 import com.obal.core.EntryKey;
 import com.obal.core.accessor.AccessorContext;
 import com.obal.core.accessor.EntityAccessor;
+import com.obal.core.accessor.EntryInfo;
 import com.obal.exception.AccessorException;
 import com.obal.meta.BaseEntity;
 import com.obal.meta.EntityAttr;
 
-public abstract class REntityAccessor <GB extends EntryKey> extends EntityAccessor<GB> implements RedisAware{
+public abstract class REntityAccessor <GB extends EntryInfo> extends EntityAccessor<GB> implements RedisAware{
 
 	Logger LOGGER = LoggerFactory.getLogger(REntityAccessor.class);
 	
@@ -63,7 +64,7 @@ public abstract class REntityAccessor <GB extends EntryKey> extends EntityAccess
 		REntryWrapper<GB> wrapper = this.getEntryWrapper();
 		wrapper.parse(entitySchema.getEntityMeta().getAllAttrs(), this.jedis,entryInfo);
 
-		rtv = entryInfo;
+		rtv = entryInfo.getEntryKey();
 
 		return rtv;
 	}

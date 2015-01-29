@@ -9,7 +9,7 @@ import java.util.Map;
 import com.obal.admin.EntityAdmin;
 import com.obal.admin.IAdminAccessor;
 import com.obal.core.EntryKey;
-import com.obal.core.accessor.RawEntry;
+import com.obal.core.accessor.EntryInfo;
 import com.obal.core.security.Principal;
 import com.obal.exception.AccessorException;
 import com.obal.exception.EntityException;

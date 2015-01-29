@@ -28,7 +28,7 @@ import org.apache.hadoop.hbase.client.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.obal.core.accessor.RawEntry;
+import com.obal.core.accessor.EntryInfo;
 import com.obal.exception.WrapperException;
 import com.obal.meta.EntityAttr;
 import com.obal.meta.EntityConstants;
@@ -42,19 +42,19 @@ import com.obal.meta.EntityMeta;
  * @version 0.1 2014-3-1
  * 
  **/
-public class HRawWrapper extends HEntryWrapper<RawEntry>{
+public class HRawWrapper extends HEntryWrapper<EntryInfo>{
 
 	public static Logger LOGGER = LoggerFactory.getLogger(HRawWrapper.class);
 
 	@Override
-	public RawEntry wrap(String entityName,Result rawEntry) throws WrapperException{
+	public EntryInfo wrap(String entityName,Result rawEntry) throws WrapperException{
 						
 		Result entry = (Result)rawEntry;	
 		EntityMeta meta = EntityManager.getInstance().getEntityMeta(entityName);
 		
 		List<EntityAttr> attrs = meta.getAllAttrs();
 		
-		RawEntry gei = new RawEntry(entityName,new String(entry.getRow()));
+		EntryInfo gei = new EntryInfo(entityName,new String(entry.getRow()));
 		
 		for(EntityAttr attr: attrs){
 			if(LOGGER.isDebugEnabled()){
@@ -68,25 +68,25 @@ public class HRawWrapper extends HEntryWrapper<RawEntry>{
 				case PRIMITIVE :
 					
 					Object value = super.getPrimitiveValue(attr, cell);
-					gei.put(attr.getAttrName(), value);	
+					gei.setAttrValue(attr.getAttrName(), value);	
 					break;
 					
 				case MAP :
 					
 					Map<String, Object> map = super.getMapValue(attr, cell);				
-					gei.put(attr.getAttrName(), map);
+					gei.setAttrValue(attr.getAttrName(), map);
 					break;
 					
 				case LIST :
 					
 					List<Object> list = super.getListValue(attr, cell);					
-					gei.put(attr.getAttrName(), list);
+					gei.setAttrValue(attr.getAttrName(), list);
 					break;
 					
 				case SET :
 					
 					Set<Object> set = super.getSetValue(attr, cell);					
-					gei.put(attr.getAttrName(), set);
+					gei.setAttrValue(attr.getAttrName(), set);
 					break;
 					
 				default:
@@ -99,7 +99,7 @@ public class HRawWrapper extends HEntryWrapper<RawEntry>{
 	}
 	
 	@Override
-	public RawEntry wrap(List<EntityAttr> attrs,Result rawEntry) throws WrapperException{
+	public EntryInfo wrap(List<EntityAttr> attrs,Result rawEntry) throws WrapperException{
 						
 		Result entry = (Result)rawEntry;
 		String entityName = attrs.size()>0? (attrs.get(0).getEntityName()):EntityConstants.ENTITY_BLIND;
@@ -107,7 +107,7 @@ public class HRawWrapper extends HEntryWrapper<RawEntry>{
 			
 			entityName = EntityConstants.ENTITY_BLIND;
 		}
-		RawEntry gei = new RawEntry(entityName,new String(entry.getRow()));
+		EntryInfo gei = new EntryInfo(entityName,new String(entry.getRow()));
 		
 		for(EntityAttr attr: attrs){
 			byte[] column = attr.getColumn().getBytes();
@@ -118,25 +118,25 @@ public class HRawWrapper extends HEntryWrapper<RawEntry>{
 				case PRIMITIVE :
 				
 					Object value = super.getPrimitiveValue(attr, cell);
-					gei.put(attr.getAttrName(), value);	
+					gei.setAttrValue(attr.getAttrName(), value);	
 					break;
 					
 				case MAP :
 					
 					Map<String, Object> map = super.getMapValue(attr, cell);				
-					gei.put(attr.getAttrName(), map);
+					gei.setAttrValue(attr.getAttrName(), map);
 					break;
 					
 				case LIST :
 					
 					List<Object> list = super.getListValue(attr, cell);					
-					gei.put(attr.getAttrName(), list);
+					gei.setAttrValue(attr.getAttrName(), list);
 					break;
 					
 				case SET :
 					
 					Set<Object> set = super.getSetValue(attr, cell);					
-					gei.put(attr.getAttrName(), set);
+					gei.setAttrValue(attr.getAttrName(), set);
 					break;
 					
 				default:
@@ -151,12 +151,12 @@ public class HRawWrapper extends HEntryWrapper<RawEntry>{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Put parse(List<EntityAttr> attrs,RawEntry entryInfo) throws WrapperException{
-		Put put = new Put(entryInfo.getKeyBytes());
+	public Put parse(List<EntityAttr> attrs,EntryInfo entryInfo) throws WrapperException{
+		Put put = new Put(entryInfo.getEntryKey().getKey().getBytes());
 
         for(EntityAttr attr:attrs){
 
-        	Object value = entryInfo.get(attr.getAttrName());
+        	Object value = entryInfo.getAttrValue(attr.getAttrName());
         	if(LOGGER.isDebugEnabled()){
         		LOGGER.debug("-=>parsing attr:{} - value:{}",attr.getAttrName(),value);
         	}

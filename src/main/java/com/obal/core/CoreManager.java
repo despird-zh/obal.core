@@ -9,6 +9,7 @@ import com.obal.admin.EntityAdmin;
 import com.obal.audit.AuditHooker;
 import com.obal.cache.CacheHooker;
 import com.obal.cache.CacheManager;
+import com.obal.core.accessor.EntryInfo;
 import com.obal.disruptor.EventDispatcher;
 import com.obal.exception.BaseException;
 import com.obal.meta.EntityManager;
@@ -59,7 +60,7 @@ public class CoreManager implements ILifecycle{
 		AuditHooker auditHooker = new AuditHooker();
 		this.eventDispatcher.regEventHooker(auditHooker);
 		
-		CacheHooker<?> cacheHooker = new CacheHooker<EntryKey>();
+		CacheHooker<?> cacheHooker = new CacheHooker<EntryInfo>();
 		this.eventDispatcher.regEventHooker(cacheHooker);
 		
 		this.entityAdmin.loadEntityMeta();		

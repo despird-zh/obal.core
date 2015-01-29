@@ -35,6 +35,7 @@ import org.slf4j.LoggerFactory;
 
 import com.obal.cache.CacheManager;
 import com.obal.core.EntryKey;
+import com.obal.core.accessor.EntryInfo;
 import com.obal.meta.EntityAttr;
 
 /**
@@ -97,7 +98,7 @@ public abstract class CacheAspect {
     		
     		putValue = values[index];
     		if(putValue instanceof EntryKey){
-    			CacheManager.getInstance().cachePut((EntryKey)putValue);
+    			CacheManager.getInstance().cachePut((EntryInfo)putValue);
     			return;
 	    	}
     	}else{
@@ -269,7 +270,7 @@ public abstract class CacheAspect {
     		if(returnVal == null){
     			
     			returnVal = jp.proceed();
-    			CacheManager.getInstance().cachePut((EntryKey)returnVal);
+    			CacheManager.getInstance().cachePut((EntryInfo)returnVal);
     		}
     	}
 

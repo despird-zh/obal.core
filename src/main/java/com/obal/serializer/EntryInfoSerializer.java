@@ -11,7 +11,7 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryo.serializers.CollectionSerializer;
 import com.esotericsoftware.kryo.serializers.MapSerializer;
-import com.obal.common.EntryInfo;
+import com.obal.core.accessor.EntryInfo;
 import com.obal.meta.EntityAttr;
 
 public class EntryInfoSerializer extends Serializer<EntryInfo>{

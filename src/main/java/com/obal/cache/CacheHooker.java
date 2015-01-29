@@ -4,6 +4,7 @@ import com.obal.core.AccessorFactory;
 import com.obal.core.CoreConstants;
 import com.obal.core.EntryKey;
 import com.obal.core.IEntityAccessor;
+import com.obal.core.accessor.EntryInfo;
 import com.obal.core.security.Principal;
 import com.obal.disruptor.EventHooker;
 import com.obal.disruptor.EventPayload;
@@ -12,7 +13,7 @@ import com.obal.exception.AccessorException;
 import com.obal.exception.EntityException;
 import com.obal.exception.RingEventException;
 
-public class CacheHooker<K extends EntryKey>  extends EventHooker<CacheInfo>{
+public class CacheHooker<K extends EntryInfo>  extends EventHooker<CacheInfo>{
 
 	public CacheHooker() {
 		super(EventType.CACHE);
@@ -55,7 +56,7 @@ public class CacheHooker<K extends EntryKey>  extends EventHooker<CacheInfo>{
 			eaccessor = 
 				AccessorFactory.getInstance().buildEntityAccessor(CoreConstants.BUILDER_REDIS, 
 						principal, 
-						cacheData.getEntityName());	
+						cacheData.getEntryKey().getEntityName());	
 				
 
 			eaccessor.doPutEntry(cacheData);

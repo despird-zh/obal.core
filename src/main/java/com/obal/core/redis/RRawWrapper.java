@@ -29,7 +29,8 @@ import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
 
 import com.obal.core.CoreConstants;
-import com.obal.core.accessor.RawEntry;
+import com.obal.core.EntryKey;
+import com.obal.core.accessor.EntryInfo;
 import com.obal.exception.AccessorException;
 import com.obal.meta.EntityAttr;
 import com.obal.meta.EntityConstants;
@@ -43,12 +44,12 @@ import com.obal.meta.EntityMeta;
  * @version 0.1 2014-3-1
  * 
  **/
-public class RRawWrapper extends REntryWrapper<RawEntry> {
+public class RRawWrapper extends REntryWrapper<EntryInfo> {
 
 	public static Logger LOGGER = LoggerFactory.getLogger(RRawWrapper.class);
 
 	@Override
-	public RawEntry wrap(String entityName, String key, Jedis rawEntry) throws AccessorException{
+	public EntryInfo wrap(String entityName, String key, Jedis rawEntry) throws AccessorException{
 		String redisKey = entityName + CoreConstants.KEYS_SEPARATOR + key;
 		Jedis entry = rawEntry;
 		// not exist return null;
@@ -62,7 +63,7 @@ public class RRawWrapper extends REntryWrapper<RawEntry> {
 			throw new AccessorException("The meta data:{} not exists in EntityManager.",entityName);
 		
 		List<EntityAttr> attrs = meta.getAllAttrs();
-		RawEntry gei = new RawEntry(entityName, key);
+		EntryInfo gei = new EntryInfo(entityName, key);
 		
 		for (EntityAttr attr : attrs) {
 			if (LOGGER.isDebugEnabled()) {
@@ -76,20 +77,20 @@ public class RRawWrapper extends REntryWrapper<RawEntry> {
 			case PRIMITIVE:
 				byte[] cell = entry.hget(redisKey.getBytes(), attr.getAttrName().getBytes());
 				Object value = super.getPrimitiveValue(attr, cell);
-				gei.put(attr.getAttrName(), value);
+				gei.setAttrValue(attr.getAttrName(), value);
 				break;
 			case MAP:
 				String mapkey = redisKey + CoreConstants.KEYS_SEPARATOR + attr.getAttrName();
 				cells = entry.hgetAll(mapkey.getBytes());
 				Map<String, Object> map = super.getMapValue(attr, cells);
-				gei.put(attr.getAttrName(), map);
+				gei.setAttrValue(attr.getAttrName(), map);
 				break;
 			case LIST:
 				String listkey = redisKey + CoreConstants.KEYS_SEPARATOR + attr.getAttrName();
 				Long llen = entry.llen(listkey.getBytes());
 				List<byte[]> listcells = entry.lrange(listkey.getBytes(), 0,llen);
 				List<Object> list = super.getListValue(attr, listcells);
-				gei.put(attr.getAttrName(), list);
+				gei.setAttrValue(attr.getAttrName(), list);
 				break;
 
 			case SET:
@@ -97,7 +98,7 @@ public class RRawWrapper extends REntryWrapper<RawEntry> {
 				Set<byte[]> setcells = entry.smembers(setkey.getBytes());
 
 				Set<Object> set = super.getSetValue(attr, setcells);
-				gei.put(attr.getAttrName(), set);
+				gei.setAttrValue(attr.getAttrName(), set);
 				break;
 
 			default:
@@ -110,7 +111,7 @@ public class RRawWrapper extends REntryWrapper<RawEntry> {
 	}
 
 	@Override
-	public RawEntry wrap(List<EntityAttr> attrs, String key, Jedis rawEntry) throws AccessorException{
+	public EntryInfo wrap(List<EntityAttr> attrs, String key, Jedis rawEntry) throws AccessorException{
 		
 		Jedis entry = rawEntry;
 
@@ -126,7 +127,7 @@ public class RRawWrapper extends REntryWrapper<RawEntry> {
 		if (entityName == null || entityName.length() == 0) {
 			entityName = EntityConstants.ENTITY_BLIND;
 		}
-		RawEntry gei = new RawEntry(entityName, key);
+		EntryInfo gei = new EntryInfo(entityName, key);
 		String redisKey = entityName + CoreConstants.KEYS_SEPARATOR + key;
 		// not exist return null;
 		if(!entry.exists(redisKey)){
@@ -142,20 +143,20 @@ public class RRawWrapper extends REntryWrapper<RawEntry> {
 				case PRIMITIVE:
 					byte[] cell = entry.hget(redisKey.getBytes(), attr.getAttrName().getBytes());
 					Object value = super.getPrimitiveValue(attr, cell);
-					gei.put(attr.getAttrName(), value);
+					gei.setAttrValue(attr.getAttrName(), value);
 					break;
 				case MAP:
 					String mapkey = redisKey + CoreConstants.KEYS_SEPARATOR + attr.getAttrName();
 					cells = entry.hgetAll(mapkey.getBytes());
 					Map<String, Object> map = super.getMapValue(attr, cells);
-					gei.put(attr.getAttrName(), map);
+					gei.setAttrValue(attr.getAttrName(), map);
 					break;
 				case LIST:
 					String listkey = redisKey + CoreConstants.KEYS_SEPARATOR + attr.getAttrName();
 					Long llen = entry.llen(listkey.getBytes());
 					List<byte[]> listcells = entry.lrange(listkey.getBytes(), 0,llen);
 					List<Object> list = super.getListValue(attr, listcells);
-					gei.put(attr.getAttrName(), list);
+					gei.setAttrValue(attr.getAttrName(), list);
 					break;
 	
 				case SET:
@@ -163,7 +164,7 @@ public class RRawWrapper extends REntryWrapper<RawEntry> {
 					Set<byte[]> setcells = entry.smembers(setkey.getBytes());
 	
 					Set<Object> set = super.getSetValue(attr, setcells);
-					gei.put(attr.getAttrName(), set);
+					gei.setAttrValue(attr.getAttrName(), set);
 					break;
 				default:
 					break;
@@ -175,19 +176,19 @@ public class RRawWrapper extends REntryWrapper<RawEntry> {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void parse(List<EntityAttr> attrs,Jedis jedis, RawEntry entryInfo)  throws AccessorException{
+	public void parse(List<EntityAttr> attrs,Jedis jedis, EntryInfo entryInfo)  throws AccessorException{
 
 		if(entryInfo == null) 
 			throw new AccessorException("entryInfo can not be null.");	
 		
 		if(attrs == null || attrs.size() == 0) 
 			throw new AccessorException("Attributes can not be empty.");	
-		
-		String redisKey = entryInfo.getEntityName() + CoreConstants.KEYS_SEPARATOR + entryInfo.getKey();
+		EntryKey key = entryInfo.getEntryKey();
+		String redisKey = key.getEntityName() + CoreConstants.KEYS_SEPARATOR + key.getKey();
 			
 		for (EntityAttr attr : attrs) {
 
-			Object value = entryInfo.get(attr.getAttrName());
+			Object value = entryInfo.getAttrValue(attr.getAttrName());
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("-key:{} =>attr:{} - value:{}",new String[]{redisKey, attr.getAttrName(),String.valueOf(value)});
 			}
