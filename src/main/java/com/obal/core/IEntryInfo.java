@@ -1,10 +1,5 @@
 package com.obal.core;
 
-import java.util.Collection;
-import java.util.List;
-
-import com.obal.meta.EntityAttr;
-
 public interface IEntryInfo extends IGenericInfo{
 
 	/**

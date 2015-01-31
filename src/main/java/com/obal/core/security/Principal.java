@@ -38,15 +38,14 @@ import com.obal.meta.EntityConstants;
  * @version 1.0 2014-01-01
  * @see com.obal.core.security.Profile
  **/
-@JsonIgnoreProperties({"keyBytes","profile","creator","modifier","lastModify","newCreate"})
-public class Principal extends TraceableEntry{
-		
-
+@JsonIgnoreProperties({"profile"})
+public class Principal{
+	
 	private static final long serialVersionUID = 1L;
 
-	public Principal(String key){
+	public Principal(String id){
 		
-		super("obal.user",key);
+		this.id = id;
 	}
 	/**
 	 * Constructor for new Principal
@@ -58,7 +57,6 @@ public class Principal extends TraceableEntry{
 	 **/
 	public Principal(String account, String name, String password) {
 		
-		super(EntityConstants.ENTITY_PRINCIPAL, null);
 		this.account = account;
 		this.name = name;
 		this.password = password;
@@ -75,13 +73,13 @@ public class Principal extends TraceableEntry{
 	@JsonCreator
 	public Principal(@JsonProperty("account") String account, @JsonProperty("name") String name, @JsonProperty("password") String password, @JsonProperty("source") String source) {
 		
-		super(EntityConstants.ENTITY_PRINCIPAL, null);
 		this.account = account;
 		this.name = name;
 		this.password = password;
 		this.source = source;
 	}
 	
+	private String id = null;
 	/** the account information */
 	private String account = "";
 	/** the name  */
@@ -95,6 +93,13 @@ public class Principal extends TraceableEntry{
 	private Profile profile = null;
 	private Map<String,Object> groups;
 	private Map<String,Object> roles;
+		
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	
 	/**
 	 * Get Account information 
