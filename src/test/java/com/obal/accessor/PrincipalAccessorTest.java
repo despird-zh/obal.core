@@ -20,7 +20,7 @@ public class PrincipalAccessorTest extends BlankTester{
 		
 		UserAccessor pa = null;
 		Principal princ = new Principal("demo1","demouser1","demopwd","demosrc");
-		princ.setKey("101001");
+		//princ.setKey("101001");
 		try {
 			Map<String,Object> groups = new HashMap<String,Object>();
 			groups.put("gk1","group1");

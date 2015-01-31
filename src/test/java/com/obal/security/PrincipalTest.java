@@ -16,7 +16,7 @@ public class PrincipalTest extends BlankTester{
 	public void testPrincipal2Json(){
 		
 		Principal princ = new Principal("acnt1","name1","passwd1","sourc1");
-		princ.setKey("pid1");
+		//princ.setKey("pid1");
 		Profile pf = new Profile();
 		pf.setSetting("pk1", "v1");
 		pf.setSetting("pk2", "v2");

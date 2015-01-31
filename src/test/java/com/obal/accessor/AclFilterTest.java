@@ -14,7 +14,7 @@ public class AclFilterTest extends BlankTester{
 	
 	public void testSerialize(){
 		Principal princ = new Principal("demo1","demouser1","demopwd","demosrc");
-		princ.setKey("101001");
+		//princ.setKey("101001");
 
 		Map<String, Object> groups = new HashMap<String, Object>();
 		groups.put("gk1", "group1");

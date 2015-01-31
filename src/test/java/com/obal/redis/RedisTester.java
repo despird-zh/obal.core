@@ -10,7 +10,7 @@ import com.obal.accessor.TestAccessor;
 import com.obal.admin.EntityAdmin;
 import com.obal.admin.IAdminAccessor;
 import com.obal.core.EntryKey;
-import com.obal.core.accessor.RawEntry;
+import com.obal.core.accessor.EntryInfo;
 import com.obal.core.security.Principal;
 import com.obal.exception.AccessorException;
 import com.obal.exception.EntityException;
@@ -40,10 +40,10 @@ public class RedisTester extends BlankTester{
 	}
 	
 
-	private RawEntry doGet(EntryKey key){
+	private EntryInfo doGet(EntryKey key){
 		
 		TestAccessor ta = null;
-		RawEntry rentry = null;
+		EntryInfo rentry = null;
 		Principal princ = new Principal("useracc","demouser","pwd");
 		try{
 			ta = AccessorUtils.getEntityAccessor("redis",princ, "obal.test");
@@ -157,51 +157,51 @@ public class RedisTester extends BlankTester{
 		try {
 			ta = AccessorUtils.getEntityAccessor("redis",princ, "obal.test");
 			EntryKey key = ta.newKey();
-			RawEntry re = new RawEntry(key);
-			re.put("i_int", 1211);
-			re.put("i_double", 13.111);
-			re.put("i_long", 123456788888L);
-			re.put("i_date", new Date());
-			re.put("i_string", "demo string SSSSXXXX AAAALAAAA");
+			EntryInfo re = new EntryInfo(key);
+			re.setAttrValue("i_int", 1211);
+			re.setAttrValue("i_double", 13.111);
+			re.setAttrValue("i_long", 123456788888L);
+			re.setAttrValue("i_date", new Date());
+			re.setAttrValue("i_string", "demo string SSSSXXXX AAAALAAAA");
 			
 			List<String> strlist = new ArrayList<String>();
 			strlist.add("item0");
 			strlist.add("item1");
 			strlist.add("item2");
 			strlist.add("item3");
-			re.put("i_list_str", strlist);
+			re.setAttrValue("i_list_str", strlist);
 			
 			List<Integer> intlist = new ArrayList<Integer>();
 			intlist.add(1010);
 			intlist.add(1011);
 			intlist.add(1012);
 			intlist.add(1014);
-			re.put("i_list_int", intlist);
+			re.setAttrValue("i_list_int", intlist);
 
 			List<Date> dtlist = new ArrayList<Date>();
 			dtlist.add(new Date());
 			dtlist.add(new Date());
 			dtlist.add(new Date());
 			dtlist.add(new Date());
-			re.put("i_list_dt", dtlist);
+			re.setAttrValue("i_list_dt", dtlist);
 			
 			Map<String, String> strmap = new HashMap<String, String>();
 			strmap.put("sk1", "str val 1");
 			strmap.put("sk2", "str val 2");
 			strmap.put("sk3", "str val 3");
-			re.put("i_map_str", strmap);
+			re.setAttrValue("i_map_str", strmap);
 			
 			Map<String, Integer> intmap = new HashMap<String, Integer>();
 			intmap.put("ik1", 121);
 			intmap.put("ik2", 122);
 			intmap.put("ik3", 123);
-			re.put("i_map_int", intmap);
+			re.setAttrValue("i_map_int", intmap);
 			
 			Map<String, Date> dtmap = new HashMap<String, Date>();
 			dtmap.put("dk1", new Date());
 			dtmap.put("dk2", new Date());
 			dtmap.put("dk3", new Date());
-			re.put("i_map_dt", dtmap);
+			re.setAttrValue("i_map_dt", dtmap);
 			
 			return ta.doPutEntry(re);
 			

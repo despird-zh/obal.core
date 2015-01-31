@@ -19,7 +19,6 @@
  */
 package com.obal.core.accessor;
 
-import com.obal.core.EntryKey;
 import com.obal.core.IEntityAccessor;
 import com.obal.core.security.Principal;
 import com.obal.meta.BaseEntity;
