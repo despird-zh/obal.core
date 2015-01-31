@@ -6,7 +6,8 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.Properties;
 
-import com.obal.common.MessageFormatter;
+import org.slf4j.helpers.MessageFormatter;
+
 
 
 public class BaseException extends Exception {
@@ -58,7 +59,7 @@ public class BaseException extends Exception {
 	protected String findMessage(String errorcode,String ... param){
 		
 		String messagePattern = base_exceps.getProperty(errorcode, errorcode);		
-		return MessageFormatter.arrayFormat(messagePattern, param);
+		return MessageFormatter.arrayFormat(messagePattern, param).getMessage();
 	}
 		
 	public void printStackTrace(PrintStream s)
