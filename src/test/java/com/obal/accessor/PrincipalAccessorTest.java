@@ -7,9 +7,11 @@ import java.util.Map;
 
 import com.obal.core.CoreManager;
 import com.obal.core.EntryFilter;
+import com.obal.core.accessor.TraceableEntry;
 import com.obal.core.security.Principal;
 import com.obal.core.security.hbase.UserAccessor;
 import com.obal.exception.AccessorException;
+import com.obal.exception.BaseException;
 import com.obal.exception.EntityException;
 import com.obal.test.BlankTester;
 import com.obal.util.AccessorUtils;
@@ -33,20 +35,16 @@ public class PrincipalAccessorTest extends BlankTester{
 			princ.setRoles(roles);
 			pa = AccessorUtils.getEntityAccessor(princ, "obal.user");
 			
-			princ.setCreator("crt01");
-			princ.setModifier("mdfier01");
-			princ.setNewCreate(new Date());
-			princ.setLastModify(new Date());
-			pa.doPutEntry(princ);
+			pa.doPutEntry(pa.toEntryInfo.convert(princ));
 			
 			pa.doPutEntryAttr("101001", "i_name", "newdemoname");
 
-			List<Principal> pl = pa.doScanEntry(null);
+			List<TraceableEntry> pl = pa.doScanEntry(null);
 			
-			Principal princ2 = pa.doGetEntry("101001");
-			System.out.println("p-name:"+princ2.getName());
+			TraceableEntry princ2 = pa.doGetEntry("101001");
+			System.out.println("p-name:"+pa.toPrincipal.convert(princ2).getName());
 			
-		} catch (EntityException | AccessorException e) {
+		} catch (BaseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally{
