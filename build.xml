@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="obal_project" basedir="." default="build_core_jar">
+<project name="doccube_project" basedir="." default="build_core_jar">
 	<property file ="build.properties" /> 
 	<property environment="env" />
     <property name="project.root" value="${basedir}" />
@@ -24,7 +24,7 @@
 		<echo message="---[ Building Hbase Side Core jar ]---"/>
         <jar jarfile="${dir.java.ext}/${obal.core.jar}" >
 			<fileset dir="${dir.java.class}">
-				<include name="**/obal/**/*.*"/>
+				<include name="**/doccube/**/*.*"/>
 			</fileset>
 			<manifest>
 				<attribute name="Application-Name" value="obal.core.library"/>
