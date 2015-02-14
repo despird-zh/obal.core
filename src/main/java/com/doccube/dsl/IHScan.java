@@ -1,4 +1,7 @@
 package com.doccube.dsl;
+
+import java.util.Set;
+
 /**
  * IHScan defines the basic common functions of Scan object.
  * 
@@ -12,6 +15,8 @@ public interface IHScan<R> {
 	public IHScan<R> attribute(IHAttrFilter attrs);
 	
 	public IHScanFilters<R> filters(String Operator);
+	
+	public IHScanFilters<R> filters();
 	
 	public IHScan<R> getHScan();
 	

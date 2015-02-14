@@ -9,6 +9,10 @@ public class HScanFilters<R> extends HScan.HScanDelegate<R> implements IHScan.IH
 	
 	private Set<IHScanFilter<R>> filterSet = new HashSet<IHScanFilter<R>>();
 	
+	public HScanFilters(HScan<R> scan) {
+		super(scan);
+	}
+	
 	public HScanFilters(HScan<R> scan, String operator) {
 		super(scan);
 		this.operator = operator;
@@ -23,4 +27,17 @@ public class HScanFilters<R> extends HScan.HScanDelegate<R> implements IHScan.IH
 		return filter;
 	}
 
+	public void setOperator(String operator) {
+		this.operator = operator;
+	}
+
+	public String getOperator() {
+		
+		return this.operator;
+	}
+
+	public Set<IHScanFilter<R>> filterSet(){
+		
+		return this.filterSet;
+	}
 }

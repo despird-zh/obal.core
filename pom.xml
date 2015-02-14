@@ -89,7 +89,7 @@
 	       <version>2.10</version>
 	      <configuration>    
 	        <includes>    
-	          <include>**/EntityAttrSerialTest.java</include> 
+	          <include>**/HScanTest.java</include> 
 	        </includes>    
 	      </configuration>    
 	  </plugin>

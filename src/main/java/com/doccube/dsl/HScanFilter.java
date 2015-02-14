@@ -1,5 +1,7 @@
 package com.doccube.dsl;
 
+import java.util.Set;
+
 import com.doccube.dsl.IHScan.*;
 public class HScanFilter<R> extends HScan.HScanDelegate<R> implements IHScanFilter<R>,IHScan<R>{
 
@@ -24,60 +26,84 @@ public class HScanFilter<R> extends HScan.HScanDelegate<R> implements IHScanFilt
 	@Override
 	public IHScanFilter<R> lt(String value) {
 		this.operator = "lt";
+		this.value = value;
 		return this;
 	}
 
 	@Override
 	public IHScanFilter<R> gt(String value) {
 		this.operator = "gt";
+		this.value = value;
 		return this;
 	}
 
 	@Override
 	public IHScanFilter<R> ne(String value) {
 		this.operator = "ne";
+		this.value = value;
 		return this;
 	}
 
 	@Override
 	public IHScanFilter<R> lte(String value) {
 		this.operator = "lte";
+		this.value = value;
 		return this;
 	}
 
 	@Override
 	public IHScanFilter<R> gte(String value) {
 		this.operator = "gte";
+		this.value = value;
 		return this;
 	}
 
 	@Override
 	public IHScanFilter<R> contain(String value) {
 		this.operator = "contain";
+		this.value = value;
 		return this;
 	}
 
 	@Override
 	public IHScanFilter<R> match(String value) {
 		this.operator = "match";
+		this.value = value;
 		return this;
 	}
 
 	@Override
 	public IHScanFilter<R> between(String value) {
 		this.operator = "between";
+		this.value = value;
 		return this;
 	}
 
 	@Override
 	public IHScanFilter<R> nbetween(String value) {
 		this.operator = "nbetween";
+		this.value = value;
 		return null;
 	}
 
 	@Override
 	public IHScanFilter<R> filter(String attr) {
 		
-		return this.scanFilters.filter(attr);
+		return (IHScanFilter<R>)this.scanFilters.filter(attr);
+	}
+
+	public void setOperator(String operator) {
+
+		this.operator = operator;
+	}
+
+	public String getOperator() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Set<IHScanFilter<R>> filterSet() {
+		// TODO Auto-generated method stub
+		return null;
 	}	
 }
