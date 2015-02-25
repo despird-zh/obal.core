@@ -27,14 +27,11 @@ import com.doccube.core.security.Principal;
 import com.doccube.exception.MetaException;
 
 /**
- * EntrySchema is responsible for generate Entry Key and decide the actual schema name before persistence or scan
- * <p>Because EntrySchema implements PrincipalAware, it can hold principal to enable some principal sensitive operation
- * eg. @link #getSchema . The principal is store in ThreadLocal, ie. it is thread safe</p>
- * <p>EntrySchema is managed by EntrySchemaManager</p>
+ * BaseEntity is responsible for generate Entry Key and decide the actual schema name before persistence or scan
+ * <p>BaseEntity is managed by EntrySchemaManager</p>
  * 
- * @author G.Obal
+ * @author despird-zh
  * @since 0.1
- * @see com.doccube.core.security.PrincipalAware
  * @see EntityManager
  **/
 public abstract class BaseEntity{

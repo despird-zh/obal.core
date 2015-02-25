@@ -23,6 +23,16 @@ import com.doccube.core.EntryKey;
 import com.doccube.core.security.Principal;
 import com.doccube.exception.MetaException;
 
+/**
+ * GenericEntity implements the entity schema methods.
+ * <p>If schema name or entity entry key is decided by principal, should implements new class 
+ * base on BaseEntity, to customize the newKey and getSchema methods.<p>
+ * 
+ * @author despird-zh
+ * @version 0.1 2014-2-1
+ * @see EntityManager
+ * @see BaseEntity
+ **/
 public class GenericEntity extends BaseEntity{
 		
 	public GenericEntity(EntityMeta meta) {

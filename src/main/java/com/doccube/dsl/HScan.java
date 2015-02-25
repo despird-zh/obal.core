@@ -34,14 +34,7 @@ public class HScan<R> implements IHScan<R>,IOperation<R>{
 		
 		return this;
 	}
-	
-	public IHScan<R> attribute(IHAttrFilter attrFilter){
 		
-		this.attrFilter = attrFilter;
-		
-		return this;
-	}
-	
 	@Override
 	public IHScanFilters<R> filters(String operator) {
 
@@ -228,11 +221,6 @@ public class HScan<R> implements IHScan<R>,IOperation<R>{
 		
 		@Override
 		public IHScan<D> attribute(String... attrs) {
-			return this.scan.attribute(attrs);
-		}
-
-		@Override
-		public IHScan<D> attribute(IHAttrFilter attrs) {
 			return this.scan.attribute(attrs);
 		}
 

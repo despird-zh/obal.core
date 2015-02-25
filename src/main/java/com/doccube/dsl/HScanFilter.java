@@ -1,14 +1,12 @@
 package com.doccube.dsl;
 
-import java.util.Set;
-
 import com.doccube.dsl.IHScan.*;
 public class HScanFilter<R> extends HScan.HScanDelegate<R> implements IHScanFilter<R>,IHScan<R>{
 
 	String operator = null;
 	String attr = null;
 	String value = null;
-	IHScanFilters scanFilters = null;
+	IHScanFilters<R> scanFilters = null;
 	
 	public HScanFilter(IHScan<R> scan,IHScanFilters<R> scanFilters, String attr) {
 		super(scan);
@@ -101,9 +99,9 @@ public class HScanFilter<R> extends HScan.HScanDelegate<R> implements IHScanFilt
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	public Set<IHScanFilter<R>> filterSet() {
-		// TODO Auto-generated method stub
-		return null;
-	}	
+	
+	@Override
+	public IHScanFilters<R> filters() {
+		return (IHScanFilter<R>)this.scanFilters;
+	}
 }

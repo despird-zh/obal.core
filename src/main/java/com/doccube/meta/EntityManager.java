@@ -106,11 +106,7 @@ public class EntityManager {
 	/**
 	 * Get the entry schema instance
 	 * 
-	 * @param entryName
-	 *            the entry name
-	 * @param principal
-	 *            the principal information
-	 * 
+	 * @param entryName  the entry name
 	 * @return EntrySchema the EntrySchema instance
 	 * 
 	 * @throws MetaException

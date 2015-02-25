@@ -11,9 +11,7 @@ import java.util.Set;
 public interface IHScan<R> {
 
 	public IHScan<R> attribute(String... attrs);
-	
-	public IHScan<R> attribute(IHAttrFilter attrs);
-	
+
 	public IHScanFilters<R> filters(String Operator);
 	
 	public IHScanFilters<R> filters();
