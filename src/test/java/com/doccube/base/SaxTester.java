@@ -1,4 +1,4 @@
-package com.doccube.test;
+package com.doccube.base;
 
 import javax.xml.parsers.*;
 

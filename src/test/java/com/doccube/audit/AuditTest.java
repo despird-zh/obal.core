@@ -1,8 +1,8 @@
 package com.doccube.audit;
 
 import com.doccube.audit.AuditInfo;
+import com.doccube.base.BlankTester;
 import com.doccube.disruptor.EventDispatcher;
-import com.doccube.test.BlankTester;
 import com.doccube.util.AuditUtils;
 
 public class AuditTest extends BlankTester{

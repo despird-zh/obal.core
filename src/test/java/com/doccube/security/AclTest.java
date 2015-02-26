@@ -7,11 +7,11 @@ import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import com.doccube.base.BlankTester;
 import com.doccube.core.CoreConstants;
 import com.doccube.core.security.AclPrivilege;
 import com.doccube.core.security.EntryAce;
 import com.doccube.core.security.EntryAcl;
-import com.doccube.test.BlankTester;
 
 public class AclTest extends BlankTester{
 

@@ -5,10 +5,10 @@ import java.util.Map;
 
 import org.apache.hadoop.hbase.exceptions.DeserializationException;
 
+import com.doccube.base.BlankTester;
 import com.doccube.core.CoreManager;
 import com.doccube.core.hbase.HAclFilter;
 import com.doccube.core.security.Principal;
-import com.doccube.test.BlankTester;
 
 public class AclFilterTest extends BlankTester{
 	

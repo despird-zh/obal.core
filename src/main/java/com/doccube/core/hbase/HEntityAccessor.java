@@ -55,11 +55,14 @@ import com.doccube.meta.BaseEntity;
 import com.doccube.meta.EntityAttr;
 
 /**
- * Base class of entry accessor, it holds HConnection object 
- * 
+ * Base class of EntitAccessor, it holds HConnection object to access HBase 
+ * <p>
+ * 	
+ * </p>
  * @author despird
  * @version 0.1 2014-5-2
  * 
+ * @see EntityAccessor
  **/
 public abstract class HEntityAccessor<GB extends EntryInfo> extends EntityAccessor<GB> implements HConnAware {
 	

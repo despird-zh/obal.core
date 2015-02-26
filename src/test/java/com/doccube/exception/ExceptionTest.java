@@ -1,7 +1,7 @@
 package com.doccube.exception;
 
+import com.doccube.base.BlankTester;
 import com.doccube.exception.EntityException;
-import com.doccube.test.BlankTester;
 
 public class ExceptionTest extends BlankTester {
 

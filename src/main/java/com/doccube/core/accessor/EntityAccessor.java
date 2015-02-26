@@ -26,6 +26,15 @@ import com.doccube.meta.BaseEntity;
 /**
  * Abstract EntryAccessor with EntrySchema information, it provides operation on
  * certain Entity
+ * <p>The EntityAccessor instances if cached in AccessorBuilder, in order to ensure the thread safe 
+ * the AccessorContext is a thread-local variable. to avoid memory leak the release() method must be called</p>
+ * <p>In case of the EntityAccessor(EA) be acquired in GenericAccessor(GA), the GA and EA share the same connection
+ * object, in fact the EA's connection is fetch from GE but the embed flag is set true by AccessorBuilder. When release
+ * Connection must do it in GE, otherwise(embed is false) release directly.</p>
+ * 
+ * @author despird-zh
+ * @version 0.1 2014-3-2
+ * 
  **/
 public abstract class EntityAccessor<GB extends EntryInfo> implements IEntityAccessor <GB>{
 

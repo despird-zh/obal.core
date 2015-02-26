@@ -1,4 +1,4 @@
-package com.doccube.test;
+package com.doccube.base;
 
 import java.util.Properties;
 
@@ -6,6 +6,9 @@ import junit.framework.TestCase;
 
 import org.apache.log4j.PropertyConfigurator;
 
+/**
+ * Base blank tester 
+ **/
 public class BlankTester extends TestCase{
 
 	public static void initLog4j() {

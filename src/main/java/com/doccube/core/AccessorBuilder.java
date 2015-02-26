@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
@@ -38,20 +39,20 @@ import com.doccube.meta.EntityManager;
 /**
  * Base class of AccessorBuilder, provides common operation when create accessor instance
  * 
- * @author despird
+ * @author despird-zh
  * @version 0.1 2014-3-1
  * 
  **/
 public abstract class AccessorBuilder {
 
 	private Properties accessorProp = null;
+	private Map<String, IBaseAccessor> accessorCache = null;
 	private String builderName = null;
 	
 	/**
 	 * Default Constructor 
 	 **/
 	protected AccessorBuilder() throws EntityException{}
-
 	
 	/**
 	 * Constructor
@@ -72,6 +73,8 @@ public abstract class AccessorBuilder {
 			
 			throw new EntityException("Fail build Accessor builder:{}", e, builderName);
 		}
+		
+		accessorCache = new HashMap<String, IBaseAccessor>();
 	}
 
 	/**
@@ -114,22 +117,22 @@ public abstract class AccessorBuilder {
 	}
 	
 	/**
-	 * Assembly the resource to Accessor instance
+	 * Assembly the resource to IBaseAccessor instance
 	 * @param principal the principal object
-	 * @param accessor the Accessor object to be assembled
+	 * @param accessor the IBaseAccessor object to be assembled
 	 **/
 	public abstract void assembly(Principal principal, IBaseAccessor accessor) throws EntityException;
 	
 	/**
-	 * Assembly the resource to Accessor instance, the resources is copied from mockup accessor.
+	 * Assembly the resource to IBaseAccessor instance, the resources is copied from mockup accessor.
 	 * 
-	 * @param mockupAccessor the mock-up Accessor object
-	 * @param accessors the Accessor objects to be assembled
+	 * @param mockupAccessor the mock-up IBaseAccessor object
+	 * @param accessors the IBaseAccessor objects to be assembled
 	 **/
 	public abstract void assembly(IBaseAccessor mockupAccessor, IBaseAccessor... accessors) throws EntityException;
 
 	/**
-	 * create new EntryAccessor instance. accessor name and entity name is same.
+	 * create new EntityAccessor instance. Accessor name and entity name is same.
 	 * 
 	 * @param principal
 	 * @param entityName  
@@ -142,7 +145,7 @@ public abstract class AccessorBuilder {
 	}	
 
 	/**
-	 * create new EntryAccessor instance.
+	 * create new EntityAccessor instance.
 	 * 
 	 * @param principal
 	 * @param accessorName 
@@ -178,11 +181,26 @@ public abstract class AccessorBuilder {
 		return newBaseAccessor(context, accessorName,true);
 	}
 
+	/**
+	 * Build the Accessor instance, firstly check cache, not exist create new one.
+	 * 
+	 * @param context the AccessorContext object
+	 * @param accessorName the name of accessor
+	 * @param isGeneric the generic flag
+	 * 
+	 * @throws EntityException
+	 **/
 	@SuppressWarnings("unchecked")
 	private <K> K newBaseAccessor(AccessorContext context, String accessorName, boolean isGeneric) throws EntityException{
 		
 		K result = null;
-		
+		// check the IBaseAccessor instance cached or not.
+		IBaseAccessor cachedAccessor = accessorCache.get(accessorName);
+		if(null != cachedAccessor){
+			// set context object
+			cachedAccessor.setAccessorContext(context);
+			return (K)cachedAccessor;
+		}
 		Class<?> clazz = this.getAccessorClass(accessorName);
 		
 		if(!GenericAccessor.class.isAssignableFrom(clazz) && isGeneric)
@@ -198,6 +216,8 @@ public abstract class AccessorBuilder {
 	
 			constructor = (Constructor<K>)clazz.getConstructor(AccessorContext.class);
 			result = constructor.newInstance(context);
+			// cache the Accessor instance
+			accessorCache.put(accessorName,(IBaseAccessor)result);
 			
 		} catch (SecurityException e) {
 

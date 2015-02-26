@@ -49,7 +49,7 @@ public class EntitySetup {
 
 	private void setupUserSchema() {
 
-		EntityAdmin ea = EntityAdmin.getInstance();
+		EntityAdmin eadmin = EntityAdmin.getInstance();
 		
 		EntityMeta meta = new EntityMeta(EntityConstants.ENTITY_PRINCIPAL);
 		meta.setSchemaClass(GenericEntity.class.getName());
@@ -69,13 +69,14 @@ public class EntitySetup {
 		meta.addAttr(attr);
 		attr = new EntityAttr("i_roles", EntityAttr.AttrMode.MAP, EntityAttr.AttrType.STRING, "c1", "roles");
 		meta.addAttr(attr);
-		ea.setupSchema(meta);
+		
+		eadmin.setupSchema(meta);
 
 	}
 
 	private void setupGroupSchema() {
 
-		EntityAdmin ea = EntityAdmin.getInstance();
+		EntityAdmin eadmin = EntityAdmin.getInstance();
 		
 		EntityMeta meta = new EntityMeta(EntityConstants.ENTITY_USER_GROUP);
 		meta.setSchemaClass(GenericEntity.class.getName());
@@ -88,12 +89,12 @@ public class EntitySetup {
 		attr = new EntityAttr("i_groups", EntityAttr.AttrMode.MAP, EntityAttr.AttrType.STRING, "c1","groups");
 		meta.addAttr(attr);
 		
-		ea.setupSchema(meta);
+		eadmin.setupSchema(meta);
 	}
 
 	private void setupRoleSchema() {
 
-		EntityAdmin ea = EntityAdmin.getInstance();
+		EntityAdmin eadmin = EntityAdmin.getInstance();
 		
 		EntityMeta meta = new EntityMeta(EntityConstants.ENTITY_USER_ROLE);
 		meta.setSchemaClass(GenericEntity.class.getName());
@@ -104,7 +105,7 @@ public class EntitySetup {
 		attr = new EntityAttr("i_users", EntityAttr.AttrMode.MAP, EntityAttr.AttrType.STRING, "c1", "users");
 		meta.addAttr(attr);
 
-		ea.setupSchema(meta);
+		eadmin.setupSchema(meta);
 	}
 
 }

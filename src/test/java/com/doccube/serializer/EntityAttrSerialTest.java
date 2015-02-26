@@ -4,9 +4,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
 import com.doccube.admin.EntitySetup;
+import com.doccube.base.BlankTester;
 import com.doccube.meta.EntityAttr;
 import com.doccube.serializer.EntityAttrSerializer;
-import com.doccube.test.BlankTester;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;

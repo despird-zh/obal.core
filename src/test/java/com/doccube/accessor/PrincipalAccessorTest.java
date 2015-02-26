@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.doccube.base.BlankTester;
 import com.doccube.core.CoreManager;
 import com.doccube.core.EntryFilter;
 import com.doccube.core.accessor.TraceableEntry;
@@ -13,7 +14,6 @@ import com.doccube.core.security.hbase.UserAccessor;
 import com.doccube.exception.AccessorException;
 import com.doccube.exception.BaseException;
 import com.doccube.exception.EntityException;
-import com.doccube.test.BlankTester;
 import com.doccube.util.AccessorUtils;
 
 public class PrincipalAccessorTest extends BlankTester{

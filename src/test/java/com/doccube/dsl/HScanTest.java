@@ -1,6 +1,6 @@
 package com.doccube.dsl;
 
-import com.doccube.test.BlankTester;
+import com.doccube.base.BlankTester;
 
 public class HScanTest extends BlankTester{
 	

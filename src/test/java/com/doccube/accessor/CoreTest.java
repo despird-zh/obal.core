@@ -1,7 +1,7 @@
 package com.doccube.accessor;
 
+import com.doccube.base.BlankTester;
 import com.doccube.core.CoreManager;
-import com.doccube.test.BlankTester;
 
 public class CoreTest extends BlankTester{
 

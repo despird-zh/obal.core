@@ -1,6 +1,6 @@
 package com.doccube.aop;
 
-import com.doccube.test.BlankTester;
+import com.doccube.base.BlankTester;
 
 public class CacheTest extends BlankTester{
 	

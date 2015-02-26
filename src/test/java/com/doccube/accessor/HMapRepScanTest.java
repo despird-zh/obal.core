@@ -5,8 +5,8 @@ import java.util.Properties;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.log4j.PropertyConfigurator;
 
+import com.doccube.base.BlankTester;
 import com.doccube.core.hbase.HMapRedHttpScan;
-import com.doccube.test.BlankTester;
 
 public class HMapRepScanTest extends BlankTester{
 

@@ -27,7 +27,6 @@ import com.doccube.core.accessor.EntryInfo;
 import com.doccube.core.hbase.HEntityAccessor;
 import com.doccube.core.hbase.HEntryWrapper;
 import com.doccube.core.hbase.HRawWrapper;
-import com.doccube.meta.BaseEntity;
 
 public class MetaInfoAccessor extends HEntityAccessor<EntryInfo>{
 

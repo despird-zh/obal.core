@@ -1,7 +1,7 @@
 package com.doccube.admin;
 
 import com.doccube.admin.EntitySetup;
-import com.doccube.test.BlankTester;
+import com.doccube.base.BlankTester;
 
 public class AdminTest extends BlankTester{
 	
@@ -20,5 +20,5 @@ public class AdminTest extends BlankTester{
 	 protected void tearDown() throws Exception {  
 	    
 		 super.tearDown();  
-	 }  
+	 }
 }
