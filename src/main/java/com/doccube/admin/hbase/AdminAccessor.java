@@ -39,7 +39,7 @@ import com.doccube.meta.EntityAttr;
 
 public class AdminAccessor extends HGenericAccessor implements IAdminAccessor,HAdminAware{
 
-	public AdminAccessor(AccessorContext context) {
+	public AdminAccessor(GenericContext context) {
 		super(context);
 	}
 

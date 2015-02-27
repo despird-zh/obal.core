@@ -231,8 +231,10 @@ public abstract class AccessorBuilder {
 		
 		Constructor<K> constructor = null;
 		try {
-	
-			constructor = (Constructor<K>)clazz.getConstructor(AccessorContext.class);
+			if(isGeneric)
+				constructor = (Constructor<K>)clazz.getConstructor(GenericContext.class);
+			else
+				constructor = (Constructor<K>)clazz.getConstructor(AccessorContext.class);
 			result = constructor.newInstance(context);
 			// cache the Accessor instance
 			accessorCache.put(accessorName,(IBaseAccessor)result);

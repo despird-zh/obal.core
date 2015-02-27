@@ -37,6 +37,7 @@ import com.doccube.core.EntryFilter;
 import com.doccube.core.EntryKey;
 import com.doccube.core.accessor.AccessorContext;
 import com.doccube.core.accessor.EntryInfo;
+import com.doccube.core.accessor.GenericContext;
 import com.doccube.core.hbase.HGenericAccessor;
 import com.doccube.exception.AccessorException;
 import com.doccube.exception.BaseException;
@@ -52,7 +53,7 @@ import com.doccube.util.AccessorUtils;
 
 public class MetaGenericAccessor extends HGenericAccessor implements IMetaGenericAccessor{
 
-	public MetaGenericAccessor(AccessorContext context) {
+	public MetaGenericAccessor(GenericContext context) {
 		super(context);
 	}
 
@@ -270,7 +271,7 @@ public class MetaGenericAccessor extends HGenericAccessor implements IMetaGeneri
 		MetaInfoAccessor metaAccr = null;
 		try {
 			metaAccr = AccessorFactory.getInstance().buildEntityAccessor(this, EntityConstants.ENTITY_META_INFO);
-			EntryKey key = metaAccr.getEntitySchema().newKey(getAccessorContext().getPrincipal());
+			EntryKey key = metaAccr.newKey();
 			EntryInfo minfo = new EntryInfo(key);
 
 			minfo.setAttrValue("i_entity_name", meta.getEntityName());

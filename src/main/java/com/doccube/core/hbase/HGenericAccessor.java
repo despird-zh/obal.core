@@ -25,6 +25,7 @@ import org.apache.hadoop.hbase.client.HConnection;
 
 import com.doccube.core.accessor.AccessorContext;
 import com.doccube.core.accessor.GenericAccessor;
+import com.doccube.core.accessor.GenericContext;
 
 /**
  * GenericAccessor base class, it will hold HConnection object. 
@@ -33,7 +34,7 @@ public abstract class HGenericAccessor extends GenericAccessor implements HConnA
 
 	private static final String LOCAL_CONNECT = "_CONNECTION";
 	
-	public HGenericAccessor(AccessorContext context) {
+	public HGenericAccessor(GenericContext context) {
 		super(context);
 	}
 

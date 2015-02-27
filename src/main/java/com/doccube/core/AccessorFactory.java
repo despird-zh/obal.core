@@ -35,6 +35,9 @@ import com.doccube.core.accessor.GenericAccessor;
 import com.doccube.core.accessor.GenericContext;
 import com.doccube.core.security.Principal;
 import com.doccube.exception.EntityException;
+import com.doccube.exception.MetaException;
+import com.doccube.meta.BaseEntity;
+import com.doccube.meta.EntityManager;
 
 /**
  * AccessorFactory create service instances according to request entry name,
@@ -290,7 +293,14 @@ public class AccessorFactory {
 					"The Mockup Accessor[from {}]'s AccessorContext not existed.",
 					this.defaultBuilder);
 		}
-		AccessorContext econtext = new AccessorContext(context.getPrincipal());
+		BaseEntity schema;
+		try {
+			schema = EntityManager.getInstance().getEntitySchema(entityName);
+		} catch (MetaException e) {
+			
+			throw new EntityException("Error when fetch schema object:entity-{}",e, entityName);
+		}
+		AccessorContext econtext = new AccessorContext(context.getPrincipal(),schema);
 		context.copy(econtext);// copy principal and attached values
 		econtext.setEmbed(true);
 		K accessor = defaultBuilder.newBaseAccessor(econtext, entityName, false);
@@ -410,8 +420,14 @@ public class AccessorFactory {
 					"The Mockup Accessor[from {}]'s AccessorContext not existed.",
 					accessorbuilder.getBuilderName());
 		}
-		
-		AccessorContext econtext = new AccessorContext(context.getPrincipal());
+		BaseEntity schema;
+		try {
+			schema = EntityManager.getInstance().getEntitySchema(entityName);
+		} catch (MetaException e) {
+			
+			throw new EntityException("Error when fetch schema object:entity-{}",e, entityName);
+		}
+		AccessorContext econtext = new AccessorContext(context.getPrincipal(),schema);
 		context.copy(econtext);
 		econtext.setEmbed(true);
 		K accessor = accessorbuilder.newBaseAccessor(econtext, entityName, false);
