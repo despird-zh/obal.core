@@ -34,7 +34,6 @@ import com.doccube.core.AccessorBuilder;
 import com.doccube.core.CoreConstants;
 import com.doccube.core.IBaseAccessor;
 import com.doccube.core.security.Principal;
-import com.doccube.core.security.PrincipalAware;
 import com.doccube.exception.EntityException;
 /**
  * Hbase-wise implementation of AccessorBuilder.
@@ -58,7 +57,7 @@ public class HAccessorBuilder extends AccessorBuilder{
 	 **/
 	public HAccessorBuilder() throws EntityException{
 		
-		this(CoreConstants.BUILDER_HBASE,"com/obal/core/AccessorMap.hbase.properties");
+		this(CoreConstants.BUILDER_HBASE,"com/doccube/core/AccessorMap.hbase.properties");
 	}
 	
 	/**
@@ -107,10 +106,7 @@ public class HAccessorBuilder extends AccessorBuilder{
 				LOGGER.error("Error when assembly Accessor:set HBaseAdmin",e);
 			}			
 		}
-		
-		if(accessor instanceof PrincipalAware){
-			((PrincipalAware) accessor).setPrincipal(principal);		
-		}
+
 	}
 
 	@Override
@@ -119,7 +115,6 @@ public class HAccessorBuilder extends AccessorBuilder{
 		
 		HConnection connection = null;		
 		HBaseAdmin hBaseAdmin = null;
-		Principal principal = null;
 		for(IBaseAccessor accessor:accessors){
 			
 			if((mockupAccessor instanceof HConnAware) 
@@ -136,12 +131,7 @@ public class HAccessorBuilder extends AccessorBuilder{
 				((HAdminAware) accessor).setAdmin(hBaseAdmin);
 		
 			}
-			
-			if((mockupAccessor instanceof PrincipalAware) 
-					&& (accessor instanceof PrincipalAware)){
-				principal = ((PrincipalAware) accessor).getPrincipal();
-				((PrincipalAware) accessor).setPrincipal(principal);		
-			}
+
 			// Set embed flag
 			accessor.setEmbed(true);
 		}

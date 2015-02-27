@@ -29,14 +29,14 @@ import com.doccube.core.IBaseAccessor;
 public abstract class GenericAccessor implements IBaseAccessor {
 	
 	/** thread local */
-	private ThreadLocal<AccessorContext> localContext = new ThreadLocal<AccessorContext>();
+	private ThreadLocal<GenericContext> localContext = new ThreadLocal<GenericContext>();
 	
 	/**
 	 * Constructor with entry schema information 
 	 * 
 	 * @param context the context that provides principal etc. 
 	 **/
-	public GenericAccessor(AccessorContext context){
+	public GenericAccessor(GenericContext context){
 		
 		localContext.set(context);
 	}
@@ -53,12 +53,12 @@ public abstract class GenericAccessor implements IBaseAccessor {
 		this.embed = embed;
 	}
 	
-	public void setAccessorContext(AccessorContext context){
+	public void setAccessorContext(GenericContext context){
 		
 		localContext.set(context);
 	}
 	
-	public AccessorContext getAccessorContext(){
+	public GenericContext getAccessorContext(){
 		
 		return localContext.get();
 	}
@@ -69,7 +69,7 @@ public abstract class GenericAccessor implements IBaseAccessor {
 	public void release(){
 		
 		if(localContext != null){
-			AccessorContext context = localContext.get();
+			GenericContext context = localContext.get();
 			// clear entity schema
 			//BaseEntity schema = context.getEntitySchema();
 		

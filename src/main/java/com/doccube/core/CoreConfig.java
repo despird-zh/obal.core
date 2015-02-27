@@ -41,7 +41,7 @@ public class CoreConfig extends PropertiesConfiguration{
 
 	private CoreConfig() throws ConfigurationException{
 		
-		super("obal-config.properties");
+		super("doccube-config.properties");
 	}
 	
 	/**

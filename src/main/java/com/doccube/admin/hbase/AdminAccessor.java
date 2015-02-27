@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 
 import com.doccube.admin.IAdminAccessor;
 import com.doccube.core.accessor.AccessorContext;
+import com.doccube.core.accessor.GenericContext;
 import com.doccube.core.hbase.HAdminAware;
 import com.doccube.core.hbase.HGenericAccessor;
 import com.doccube.exception.AccessorException;
@@ -168,4 +169,5 @@ public class AdminAccessor extends HGenericAccessor implements IAdminAccessor,HA
 			}
 		}
 	}
+
 }

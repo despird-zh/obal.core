@@ -32,8 +32,8 @@ import org.slf4j.LoggerFactory;
 import com.doccube.core.accessor.AccessorContext;
 import com.doccube.core.accessor.EntityAccessor;
 import com.doccube.core.accessor.GenericAccessor;
+import com.doccube.core.accessor.GenericContext;
 import com.doccube.core.security.Principal;
-import com.doccube.core.security.PrincipalAware;
 import com.doccube.exception.EntityException;
 
 /**
@@ -60,14 +60,16 @@ public class AccessorFactory {
 		CoreConfig cc = CoreConfig.getInstance();
 		String defaultName = cc.getString("builder.default",CoreConstants.BUILDER_HBASE);
 		defaultBuilder = defaultName;
-
+		LOGGER.info("default builder is {}", defaultName);
 		for (int i = 0; i < 20; i++) {
 
 			String builderClass = cc.getString(BUILDER_PREFIX + i);
 			
-			if(StringUtils.isBlank(builderClass))
+			if(StringUtils.isBlank(builderClass)){
+				
 				continue;
-			
+			}
+			LOGGER.debug("builder {} is {}", new String[]{String.valueOf(i), builderClass});
 			try {
 				Class<?> builderClazz = getClass().getClassLoader().loadClass(builderClass);
 
@@ -85,7 +87,7 @@ public class AccessorFactory {
 
 		}
 
-		appendMapping(CoreConstants.BUILDER_HBASE, "com/obal/meta/AccessorMap.hbase.properties");
+		appendMapping(CoreConstants.BUILDER_HBASE, "com/doccube/meta/AccessorMap.hbase.properties");
 
 	}
 
@@ -178,10 +180,17 @@ public class AccessorFactory {
 			LOGGER.warn("builder:{} not exists",builderName);
 			return;
 		}
+		
+		LOGGER.debug("Load {}'s mapping resource:{}", new String[]{builderName,resourcePath});
 		InputStream is = this.getClass().getClassLoader().getResourceAsStream(resourcePath);
-
+		if(is == null){
+			
+			LOGGER.error("Cannot load accessor mapping:{}",resourcePath);
+			return;
+		}
 		Properties prop = new Properties();
 		try {
+			
 			prop.load(is);
 			Map<String, String> entries = new HashMap<String, String>();
 
@@ -274,11 +283,17 @@ public class AccessorFactory {
 					"The Default AccessorBuilder instance:{} not existed.",
 					this.defaultBuilder);
 		}
-		Principal principal = null;
-		if (mockupAccessor instanceof PrincipalAware)
-			principal = ((PrincipalAware) mockupAccessor).getPrincipal();
 
-		K accessor = defaultBuilder.newEntityAccessor( principal,entityName);
+		GenericContext context = mockupAccessor.getAccessorContext();
+		if(context == null){
+			throw new EntityException(
+					"The Mockup Accessor[from {}]'s AccessorContext not existed.",
+					this.defaultBuilder);
+		}
+		AccessorContext econtext = new AccessorContext(context.getPrincipal());
+		context.copy(econtext);// copy principal and attached values
+		
+		K accessor = defaultBuilder.newBaseAccessor(econtext, entityName, false);
 		defaultBuilder.assembly(mockupAccessor, (IBaseAccessor) accessor);
 		return accessor;
 	}
@@ -303,13 +318,14 @@ public class AccessorFactory {
 					this.defaultBuilder);
 		}
 		// retrieve the principal from mock-up accessor
-		AccessorContext context = mockupAccessor.getAccessorContext();
+		GenericContext context = mockupAccessor.getAccessorContext();
 		if(context == null){
 			throw new EntityException(
 					"The Mockup Accessor[from {}]'s AccessorContext not existed.",
 					this.defaultBuilder);
 		}
-		K accessor = defaultBuilder.newGenericAccessor(context.getPrincipal(),accessorName);
+
+		K accessor = defaultBuilder.newBaseAccessor(context, accessorName, true);
 		defaultBuilder.assembly(mockupAccessor, (IBaseAccessor) accessor);
 		return accessor;
 	}
@@ -385,13 +401,17 @@ public class AccessorFactory {
 					"The AccessorBuilder instance:{} not existed.", builderName);
 		}
 
-		AccessorContext context = mockupAccessor.getAccessorContext();
+		GenericContext context = mockupAccessor.getAccessorContext();
 		if(context == null){
 			throw new EntityException(
 					"The Mockup Accessor[from {}]'s AccessorContext not existed.",
 					accessorbuilder.getBuilderName());
 		}
-		K accessor = accessorbuilder.newEntityAccessor(context.getPrincipal(),entityName,entityName);
+		
+		AccessorContext econtext = new AccessorContext(context.getPrincipal());
+		context.copy(econtext);
+		
+		K accessor = accessorbuilder.newBaseAccessor(econtext, entityName, false);
 		accessorbuilder.assembly(mockupAccessor, (IBaseAccessor) accessor);
 		return accessor;
 	}
@@ -417,13 +437,14 @@ public class AccessorFactory {
 			throw new EntityException(
 					"The AccessorBuilder instance:{} not existed.", builderName);
 		}
-		AccessorContext context = mockupAccessor.getAccessorContext();
+		
+		GenericContext context = mockupAccessor.getAccessorContext();
 		if(context == null){
 			throw new EntityException(
 					"The Mockup Accessor[from {}]'s AccessorContext not existed.",
 					accessorbuilder.getBuilderName());
 		}
-		K accessor = accessorbuilder.newGenericAccessor(context.getPrincipal(), accessorName);
+		K accessor = accessorbuilder.newBaseAccessor(context, accessorName, true);
 		accessorbuilder.assembly(mockupAccessor, (IBaseAccessor) accessor);
 		return accessor;
 	}

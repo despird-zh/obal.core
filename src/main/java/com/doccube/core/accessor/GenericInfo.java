@@ -24,8 +24,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.doccube.core.EntryKey;
-import com.doccube.core.IEntryInfo;
 import com.doccube.core.IGenericInfo;
 import com.doccube.meta.EntityAttr;
 

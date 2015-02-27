@@ -30,7 +30,6 @@ import com.doccube.core.AccessorBuilder;
 import com.doccube.core.CoreConstants;
 import com.doccube.core.IBaseAccessor;
 import com.doccube.core.security.Principal;
-import com.doccube.core.security.PrincipalAware;
 import com.doccube.exception.EntityException;
 /**
  * Jedis-wise implementation of AccessorBuilder.
@@ -56,7 +55,7 @@ public class RAccessorBuilder extends AccessorBuilder{
 	 **/
 	public RAccessorBuilder() throws EntityException{
 		
-		this(CoreConstants.BUILDER_REDIS,"com/obal/core/AccessorMap.redis.properties");
+		this(CoreConstants.BUILDER_REDIS,"com/doccube/core/AccessorMap.redis.properties");
 	}
 	
 	
@@ -98,9 +97,6 @@ public class RAccessorBuilder extends AccessorBuilder{
 			}			
 		}
 				
-		if(accessor instanceof PrincipalAware){
-			((PrincipalAware) accessor).setPrincipal(principal);		
-		}
 	}
 
 	@Override
@@ -118,11 +114,6 @@ public class RAccessorBuilder extends AccessorBuilder{
 				((RedisAware) accessor).setJedis(jedis);		
 			}
 			
-			if((mockupAccessor instanceof RedisAware) 
-					&& (accessor instanceof PrincipalAware)){
-				principal = ((PrincipalAware) accessor).getPrincipal();
-				((PrincipalAware) accessor).setPrincipal(principal);		
-			}
 			// Set embed flag
 			accessor.setEmbed(true);
 		}

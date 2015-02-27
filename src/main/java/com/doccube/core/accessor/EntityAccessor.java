@@ -39,7 +39,7 @@ import com.doccube.meta.BaseEntity;
 public abstract class EntityAccessor<GB extends EntryInfo> implements IEntityAccessor <GB>{
 
 	private boolean embed = false;
-	private ThreadLocal<AccessorContext> localContext = new ThreadLocal<AccessorContext>();
+	private ThreadLocal<GenericContext> localContext = new ThreadLocal<GenericContext>();
 	
 	/**
 	 * Constructor with entry schema information 
@@ -51,15 +51,16 @@ public abstract class EntityAccessor<GB extends EntryInfo> implements IEntityAcc
 		localContext.set(context);
 	}
 	
-	public void setAccessorContext(AccessorContext context){
+	public void setAccessorContext(GenericContext context){
 		
 		localContext.set(context);
 	}
 	
 	public AccessorContext getAccessorContext(){
 		
-		return localContext.get();
+		return (AccessorContext)localContext.get();
 	}
+	
 	/**
 	 * Get the entity schema  
 	 * 
@@ -67,7 +68,7 @@ public abstract class EntityAccessor<GB extends EntryInfo> implements IEntityAcc
 	 **/
 	@Override
 	public BaseEntity getEntitySchema(){
-		AccessorContext context = localContext.get();
+		AccessorContext context = (AccessorContext)localContext.get();
 		return context == null? null:context.getEntitySchema();
 	}
 	
@@ -75,7 +76,7 @@ public abstract class EntityAccessor<GB extends EntryInfo> implements IEntityAcc
 	 * Get the principal bound to the EntityAccessor object. 
 	 **/
 	public Principal getPrincipal(){
-		AccessorContext context = localContext.get();
+		AccessorContext context = (AccessorContext)localContext.get();
 		return context == null? null:context.getPrincipal();
 	}
 	
@@ -86,7 +87,7 @@ public abstract class EntityAccessor<GB extends EntryInfo> implements IEntityAcc
 		// not embed accessor
 		if(localContext != null){
 			
-			AccessorContext context = localContext.get();
+			AccessorContext context = (AccessorContext)localContext.get();
 			// clear entity schema
 			//BaseEntity schema = context.getEntitySchema();
 

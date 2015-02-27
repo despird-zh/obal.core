@@ -21,6 +21,7 @@ package com.doccube.audit.hbase;
 
 import com.doccube.audit.AuditInfo;
 import com.doccube.core.accessor.AccessorContext;
+import com.doccube.core.accessor.GenericContext;
 import com.doccube.core.hbase.HEntityAccessor;
 import com.doccube.core.hbase.HEntryWrapper;
 import com.doccube.meta.BaseEntity;

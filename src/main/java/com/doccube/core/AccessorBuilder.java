@@ -30,6 +30,7 @@ import java.util.Properties;
 import com.doccube.core.accessor.AccessorContext;
 import com.doccube.core.accessor.EntityAccessor;
 import com.doccube.core.accessor.GenericAccessor;
+import com.doccube.core.accessor.GenericContext;
 import com.doccube.core.security.Principal;
 import com.doccube.exception.EntityException;
 import com.doccube.exception.MetaException;
@@ -87,6 +88,7 @@ public abstract class AccessorBuilder {
 	
 	/**
 	 * get the accessor's class object
+	 * 
 	 * @param accessor the accessor name
 	 * @return Class object of accessor
 	 **/
@@ -162,6 +164,7 @@ public abstract class AccessorBuilder {
 			
 			throw new EntityException("Error when fetch schema object:{}-{}",e,accessorName, entityName);
 		}
+		// prepare context object
 		AccessorContext context = new AccessorContext(principal,schema);
 		
 		return newBaseAccessor(context, accessorName,false);
@@ -176,7 +179,7 @@ public abstract class AccessorBuilder {
 	 **/
 	protected <K> K newGenericAccessor(Principal principal, String accessorName) throws EntityException{
 		
-		AccessorContext context = new AccessorContext(principal);
+		GenericContext context = new GenericContext(principal);
 		
 		return newBaseAccessor(context, accessorName,true);
 	}
@@ -191,12 +194,27 @@ public abstract class AccessorBuilder {
 	 * @throws EntityException
 	 **/
 	@SuppressWarnings("unchecked")
-	private <K> K newBaseAccessor(AccessorContext context, String accessorName, boolean isGeneric) throws EntityException{
+	protected <K> K newBaseAccessor(GenericContext context, String accessorName, boolean isGeneric) throws EntityException{
 		
 		K result = null;
 		// check the IBaseAccessor instance cached or not.
 		IBaseAccessor cachedAccessor = accessorCache.get(accessorName);
-		if(null != cachedAccessor){
+		if(null != cachedAccessor && isGeneric){
+			// set context object
+			cachedAccessor.setAccessorContext(context);
+			return (K)cachedAccessor;
+			
+		}else if(null != cachedAccessor && !isGeneric){
+			// for entity accessor the accessorname is same as entity name.
+			BaseEntity schema;
+			try {
+				schema = EntityManager.getInstance().getEntitySchema(accessorName);
+			} catch (MetaException e) {
+				
+				throw new EntityException("Error when fetch schema object:{}-{}",e,accessorName);
+			}
+			// set the schema to context
+			((AccessorContext)context).setEntitySchema(schema);
 			// set context object
 			cachedAccessor.setAccessorContext(context);
 			return (K)cachedAccessor;

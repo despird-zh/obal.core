@@ -19,7 +19,7 @@
  */
 package com.doccube.core;
 
-import com.doccube.core.accessor.AccessorContext;
+import com.doccube.core.accessor.GenericContext;
 
 /**
  * Base interface for all Accessor class, it provides methods to 
@@ -32,9 +32,10 @@ import com.doccube.core.accessor.AccessorContext;
  **/
 public interface IBaseAccessor {
 
-	public void setAccessorContext(AccessorContext context);
+	public void setAccessorContext(GenericContext context);
 	
-	public  AccessorContext getAccessorContext();
+	public  GenericContext getAccessorContext();
+	
 	/**
 	 * get embed flag
 	 * @return flag 
