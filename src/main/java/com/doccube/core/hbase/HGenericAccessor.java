@@ -31,28 +31,31 @@ import com.doccube.core.accessor.GenericAccessor;
  **/
 public abstract class HGenericAccessor extends GenericAccessor implements HConnAware{
 
+	private static final String LOCAL_CONNECT = "_CONNECTION";
+	
 	public HGenericAccessor(AccessorContext context) {
 		super(context);
 	}
 
-	private HConnection conn;	
-
 	@Override
 	public void setConnection(HConnection connection) {
-		this.conn = connection;
+		
+		getLocalVars().get().put(LOCAL_CONNECT, connection);
 	}
 
 	@Override
 	public HConnection getConnection() {
 		
+		HConnection conn = (HConnection)getLocalVars().get().get(LOCAL_CONNECT);
 		return conn;
 	}
 	
 	@Override
 	public void release() {
 		try {
+			HConnection conn = getConnection();
 			if (conn != null && !isEmbed())
-				this.conn.close();
+				conn.close();
 			
 			super.release();
 		} catch (IOException e) {

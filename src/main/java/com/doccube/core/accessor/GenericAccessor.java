@@ -62,6 +62,14 @@ public abstract class GenericAccessor implements IBaseAccessor {
 	}
 	
 	/**
+	 * Get the local variables 
+	 **/
+	protected ThreadLocal<Map<String, Object>> getLocalVars(){
+		
+		return localVars;
+	}
+	
+	/**
 	 * Release the entity schema and clear the principal in it.
 	 **/
 	public void release(){

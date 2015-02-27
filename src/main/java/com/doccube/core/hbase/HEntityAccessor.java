@@ -66,13 +66,13 @@ import com.doccube.meta.EntityAttr;
  **/
 public abstract class HEntityAccessor<GB extends EntryInfo> extends EntityAccessor<GB> implements HConnAware {
 	
+	private static final String LOCAL_CONNECT = "_CONNECTION";
+	
 	Logger LOGGER = LoggerFactory.getLogger(HEntityAccessor.class);
 	
 	public HEntityAccessor(AccessorContext context) {
 		super(context);
 	}
-
-	private HConnection conn;
 	
 	@Override
 	public boolean isFilterSupported(EntryFilter<?> scanfilter,boolean throwExcep) throws AccessorException{
@@ -127,7 +127,7 @@ public abstract class HEntityAccessor<GB extends EntryInfo> extends EntityAccess
 				Filter hfilter = (Filter) scanfilter.getFilter();
 				scan.setFilter(hfilter);
 			}
-			
+			HConnection conn = getConnection();
 			table = conn.getTable(super.getEntitySchema().getSchemaBytes(getAccessorContext().getPrincipal(),null));
 			
 			ResultScanner rs = table.getScanner(scan);
@@ -161,12 +161,15 @@ public abstract class HEntityAccessor<GB extends EntryInfo> extends EntityAccess
 
 	@Override
 	public void setConnection(HConnection connection) {
-		this.conn = connection;
+		
+		getLocalVars().get().put(LOCAL_CONNECT, connection);
+		
 	}
 
 	@Override
 	public HConnection getConnection() {
 		
+		HConnection conn = (HConnection)getLocalVars().get().get(LOCAL_CONNECT);
 		return conn;
 	}
 	
@@ -394,11 +397,12 @@ public abstract class HEntityAccessor<GB extends EntryInfo> extends EntityAccess
 	@Override
 	public void release() {
 		try {
+			HConnection conn = getConnection();
 			// embed means share connection, close it directly affect other accessors using this conn.
 			if (conn != null && !isEmbed()){
-				this.conn.close();				
+				conn.close();				
 			}
-			this.conn = null;
+			
 			super.release();
 			
 		} catch (IOException e) {

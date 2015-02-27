@@ -67,6 +67,14 @@ public abstract class EntityAccessor<GB extends EntryInfo> implements IEntityAcc
 	}
 	
 	/**
+	 * Get the local variables 
+	 **/
+	protected ThreadLocal<Map<String, Object>> getLocalVars(){
+		
+		return localVars;
+	}
+	
+	/**
 	 * Get the entity schema  
 	 * 
 	 * @return entity schema
