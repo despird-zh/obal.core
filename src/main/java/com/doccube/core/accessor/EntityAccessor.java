@@ -19,6 +19,9 @@
  */
 package com.doccube.core.accessor;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.doccube.core.IEntityAccessor;
 import com.doccube.core.security.Principal;
 import com.doccube.meta.BaseEntity;
@@ -39,7 +42,8 @@ import com.doccube.meta.BaseEntity;
 public abstract class EntityAccessor<GB extends EntryInfo> implements IEntityAccessor <GB>{
 
 	private boolean embed = false;
-	private ThreadLocal<GenericContext> localContext = new ThreadLocal<GenericContext>();
+	
+	private ThreadLocal<Map<String, Object>> localVars = new ThreadLocal<Map<String, Object>>();
 	
 	/**
 	 * Constructor with entry schema information 
@@ -48,17 +52,18 @@ public abstract class EntityAccessor<GB extends EntryInfo> implements IEntityAcc
 	 **/
 	public EntityAccessor(AccessorContext context){
 		
-		localContext.set(context);
+		localVars.set(new HashMap<String, Object>());
+		localVars.get().put(LOCAL_CONTEXT, context);
 	}
 	
 	public void setAccessorContext(GenericContext context){
 		
-		localContext.set(context);
+		localVars.get().put(LOCAL_CONTEXT, context);
 	}
 	
 	public AccessorContext getAccessorContext(){
 		
-		return (AccessorContext)localContext.get();
+		return (AccessorContext)localVars.get().get(LOCAL_CONTEXT);
 	}
 	
 	/**
@@ -68,7 +73,8 @@ public abstract class EntityAccessor<GB extends EntryInfo> implements IEntityAcc
 	 **/
 	@Override
 	public BaseEntity getEntitySchema(){
-		AccessorContext context = (AccessorContext)localContext.get();
+		
+		AccessorContext context = (AccessorContext)localVars.get().get(LOCAL_CONTEXT);
 		return context == null? null:context.getEntitySchema();
 	}
 	
@@ -76,7 +82,7 @@ public abstract class EntityAccessor<GB extends EntryInfo> implements IEntityAcc
 	 * Get the principal bound to the EntityAccessor object. 
 	 **/
 	public Principal getPrincipal(){
-		AccessorContext context = (AccessorContext)localContext.get();
+		AccessorContext context = (AccessorContext)localVars.get().get(LOCAL_CONTEXT);
 		return context == null? null:context.getPrincipal();
 	}
 	
@@ -84,15 +90,13 @@ public abstract class EntityAccessor<GB extends EntryInfo> implements IEntityAcc
 	 * Release the entity schema and clear the principal in it.
 	 **/
 	public void release(){
-		// not embed accessor
-		if(localContext != null){
-			
-			AccessorContext context = (AccessorContext)localContext.get();
-			// clear entity schema
-			//BaseEntity schema = context.getEntitySchema();
+		
+		GenericContext context = (GenericContext)localVars.get().get(LOCAL_CONTEXT);
 
-			context.clear();// release objects.			
-			localContext.remove();
+		if(context != null){
+			// not embed accessor, purge all resource;embed only release object pointers.
+			context.clear(!embed);		
+			localVars.get().clear();// release objects.	
 			
 		}
 	}

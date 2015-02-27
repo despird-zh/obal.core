@@ -396,8 +396,7 @@ public abstract class HEntityAccessor<GB extends EntryInfo> extends EntityAccess
 		try {
 			// embed means share connection, close it directly affect other accessors using this conn.
 			if (conn != null && !isEmbed()){
-				this.conn.close();
-				
+				this.conn.close();				
 			}
 			this.conn = null;
 			super.release();

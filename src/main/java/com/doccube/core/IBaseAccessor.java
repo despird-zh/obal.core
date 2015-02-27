@@ -32,8 +32,18 @@ import com.doccube.core.accessor.GenericContext;
  **/
 public interface IBaseAccessor {
 
+	public static final String LOCAL_CONTEXT = "_CONTEXT";
+	
+	/**
+	 * Set the accessor context
+	 * 
+	 * @param context  
+	 **/
 	public void setAccessorContext(GenericContext context);
 	
+	/**
+	 * Get the accessor context 
+	 **/
 	public  GenericContext getAccessorContext();
 	
 	/**

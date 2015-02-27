@@ -19,17 +19,25 @@
  */
 package com.doccube.core.accessor;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.doccube.core.IBaseAccessor;
 
 /**
  * The interface general use Accessor, these accessor provides method not
  * constraint on certain entry. eg a method might operation on more than one
  * entry, we will write it in GeneralAccessor.
+ * 
+ * @author despird-zh
+ * @version 0.1 2014-3-1
+ * 
  **/
 public abstract class GenericAccessor implements IBaseAccessor {
 	
+	private boolean embed = false;	
 	/** thread local */
-	private ThreadLocal<GenericContext> localContext = new ThreadLocal<GenericContext>();
+	private ThreadLocal<Map<String, Object>> localVars = new ThreadLocal<Map<String, Object>>();
 	
 	/**
 	 * Constructor with entry schema information 
@@ -38,11 +46,36 @@ public abstract class GenericAccessor implements IBaseAccessor {
 	 **/
 	public GenericAccessor(GenericContext context){
 		
-		localContext.set(context);
+		localVars.set(new HashMap<String, Object>());
+		localVars.get().put(LOCAL_CONTEXT, context);
+	}
+
+	
+	public void setAccessorContext(GenericContext context){
+		
+		localVars.get().put(LOCAL_CONTEXT, context);
 	}
 	
-	private boolean embed = false;
+	public GenericContext getAccessorContext(){
+		
+		return (GenericContext)localVars.get().get(LOCAL_CONTEXT);
+	}
 	
+	/**
+	 * Release the entity schema and clear the principal in it.
+	 **/
+	public void release(){
+		
+		GenericContext context = (GenericContext)localVars.get().get(LOCAL_CONTEXT);
+
+		if(context != null){
+			// not embed accessor, purge all resource;embed only release object pointers.
+			context.clear(!embed);		
+			localVars.get().clear();// release objects.	
+			
+		}
+	}
+		
 	public boolean isEmbed(){
 		
 		return embed;
@@ -51,31 +84,5 @@ public abstract class GenericAccessor implements IBaseAccessor {
 	public void setEmbed(boolean embed){
 		
 		this.embed = embed;
-	}
-	
-	public void setAccessorContext(GenericContext context){
-		
-		localContext.set(context);
-	}
-	
-	public GenericContext getAccessorContext(){
-		
-		return localContext.get();
-	}
-	
-	/**
-	 * Release the entity schema and clear the principal in it.
-	 **/
-	public void release(){
-		
-		if(localContext != null){
-			GenericContext context = localContext.get();
-			// clear entity schema
-			//BaseEntity schema = context.getEntitySchema();
-		
-			context.clear();// release objects.			
-			localContext.remove();
-			
-		}
 	}
 }

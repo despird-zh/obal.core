@@ -324,8 +324,10 @@ public class AccessorFactory {
 					"The Mockup Accessor[from {}]'s AccessorContext not existed.",
 					this.defaultBuilder);
 		}
-
-		K accessor = defaultBuilder.newBaseAccessor(context, accessorName, true);
+		// new generic context
+		GenericContext ncontext = new GenericContext(context.getPrincipal());
+		context.copy(ncontext);
+		K accessor = defaultBuilder.newBaseAccessor(ncontext, accessorName, true);
 		defaultBuilder.assembly(mockupAccessor, (IBaseAccessor) accessor);
 		return accessor;
 	}
@@ -444,7 +446,10 @@ public class AccessorFactory {
 					"The Mockup Accessor[from {}]'s AccessorContext not existed.",
 					accessorbuilder.getBuilderName());
 		}
-		K accessor = accessorbuilder.newBaseAccessor(context, accessorName, true);
+		// new generic context
+		GenericContext ncontext = new GenericContext(context.getPrincipal());
+		context.copy(ncontext);
+		K accessor = accessorbuilder.newBaseAccessor(ncontext, accessorName, true);
 		accessorbuilder.assembly(mockupAccessor, (IBaseAccessor) accessor);
 		return accessor;
 	}

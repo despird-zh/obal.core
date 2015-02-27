@@ -36,7 +36,7 @@ import com.doccube.meta.BaseEntity;
  * @see EntryKey
  **/
 public interface IEntityAccessor <GB extends EntryInfo> extends IBaseAccessor{
-	
+		
 	/**
 	 * Generate new key for entity 
 	 * @throws AccessorException 

@@ -83,11 +83,14 @@ public class GenericContext {
 	
 	/**
 	 * clear the resource bound to context
+	 * 
+	 * @param purge true:clear the values; false:keep values
 	 **/
-	public void clear(){
+	public void clear(boolean purge){
 		
 		this.principal = null;
-		values.clear();
+		if(purge)
+			this.values.clear();
 		this.values = null;
 	}
 }
