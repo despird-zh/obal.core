@@ -17,6 +17,8 @@ import com.doccube.core.security.Principal;
  **/
 public class GenericContext {
 
+	private boolean embed = false;
+	
 	// principal
 	private Principal principal = null;
 
@@ -86,11 +88,27 @@ public class GenericContext {
 	 * 
 	 * @param purge true:clear the values; false:keep values
 	 **/
-	public void clear(boolean purge){
+	public void clear(){
 		
 		this.principal = null;
-		if(purge)
+		if(embed)
 			this.values.clear();
 		this.values = null;
+	}
+	
+	/**
+	 * Get embed flag
+	 **/
+	public boolean isEmbed(){
+		
+		return embed;
+	}
+	
+	/**
+	 * Set embed flag
+	 **/
+	public void setEmbed(boolean embed){
+		
+		this.embed = embed;
 	}
 }

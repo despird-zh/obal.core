@@ -41,7 +41,6 @@ import com.doccube.meta.BaseEntity;
  **/
 public abstract class EntityAccessor<GB extends EntryInfo> implements IEntityAccessor <GB>{
 
-	private boolean embed = false;
 	
 	private ThreadLocal<Map<String, Object>> localVars = new ThreadLocal<Map<String, Object>>();
 	
@@ -103,7 +102,7 @@ public abstract class EntityAccessor<GB extends EntryInfo> implements IEntityAcc
 
 		if(context != null){
 			// not embed accessor, purge all resource;embed only release object pointers.
-			context.clear(!embed);		
+			context.clear();		
 			localVars.get().clear();// release objects.	
 			
 		}
@@ -111,12 +110,14 @@ public abstract class EntityAccessor<GB extends EntryInfo> implements IEntityAcc
 		
 	public boolean isEmbed(){
 		
-		return embed;
+		AccessorContext context = (AccessorContext)localVars.get().get(LOCAL_CONTEXT);
+		return context.isEmbed();
 	}
 	
 	public void setEmbed(boolean embed){
 		
-		this.embed = embed;
+		AccessorContext context = (AccessorContext)localVars.get().get(LOCAL_CONTEXT);
+		context.setEmbed(embed);
 	}
 
 }

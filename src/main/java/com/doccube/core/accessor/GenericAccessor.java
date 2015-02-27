@@ -34,8 +34,7 @@ import com.doccube.core.IBaseAccessor;
  * 
  **/
 public abstract class GenericAccessor implements IBaseAccessor {
-	
-	private boolean embed = false;	
+		
 	/** thread local */
 	private ThreadLocal<Map<String, Object>> localVars = new ThreadLocal<Map<String, Object>>();
 	
@@ -78,7 +77,7 @@ public abstract class GenericAccessor implements IBaseAccessor {
 
 		if(context != null){
 			// not embed accessor, purge all resource;embed only release object pointers.
-			context.clear(!embed);		
+			context.clear();		
 			localVars.get().clear();// release objects.	
 			
 		}
@@ -86,11 +85,13 @@ public abstract class GenericAccessor implements IBaseAccessor {
 		
 	public boolean isEmbed(){
 		
-		return embed;
+		GenericContext context = (GenericContext)localVars.get().get(LOCAL_CONTEXT);
+		return context.isEmbed();
 	}
 	
 	public void setEmbed(boolean embed){
 		
-		this.embed = embed;
+		GenericContext context = (GenericContext)localVars.get().get(LOCAL_CONTEXT);
+		context.setEmbed(embed);
 	}
 }

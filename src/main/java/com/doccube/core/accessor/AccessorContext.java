@@ -63,9 +63,9 @@ public class AccessorContext extends GenericContext{
 	 * @param purge true:clear the values; false:keep values
 	 **/
 	@Override
-	public void clear(boolean purge){
+	public void clear(){
 
 		this.entitySchema = null;
-		super.clear(purge);
+		super.clear();
 	}
 }
