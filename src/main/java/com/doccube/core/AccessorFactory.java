@@ -292,7 +292,7 @@ public class AccessorFactory {
 		}
 		AccessorContext econtext = new AccessorContext(context.getPrincipal());
 		context.copy(econtext);// copy principal and attached values
-		
+		econtext.setEmbed(true);
 		K accessor = defaultBuilder.newBaseAccessor(econtext, entityName, false);
 		defaultBuilder.assembly(mockupAccessor, (IBaseAccessor) accessor);
 		return accessor;
@@ -327,6 +327,7 @@ public class AccessorFactory {
 		// new generic context
 		GenericContext ncontext = new GenericContext(context.getPrincipal());
 		context.copy(ncontext);
+		ncontext.setEmbed(true);
 		K accessor = defaultBuilder.newBaseAccessor(ncontext, accessorName, true);
 		defaultBuilder.assembly(mockupAccessor, (IBaseAccessor) accessor);
 		return accessor;
@@ -412,7 +413,7 @@ public class AccessorFactory {
 		
 		AccessorContext econtext = new AccessorContext(context.getPrincipal());
 		context.copy(econtext);
-		
+		econtext.setEmbed(true);
 		K accessor = accessorbuilder.newBaseAccessor(econtext, entityName, false);
 		accessorbuilder.assembly(mockupAccessor, (IBaseAccessor) accessor);
 		return accessor;
@@ -449,6 +450,7 @@ public class AccessorFactory {
 		// new generic context
 		GenericContext ncontext = new GenericContext(context.getPrincipal());
 		context.copy(ncontext);
+		ncontext.setEmbed(true);
 		K accessor = accessorbuilder.newBaseAccessor(ncontext, accessorName, true);
 		accessorbuilder.assembly(mockupAccessor, (IBaseAccessor) accessor);
 		return accessor;
