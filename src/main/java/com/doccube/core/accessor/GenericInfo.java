@@ -19,6 +19,7 @@
  */
 package com.doccube.core.accessor;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +27,7 @@ import java.util.Map;
 
 import com.doccube.core.IGenericInfo;
 import com.doccube.meta.EntityAttr;
+import com.doccube.meta.EntityConstants;
 
 /**
  * EntryInfo is the base class for all classes that be used to wrap the entry row
@@ -42,61 +44,101 @@ import com.doccube.meta.EntityAttr;
  **/
 public class GenericInfo implements IGenericInfo{
 
-	private Map<String, Object> values = null;
-	private Map<String, EntityAttr> attrs = null;
+	private Map<String, AttributeItem> itemMap = null;
 	
 	public GenericInfo (){
-		
-		values = new HashMap<String,Object> ();
-		attrs = new HashMap<String, EntityAttr> ();
+		itemMap = new HashMap<String,AttributeItem> ();
 	}
 	
-	public GenericInfo(List<EntityAttr> attrs){
+	public EntityAttr getAttr(String entityname, String attrname) {
 		
-		for(EntityAttr attr:attrs){
-			
-			this.attrs.put(attr.getAttrName(), attr);
+		AttributeItem item = itemMap.get(entityname + EntityConstants.NAME_SEPARATOR + attrname);
+		return item == null? null : item.attribute;
+	}
+
+	public List<EntityAttr> getAttrs() {
+		
+		List<EntityAttr> rtv = new ArrayList<EntityAttr>();
+		
+		for(Map.Entry<String, AttributeItem> e:itemMap.entrySet()){
+			if(e.getValue() != null)
+				rtv.add(e.getValue().attribute);
 		}
 		
-	}
-	
-	@Override
-	public EntityAttr getAttr(String attrname) {
-		
-		return attrs.get(attrname);
+		return rtv.size() == 0? null:rtv;
 	}
 
-	@Override
-	public Collection<EntityAttr> getAttrs() {
-		
-		return attrs.values();
-	}
+	public <K> K getAttrValue(String entityname, String attrname, Class<K> targetType) {
 
-	@Override
-	public <K> K getAttrValue(String attrName, Class<K> targetType) {
-
-		Object value = values.get(attrName);
-		EntityAttr attr = attrs.get(attrName);
-		if(targetType.isAssignableFrom(value.getClass())){
+		AttributeItem e = itemMap.get(entityname + EntityConstants.NAME_SEPARATOR + attrname);
+		if(null == e)
+			return null;
+		Object value = e.value;
+		if(null!=value && targetType.isAssignableFrom(value.getClass())){
 			
 			return (K) value;
-		}else {
-			
-			//throw exception
 		}
 		return null;
 	}
 
-	@Override 
-	public Object getAttrValue(String attrName){
+	public Object getAttrValue(String entityname, String attrname){
 		
-		return values.get(attrName);
+		AttributeItem e = itemMap.get(entityname + EntityConstants.NAME_SEPARATOR + attrname);
+		if(null == e)
+			return null;
+		
+		return e.value;
 	}
 	
-	@Override
-	public void setAttrValue(String attrName, Object value) {
+	public void setAttrValue(EntityAttr attribute, Object value) {
 		
-		values.put(attrName, value);
+		AttributeItem item = new AttributeItem(attribute, value);
+		itemMap.put(item.getFullName(),item);
 	}
 	
+	public void setAttrValue(String entityname, String attrname, Object value) {
+		
+		AttributeItem item = new AttributeItem(entityname, attrname, value);
+		itemMap.put(item.getFullName(),item);
+	}
+	
+	protected Map<String, AttributeItem> getItemMap(){
+		
+		return this.itemMap;
+	}
+	
+	protected AttributeItem getAttributeItem(String entityname, String attrname){
+		
+		return itemMap.get(entityname + EntityConstants.NAME_SEPARATOR + attrname);
+	}
+	/**
+	 * Inner class to wrap value and attribute 
+	 **/
+	protected static class AttributeItem{
+		
+		public AttributeItem(String entityname, String attrname, Object value){
+			
+			this.entityname = entityname;
+			this.attrname = attrname;
+			this.value = value;
+		}
+		
+		public AttributeItem(EntityAttr attribute, Object value){
+			
+			this.attribute = attribute;
+			this.entityname = attribute.getEntityName();
+			this.attrname = attribute.getAttrName();
+			this.value = value;
+		}
+		
+		public String getFullName(){
+			
+			return this.entityname + EntityConstants.NAME_SEPARATOR + this.attrname;
+		}
+		
+		public EntityAttr attribute = null;
+		public String entityname = null;
+		public String attrname = null;
+		public Object value = null;
+	}
 }

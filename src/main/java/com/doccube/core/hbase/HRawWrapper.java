@@ -45,58 +45,6 @@ import com.doccube.meta.EntityMeta;
 public class HRawWrapper extends HEntryWrapper<EntryInfo>{
 
 	public static Logger LOGGER = LoggerFactory.getLogger(HRawWrapper.class);
-
-	@Override
-	public EntryInfo wrap(String entityName,Result rawEntry) throws WrapperException{
-						
-		Result entry = (Result)rawEntry;	
-		EntityMeta meta = EntityManager.getInstance().getEntityMeta(entityName);
-		
-		List<EntityAttr> attrs = meta.getAllAttrs();
-		
-		EntryInfo gei = new EntryInfo(entityName,new String(entry.getRow()));
-		
-		for(EntityAttr attr: attrs){
-			if(LOGGER.isDebugEnabled()){
-				LOGGER.debug("Wrapping entity:{} - attribute:{}",entityName, attr.getAttrName());
-			}
-			byte[] column = attr.getColumn().getBytes();
-			byte[] qualifier = attr.getQualifier().getBytes();
-			byte[] cell = entry.getValue(column, qualifier);
-			switch(attr.mode){
-			
-				case PRIMITIVE :
-					
-					Object value = super.getPrimitiveValue(attr, cell);
-					gei.setAttrValue(attr.getAttrName(), value);	
-					break;
-					
-				case MAP :
-					
-					Map<String, Object> map = super.getMapValue(attr, cell);				
-					gei.setAttrValue(attr.getAttrName(), map);
-					break;
-					
-				case LIST :
-					
-					List<Object> list = super.getListValue(attr, cell);					
-					gei.setAttrValue(attr.getAttrName(), list);
-					break;
-					
-				case SET :
-					
-					Set<Object> set = super.getSetValue(attr, cell);					
-					gei.setAttrValue(attr.getAttrName(), set);
-					break;
-					
-				default:
-					break;
-				
-			}
-		}
-		
-		return gei;
-	}
 	
 	@Override
 	public EntryInfo wrap(List<EntityAttr> attrs,Result rawEntry) throws WrapperException{
@@ -118,25 +66,25 @@ public class HRawWrapper extends HEntryWrapper<EntryInfo>{
 				case PRIMITIVE :
 				
 					Object value = super.getPrimitiveValue(attr, cell);
-					gei.setAttrValue(attr.getAttrName(), value);	
+					gei.setAttrValue(attr, value);	
 					break;
 					
 				case MAP :
 					
 					Map<String, Object> map = super.getMapValue(attr, cell);				
-					gei.setAttrValue(attr.getAttrName(), map);
+					gei.setAttrValue(attr, map);
 					break;
 					
 				case LIST :
 					
 					List<Object> list = super.getListValue(attr, cell);					
-					gei.setAttrValue(attr.getAttrName(), list);
+					gei.setAttrValue(attr, list);
 					break;
 					
 				case SET :
 					
 					Set<Object> set = super.getSetValue(attr, cell);					
-					gei.setAttrValue(attr.getAttrName(), set);
+					gei.setAttrValue(attr, set);
 					break;
 					
 				default:

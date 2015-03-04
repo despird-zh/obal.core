@@ -6,6 +6,7 @@ import com.doccube.core.EntryKey;
 import com.doccube.core.IEntryConverter;
 import com.doccube.core.accessor.AccessorContext;
 import com.doccube.core.accessor.EntryInfo;
+import com.doccube.core.accessor.GenericContext;
 import com.doccube.core.accessor.TraceableEntry;
 import com.doccube.core.hbase.HEntityAccessor;
 import com.doccube.core.hbase.HEntryWrapper;
@@ -15,6 +16,8 @@ import com.doccube.core.security.Principal;
 import com.doccube.exception.BaseException;
 import com.doccube.meta.BaseEntity;
 import com.doccube.meta.EntityConstants;
+import com.doccube.meta.EntityManager;
+import com.doccube.meta.EntityMeta;
 
 public class UserAccessor extends HEntityAccessor<TraceableEntry> {
 
@@ -56,14 +59,15 @@ public class UserAccessor extends HEntityAccessor<TraceableEntry> {
 			String id = fromObject.getId();
 			
 			TraceableEntry entry = new TraceableEntry(EntityConstants.ENTITY_PRINCIPAL,id);
-			
-			entry.setAttrValue("i_account", fromObject.getAccount());
-			entry.setAttrValue("i_name", fromObject.getName());
-			entry.setAttrValue("i_source", fromObject.getSource());
-			entry.setAttrValue("i_password", fromObject.getPassword());
-			entry.setAttrValue("i_groups", fromObject.getGroups());
-			entry.setAttrValue("i_roles", fromObject.getRoles());
+			EntityMeta meta = EntityManager.getInstance().getEntityMeta(EntityConstants.ENTITY_PRINCIPAL);
+			entry.setAttrValue(meta.getAttr("i_account"), fromObject.getAccount());
+			entry.setAttrValue(meta.getAttr("i_name"), fromObject.getName());
+			entry.setAttrValue(meta.getAttr("i_source"), fromObject.getSource());
+			entry.setAttrValue(meta.getAttr("i_password"), fromObject.getPassword());
+			entry.setAttrValue(meta.getAttr("i_groups"), fromObject.getGroups());
+			entry.setAttrValue(meta.getAttr("i_roles"), fromObject.getRoles());
 			
 			return entry;
 		}};
+
 }

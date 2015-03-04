@@ -24,6 +24,7 @@ import java.util.Map;
 
 import com.doccube.core.IEntityAccessor;
 import com.doccube.core.security.Principal;
+import com.doccube.exception.AccessorException;
 import com.doccube.meta.BaseEntity;
 
 /**
@@ -55,12 +56,15 @@ public abstract class EntityAccessor<GB extends EntryInfo> implements IEntityAcc
 		localVars.get().put(LOCAL_CONTEXT, context);
 	}
 	
-	public void setAccessorContext(GenericContext context){
+	public void setContext(GenericContext context) throws AccessorException{
+		
+		if(!(context instanceof AccessorContext))
+			throw new AccessorException("context must be AccessorContext.");
 		
 		localVars.get().put(LOCAL_CONTEXT, context);
 	}
 	
-	public AccessorContext getAccessorContext(){
+	public AccessorContext getContext(){
 		
 		return (AccessorContext)localVars.get().get(LOCAL_CONTEXT);
 	}

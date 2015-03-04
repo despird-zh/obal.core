@@ -20,6 +20,7 @@
 package com.doccube.core;
 
 import com.doccube.core.accessor.GenericContext;
+import com.doccube.exception.AccessorException;
 
 /**
  * Base interface for all Accessor class, it provides methods to 
@@ -39,12 +40,12 @@ public interface IBaseAccessor {
 	 * 
 	 * @param context  
 	 **/
-	public void setAccessorContext(GenericContext context);
+	public void setContext(GenericContext context) throws AccessorException;
 	
 	/**
 	 * Get the accessor context 
 	 **/
-	public  GenericContext getAccessorContext();
+	public  GenericContext getContext();
 	
 	/**
 	 * get embed flag

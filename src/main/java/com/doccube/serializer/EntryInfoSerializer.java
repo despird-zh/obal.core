@@ -25,7 +25,7 @@ public class EntryInfoSerializer extends Serializer<EntryInfo>{
 	@Override
 	public EntryInfo read(Kryo kryo, Input input, Class<EntryInfo> clazz) {
 		// TODO Auto-generated method stub
-		EntryInfo tile = new EntryInfo();
+		EntryInfo tile = new EntryInfo("","");
 	        kryo.reference(tile); // Only necessary if Kryo#setReferences is true AND Tile#something could reference this tile.
 
 	        //tile.something = kryo.readClassAndObject(input);

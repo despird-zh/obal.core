@@ -4,42 +4,48 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
+import com.doccube.admin.EntityAdmin;
+import com.doccube.admin.EntitySetup;
+
 @FixMethodOrder(MethodSorters.NAME_ASCENDING) 
 public class LaunchTest extends BlankTester{
-	
-	public LaunchTest(){
 		
-		System.out.println("constructor");
-	}
-	
     @Test   
-    public void test003Third() {       
+    public void T003() {       
        
         System.out.println("test003Third");
     }
-   
-    @Test   
-    public void test001First() {       
-       
-        System.out.println("test001First");
+    
+    public void test001Prepare() {       
+    	System.out.println("---==: Test schema create ");
+    	EntitySetup ei = new EntitySetup();
+		ei.setup();		
     }
-
-    @Test   
-    public void test002Second() {       
+ 
+    public void Itest002() {       
        
-        System.out.println("test002Second");
+        System.out.println("---==: Test schema load meta info ");
+        EntityAdmin eadmin = EntityAdmin.getInstance();
+        eadmin.loadEntityMeta();
     } 
+      
+    public void test999End() {       
+       
+    	System.out.println("---==: Test schema drop");
+    	EntitySetup ei = new EntitySetup();
+    	ei.purge();
+    }
     
 	protected void setUp() throws Exception {
 		
-		System.out.println("setUp");
+		System.out.println("---==: Before launch initial log4j");
 		initLog4j();
 		super.setUp();		
 	}
 
 	protected void tearDown() throws Exception {
 		
-		System.out.println("tearDown");
+		System.out.println("---==: End launch test");
 		super.tearDown();
 		
 	}

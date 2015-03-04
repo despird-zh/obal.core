@@ -21,7 +21,10 @@ package com.doccube.core;
 
 import java.util.List;
 
+import com.doccube.core.accessor.AccessorContext;
+import com.doccube.core.accessor.EntryCollection;
 import com.doccube.core.accessor.EntryInfo;
+import com.doccube.core.accessor.GenericContext;
 import com.doccube.exception.AccessorException;
 import com.doccube.meta.BaseEntity;
 /**
@@ -94,7 +97,7 @@ public interface IEntityAccessor <GB extends EntryInfo> extends IBaseAccessor{
 	 * @param scan the scan object
 	 * @return List<GB> - the entry information
 	 **/
-	public abstract List<GB> doScanEntry(EntryFilter<?> scanfilter)throws AccessorException;
+	public abstract EntryCollection<GB> doScanEntry(EntryFilter<?> scanfilter)throws AccessorException;
 
 	/**
 	 * check filter object is supported or not

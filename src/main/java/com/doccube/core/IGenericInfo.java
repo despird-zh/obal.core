@@ -1,18 +1,47 @@
 package com.doccube.core;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 import com.doccube.meta.EntityAttr;
 
+/**
+ * IGenericInfo is the basic interface for row level data wrapping.
+ * 
+ * @author despird-zh
+ * @version 0.1 2014-3-1
+ * 
+ **/
 public interface IGenericInfo {
 
-	public EntityAttr getAttr(String attrname);
-	
-	public Collection<EntityAttr> getAttrs();
+	/**
+	 * Get the attribute of specified attribute
+	 **/
+	public EntityAttr getAttr(String entityname,String attrname);
+
+	/**
+	 * Get the attribute List, if every attributeItem not set entityattr,
+	 * it will return null. 
+	 **/
+	public List<EntityAttr> getAttrs();
 		
-	public <K> K getAttrValue(String attrName, Class<K> type);
+	/**
+	 * Get the value of attribute as specified type
+	 * @param entityname
+	 * @param attrname 
+	 **/
+	public <K> K getAttrValue(String entityname,String attrname, Class<K> type);
 	
-	public Object getAttrValue(String attrName);
+	/**
+	 * Get the value of attribute as Object
+	 * @param entityname
+	 * @param attrname 
+	 **/
+	public Object getAttrValue(String entityname,String attrname);
 	
-	public void setAttrValue(String attrName, Object value);
+	/**
+	 * Set attribute value
+	 **/
+	public void setAttrValue(EntityAttr attribute, Object value);
 }

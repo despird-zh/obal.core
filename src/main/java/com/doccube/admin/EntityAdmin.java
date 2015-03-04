@@ -111,17 +111,13 @@ public class EntityAdmin {
 
 		Principal princ = new Principal("acc", "demo", "pwd");
 
-		IAdminAccessor aa = getAdminAccessor(princ);
+		IAdminAccessor adminAccessor = getAdminAccessor(princ);
 		IMetaGenericAccessor metaAttrAccessor = null;
 		List<EntityAttr> attrs = meta.getAllAttrs();
-		// check if the entity is traceable, true: append the traceable attributes.
-		if(meta.getTraceable()){
-			List<EntityAttr>  traceAttrs = EntityManager.getInstance().getEntityMeta(EntityConstants.ENTITY_TRACEABLE).getAllAttrs();
-			attrs.addAll(traceAttrs);
-		}
+
 		try {
 			// create the schema table and columnfamily
-			aa.createSchema(meta.getEntityName(),attrs);
+			adminAccessor.createSchema(meta.getEntityName(),attrs);
 
 			metaAttrAccessor = AccessorUtils.getGenericAccessor(princ,
 					EntityConstants.ENTITY_META_GENERIC);
@@ -136,7 +132,30 @@ public class EntityAdmin {
 			LOGGER.debug("Error when loading entity meta information",e);
 		} finally {
 
-			AccessorUtils.releaseAccessor(metaAttrAccessor, aa);
+			AccessorUtils.releaseAccessor(metaAttrAccessor, adminAccessor);
 		}
+	}
+	
+	/**
+	 * Drop schema(table) by schema name 
+	 * 
+	 * @param schemaName the name of schema
+	 **/
+	public void dropSchema(String schemaName){
+		
+		Principal princ = new Principal("acc", "demo", "pwd");
+
+		IAdminAccessor adminAccessor = getAdminAccessor(princ);
+		
+		try {
+			adminAccessor.dropSchema(schemaName);
+		} catch (AccessorException e) {
+			
+			LOGGER.debug("Error when drop schema-{}",e, schemaName);
+		}finally {
+
+			AccessorUtils.releaseAccessor(adminAccessor);
+		}
+		
 	}
 }

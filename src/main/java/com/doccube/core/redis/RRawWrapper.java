@@ -77,20 +77,20 @@ public class RRawWrapper extends REntryWrapper<EntryInfo> {
 			case PRIMITIVE:
 				byte[] cell = entry.hget(redisKey.getBytes(), attr.getAttrName().getBytes());
 				Object value = super.getPrimitiveValue(attr, cell);
-				gei.setAttrValue(attr.getAttrName(), value);
+				gei.setAttrValue(attr, value);
 				break;
 			case MAP:
 				String mapkey = redisKey + CoreConstants.KEYS_SEPARATOR + attr.getAttrName();
 				cells = entry.hgetAll(mapkey.getBytes());
 				Map<String, Object> map = super.getMapValue(attr, cells);
-				gei.setAttrValue(attr.getAttrName(), map);
+				gei.setAttrValue(attr, map);
 				break;
 			case LIST:
 				String listkey = redisKey + CoreConstants.KEYS_SEPARATOR + attr.getAttrName();
 				Long llen = entry.llen(listkey.getBytes());
 				List<byte[]> listcells = entry.lrange(listkey.getBytes(), 0,llen);
 				List<Object> list = super.getListValue(attr, listcells);
-				gei.setAttrValue(attr.getAttrName(), list);
+				gei.setAttrValue(attr, list);
 				break;
 
 			case SET:
@@ -98,7 +98,7 @@ public class RRawWrapper extends REntryWrapper<EntryInfo> {
 				Set<byte[]> setcells = entry.smembers(setkey.getBytes());
 
 				Set<Object> set = super.getSetValue(attr, setcells);
-				gei.setAttrValue(attr.getAttrName(), set);
+				gei.setAttrValue(attr, set);
 				break;
 
 			default:
@@ -143,20 +143,20 @@ public class RRawWrapper extends REntryWrapper<EntryInfo> {
 				case PRIMITIVE:
 					byte[] cell = entry.hget(redisKey.getBytes(), attr.getAttrName().getBytes());
 					Object value = super.getPrimitiveValue(attr, cell);
-					gei.setAttrValue(attr.getAttrName(), value);
+					gei.setAttrValue(attr, value);
 					break;
 				case MAP:
 					String mapkey = redisKey + CoreConstants.KEYS_SEPARATOR + attr.getAttrName();
 					cells = entry.hgetAll(mapkey.getBytes());
 					Map<String, Object> map = super.getMapValue(attr, cells);
-					gei.setAttrValue(attr.getAttrName(), map);
+					gei.setAttrValue(attr, map);
 					break;
 				case LIST:
 					String listkey = redisKey + CoreConstants.KEYS_SEPARATOR + attr.getAttrName();
 					Long llen = entry.llen(listkey.getBytes());
 					List<byte[]> listcells = entry.lrange(listkey.getBytes(), 0,llen);
 					List<Object> list = super.getListValue(attr, listcells);
-					gei.setAttrValue(attr.getAttrName(), list);
+					gei.setAttrValue(attr, list);
 					break;
 	
 				case SET:
@@ -164,7 +164,7 @@ public class RRawWrapper extends REntryWrapper<EntryInfo> {
 					Set<byte[]> setcells = entry.smembers(setkey.getBytes());
 	
 					Set<Object> set = super.getSetValue(attr, setcells);
-					gei.setAttrValue(attr.getAttrName(), set);
+					gei.setAttrValue(attr, set);
 					break;
 				default:
 					break;

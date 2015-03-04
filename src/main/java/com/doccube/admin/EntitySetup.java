@@ -9,10 +9,20 @@ import com.doccube.meta.GenericEntity;
 import com.doccube.util.AccessorUtils;
 import com.doccube.util.EntityUtils;
 
+/**
+ * EntitySetup prepare the installation of doccube package.
+ * 
+ * @author despird-zh
+ * @version 0.1 2014-3-2
+ * 
+ **/
 public class EntitySetup {
 
 	public EntitySetup() {}
 
+	/**
+	 * Setup the necessary schemas 
+	 **/
 	public void setup() {
 
 		setupMetaSchema();
@@ -108,4 +118,16 @@ public class EntitySetup {
 		eadmin.setupSchema(meta);
 	}
 
+	/**
+	 * Purge the predefined schemas(tables) 
+	 **/
+	public void purge(){
+		
+		EntityAdmin eadmin = EntityAdmin.getInstance();
+		eadmin.dropSchema(EntityConstants.ENTITY_USER_ROLE);
+		eadmin.dropSchema(EntityConstants.ENTITY_USER_GROUP);
+		eadmin.dropSchema(EntityConstants.ENTITY_PRINCIPAL);
+		eadmin.dropSchema(EntityConstants.ENTITY_META_INFO);
+		eadmin.dropSchema(EntityConstants.ENTITY_META_ATTR);
+	}
 }

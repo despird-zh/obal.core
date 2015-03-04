@@ -1,110 +1,98 @@
 package com.doccube.core.accessor;
 
 import java.util.Date;
-import java.util.List;
-
 import com.doccube.core.EntryKey;
 import com.doccube.core.ITraceable;
 import com.doccube.core.security.EntryAce;
 import com.doccube.core.security.EntryAcl;
 import com.doccube.core.security.IAccessControl;
-import com.doccube.meta.EntityAttr;
+import com.doccube.exception.SecurityException;
 
 public class AccessControlEntry extends EntryInfo implements ITraceable ,IAccessControl{
 
-	private String creator;
-	private String modifier;
-	private Date newCreate;
-	private Date lastModify;
-	private EntryAcl entryAcl;
-	
-	public AccessControlEntry (){
-		
-		super();
-	}
-
 	public AccessControlEntry (String entityName,String key){
 		
-		super();
-		EntryKey entryKey = new EntryKey(entityName,key);
-		this.setEntryKey(entryKey);
+		super(entityName, key);
 	}
 	
 	public AccessControlEntry (EntryKey entryKey){
 		
-		super();
-		this.setEntryKey(entryKey);
+		super(entryKey);
 	}
-	
-	public AccessControlEntry(List<EntityAttr> attrs){
-		
-		super(attrs);
-		
-	}
+
 	
 	@Override
 	public String getCreator() {
 		
-		return this.creator;
+		return super.getAttrValue(ATTR_CREATOR, String.class);
 	}
 
 	@Override
 	public void setCreator(String creator) {
 		
-		this.creator = creator;
+		super.setAttrValue(ITraceable.ATTR_CREATOR, creator);
 		
 	}
 
 	@Override
 	public String getModifier() {
 		
-		return this.modifier;
+		return super.getAttrValue(ITraceable.ATTR_MODIFIER, String.class);
 	}
 
 	@Override
 	public void setModifier(String modifier) {
 		
-		this.modifier = modifier;
+		super.setAttrValue(ITraceable.ATTR_MODIFIER, modifier);
 	}
 
 	@Override
 	public Date getNewCreate() {
 		
-		return this.newCreate;
+		return super.getAttrValue(ITraceable.ATTR_NEWCREATE, Date.class);
 	}
 
 	@Override
 	public void setNewCreate(Date newCreate) {
-		this.newCreate = newCreate;
+
+		super.setAttrValue(ITraceable.ATTR_NEWCREATE, newCreate);
 	}
 
 	@Override
 	public Date getLastModify() {
 		
-		return this.lastModify;
+		return super.getAttrValue(ITraceable.ATTR_LASTMOFIFY, Date.class);
 	}
 
 	@Override
 	public void setLastModify(Date lastModify) {
-		this.lastModify = lastModify;
+
+		super.setAttrValue(ITraceable.ATTR_LASTMOFIFY, lastModify);
 	}
 	
 	public EntryAcl getEntryAcl() throws SecurityException{
 		
-		return entryAcl;
+		String aclStr = super.getAttrValue(IAccessControl.ATTR_ACL, String.class);
+		EntryAcl acl = null;
+
+		acl = EntryAcl.readJson(aclStr);
+
+		return acl;
 	}
 	
 	public void setEntryAcl(EntryAcl acl) throws SecurityException{
 		
-		this.entryAcl = acl;
+		String jsonStr = null;
+		jsonStr = EntryAcl.writeJson(acl);
+		super.setAttrValue(IAccessControl.ATTR_ACL, jsonStr);
+		
 	}
 	
 	public void addEntryAce(EntryAce ace) throws SecurityException{
 		
-		if( null == entryAcl)
-			this.entryAcl = new EntryAcl("defaultAcl");
-		
-		this.entryAcl.addEntryAce(ace);
+		EntryAcl acl = getEntryAcl();		
+		acl.addEntryAce(ace);		
+		setEntryAcl(acl);
 	}
-	
+
 }

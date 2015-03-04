@@ -1,5 +1,6 @@
 package com.doccube.core.security;
 
+import com.doccube.exception.SecurityException;
 /**
  * IAccessControl indicates implementation support Access control
  * 
@@ -8,6 +9,8 @@ package com.doccube.core.security;
  * 
  **/
 public interface IAccessControl {
+	
+	public static final String ATTR_ACL = "i_acl";
 	
 	public EntryAcl getEntryAcl() throws SecurityException;
 	

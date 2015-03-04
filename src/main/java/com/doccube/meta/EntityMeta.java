@@ -45,7 +45,7 @@ import com.doccube.core.ITraceable;
  * @see com.doccube.meta.BaseEntity
  * @see com.doccube.core.EntryKey
  **/
-public class EntityMeta implements ITraceable{
+public class EntityMeta{
 
 	private String schemaClazz = null;
 	private Map<String, EntityAttr> attrMap = new HashMap<String, EntityAttr>();
@@ -140,8 +140,8 @@ public class EntityMeta implements ITraceable{
 	 * @see com.doccube.meta.EntityAttr
 	 **/
 	public void addAttr(EntityAttr attr){
-
-		attrMap.put(attr.getAttrName(), attr);
+		attr.setEntityName(entityName);
+		attrMap.put(attr.getFullName(), attr);
 	}
 	
 	public EntryKey getEntryKey(){
@@ -331,6 +331,7 @@ public class EntityMeta implements ITraceable{
 			else if(attr.getAttrName().equalsIgnoreCase(attrName)){
 				
 				rtv = attr;
+				break;
 			}
 		}
 		
@@ -348,7 +349,15 @@ public class EntityMeta implements ITraceable{
 	}
 	
 	public void setTraceable(Boolean traceable){
-		
+		List<EntityAttr> tattrs = EntityManager.getInstance().getTraceableAttributes(entityName);
+		if(!traceable){
+			
+			for(EntityAttr attr:tattrs)
+				attrMap.remove(attr.getFullName());
+		}else{
+			for(EntityAttr attr:tattrs)
+				attrMap.put(attr.getFullName(),attr);			
+		}
 		this.traceable = traceable;
 	}
 	
@@ -358,7 +367,14 @@ public class EntityMeta implements ITraceable{
 	}
 
 	public void setAccessControllable(Boolean accessControllable){
-		
+		EntityAttr attr = EntityManager.getInstance().getAccessControlAttribute(entityName);
+		if(!accessControllable){
+			
+			attrMap.remove(attr.getFullName());
+		}else{
+			
+			attrMap.put(attr.getFullName(),attr);
+		}
 		this.accessControllable = accessControllable;
 	}
 	
@@ -367,54 +383,4 @@ public class EntityMeta implements ITraceable{
 		return this.accessControllable;
 	}
 	
-	private String creator;
-	private String modifier;
-	private Date newCreate;
-	private Date lastModify;
-	@Override
-	public String getCreator() {
-		
-		return this.creator;
-	}
-
-	@Override
-	public void setCreator(String creator) {
-		
-		this.creator = creator;
-		
-	}
-
-	@Override
-	public String getModifier() {
-		
-		return this.modifier;
-	}
-
-	@Override
-	public void setModifier(String modifier) {
-		
-		this.modifier = modifier;
-	}
-
-	@Override
-	public Date getNewCreate() {
-		
-		return this.newCreate;
-	}
-
-	@Override
-	public void setNewCreate(Date newCreate) {
-		this.newCreate = newCreate;
-	}
-
-	@Override
-	public Date getLastModify() {
-		
-		return this.lastModify;
-	}
-
-	@Override
-	public void setLastModify(Date lastModify) {
-		this.lastModify = lastModify;
-	}
 }

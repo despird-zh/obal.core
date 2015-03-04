@@ -27,18 +27,7 @@ public class EntityAttrSerializer  extends Serializer<EntityAttr>{
 		attr.setPrimary(input.readBoolean());
 		attr.setReadonly(input.readBoolean());
 		attr.setRequired(input.readBoolean());
-		
-		attr.setCreator(input.readString());
-		attr.setModifier(input.readString());
-		
-		long time = input.readLong();
-		if(time != -1l)
-		attr.setNewCreate(new Date(time));
-		
-		time = input.readLong();
-		if(time != -1l)
-		attr.setLastModify(new Date(time));
-		
+
 		return attr;
 	}
 
@@ -59,18 +48,6 @@ public class EntityAttrSerializer  extends Serializer<EntityAttr>{
 		output.writeBoolean(attr.isReadonly());
 		output.writeBoolean(attr.isRequired());
 		
-		output.writeString(attr.getCreator());
-		output.writeString(attr.getModifier());
-		
-		if(attr.getLastModify() == null)
-			output.writeLong(-1l);
-		else
-			output.writeLong(attr.getLastModify().getTime());
-		
-		if(attr.getNewCreate() == null)
-			output.writeLong(-1l);
-		else
-			output.writeLong(attr.getNewCreate().getTime());
 	}
 
 }

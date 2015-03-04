@@ -22,9 +22,13 @@ package com.doccube.meta;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import com.doccube.core.ITraceable;
+import com.doccube.core.security.IAccessControl;
 import com.doccube.exception.MetaException;
 
 /**
@@ -176,28 +180,28 @@ public class EntityManager {
 		EntityMeta meta = new EntityMeta(EntityConstants.ENTITY_META_ATTR);
 		meta.setSchemaClass(GenericEntity.class.getName());
 		EntityAttr attr = new EntityAttr("i_attr_name", "c0", "attr_name");
+
 		meta.addAttr(attr);
 		attr = new EntityAttr("i_format", "c0", "format");
+
 		meta.addAttr(attr);
 		attr = new EntityAttr("i_column", "c0", "column");
+
 		meta.addAttr(attr);
 		attr = new EntityAttr("i_qualifier", "c0", "qualifier");
+
 		meta.addAttr(attr);
 		attr = new EntityAttr("i_hidden", EntityAttr.AttrType.BOOL, "c0", "hidden");
+
 		meta.addAttr(attr);
 		attr = new EntityAttr("i_readonly", EntityAttr.AttrType.BOOL, "c0", "readonly");
+
 		meta.addAttr(attr);
 		attr = new EntityAttr("i_required", EntityAttr.AttrType.BOOL, "c0", "required");
+
 		meta.addAttr(attr);
 		attr = new EntityAttr("i_primary", EntityAttr.AttrType.BOOL, "c0", "primary");
-		meta.addAttr(attr);
-		attr = new EntityAttr("i_creator", "c0", "creator");
-		meta.addAttr(attr);
-		attr = new EntityAttr("i_modifier", "c0", "modifier");
-		meta.addAttr(attr);
-		attr = new EntityAttr("i_newcreate", EntityAttr.AttrType.DATE, "c0", "newcreate");
-		meta.addAttr(attr);
-		attr = new EntityAttr("i_lastmodify", EntityAttr.AttrType.DATE, "c0", "lastmodify");
+
 		meta.addAttr(attr);
 		attr = new EntityAttr("i_entity", "c1", "entity");
 		meta.addAttr(attr);
@@ -218,42 +222,37 @@ public class EntityManager {
 		meta.addAttr(attr);
 		attr = new EntityAttr("i_traceable", EntityAttr.AttrType.BOOL, "c0", "traceable");
 		meta.addAttr(attr);
-		attr = new EntityAttr("i_creator", "c0", "creator");
+		attr = new EntityAttr("i_attributes", EntityAttr.AttrMode.MAP, EntityAttr.AttrType.STRING, "c1", "a");
 		meta.addAttr(attr);
-		attr = new EntityAttr("i_modifier", "c0", "modifier");
-		meta.addAttr(attr);
-		attr = new EntityAttr("i_newcreate", EntityAttr.AttrType.DATE, "c0", "newcreate");
-		meta.addAttr(attr);
-		attr = new EntityAttr("i_lastmodify", EntityAttr.AttrType.DATE, "c0", "lastmodify");
-		meta.addAttr(attr);
-		attr = new EntityAttr("i_attributes", EntityAttr.AttrMode.MAP, EntityAttr.AttrType.STRING,
-				"c1", "a");
-		meta.addAttr(attr);
-		attr = new EntityAttr("i_schemas", EntityAttr.AttrMode.LIST, EntityAttr.AttrType.STRING,
-				"c1", "s");
+		attr = new EntityAttr("i_schemas", EntityAttr.AttrMode.LIST, EntityAttr.AttrType.STRING, "c1", "s");
+		
 		meta.addAttr(attr);
 		GenericEntity me = new GenericEntity(meta);
 		metaMap.put(me.getEntityName(), me.getEntityMeta());
-		/** ---------- obal.traceable ------------- */
-		EntityMeta traceable = new EntityMeta(EntityConstants.ENTITY_TRACEABLE);
-		traceable.setSchemaClass(GenericEntity.class.getName());
-		attr = new EntityAttr("i_creator", "c0", "creator");
-		traceable.addAttr(attr);
-		attr = new EntityAttr("i_modifier", "c0", "modifier");
-		traceable.addAttr(attr);
-		attr = new EntityAttr("i_newcreate", EntityAttr.AttrType.DATE, "c0", "newcreate");
-		traceable.addAttr(attr);
-		attr = new EntityAttr("i_lastmodify", EntityAttr.AttrType.DATE, "c0", "lastmodify");
-		traceable.addAttr(attr);
-		GenericEntity te = new GenericEntity(traceable);
-		metaMap.put(te.getEntityName(), te.getEntityMeta());
-		/** ---------- obal.accesscontrol ------------- */
-		EntityMeta acl = new EntityMeta(EntityConstants.ENTITY_ACCESSCONTROL);
-		acl.setSchemaClass(GenericEntity.class.getName());
-		attr = new EntityAttr("i_acl", "c0", "acl");
-		acl.addAttr(attr);
-		GenericEntity aclentity = new GenericEntity(acl);
-		metaMap.put(aclentity.getEntityName(), aclentity.getEntityMeta());
+
 	}
 
+	public List<EntityAttr> getTraceableAttributes(String entityname){
+		
+		List<EntityAttr> attrs = new ArrayList<EntityAttr>();
+		EntityAttr attr = new EntityAttr(ITraceable.ATTR_CREATOR, "c0", "creator");
+		attr.setEntityName(entityname);
+		attrs.add(attr);
+		attr = new EntityAttr(ITraceable.ATTR_MODIFIER, "c0", "modifier");
+		attr.setEntityName(entityname);
+		attrs.add(attr);
+		attr = new EntityAttr(ITraceable.ATTR_NEWCREATE, EntityAttr.AttrType.DATE, "c0", "newcreate");
+		attr.setEntityName(entityname);
+		attrs.add(attr);
+		attr = new EntityAttr(ITraceable.ATTR_LASTMOFIFY, EntityAttr.AttrType.DATE, "c0", "lastmodify");
+		attr.setEntityName(entityname);
+		attrs.add(attr);
+		return attrs;
+	}
+	
+	public EntityAttr getAccessControlAttribute(String entityname){
+		EntityAttr attr = new EntityAttr(IAccessControl.ATTR_ACL, "c0", "acl");
+		attr.setEntityName(entityname);
+		return attr;
+	}
 }

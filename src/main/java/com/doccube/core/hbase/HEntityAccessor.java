@@ -47,6 +47,7 @@ import com.doccube.core.EntryKey;
 import com.doccube.core.ITraceable;
 import com.doccube.core.accessor.AccessorContext;
 import com.doccube.core.accessor.EntityAccessor;
+import com.doccube.core.accessor.EntryCollection;
 import com.doccube.core.accessor.EntryInfo;
 import com.doccube.exception.AccessorException;
 import com.doccube.exception.MetaException;
@@ -97,7 +98,7 @@ public abstract class HEntityAccessor<GB extends EntryInfo> extends EntityAccess
 			if(null == super.getEntitySchema())
 				throw new AccessorException("The entity schema not set yet");
 			
-			key = super.getEntitySchema().newKey(getAccessorContext().getPrincipal());
+			key = super.getEntitySchema().newKey(getContext().getPrincipal());
 		} catch (MetaException e) {
 			
 			throw new AccessorException("Error when generating entry key",e);
@@ -112,9 +113,9 @@ public abstract class HEntityAccessor<GB extends EntryInfo> extends EntityAccess
 	public abstract HEntryWrapper<GB> getEntryWrapper();
 	
 	@Override
-	public List<GB> doScanEntry(EntryFilter<?> scanfilter) throws AccessorException{
+	public EntryCollection<GB> doScanEntry(EntryFilter<?> scanfilter) throws AccessorException{
 		
-		List<GB> result = new LinkedList<GB>();
+		EntryCollection<GB> entryColl = new EntryCollection<GB>();
 		HEntryWrapper<GB> wrapper = this.getEntryWrapper();
 		HTableInterface table = null;
 		Scan scan=new Scan();
@@ -128,17 +129,16 @@ public abstract class HEntityAccessor<GB extends EntryInfo> extends EntityAccess
 				scan.setFilter(hfilter);
 			}
 			HConnection conn = getConnection();
-			table = conn.getTable(super.getEntitySchema().getSchemaBytes(getAccessorContext().getPrincipal(),null));
-			
+			AccessorContext context = super.getContext();
+			table = conn.getTable(context.getEntitySchema().getSchemaBytes(getContext().getPrincipal(),null));
+			BaseEntity schema = context.getEntitySchema();
+			List<EntityAttr> attrs = schema.getEntityMeta().getAllAttrs();
 			ResultScanner rs = table.getScanner(scan);
 			
 			for (Result r : rs) {  
-			     GB entry = wrapper.wrap(super.getEntitySchema().getEntityName(),r);
-			     // Extract the traceable information
-			     if(entry instanceof ITraceable){
-			    	 wrapper.wrapTraceable((ITraceable)entry, r);
-			     }
-			     result.add(entry);
+			     GB entry = wrapper.wrap(attrs,r);
+			     
+			     entryColl.addEntry(entry);
 			}
 		} catch (IOException e) {
 			
@@ -156,7 +156,7 @@ public abstract class HEntityAccessor<GB extends EntryInfo> extends EntityAccess
 				}
 		}
 		
-		return result;
+		return entryColl;
 	}
 
 	@Override
@@ -184,7 +184,7 @@ public abstract class HEntityAccessor<GB extends EntryInfo> extends EntityAccess
         try {
         	byte[] column = attr.getColumn().getBytes();
         	byte[] qualifier = attr.getQualifier().getBytes();
-        	table = getConnection().getTable(entitySchema.getSchema(getAccessorContext().getPrincipal(),entryKey));
+        	table = getConnection().getTable(entitySchema.getSchema(getContext().getPrincipal(),entryKey));
         	Get get = new Get(entryKey.getBytes());
         	QualifierFilter qfilter = new QualifierFilter(CompareOp.GREATER,new BinaryPrefixComparator(qualifier));
         	get.setFilter(qfilter);
@@ -242,17 +242,15 @@ public abstract class HEntityAccessor<GB extends EntryInfo> extends EntityAccess
 		BaseEntity entrySchema = (BaseEntity)getEntitySchema();
         try {
         	
-           table = getConnection().getTable(entrySchema.getSchema(getAccessorContext().getPrincipal(),entryKey));
+           table = getConnection().getTable(entrySchema.getSchema(getContext().getPrincipal(),entryKey));
            Get get = new Get(entryKey.getBytes());
            
            Result r = table.get(get);
            HEntryWrapper<GB> wrapper = (HEntryWrapper<GB>)getEntryWrapper();
+           AccessorContext context = super.getContext();
+           BaseEntity schema = context.getEntitySchema();
+           rtv = wrapper.wrap(schema.getEntityMeta().getAllAttrs(),r);
 
-           rtv = wrapper.wrap(super.getEntitySchema().getEntityName(),r);
-           // Extract the traceable information
-		   if(rtv instanceof ITraceable){
-			   wrapper.wrapTraceable((ITraceable)rtv, r);
-		   }
         } catch (IOException e) {  
         	
             throw new AccessorException("Error get entry row,key:{}",e,entryKey);
@@ -278,7 +276,7 @@ public abstract class HEntityAccessor<GB extends EntryInfo> extends EntityAccess
 		BaseEntity entitySchema = (BaseEntity)getEntitySchema();
 		EntityAttr attr = entitySchema.getEntityMeta().getAttr(attrName);
         try {  
-            table = getConnection().getTable(entitySchema.getSchema(getAccessorContext().getPrincipal(),entryKey));
+            table = getConnection().getTable(entitySchema.getSchema(getContext().getPrincipal(),entryKey));
             // support check.
             HEntryWrapper<GB> wrapper = (HEntryWrapper<GB>)this.getEntryWrapper();
 
@@ -337,15 +335,11 @@ public abstract class HEntityAccessor<GB extends EntryInfo> extends EntityAccess
 		BaseEntity entrySchema = (BaseEntity)getEntitySchema();
         try {  
         	EntryKey key = entryInfo.getEntryKey();
-            table = getConnection().getTable(entrySchema.getSchema(getAccessorContext().getPrincipal(),key.getKey()));
+            table = getConnection().getTable(entrySchema.getSchema(getContext().getPrincipal(),key.getKey()));
             HEntryWrapper<GB> wrapper = this.getEntryWrapper();
  
             Put put = (Put)wrapper.parse(entrySchema.getEntityMeta().getAllAttrs(),entryInfo);
-        	// for traceable set trace information
-            if(entryInfo instanceof ITraceable){
-        		
-        		wrapper.parseTraceable(put, (ITraceable)entryInfo);
-        	}
+
             table.put(put);
         	table.flushCommits();
         	rtv = entryInfo.getEntryKey();
@@ -374,7 +368,7 @@ public abstract class HEntityAccessor<GB extends EntryInfo> extends EntityAccess
 			
 			List<Delete> list = new ArrayList<Delete>();
 			for(String key:rowkey){
-				table = getConnection().getTable(entrySchema.getSchema(getAccessorContext().getPrincipal(),key));
+				table = getConnection().getTable(entrySchema.getSchema(getContext().getPrincipal(),key));
 				if(StringUtils.isBlank(key)) continue;
 				
 				Delete d1 = new Delete(key.getBytes());  

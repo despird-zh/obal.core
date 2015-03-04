@@ -34,6 +34,7 @@ import com.doccube.core.EntryFilter;
 import com.doccube.core.EntryKey;
 import com.doccube.core.accessor.AccessorContext;
 import com.doccube.core.accessor.EntityAccessor;
+import com.doccube.core.accessor.EntryCollection;
 import com.doccube.core.accessor.EntryInfo;
 import com.doccube.exception.AccessorException;
 import com.doccube.meta.BaseEntity;
@@ -178,7 +179,7 @@ public abstract class REntityAccessor <GB extends EntryInfo> extends EntityAcces
 	 **/
 	@Deprecated
 	@Override
-	public List<GB> doScanEntry(EntryFilter<?> scanfilter)
+	public EntryCollection<GB> doScanEntry(EntryFilter<?> scanfilter)
 			throws AccessorException {
 		// TODO Auto-generated method stub
 		return null;

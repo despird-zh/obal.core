@@ -20,8 +20,10 @@
 package com.doccube.core.accessor;
 
 import java.util.List;
+
 import com.doccube.core.EntryKey;
 import com.doccube.core.IEntryInfo;
+import com.doccube.core.accessor.GenericInfo.AttributeItem;
 import com.doccube.meta.EntityAttr;
 
 /**
@@ -41,11 +43,6 @@ public class EntryInfo extends GenericInfo implements IEntryInfo{
 
 	private EntryKey entryKey = null;
 	
-	public EntryInfo (){
-		
-		super();
-	}
-
 	public EntryInfo (String entityName,String key){
 		
 		super();
@@ -58,10 +55,10 @@ public class EntryInfo extends GenericInfo implements IEntryInfo{
 		this.setEntryKey(entryKey);
 	}
 	
-	public EntryInfo(List<EntityAttr> attrs){
+	@Override
+	public String getEntityName(){
 		
-		super(attrs);
-		
+		return getEntryKey().getEntityName();
 	}
 	
 	@Override
@@ -76,4 +73,26 @@ public class EntryInfo extends GenericInfo implements IEntryInfo{
 		this.entryKey = entryKey;
 	}
 
+	@Override
+	public EntityAttr getAttr(String attrname) {
+		
+		return getAttr(entryKey.getEntityName(), attrname);
+	}
+
+	@Override
+	public <K> K getAttrValue(String attrname, Class<K> type) {
+		
+		return getAttrValue(entryKey.getEntityName(), attrname,type);
+	}
+
+	@Override
+	public Object getAttrValue(String attrname) {
+		
+		return getAttrValue(entryKey.getEntityName(), attrname);
+	}
+
+	public void setAttrValue(String attrname, Object value) {
+		
+		super.setAttrValue(entryKey.getEntityName(), attrname, value);
+	}
 }

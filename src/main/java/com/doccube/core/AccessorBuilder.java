@@ -32,6 +32,7 @@ import com.doccube.core.accessor.EntityAccessor;
 import com.doccube.core.accessor.GenericAccessor;
 import com.doccube.core.accessor.GenericContext;
 import com.doccube.core.security.Principal;
+import com.doccube.exception.AccessorException;
 import com.doccube.exception.EntityException;
 import com.doccube.exception.MetaException;
 import com.doccube.meta.BaseEntity;
@@ -197,40 +198,41 @@ public abstract class AccessorBuilder {
 	protected <K> K newBaseAccessor(GenericContext context, String accessorName, boolean isGeneric) throws EntityException{
 		
 		K result = null;
-		// check the IBaseAccessor instance cached or not.
-		IBaseAccessor cachedAccessor = accessorCache.get(accessorName);
-		if(null != cachedAccessor && isGeneric){
-			// set context object
-			cachedAccessor.setAccessorContext(context);
-			return (K)cachedAccessor;
-			
-		}else if(null != cachedAccessor && !isGeneric){
-			// for entity accessor the accessorname is same as entity name.
-			BaseEntity schema;
-			try {
-				schema = EntityManager.getInstance().getEntitySchema(accessorName);
-			} catch (MetaException e) {
-				
-				throw new EntityException("Error when fetch schema object:{}-{}",e,accessorName);
-			}
-			// set the schema to context
-			((AccessorContext)context).setEntitySchema(schema);
-			// set context object
-			cachedAccessor.setAccessorContext(context);
-			return (K)cachedAccessor;
-		}
-		Class<?> clazz = this.getAccessorClass(accessorName);
-		
-		if(!GenericAccessor.class.isAssignableFrom(clazz) && isGeneric)
-			
-			throw new EntityException("The {}-{} is not a GenericAccessor sub class.",accessorName, clazz.getName() );
-		else if(!EntityAccessor.class.isAssignableFrom(clazz) && !isGeneric){
-			
-			throw new EntityException("The {}-{} is not a EntityAccessor sub class.",accessorName, clazz.getName() );
-		}
-		
-		Constructor<K> constructor = null;
 		try {
+			// check the IBaseAccessor instance cached or not.
+			IBaseAccessor cachedAccessor = accessorCache.get(accessorName);
+			if(null != cachedAccessor && isGeneric){
+				// set context object
+				cachedAccessor.setContext(context);
+				return (K)cachedAccessor;
+				
+			}else if(null != cachedAccessor && !isGeneric){
+				// for entity accessor the accessorname is same as entity name.
+				BaseEntity schema;
+				try {
+					schema = EntityManager.getInstance().getEntitySchema(accessorName);
+				} catch (MetaException e) {
+					
+					throw new EntityException("Error when fetch schema object:{}-{}",e,accessorName);
+				}
+				// set the schema to context
+				((AccessorContext)context).setEntitySchema(schema);
+				// set context object
+				cachedAccessor.setContext(context);
+				return (K)cachedAccessor;
+			}
+			Class<?> clazz = this.getAccessorClass(accessorName);
+			
+			if(!GenericAccessor.class.isAssignableFrom(clazz) && isGeneric)
+				
+				throw new EntityException("The {}-{} is not a GenericAccessor sub class.",accessorName, clazz.getName() );
+			else if(!EntityAccessor.class.isAssignableFrom(clazz) && !isGeneric){
+				
+				throw new EntityException("The {}-{} is not a EntityAccessor sub class.",accessorName, clazz.getName() );
+			}
+			
+			Constructor<K> constructor = null;
+		
 			if(isGeneric)
 				constructor = (Constructor<K>)clazz.getConstructor(GenericContext.class);
 			else
@@ -239,7 +241,7 @@ public abstract class AccessorBuilder {
 			// cache the Accessor instance
 			accessorCache.put(accessorName,(IBaseAccessor)result);
 			
-		} catch (SecurityException e) {
+		} catch (AccessorException e) {
 
 			throw new EntityException("Fail build Accessor-{}",e, accessorName);
 		} catch (IllegalArgumentException e) {

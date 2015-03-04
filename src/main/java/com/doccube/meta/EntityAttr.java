@@ -22,8 +22,12 @@ package com.doccube.meta;
 
 import java.util.Date;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 import com.doccube.core.EntryKey;
 import com.doccube.core.ITraceable;
+import com.doccube.core.security.EntryAce;
 
 /**
  * EntryAttr wrap the setting of entry attribute.
@@ -31,7 +35,7 @@ import com.doccube.core.ITraceable;
  * @author G.Obal
  * @since 0.1
  **/
-public class EntityAttr implements ITraceable{
+public class EntityAttr{
 
 	/**
 	 * The attribute support four kinds of value store mode:
@@ -280,55 +284,38 @@ public class EntityAttr implements ITraceable{
 		this.entryKey = entryKey;		
 	}
 	
-
-	private String creator;
-	private String modifier;
-	private Date newCreate;
-	private Date lastModify;
-	@Override
-	public String getCreator() {
+	public String getFullName(){
 		
-		return this.creator;
+		return this.entityName + EntityConstants.NAME_SEPARATOR + this.attrName;
+	}
+	
+	@Override
+	public boolean equals(Object other) {
+		// step 1
+		if (other == this) {
+			return true;
+		}
+		// step 2
+		if (!(other instanceof EntityAttr)) {
+			return false;
+		}
+		// step 3
+		EntityAttr that = (EntityAttr) other;
+		// step 4
+		return new EqualsBuilder()
+			.append(this.entityName, that.entityName)
+			.append(this.attrName, that.attrName).isEquals();
+		
 	}
 
 	@Override
-	public void setCreator(String creator) {
-		
-		this.creator = creator;
-		
-	}
-
-	@Override
-	public String getModifier() {
-		
-		return this.modifier;
-	}
-
-	@Override
-	public void setModifier(String modifier) {
-		
-		this.modifier = modifier;
-	}
-
-	@Override
-	public Date getNewCreate() {
-		
-		return this.newCreate;
-	}
-
-	@Override
-	public void setNewCreate(Date newCreate) {
-		this.newCreate = newCreate;
-	}
-
-	@Override
-	public Date getLastModify() {
-		
-		return this.lastModify;
-	}
-
-	@Override
-	public void setLastModify(Date lastModify) {
-		this.lastModify = lastModify;
+	public int hashCode() {
+				
+		return new HashCodeBuilder(17, 37)
+			.append(this.entityName)
+			.append(this.attrName).toHashCode();
+			//.append(this.privilege)
+			//.append(sumPerms)
+			
 	}
 }

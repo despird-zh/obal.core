@@ -39,25 +39,25 @@ public class HTraceableEntryWrapper extends HEntryWrapper<TraceableEntry>{
 				case PRIMITIVE :
 				
 					Object value = super.getPrimitiveValue(attr, cell);
-					gei.setAttrValue(attr.getAttrName(), value);	
+					gei.setAttrValue(attr, value);	
 					break;
 					
 				case MAP :
 					
 					Map<String, Object> map = super.getMapValue(attr, cell);				
-					gei.setAttrValue(attr.getAttrName(), map);
+					gei.setAttrValue(attr, map);
 					break;
 					
 				case LIST :
 					
 					List<Object> list = super.getListValue(attr, cell);					
-					gei.setAttrValue(attr.getAttrName(), list);
+					gei.setAttrValue(attr, list);
 					break;
 					
 				case SET :
 					
 					Set<Object> set = super.getSetValue(attr, cell);					
-					gei.setAttrValue(attr.getAttrName(), set);
+					gei.setAttrValue(attr, set);
 					break;
 					
 				default:
@@ -66,9 +66,7 @@ public class HTraceableEntryWrapper extends HEntryWrapper<TraceableEntry>{
 			}
 			
 		}
-		
-		wrapTraceable(gei, rawEntry);
-		
+
 		return gei;
 	}
 
@@ -111,17 +109,8 @@ public class HTraceableEntryWrapper extends HEntryWrapper<TraceableEntry>{
         	
         	}
         }
-        
-        super.parseTraceable(put, (ITraceable)entryInfo);
-        return put;
-	}
 
-	@Override
-	public TraceableEntry wrap(String entityName, Result rawEntry)
-			throws WrapperException {
-		
-		List<EntityAttr> attrs = EntityManager.getInstance().getEntityMeta(entityName).getAllAttrs();
-		return wrap(attrs, rawEntry);
+        return put;
 	}
 
 }

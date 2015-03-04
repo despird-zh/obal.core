@@ -12,10 +12,7 @@ public class EntityConstants {
 	public static String ENTITY_META_INFO = "obal.meta.info";
 	/** the meta attr */
 	public static String ENTITY_META_ATTR = "obal.meta.attr";
-	/** the meta entity which holds traceable attributes */
-	public static String ENTITY_TRACEABLE = "obal.traceable";
-	/** the meta entity which holds access control attributes */
-	public static String ENTITY_ACCESSCONTROL = "obal.accesscontrol";
+
 	/** 
 	 * the meta general , key of Accessor 
 	 * 
@@ -36,4 +33,6 @@ public class EntityConstants {
 	 * the entity name of group
 	 **/
 	public static String ENTITY_USER_GROUP = "obal.user.group";
+	
+	public static String NAME_SEPARATOR = ".";
 }

@@ -9,79 +9,62 @@ import com.doccube.meta.EntityAttr;
 
 public class TraceableEntry extends EntryInfo implements ITraceable{
 
-	public TraceableEntry (){
-		
-		super();
-	}
-
 	public TraceableEntry (String entityName,String key){
 		
-		super();
-		EntryKey entryKey = new EntryKey(entityName,key);
-		this.setEntryKey(entryKey);
+		super(entityName, key);
 	}
 	
 	public TraceableEntry (EntryKey entryKey){
 		
-		super();
-		this.setEntryKey(entryKey);
+		super(entryKey);
 	}
-	
-	public TraceableEntry(List<EntityAttr> attrs){
-		
-		super(attrs);
-		
-	}
-	
-	private String creator;
-	private String modifier;
-	private Date newCreate;
-	private Date lastModify;
 	
 	@Override
 	public String getCreator() {
 		
-		return this.creator;
+		return super.getAttrValue(ITraceable.ATTR_CREATOR, String.class);
 	}
 
 	@Override
 	public void setCreator(String creator) {
 		
-		this.creator = creator;
+		super.setAttrValue(ITraceable.ATTR_CREATOR, creator);
 		
 	}
 
 	@Override
 	public String getModifier() {
 		
-		return this.modifier;
+		return super.getAttrValue(ITraceable.ATTR_MODIFIER, String.class);
 	}
 
 	@Override
 	public void setModifier(String modifier) {
 		
-		this.modifier = modifier;
+		super.setAttrValue(ITraceable.ATTR_MODIFIER, modifier);
 	}
 
 	@Override
 	public Date getNewCreate() {
 		
-		return this.newCreate;
+		return super.getAttrValue(ITraceable.ATTR_NEWCREATE, Date.class);
 	}
 
 	@Override
 	public void setNewCreate(Date newCreate) {
-		this.newCreate = newCreate;
+
+		super.setAttrValue(ITraceable.ATTR_NEWCREATE, newCreate);
 	}
 
 	@Override
 	public Date getLastModify() {
 		
-		return this.lastModify;
+		return super.getAttrValue(ITraceable.ATTR_LASTMOFIFY, Date.class);
 	}
 
 	@Override
 	public void setLastModify(Date lastModify) {
-		this.lastModify = lastModify;
+
+		super.setAttrValue(ITraceable.ATTR_LASTMOFIFY, lastModify);
 	}
 }

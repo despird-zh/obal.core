@@ -8,6 +8,7 @@ import java.util.Map;
 import com.doccube.base.BlankTester;
 import com.doccube.core.CoreManager;
 import com.doccube.core.EntryFilter;
+import com.doccube.core.accessor.EntryCollection;
 import com.doccube.core.accessor.TraceableEntry;
 import com.doccube.core.security.Principal;
 import com.doccube.core.security.hbase.UserAccessor;
@@ -39,7 +40,7 @@ public class PrincipalAccessorTest extends BlankTester{
 			
 			pa.doPutEntryAttr("101001", "i_name", "newdemoname");
 
-			List<TraceableEntry> pl = pa.doScanEntry(null);
+			EntryCollection<TraceableEntry> pl = pa.doScanEntry(null);
 			
 			TraceableEntry princ2 = pa.doGetEntry("101001");
 			System.out.println("p-name:"+pa.toPrincipal.convert(princ2).getName());

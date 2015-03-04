@@ -287,7 +287,7 @@ public class AccessorFactory {
 					this.defaultBuilder);
 		}
 
-		GenericContext context = mockupAccessor.getAccessorContext();
+		GenericContext context = mockupAccessor.getContext();
 		if(context == null){
 			throw new EntityException(
 					"The Mockup Accessor[from {}]'s AccessorContext not existed.",
@@ -328,7 +328,7 @@ public class AccessorFactory {
 					this.defaultBuilder);
 		}
 		// retrieve the principal from mock-up accessor
-		GenericContext context = mockupAccessor.getAccessorContext();
+		GenericContext context = mockupAccessor.getContext();
 		if(context == null){
 			throw new EntityException(
 					"The Mockup Accessor[from {}]'s AccessorContext not existed.",
@@ -414,7 +414,7 @@ public class AccessorFactory {
 					"The AccessorBuilder instance:{} not existed.", builderName);
 		}
 
-		GenericContext context = mockupAccessor.getAccessorContext();
+		GenericContext context = mockupAccessor.getContext();
 		if(context == null){
 			throw new EntityException(
 					"The Mockup Accessor[from {}]'s AccessorContext not existed.",
@@ -457,7 +457,7 @@ public class AccessorFactory {
 					"The AccessorBuilder instance:{} not existed.", builderName);
 		}
 		
-		GenericContext context = mockupAccessor.getAccessorContext();
+		GenericContext context = mockupAccessor.getContext();
 		if(context == null){
 			throw new EntityException(
 					"The Mockup Accessor[from {}]'s AccessorContext not existed.",

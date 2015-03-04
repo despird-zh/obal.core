@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
 import com.doccube.core.AccessorFactory;
 import com.doccube.core.EntryFilter;
 import com.doccube.core.EntryKey;
-import com.doccube.core.accessor.AccessorContext;
+import com.doccube.core.accessor.EntryCollection;
 import com.doccube.core.accessor.EntryInfo;
 import com.doccube.core.accessor.GenericContext;
 import com.doccube.core.hbase.HGenericAccessor;
@@ -79,16 +79,13 @@ public class MetaGenericAccessor extends HGenericAccessor implements IMetaGeneri
 			attr = new EntityAttr(attrName,mode,type,column,qualifier);
 			attr.setEntryKey(minfo.getEntryKey());
 			attr.setEntityName(minfo.getAttrValue("i_entity",String.class));
-			attr.setDescription(minfo.getAttrValue("i_description",String.class));
+			//attr.setDescription(minfo.getAttrValue("i_description",String.class));
 			attr.setFormat(minfo.getAttrValue("i_format",String.class));
 			attr.setHidden(minfo.getAttrValue("i_hidden",Boolean.class));
 			attr.setPrimary(minfo.getAttrValue("i_primary",Boolean.class));
 			attr.setRequired(minfo.getAttrValue("i_required",Boolean.class));
 			attr.setReadonly(minfo.getAttrValue("i_readonly",Boolean.class));
-			attr.setCreator(minfo.getAttrValue("i_creator",String.class));
-			attr.setNewCreate(minfo.getAttrValue("i_newcreate",Date.class));
-			attr.setCreator(minfo.getAttrValue("i_modifier",String.class));
-			attr.setLastModify(minfo.getAttrValue("i_lastmodify",Date.class));
+
 		}catch(EntityException ee){
 			
 			throw new AccessorException("Error when build embed accessor:{}",ee,EntityConstants.ENTITY_META_ATTR);
@@ -106,7 +103,7 @@ public class MetaGenericAccessor extends HGenericAccessor implements IMetaGeneri
 		Filter filter1 = new RowFilter(CompareFilter.CompareOp.EQUAL,
 				new BinaryComparator(entityName.getBytes()));
 		AttrInfoAccessor attraccessor = null;
-		List<EntryInfo> attrs = null;
+		EntryCollection<EntryInfo> attrs = null;
 		List<EntityAttr> rtv = null;
 		try{
 			attraccessor = AccessorFactory.getInstance().buildEntityAccessor(this, EntityConstants.ENTITY_META_ATTR);
@@ -132,10 +129,6 @@ public class MetaGenericAccessor extends HGenericAccessor implements IMetaGeneri
 				attr.setRequired(minfo.getAttrValue("i_required",Boolean.class));
 				attr.setReadonly(minfo.getAttrValue("i_readonly",Boolean.class));
 				
-				attr.setCreator(minfo.getAttrValue("i_creator",String.class));
-				attr.setNewCreate(minfo.getAttrValue("i_newcreate",Date.class));
-				attr.setCreator(minfo.getAttrValue("i_modifier",String.class));
-				attr.setLastModify(minfo.getAttrValue("i_lastmodify",Date.class));
 				rtv.add(attr);
 			}
 		}catch(EntityException ee){
@@ -153,26 +146,26 @@ public class MetaGenericAccessor extends HGenericAccessor implements IMetaGeneri
 		
 		try {
 			attraccessor = AccessorFactory.getInstance().buildEntityAccessor(this, EntityConstants.ENTITY_META_ATTR);
-			EntryKey key = attraccessor.getEntitySchema().newKey(getAccessorContext().getPrincipal());
+			EntryKey key = attraccessor.getEntitySchema().newKey(getContext().getPrincipal());
 			EntryInfo minfo = new EntryInfo(key);
+			EntityMeta meta = attraccessor.getEntitySchema().getEntityMeta();
+			minfo.setAttrValue(meta.getAttr("i_attr_name"), attr.getAttrName());
+			minfo.setAttrValue(meta.getAttr("i_description"), attr.getDescription());
+			minfo.setAttrValue(meta.getAttr("i_format"), attr.getFormat());
+			minfo.setAttrValue(meta.getAttr("i_column"), attr.getColumn());
+			minfo.setAttrValue(meta.getAttr("i_qualifier"), attr.getQualifier());
+			minfo.setAttrValue(meta.getAttr("i_hidden"), attr.isHidden());
+			minfo.setAttrValue(meta.getAttr("i_primary"), attr.isPrimary());
+			minfo.setAttrValue(meta.getAttr("i_required"), attr.isRequired());
+			minfo.setAttrValue(meta.getAttr("i_readonly"), attr.isReadonly());
+			minfo.setAttrValue(meta.getAttr("i_type"), attr.type.toString());
+			minfo.setAttrValue(meta.getAttr("i_mode"), attr.mode.toString());
+			minfo.setAttrValue(meta.getAttr("i_entity"), attr.getEntityName());
 			
-			minfo.setAttrValue("i_attr_name", attr.getAttrName());
-			minfo.setAttrValue("i_description", attr.getDescription());
-			minfo.setAttrValue("i_format", attr.getFormat());
-			minfo.setAttrValue("i_column", attr.getColumn());
-			minfo.setAttrValue("i_qualifier", attr.getQualifier());
-			minfo.setAttrValue("i_hidden", attr.isHidden());
-			minfo.setAttrValue("i_primary", attr.isPrimary());
-			minfo.setAttrValue("i_required", attr.isRequired());
-			minfo.setAttrValue("i_readonly", attr.isReadonly());
-			minfo.setAttrValue("i_type", attr.type.toString());
-			minfo.setAttrValue("i_mode", attr.mode.toString());
-			minfo.setAttrValue("i_entity", attr.getEntityName());
-			
-			minfo.setAttrValue("i_creator",attraccessor.getPrincipal().getName());
-			minfo.setAttrValue("i_modifier",attraccessor.getPrincipal().getName());
-			minfo.setAttrValue("i_newcreate", new Date());
-			minfo.setAttrValue("i_lastmodify", new Date());
+			minfo.setAttrValue(meta.getAttr("i_creator"),attraccessor.getPrincipal().getName());
+			minfo.setAttrValue(meta.getAttr("i_modifier"),attraccessor.getPrincipal().getName());
+			minfo.setAttrValue(meta.getAttr("i_newcreate"), new Date());
+			minfo.setAttrValue(meta.getAttr("i_lastmodify"), new Date());
 						
 			return attraccessor.doPutEntry(minfo);
 			
@@ -205,10 +198,6 @@ public class MetaGenericAccessor extends HGenericAccessor implements IMetaGeneri
 			meta.setEntityName(minfo.getAttrValue("i_entity_name",String.class));
 			meta.setSchemas(minfo.getAttrValue("i_schemas",List.class));	
 			meta.setTraceable(minfo.getAttrValue("i_traceable",Boolean.class));
-			meta.setCreator(minfo.getAttrValue("i_creator",String.class));
-			meta.setNewCreate(minfo.getAttrValue("i_newcreate",Date.class));
-			meta.setCreator(minfo.getAttrValue("i_modifier",String.class));
-			meta.setLastModify(minfo.getAttrValue("i_lastmodify",Date.class));
 			
 		}catch (EntityException ee){
 			
@@ -224,7 +213,7 @@ public class MetaGenericAccessor extends HGenericAccessor implements IMetaGeneri
 	@Override
 	public List<EntityMeta> getEntityMetaList() throws AccessorException {
 		MetaInfoAccessor metaAccr = null;
-		List<EntryInfo> rlist = null;
+		EntryCollection<EntryInfo> rlist = null;
 		List<EntityMeta> rtv = null;
 		try{
 			
@@ -241,10 +230,7 @@ public class MetaGenericAccessor extends HGenericAccessor implements IMetaGeneri
 				meta.setDescription(ri.getAttrValue("i_description",String.class));
 				meta.setSchemas(ri.getAttrValue("i_schemas",List.class));	
 				meta.setTraceable(ri.getAttrValue("i_traceable",Boolean.class));
-				meta.setCreator(ri.getAttrValue("i_creator",String.class));
-				meta.setNewCreate(ri.getAttrValue("i_newcreate",Date.class));
-				meta.setCreator(ri.getAttrValue("i_modifier",String.class));
-				meta.setLastModify(ri.getAttrValue("i_lastmodify",Date.class));
+
 				Map<String, String> attrMap =(ri.getAttrValue("i_attributes",Map.class));
 				
 				for(Map.Entry<String, String> et:attrMap.entrySet()){
@@ -273,16 +259,16 @@ public class MetaGenericAccessor extends HGenericAccessor implements IMetaGeneri
 			metaAccr = AccessorFactory.getInstance().buildEntityAccessor(this, EntityConstants.ENTITY_META_INFO);
 			EntryKey key = metaAccr.newKey();
 			EntryInfo minfo = new EntryInfo(key);
-
-			minfo.setAttrValue("i_entity_name", meta.getEntityName());
-			minfo.setAttrValue("i_schema_class", meta.getSchemaClass());
-			minfo.setAttrValue("i_description", meta.getDescription());
-			minfo.setAttrValue("i_traceable", meta.getTraceable());
-			minfo.setAttrValue("i_creator",metaAccr.getPrincipal().getName());
-			minfo.setAttrValue("i_modifier",metaAccr.getPrincipal().getName());
-			minfo.setAttrValue("i_newcreate", new Date());
-			minfo.setAttrValue("i_lastmodify", new Date());
-			minfo.setAttrValue("i_schemas", meta.getSchemas());
+			EntityMeta emeta = metaAccr.getEntitySchema().getEntityMeta();
+			minfo.setAttrValue(emeta.getAttr("i_entity_name"), meta.getEntityName());
+			minfo.setAttrValue(emeta.getAttr("i_schema_class"), meta.getSchemaClass());
+			minfo.setAttrValue(emeta.getAttr("i_description"), meta.getDescription());
+			minfo.setAttrValue(emeta.getAttr("i_traceable"), meta.getTraceable());
+			minfo.setAttrValue(emeta.getAttr("i_creator"),metaAccr.getPrincipal().getName());
+			minfo.setAttrValue(emeta.getAttr("i_modifier"),metaAccr.getPrincipal().getName());
+			minfo.setAttrValue(emeta.getAttr("i_newcreate"), new Date());
+			minfo.setAttrValue(emeta.getAttr("i_lastmodify"), new Date());
+			minfo.setAttrValue(emeta.getAttr("i_schemas"), meta.getSchemas());
 			
 			EntryKey mkey = metaAccr.doPutEntry(minfo);
 			
