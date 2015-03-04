@@ -28,9 +28,6 @@ import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
-import com.doccube.core.accessor.TraceableEntry;
-import com.doccube.meta.EntityConstants;
-
 /**
  * Store the pincipal info of user
  * 
@@ -41,8 +38,6 @@ import com.doccube.meta.EntityConstants;
 @JsonIgnoreProperties({"profile"})
 public class Principal{
 	
-	private static final long serialVersionUID = 1L;
-
 	public Principal(String id){
 		
 		this.id = id;
