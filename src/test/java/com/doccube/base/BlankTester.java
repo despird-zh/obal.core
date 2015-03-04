@@ -25,7 +25,7 @@ public class BlankTester extends TestCase{
 		prop.setProperty("log4j.appender.CONSOLE", "org.apache.log4j.ConsoleAppender");
 		prop.setProperty("log4j.appender.CONSOLE.layout", "org.apache.log4j.PatternLayout");
 		prop.setProperty("log4j.appender.CONSOLE.layout.ConversionPattern", "%d{HH:mm:ss,SSS} [%t] %-5p %C{1} : %m%n");
-		
+		prop.setProperty("log4j.logger.com.doccube","DEBUG");
 		PropertyConfigurator.configure(prop);
 		
 		LOG4J_INIT = true;

@@ -27,9 +27,9 @@ public class LaunchTest extends BlankTester{
         System.out.println("---==: Test schema load meta info ");
         EntityAdmin eadmin = EntityAdmin.getInstance();
         eadmin.loadEntityMeta();
-    } 
+    }
       
-    public void test999End() {       
+    public void Itest999End() {       
        
     	System.out.println("---==: Test schema drop");
     	EntitySetup ei = new EntitySetup();

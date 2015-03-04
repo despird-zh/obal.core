@@ -180,35 +180,41 @@ public class EntityManager {
 		EntityMeta meta = new EntityMeta(EntityConstants.ENTITY_META_ATTR);
 		meta.setSchemaClass(GenericEntity.class.getName());
 		EntityAttr attr = new EntityAttr("i_attr_name", "c0", "attr_name");
-
 		meta.addAttr(attr);
+		
 		attr = new EntityAttr("i_format", "c0", "format");
-
 		meta.addAttr(attr);
+		
 		attr = new EntityAttr("i_column", "c0", "column");
-
 		meta.addAttr(attr);
+		
 		attr = new EntityAttr("i_qualifier", "c0", "qualifier");
-
 		meta.addAttr(attr);
+		
 		attr = new EntityAttr("i_hidden", EntityAttr.AttrType.BOOL, "c0", "hidden");
-
 		meta.addAttr(attr);
+		
 		attr = new EntityAttr("i_readonly", EntityAttr.AttrType.BOOL, "c0", "readonly");
-
 		meta.addAttr(attr);
+		
 		attr = new EntityAttr("i_required", EntityAttr.AttrType.BOOL, "c0", "required");
-
 		meta.addAttr(attr);
+		
 		attr = new EntityAttr("i_primary", EntityAttr.AttrType.BOOL, "c0", "primary");
-
 		meta.addAttr(attr);
+		
 		attr = new EntityAttr("i_entity", "c1", "entity");
 		meta.addAttr(attr);
+		
 		attr = new EntityAttr("i_type", "c0", "type");
 		meta.addAttr(attr);
+		
 		attr = new EntityAttr("i_mode", "c0", "mode");
 		meta.addAttr(attr);
+		
+		attr = new EntityAttr("i_description", "c0", "description");
+		meta.addAttr(attr);
+		
 		GenericEntity ae = new GenericEntity(meta);
 		metaMap.put(ae.getEntityName(), ae.getEntityMeta());
 		/** ---------- obal.meta.info ------------- */
@@ -216,17 +222,22 @@ public class EntityManager {
 		meta.setSchemaClass(GenericEntity.class.getName());
 		attr = new EntityAttr("i_schema_class", "c0", "schemaclass");
 		meta.addAttr(attr);
+		
 		attr = new EntityAttr("i_entity_name", "c0", "entityname");
 		meta.addAttr(attr);
+		
 		attr = new EntityAttr("i_description", "c0", "description");
 		meta.addAttr(attr);
+		
 		attr = new EntityAttr("i_traceable", EntityAttr.AttrType.BOOL, "c0", "traceable");
 		meta.addAttr(attr);
+		
 		attr = new EntityAttr("i_attributes", EntityAttr.AttrMode.MAP, EntityAttr.AttrType.STRING, "c1", "a");
 		meta.addAttr(attr);
-		attr = new EntityAttr("i_schemas", EntityAttr.AttrMode.LIST, EntityAttr.AttrType.STRING, "c1", "s");
 		
+		attr = new EntityAttr("i_schemas", EntityAttr.AttrMode.LIST, EntityAttr.AttrType.STRING, "c1", "s");		
 		meta.addAttr(attr);
+		
 		GenericEntity me = new GenericEntity(meta);
 		metaMap.put(me.getEntityName(), me.getEntityMeta());
 

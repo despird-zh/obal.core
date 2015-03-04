@@ -364,8 +364,7 @@ public abstract class HEntityAccessor<GB extends EntryInfo> extends EntityAccess
 		HTableInterface table = null;
 		BaseEntity entrySchema = (BaseEntity)getEntitySchema();
 		try {
-			
-			
+						
 			List<Delete> list = new ArrayList<Delete>();
 			for(String key:rowkey){
 				table = getConnection().getTable(entrySchema.getSchema(getContext().getPrincipal(),key));
