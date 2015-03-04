@@ -22,7 +22,7 @@ public class LaunchTest extends BlankTester{
 		ei.setup();		
     }
  
-    public void Itest002() {       
+    public void test002() {       
        
         System.out.println("---==: Test schema load meta info ");
         EntityAdmin eadmin = EntityAdmin.getInstance();

@@ -26,6 +26,8 @@ import com.doccube.util.AccessorUtils;
  **/
 public class EntityAdmin {
 
+	public static final String ADMIN_ACCESSOR = EntityConstants.ENTITY_PREFIX+ "admin";
+	
 	Logger LOGGER = LoggerFactory.getLogger(EntityAdmin.class);
 	
 	private EntityAdmin(){
@@ -60,7 +62,7 @@ public class EntityAdmin {
 		
 		IAdminAccessor aa = null;
 		try {
-			aa = AccessorFactory.getInstance().buildGenericAccessor(principal, "AdminAccessor");
+			aa = AccessorFactory.getInstance().buildGenericAccessor(principal, ADMIN_ACCESSOR);
 		} catch (EntityException e) {
 			
 			LOGGER.error("Error when getting Admin service",e);

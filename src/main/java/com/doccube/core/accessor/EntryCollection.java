@@ -27,6 +27,7 @@ public class EntryCollection<GB extends GenericInfo> implements Iterable<GB> {
 	public EntryCollection(){
 		
 		this.attrlist = new ArrayList<EntityAttr>();
+		entrylist = new ArrayList<GB>();
 	}
 	
 	/**

@@ -30,7 +30,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.doccube.admin.IAdminAccessor;
-import com.doccube.core.accessor.AccessorContext;
 import com.doccube.core.accessor.GenericContext;
 import com.doccube.core.hbase.HAdminAware;
 import com.doccube.core.hbase.HGenericAccessor;
@@ -126,7 +125,7 @@ public class AdminAccessor extends HGenericAccessor implements IAdminAccessor,HA
 		try{
 			
 			if(!hadmin.tableExists(schemaName)){
-				LOGGER.error("Schema[{}] already existed, ignore further operation.",schemaName);
+				LOGGER.error("Schema[{}] not exist yet, ignore further operation.",schemaName);
 				return;
 			}
 			
