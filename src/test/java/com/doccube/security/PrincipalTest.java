@@ -65,6 +65,11 @@ public class PrincipalTest extends BlankTester{
 		}
 	}
 	
+	public void testPrincipalWrite(){
+		
+		
+	}
+	
 	protected void setUp() throws Exception {  
 	     initLog4j();  
 	     super.setUp();  

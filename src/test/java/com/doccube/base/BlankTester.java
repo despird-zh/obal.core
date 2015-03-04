@@ -10,7 +10,20 @@ import org.apache.log4j.PropertyConfigurator;
  * Base blank tester 
  **/
 public class BlankTester extends TestCase{
+	
 	static boolean LOG4J_INIT = false;
+	
+	static boolean[] onoffswitch = new boolean[1000];
+	
+	public static void setSwitch(int index ,boolean onoffFlag){
+		
+		onoffswitch[index] = onoffFlag;
+	}
+	
+	public static Boolean switchOn(int index){
+		
+		return onoffswitch[index];
+	}
 	
 	public static void initLog4j() {
 		

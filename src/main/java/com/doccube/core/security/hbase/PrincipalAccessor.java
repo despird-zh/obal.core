@@ -3,7 +3,6 @@ package com.doccube.core.security.hbase;
 import java.util.List;
 
 import com.doccube.core.accessor.AccessorContext;
-import com.doccube.core.accessor.GenericContext;
 import com.doccube.core.hbase.HGenericAccessor;
 import com.doccube.core.security.Principal;
 import com.doccube.core.security.accessor.IPrincipalAccessor;
@@ -38,7 +37,7 @@ public class PrincipalAccessor extends HGenericAccessor implements IPrincipalAcc
 	@Override
 	public List<Principal> getPrincipalsByRole(String role)
 			throws AccessorException {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
