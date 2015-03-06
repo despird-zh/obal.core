@@ -281,7 +281,6 @@ public class RedisTester extends BlankTester{
 		}
 	}
 	
-
 	 protected void setUp() throws Exception {  
 		 initLog4j();
 		EntityAdmin eadmin = EntityAdmin.getInstance();
