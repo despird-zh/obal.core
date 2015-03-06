@@ -100,7 +100,7 @@ public class EntityAdmin {
 			
 			LOGGER.debug("Error when loading entity meta information",e);
 		} finally {
-			AccessorUtils.releaseAccessor(imeta);
+			AccessorUtils.closeAccessor(imeta);
 		}
 	}
 	
@@ -134,7 +134,7 @@ public class EntityAdmin {
 			LOGGER.debug("Error when loading entity meta information",e);
 		} finally {
 
-			AccessorUtils.releaseAccessor(metaAttrAccessor, adminAccessor);
+			AccessorUtils.closeAccessor(metaAttrAccessor, adminAccessor);
 		}
 	}
 	
@@ -156,7 +156,7 @@ public class EntityAdmin {
 			LOGGER.debug("Error when drop schema-{}",e, schemaName);
 		}finally {
 
-			AccessorUtils.releaseAccessor(adminAccessor);
+			AccessorUtils.closeAccessor(adminAccessor);
 		}
 		
 	}

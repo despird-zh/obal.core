@@ -52,7 +52,7 @@ public abstract class HGenericAccessor extends GenericAccessor implements HConnA
 	}
 	
 	@Override
-	public void release() {
+	public void close() throws Exception{
 		try {
 			HConnection conn = getConnection();
 			if (conn != null && !isEmbed())

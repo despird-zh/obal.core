@@ -207,7 +207,7 @@ public abstract class REntityAccessor <GB extends EntryInfo> extends EntityAcces
 	}
 
 	@Override
-	public void release() {
+	public void close() throws Exception {
 		try {
 			// embed means share connection, close it directly affect other accessors using this conn.
 			if (jedis != null && !isEmbed()){
@@ -216,7 +216,7 @@ public abstract class REntityAccessor <GB extends EntryInfo> extends EntityAcces
 				builder.returnJedis(jedis);
 			}
 
-			super.release();
+			super.close();
 			
 		} catch (Exception e) {
 			e.printStackTrace();

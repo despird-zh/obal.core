@@ -119,11 +119,16 @@ public class AccessorUtils {
 	 * @param bAccessors The accessor array of IBaseAccessor object. 
 	 * 
 	 **/
-	public static void releaseAccessor(IBaseAccessor ... bAccessors){
+	public static void closeAccessor(IBaseAccessor ... bAccessors){
 		
 		for(IBaseAccessor bAccessor:bAccessors){
 			if(bAccessor != null)
-				bAccessor.release();
+				try {
+					bAccessor.close();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 		}
 	}
 }

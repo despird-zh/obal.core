@@ -100,7 +100,7 @@ public abstract class EntityAccessor<GB extends EntryInfo> implements IEntityAcc
 	/**
 	 * Release the entity schema and clear the principal in it.
 	 **/
-	public void release(){
+	public void close()throws Exception{
 		
 		GenericContext context = (GenericContext)localVars.get().get(LOCAL_CONTEXT);
 

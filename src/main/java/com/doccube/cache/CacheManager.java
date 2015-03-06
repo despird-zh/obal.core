@@ -127,7 +127,7 @@ public class CacheManager{
 			e.printStackTrace();
 		}finally{
 			
-			AccessorUtils.releaseAccessor(eaccessor);
+			AccessorUtils.closeAccessor(eaccessor);
 		}
 		
 		return cacheData;
@@ -162,7 +162,7 @@ public class CacheManager{
 			e.printStackTrace();
 		}finally{
 			
-			eaccessor.release();
+			AccessorUtils.closeAccessor(eaccessor);
 		}
 		
 		return cacheAttr;

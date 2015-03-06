@@ -387,8 +387,8 @@ public abstract class HEntityAccessor<GB extends EntryInfo> extends EntityAccess
         }        
 	}
 		
-	@Override
-	public void release() {
+	@Override	
+	public void close() throws Exception{
 		try {
 			HConnection conn = getConnection();
 			// embed means share connection, close it directly affect other accessors using this conn.
@@ -396,7 +396,7 @@ public abstract class HEntityAccessor<GB extends EntryInfo> extends EntityAccess
 				conn.close();				
 			}
 			
-			super.release();
+			super.close();
 			
 		} catch (IOException e) {
 			e.printStackTrace();

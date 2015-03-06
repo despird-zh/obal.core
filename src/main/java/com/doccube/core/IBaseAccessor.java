@@ -31,7 +31,7 @@ import com.doccube.exception.AccessorException;
  * 
  * @author despird
  **/
-public interface IBaseAccessor {
+public interface IBaseAccessor extends AutoCloseable{
 
 	public static final String LOCAL_CONTEXT = "_CONTEXT";
 	
@@ -59,8 +59,4 @@ public interface IBaseAccessor {
 	 **/
 	public void setEmbed(boolean embed);
 	
-	/**
-	 * Release the resources post operation. 
-	 **/
-	public void release();
 }

@@ -50,7 +50,7 @@ public class PrincipalAccessorTest extends BlankTester{
 			e.printStackTrace();
 		}finally{
 			
-			AccessorUtils.releaseAccessor(pa);
+			AccessorUtils.closeAccessor(pa);
 		}
 	}
 		

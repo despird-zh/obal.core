@@ -58,7 +58,7 @@ public class RedisTester extends BlankTester{
 			e.printStackTrace();
 		}finally{
 			System.out.println("----end get entry");
-			AccessorUtils.releaseAccessor(ta);
+			AccessorUtils.closeAccessor(ta);
 		}
 		
 		return rentry;
@@ -81,7 +81,7 @@ public class RedisTester extends BlankTester{
 			e.printStackTrace();
 		}finally{
 			System.out.println("----end delete new entry");
-			AccessorUtils.releaseAccessor(ta);
+			AccessorUtils.closeAccessor(ta);
 		}
 	}
 	
@@ -145,7 +145,7 @@ public class RedisTester extends BlankTester{
 			e.printStackTrace();
 		}finally{
 			System.out.println("----end update attr");
-			AccessorUtils.releaseAccessor(ta);
+			AccessorUtils.closeAccessor(ta);
 		}
 	}
 	
@@ -214,7 +214,7 @@ public class RedisTester extends BlankTester{
 			e.printStackTrace();
 		}finally{
 			System.out.println("----end create new entry");
-			AccessorUtils.releaseAccessor(ta);
+			AccessorUtils.closeAccessor(ta);
 		}
 		
 		return null;
@@ -277,7 +277,7 @@ public class RedisTester extends BlankTester{
 			e.printStackTrace();
 		}finally{
 
-			AccessorUtils.releaseAccessor(imeta,aa);
+			AccessorUtils.closeAccessor(imeta,aa);
 		}
 	}
 	

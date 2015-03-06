@@ -53,7 +53,7 @@ public class EntitySetup {
 			e.printStackTrace();
 		} finally {
 
-			AccessorUtils.releaseAccessor(aa);
+			AccessorUtils.closeAccessor(aa);
 		}
 	}
 
