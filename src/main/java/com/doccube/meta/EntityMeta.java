@@ -22,7 +22,6 @@ package com.doccube.meta;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +29,6 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 
 import com.doccube.core.EntryKey;
-import com.doccube.core.ITraceable;
 
 
 /**
@@ -40,6 +38,7 @@ import com.doccube.core.ITraceable;
  * <p>It holds the entry attributes, these attributes be reserved in a Map. it provide methods to 
  * get the <b>Required,Readonly,Visual</b> attributes
  * </p>
+ * The schema name (table name) will be same as entity name by default.
  * 
  * @since 0.1
  * @see com.doccube.meta.BaseEntity
@@ -51,7 +50,7 @@ public class EntityMeta{
 	private Map<String, EntityAttr> attrMap = new HashMap<String, EntityAttr>();
 	private String entityName;
 	private String description;
-	private List<String> schemas;
+	private String schema;
 	private EntryKey entryKey = null;
 	private Boolean traceable = false;
 	private Boolean accessControllable = false;
@@ -71,6 +70,7 @@ public class EntityMeta{
 		
 		this.entityName = entityName;
 		this.schemaClazz = schemaClazz;
+		this.schema = entityName;
 	}
 
 	/**
@@ -83,6 +83,7 @@ public class EntityMeta{
 	public EntityMeta(String entityName){
 		
 		this.entityName = entityName;
+		this.schema = entityName;
 	}
 	
 	/**
@@ -121,13 +122,28 @@ public class EntityMeta{
 	 **/
 	public void setEntityName(String entityName) {
 		this.entityName = entityName;
+		for(Map.Entry<String, EntityAttr> entry:attrMap.entrySet()){
+			
+			EntityAttr attr = entry.getValue();
+			if(null == attr) 
+				continue;
+			else {
+				
+				attr.setEntityName(entityName);
+			}
+		}
 	}
 
-	
+	/**
+	 * Get the entity description 
+	 **/
 	public String getDescription() {
 		return description;
 	}
 
+	/**
+	 * Set the entity description 
+	 **/
 	public void setDescription(String description) {
 		this.description = description;
 	}
@@ -144,11 +160,17 @@ public class EntityMeta{
 		attrMap.put(attr.getFullName(), attr);
 	}
 	
+	/**
+	 * Get the entry key 
+	 **/
 	public EntryKey getEntryKey(){
 		
 		return this.entryKey;
 	}
 	
+	/**
+	 * Public set the entry key 
+	 **/
 	public void setEntryKey(EntryKey entryKey){
 		
 		this.entryKey = entryKey;		
@@ -338,16 +360,25 @@ public class EntityMeta{
 		return rtv;
 	}
 	
-	public List<String> getSchemas(){
+	/**
+	 * Get the schema name ie. the table name 
+	 **/
+	public String getSchema(){
 		
-		return schemas;
+		return schema;
 	}
 	
-	public void setSchemas(List<String> schemas){
+	/**
+	 * Set schema name 
+	 **/
+	public void setSchema(String schema){
 		
-		this.schemas = schemas;
+		this.schema = schema;
 	}
 	
+	/**
+	 * Set the entity is traceable flag, default not traceable. 
+	 **/
 	public void setTraceable(Boolean traceable){
 		List<EntityAttr> tattrs = EntityManager.getInstance().getTraceableAttributes(entityName);
 		if(!traceable){
@@ -361,11 +392,17 @@ public class EntityMeta{
 		this.traceable = traceable;
 	}
 	
+	/**
+	 * Get the traceable flag 
+	 **/
 	public Boolean getTraceable(){
 		
 		return this.traceable;
 	}
 
+	/**
+	 * set the entity access controllable flag
+	 **/
 	public void setAccessControllable(Boolean accessControllable){
 		EntityAttr attr = EntityManager.getInstance().getAccessControlAttribute(entityName);
 		if(!accessControllable){
@@ -378,6 +415,9 @@ public class EntityMeta{
 		this.accessControllable = accessControllable;
 	}
 	
+	/**
+	 * get the entity access controllable flag 
+	 **/
 	public Boolean getAccessControllable(){
 		
 		return this.accessControllable;

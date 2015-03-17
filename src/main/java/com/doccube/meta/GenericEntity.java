@@ -40,9 +40,9 @@ public class GenericEntity extends BaseEntity{
 	}
 
 	@Override
-	public String getSchema(Principal principal, EntryKey key) {
+	public String getSchema(Principal principal, EntryKey key) throws MetaException{
 		
-		return getEntityMeta().getEntityName();
+		return super.getSchema();
 	}
 
 	@Override

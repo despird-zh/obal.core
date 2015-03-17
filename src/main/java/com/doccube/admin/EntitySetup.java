@@ -49,7 +49,7 @@ public class EntitySetup {
 			aa.createSchema(arrtMeta.getEntityName(), arrtMeta.getAllAttrs());
 
 		} catch (AccessorException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} finally {
 

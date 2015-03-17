@@ -119,7 +119,7 @@ public class EntityAdmin {
 
 		try {
 			// create the schema table and columnfamily
-			adminAccessor.createSchema(meta.getEntityName(),attrs);
+			adminAccessor.createSchema(meta.getSchema(),attrs);
 
 			metaAttrAccessor = AccessorUtils.getGenericAccessor(princ,
 					EntityConstants.ENTITY_META_GENERIC);

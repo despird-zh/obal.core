@@ -191,7 +191,7 @@ public class MetaGenericAccessor extends HGenericAccessor implements IMetaGeneri
 			meta.setSchemaClass(minfo.getAttrValue("i_schema_class",String.class));
 			meta.setDescription(minfo.getAttrValue("i_description",String.class));
 			meta.setEntityName(minfo.getAttrValue("i_entity_name",String.class));
-			meta.setSchemas(minfo.getAttrValue("i_schemas",List.class));	
+			meta.setSchema(minfo.getAttrValue("i_schema",String.class));	
 			meta.setTraceable(minfo.getAttrValue("i_traceable",Boolean.class));
 			
 		}catch (EntityException ee){
@@ -223,7 +223,7 @@ public class MetaGenericAccessor extends HGenericAccessor implements IMetaGeneri
 				meta.setSchemaClass(ri.getAttrValue("i_schema_class",String.class));
 				meta.setEntityName(ri.getAttrValue("i_entity_name",String.class));
 				meta.setDescription(ri.getAttrValue("i_description",String.class));
-				meta.setSchemas(ri.getAttrValue("i_schemas",List.class));	
+				meta.setSchema(ri.getAttrValue("i_schema",String.class));	
 				meta.setTraceable(ri.getAttrValue("i_traceable",Boolean.class));
 
 				Map<String, String> attrMap =(ri.getAttrValue("i_attributes",Map.class));
@@ -259,7 +259,7 @@ public class MetaGenericAccessor extends HGenericAccessor implements IMetaGeneri
 			minfo.setAttrValue(emeta.getAttr("i_schema_class"), meta.getSchemaClass());
 			minfo.setAttrValue(emeta.getAttr("i_description"), meta.getDescription());
 			minfo.setAttrValue(emeta.getAttr("i_traceable"), meta.getTraceable());
-			minfo.setAttrValue(emeta.getAttr("i_schemas"), meta.getSchemas());
+			minfo.setAttrValue(emeta.getAttr("i_schema"), meta.getSchema());
 			
 			EntryKey mkey = metaAccr.doPutEntry(minfo);
 			

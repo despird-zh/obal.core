@@ -145,6 +145,8 @@ public abstract class HEntityAccessor<GB extends EntryInfo> extends EntityAccess
 			throw new AccessorException("Scan exception .",e);
 		} catch (WrapperException e) {
 			throw new AccessorException("Scan exception .",e);
+		} catch (MetaException e) {
+			throw new AccessorException("Scan exception .",e);
 		}finally{
 			
 			if(table != null)
@@ -224,6 +226,8 @@ public abstract class HEntityAccessor<GB extends EntryInfo> extends EntityAccess
             throw new AccessorException("Error get entry row,key:{} attr:{}",e,entryKey,attr.getAttrName());
         } catch (WrapperException e) {
         	 throw new AccessorException("Error get entry row,key:{} attr:{}",e,entryKey,attr.getAttrName());
+		} catch (MetaException e) {
+			throw new AccessorException("Error get entry row,key:{} attr:{}",e,entryKey,attr.getAttrName());
 		}finally{
         	
         	try {
@@ -242,7 +246,8 @@ public abstract class HEntityAccessor<GB extends EntryInfo> extends EntityAccess
 		BaseEntity entrySchema = (BaseEntity)getEntitySchema();
         try {
         	
-           table = getConnection().getTable(entrySchema.getSchema(getContext().getPrincipal(),entryKey));
+        	table = getConnection().getTable(entrySchema.getSchema(getContext().getPrincipal(),entryKey));
+
            Get get = new Get(entryKey.getBytes());
            
            Result r = table.get(get);
@@ -256,6 +261,8 @@ public abstract class HEntityAccessor<GB extends EntryInfo> extends EntityAccess
             throw new AccessorException("Error get entry row,key:{}",e,entryKey);
         } catch (WrapperException e) {
         	 throw new AccessorException("Error get entry row,key:{}",e,entryKey);
+		} catch (MetaException e) {
+			throw new AccessorException("Error get entry row,key:{}",e,entryKey);
 		}finally{
         	
         	try {
@@ -317,6 +324,8 @@ public abstract class HEntityAccessor<GB extends EntryInfo> extends EntityAccess
         	 throw new AccessorException("Error put entry row,key:{},attr:{},value{}",e,entryKey,attrName,value.toString());
         } catch (WrapperException e) {
         	throw new AccessorException("Error put entry row,key:{},attr:{},value{}",e,entryKey,attrName,value.toString());
+		} catch (MetaException e) {
+			throw new AccessorException("Error put entry row,key:{},attr:{},value{}",e,entryKey,attrName,value.toString());
 		}finally{
         	
         	try {
@@ -348,6 +357,8 @@ public abstract class HEntityAccessor<GB extends EntryInfo> extends EntityAccess
         	 throw new AccessorException("Error put entry row,key:{}",e,entryInfo.getEntryKey().toString());
         } catch (WrapperException e) {
         	throw new AccessorException("Error put entry row,key:{}",e,entryInfo.getEntryKey().toString());
+		} catch (MetaException e) {
+			throw new AccessorException("Error put entry row,key:{},attr:{},value{}",e,entryInfo.getEntryKey().toString());
 		}finally{
         	
         	try {
@@ -376,6 +387,8 @@ public abstract class HEntityAccessor<GB extends EntryInfo> extends EntityAccess
 	        table.delete(list);
 	        table.flushCommits();
 		} catch (IOException e) {
+			throw new AccessorException("Error delete entry row, key:{}",e,rowkey);
+		} catch (MetaException e) {
 			throw new AccessorException("Error delete entry row, key:{}",e,rowkey);
 		}finally{
         	

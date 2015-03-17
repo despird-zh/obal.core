@@ -173,7 +173,7 @@ public class EntityManager {
 
 		return schemainstance;
 	}
-
+	
 	/** initial the meta schema */
 	private void initialMetaSchema() {
 		/** ---------- obal.meta.attr ------------- */
@@ -203,7 +203,7 @@ public class EntityManager {
 		attr = new EntityAttr("i_primary", EntityAttr.AttrType.BOOL, "c0", "primary");
 		meta.addAttr(attr);
 		
-		attr = new EntityAttr("i_entity", "c1", "entity");
+		attr = new EntityAttr("i_entity", "c0", "entity");
 		meta.addAttr(attr);
 		
 		attr = new EntityAttr("i_type", "c0", "type");
@@ -232,10 +232,10 @@ public class EntityManager {
 		attr = new EntityAttr("i_traceable", EntityAttr.AttrType.BOOL, "c0", "traceable");
 		meta.addAttr(attr);
 		
-		attr = new EntityAttr("i_attributes", EntityAttr.AttrMode.MAP, EntityAttr.AttrType.STRING, "c1", "a");
+		attr = new EntityAttr("i_attributes", EntityAttr.AttrMode.MAP, EntityAttr.AttrType.STRING, "c0", "attributes");
 		meta.addAttr(attr);
 		
-		attr = new EntityAttr("i_schemas", EntityAttr.AttrMode.LIST, EntityAttr.AttrType.STRING, "c1", "s");		
+		attr = new EntityAttr("i_schema", EntityAttr.AttrType.STRING, "c0", "schema");		
 		meta.addAttr(attr);
 		
 		GenericEntity me = new GenericEntity(meta);
@@ -243,6 +243,9 @@ public class EntityManager {
 
 	}
 
+	/**
+	 * Get the traceable attributes 
+	 **/
 	public List<EntityAttr> getTraceableAttributes(String entityname){
 		
 		List<EntityAttr> attrs = new ArrayList<EntityAttr>();
@@ -261,6 +264,10 @@ public class EntityManager {
 		return attrs;
 	}
 	
+	/**
+	 * Get the access control attribute
+	 * @param entityname the attribute name 
+	 **/
 	public EntityAttr getAccessControlAttribute(String entityname){
 		EntityAttr attr = new EntityAttr(IAccessControl.ATTR_ACL, "c0", "acl");
 		attr.setEntityName(entityname);

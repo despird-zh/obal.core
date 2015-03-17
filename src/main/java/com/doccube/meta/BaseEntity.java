@@ -51,13 +51,13 @@ public abstract class BaseEntity{
 	 * Get list of all schemas for entity. the schema list is retrieved from EntityMeta
 	 * 
 	 **/
-	public List<String> getSchemas()throws MetaException{
+	public String getSchema()throws MetaException{
 		
 		if(null == this.meta) {
 			throw new MetaException("Cann't get schema list because of null meta.");
 		}else{
 			
-			return this.meta.getSchemas();
+			return this.meta.getSchema();
 		}
 	}
 	
@@ -66,7 +66,7 @@ public abstract class BaseEntity{
 	 * @param entryKey the entry key
 	 * @return String the schema name of entity 
 	 **/
-	public String getSchema(String entryKey){
+	public String getSchema(String entryKey)throws MetaException{
 		
 		return getSchema(null, entryKey);
 	}
@@ -74,7 +74,7 @@ public abstract class BaseEntity{
 	/**
 	 * Get the schema name  
 	 **/
-	public String getSchema(Principal principal,String entryKey){
+	public String getSchema(Principal principal,String entryKey)throws MetaException{
 		
 		EntryKey key = new EntryKey(meta.getEntityName(), entryKey);
 		return getSchema(principal, key);
@@ -84,7 +84,7 @@ public abstract class BaseEntity{
 	 * Get the schema name, it indict the physical location to store entry data, eg. the table name
 	 * @return String the schema name
 	 **/
-	public abstract String getSchema(Principal principal,EntryKey entryKey);
+	public abstract String getSchema(Principal principal,EntryKey entryKey)throws MetaException;
 	
 	/**
 	 * Generate new key with parameters
@@ -102,7 +102,7 @@ public abstract class BaseEntity{
 	 * Get the schema name in byte[]
 	 * @see getSchema 
 	 **/
-	public byte[] getSchemaBytes(Principal principal,EntryKey entryKey){
+	public byte[] getSchemaBytes(Principal principal,EntryKey entryKey)throws MetaException{
 		
 		String schema = getSchema(principal,entryKey);
 		return schema == null? null: schema.getBytes();
