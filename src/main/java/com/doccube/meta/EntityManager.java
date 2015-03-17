@@ -30,6 +30,8 @@ import java.util.Map;
 import com.doccube.core.ITraceable;
 import com.doccube.core.security.IAccessControl;
 import com.doccube.exception.MetaException;
+import com.doccube.meta.EntityConstants.MetaInfo;
+import com.doccube.meta.EntityConstants.AttrInfo;
 
 /**
  * EntityManager manage all the Entity schema object.
@@ -179,63 +181,109 @@ public class EntityManager {
 		/** ---------- obal.meta.attr ------------- */
 		EntityMeta meta = new EntityMeta(EntityConstants.ENTITY_META_ATTR);
 		meta.setSchemaClass(GenericEntity.class.getName());
-		EntityAttr attr = new EntityAttr("i_attr_name", "c0", "attr_name");
+		EntityAttr attr = new EntityAttr(AttrInfo.AttrName.attribute, 
+				AttrInfo.AttrName.colfamily, 
+				AttrInfo.AttrName.qualifier);
 		meta.addAttr(attr);
 		
-		attr = new EntityAttr("i_format", "c0", "format");
+		attr = new EntityAttr(AttrInfo.Format.attribute, 
+				AttrInfo.Format.colfamily, 
+				AttrInfo.Format.qualifier);
 		meta.addAttr(attr);
 		
-		attr = new EntityAttr("i_column", "c0", "column");
+		attr = new EntityAttr(AttrInfo.Column.attribute, 
+				AttrInfo.Column.colfamily, 
+				AttrInfo.Column.qualifier);
 		meta.addAttr(attr);
 		
-		attr = new EntityAttr("i_qualifier", "c0", "qualifier");
+		attr = new EntityAttr(AttrInfo.Qualifier.attribute, 
+				AttrInfo.Qualifier.colfamily, 
+				AttrInfo.Qualifier.qualifier);
 		meta.addAttr(attr);
 		
-		attr = new EntityAttr("i_hidden", EntityAttr.AttrType.BOOL, "c0", "hidden");
+		attr = new EntityAttr(AttrInfo.Hidden.attribute, EntityAttr.AttrType.BOOL, 
+				AttrInfo.Hidden.colfamily, 
+				AttrInfo.Hidden.qualifier);
 		meta.addAttr(attr);
 		
-		attr = new EntityAttr("i_readonly", EntityAttr.AttrType.BOOL, "c0", "readonly");
+		attr = new EntityAttr(AttrInfo.Readonly.attribute, EntityAttr.AttrType.BOOL, 				
+				AttrInfo.Readonly.colfamily, 
+				AttrInfo.Readonly.qualifier);
 		meta.addAttr(attr);
 		
-		attr = new EntityAttr("i_required", EntityAttr.AttrType.BOOL, "c0", "required");
+		attr = new EntityAttr(AttrInfo.Required.attribute, EntityAttr.AttrType.BOOL, 
+				AttrInfo.Required.colfamily, 
+				AttrInfo.Required.qualifier);
 		meta.addAttr(attr);
 		
-		attr = new EntityAttr("i_primary", EntityAttr.AttrType.BOOL, "c0", "primary");
+		attr = new EntityAttr(AttrInfo.Primary.attribute, EntityAttr.AttrType.BOOL, 				
+				AttrInfo.Primary.colfamily, 
+				AttrInfo.Primary.qualifier);
 		meta.addAttr(attr);
 		
-		attr = new EntityAttr("i_entity", "c0", "entity");
+		attr = new EntityAttr(AttrInfo.Entity.attribute, 				
+				AttrInfo.Entity.colfamily, 
+				AttrInfo.Entity.qualifier);
 		meta.addAttr(attr);
 		
-		attr = new EntityAttr("i_type", "c0", "type");
+		attr = new EntityAttr(AttrInfo.Type.attribute, 				
+				AttrInfo.Type.colfamily, 
+				AttrInfo.Type.qualifier);
 		meta.addAttr(attr);
 		
-		attr = new EntityAttr("i_mode", "c0", "mode");
+		attr = new EntityAttr(AttrInfo.Mode.attribute, 				
+				AttrInfo.Mode.colfamily, 
+				AttrInfo.Mode.qualifier);
 		meta.addAttr(attr);
 		
-		attr = new EntityAttr("i_description", "c0", "description");
+		attr = new EntityAttr(AttrInfo.Description.attribute, 				
+				AttrInfo.Description.colfamily, 
+				AttrInfo.Description.qualifier);
 		meta.addAttr(attr);
 		
 		GenericEntity ae = new GenericEntity(meta);
 		metaMap.put(ae.getEntityName(), ae.getEntityMeta());
+		
 		/** ---------- obal.meta.info ------------- */
 		meta = new EntityMeta(EntityConstants.ENTITY_META_INFO);
 		meta.setSchemaClass(GenericEntity.class.getName());
-		attr = new EntityAttr("i_schema_class", "c0", "schemaclass");
+		attr = new EntityAttr(MetaInfo.SchemaClass.attribute, 
+							  MetaInfo.SchemaClass.colfamily, 
+							  MetaInfo.SchemaClass.qualifier);
 		meta.addAttr(attr);
 		
-		attr = new EntityAttr("i_entity_name", "c0", "entityname");
+		attr = new EntityAttr(MetaInfo.EntityName.attribute, 
+				MetaInfo.EntityName.colfamily, 
+				MetaInfo.EntityName.qualifier);
 		meta.addAttr(attr);
 		
-		attr = new EntityAttr("i_description", "c0", "description");
+		attr = new EntityAttr(MetaInfo.AccessorClass.attribute, 
+				MetaInfo.AccessorClass.colfamily, 
+				MetaInfo.AccessorClass.qualifier);
 		meta.addAttr(attr);
 		
-		attr = new EntityAttr("i_traceable", EntityAttr.AttrType.BOOL, "c0", "traceable");
+		attr = new EntityAttr(MetaInfo.Description.attribute, 
+				MetaInfo.Description.colfamily, 
+				MetaInfo.Description.qualifier);
 		meta.addAttr(attr);
 		
-		attr = new EntityAttr("i_attributes", EntityAttr.AttrMode.MAP, EntityAttr.AttrType.STRING, "c0", "attributes");
+		attr = new EntityAttr(MetaInfo.Traceable.attribute, 
+				EntityAttr.AttrType.BOOL, 
+				MetaInfo.Traceable.colfamily, 
+				MetaInfo.Traceable.qualifier);
 		meta.addAttr(attr);
 		
-		attr = new EntityAttr("i_schema", EntityAttr.AttrType.STRING, "c0", "schema");		
+		attr = new EntityAttr(MetaInfo.Attributes.attribute, 
+				EntityAttr.AttrMode.MAP, 
+				EntityAttr.AttrType.STRING, 
+				MetaInfo.Attributes.colfamily, 
+				MetaInfo.Attributes.qualifier);
+		meta.addAttr(attr);
+		
+		attr = new EntityAttr(MetaInfo.Schema.attribute, 
+				EntityAttr.AttrType.STRING, 				
+				MetaInfo.Schema.colfamily, 
+				MetaInfo.Schema.qualifier);		
 		meta.addAttr(attr);
 		
 		GenericEntity me = new GenericEntity(meta);

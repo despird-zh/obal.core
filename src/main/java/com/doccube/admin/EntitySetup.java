@@ -4,6 +4,9 @@ import com.doccube.core.security.Principal;
 import com.doccube.exception.AccessorException;
 import com.doccube.meta.EntityAttr;
 import com.doccube.meta.EntityConstants;
+import com.doccube.meta.EntityConstants.UserInfo;
+import com.doccube.meta.EntityConstants.GroupInfo;
+import com.doccube.meta.EntityConstants.RoleInfo;
 import com.doccube.meta.EntityMeta;
 import com.doccube.meta.GenericEntity;
 import com.doccube.util.AccessorUtils;
@@ -65,19 +68,37 @@ public class EntitySetup {
 		meta.setSchemaClass(GenericEntity.class.getName());
 		meta.setDescription("user schema ");
 		meta.setTraceable(true);
-		EntityAttr attr = new EntityAttr("i_account", "c0", "account");
+		EntityAttr attr = new EntityAttr(UserInfo.Account.attribute, 
+				UserInfo.Account.colfamily, 
+				UserInfo.Account.qualifier);
 		meta.addAttr(attr);
-		attr = new EntityAttr("i_domain", "c0", "domain");
+		attr = new EntityAttr(UserInfo.Domain.attribute, 
+				UserInfo.Domain.colfamily, 
+				UserInfo.Domain.qualifier);
 		meta.addAttr(attr);
-		attr = new EntityAttr("i_name", "c0", "name");
+		attr = new EntityAttr(UserInfo.Name.attribute, 
+				UserInfo.Name.colfamily, 
+				UserInfo.Name.qualifier);
 		meta.addAttr(attr);
-		attr = new EntityAttr("i_source", "c0", "source");
+		attr = new EntityAttr(UserInfo.Source.attribute, 
+				UserInfo.Source.colfamily, 
+				UserInfo.Source.qualifier);
 		meta.addAttr(attr);
-		attr = new EntityAttr("i_password", "c0", "password");
+		attr = new EntityAttr(UserInfo.Password.attribute, 
+				UserInfo.Password.colfamily, 
+				UserInfo.Password.qualifier);
 		meta.addAttr(attr);
-		attr = new EntityAttr("i_groups", EntityAttr.AttrMode.MAP, EntityAttr.AttrType.STRING, "c1", "groups");
+		attr = new EntityAttr(UserInfo.Salt.attribute, 
+				UserInfo.Salt.colfamily, 
+				UserInfo.Salt.qualifier);
 		meta.addAttr(attr);
-		attr = new EntityAttr("i_roles", EntityAttr.AttrMode.MAP, EntityAttr.AttrType.STRING, "c1", "roles");
+		attr = new EntityAttr(UserInfo.Groups.attribute, EntityAttr.AttrMode.MAP, EntityAttr.AttrType.STRING, 
+				UserInfo.Groups.colfamily, 
+				UserInfo.Groups.qualifier);
+		meta.addAttr(attr);
+		attr = new EntityAttr(UserInfo.Roles.attribute, EntityAttr.AttrMode.MAP, EntityAttr.AttrType.STRING, 				
+				UserInfo.Roles.colfamily, 
+				UserInfo.Roles.qualifier);
 		meta.addAttr(attr);
 		
 		eadmin.setupSchema(meta);
@@ -92,11 +113,19 @@ public class EntitySetup {
 		meta.setSchemaClass(GenericEntity.class.getName());
 		meta.setDescription("user Group schema ");
 		meta.setTraceable(true);
-		EntityAttr attr = new EntityAttr("i_group_name", "c0", "groupname");
+		EntityAttr attr = new EntityAttr(GroupInfo.Name.attribute, 
+				GroupInfo.Name.colfamily, 
+				GroupInfo.Name.qualifier);
 		meta.addAttr(attr);
-		attr = new EntityAttr("i_users", EntityAttr.AttrMode.MAP, EntityAttr.AttrType.STRING, "c1","users");
+		
+		attr = new EntityAttr(GroupInfo.Users.attribute, EntityAttr.AttrMode.MAP, EntityAttr.AttrType.STRING, 
+				GroupInfo.Users.colfamily, 
+				GroupInfo.Users.qualifier);
 		meta.addAttr(attr);
-		attr = new EntityAttr("i_groups", EntityAttr.AttrMode.MAP, EntityAttr.AttrType.STRING, "c1","groups");
+		
+		attr = new EntityAttr(GroupInfo.Groups.attribute, EntityAttr.AttrMode.MAP, EntityAttr.AttrType.STRING, 
+				GroupInfo.Groups.colfamily, 
+				GroupInfo.Groups.qualifier);
 		meta.addAttr(attr);
 		
 		eadmin.setupSchema(meta);
@@ -110,9 +139,15 @@ public class EntitySetup {
 		meta.setSchemaClass(GenericEntity.class.getName());
 		meta.setDescription("user Group schema ");
 		meta.setTraceable(true);
-		EntityAttr attr = new EntityAttr("i_role_name", "c0", "rolename");
+		
+		EntityAttr attr = new EntityAttr(RoleInfo.Name.attribute, 
+				RoleInfo.Name.colfamily, 
+				RoleInfo.Name.qualifier);
 		meta.addAttr(attr);
-		attr = new EntityAttr("i_users", EntityAttr.AttrMode.MAP, EntityAttr.AttrType.STRING, "c1", "users");
+		
+		attr = new EntityAttr(RoleInfo.Users.attribute, EntityAttr.AttrMode.MAP, EntityAttr.AttrType.STRING, 
+				RoleInfo.Users.colfamily, 
+				RoleInfo.Users.qualifier);
 		meta.addAttr(attr);
 
 		eadmin.setupSchema(meta);
