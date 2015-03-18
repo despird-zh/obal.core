@@ -186,7 +186,7 @@ public abstract class AccessorBuilder {
 	}
 
 	/**
-	 * Build the Accessor instance, firstly check cache, not exist create new one.
+	 * Build the GenericAccessor instance, firstly check cache, not exist create new one.
 	 * 
 	 * @param context the AccessorContext object
 	 * @param accessorName the name of accessor

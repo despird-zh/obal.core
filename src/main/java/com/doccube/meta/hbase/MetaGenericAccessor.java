@@ -20,7 +20,6 @@
 package com.doccube.meta.hbase;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +44,8 @@ import com.doccube.exception.EntityException;
 import com.doccube.exception.MetaException;
 import com.doccube.meta.EntityAttr;
 import com.doccube.meta.EntityConstants;
+import com.doccube.meta.EntityConstants.MetaInfo;
+import com.doccube.meta.EntityConstants.AttrInfo;
 import com.doccube.meta.EntityMeta;
 import com.doccube.meta.EntityAttr.AttrMode;
 import com.doccube.meta.EntityAttr.AttrType;
@@ -69,22 +70,22 @@ public class MetaGenericAccessor extends HGenericAccessor implements IMetaGeneri
 
 			EntryInfo minfo = attraccessor.doGetEntry(attrKey);
 		
-			String attrName = minfo.getAttrValue("i_attr_name",String.class);
-			String column = minfo.getAttrValue("i_column",String.class);
-			String qualifier = minfo.getAttrValue("i_qualifier",String.class);
+			String attrName = minfo.getAttrValue(AttrInfo.AttrName.attribute,String.class);
+			String column = minfo.getAttrValue(AttrInfo.Column.attribute,String.class);
+			String qualifier = minfo.getAttrValue(AttrInfo.Qualifier.attribute,String.class);
 			LOGGER.debug("the qualifier:"+qualifier);
-			AttrType type = AttrType.valueOf(minfo.getAttrValue("i_type",String.class));
-			AttrMode mode = AttrMode.valueOf(minfo.getAttrValue("i_mode",String.class));
+			AttrType type = AttrType.valueOf(minfo.getAttrValue(AttrInfo.Type.attribute,String.class));
+			AttrMode mode = AttrMode.valueOf(minfo.getAttrValue(AttrInfo.Mode.attribute,String.class));
 			
 			attr = new EntityAttr(attrName,mode,type,column,qualifier);
 			attr.setEntryKey(minfo.getEntryKey());
-			attr.setEntityName(minfo.getAttrValue("i_entity",String.class));
-			//attr.setDescription(minfo.getAttrValue("i_description",String.class));
-			attr.setFormat(minfo.getAttrValue("i_format",String.class));
-			attr.setHidden(minfo.getAttrValue("i_hidden",Boolean.class));
-			attr.setPrimary(minfo.getAttrValue("i_primary",Boolean.class));
-			attr.setRequired(minfo.getAttrValue("i_required",Boolean.class));
-			attr.setReadonly(minfo.getAttrValue("i_readonly",Boolean.class));
+			attr.setEntityName(minfo.getAttrValue(AttrInfo.Entity.attribute,String.class));
+			attr.setDescription(minfo.getAttrValue(AttrInfo.Description.attribute,String.class));
+			attr.setFormat(minfo.getAttrValue(AttrInfo.Format.attribute,String.class));
+			attr.setHidden(minfo.getAttrValue(AttrInfo.Hidden.attribute,Boolean.class));
+			attr.setPrimary(minfo.getAttrValue(AttrInfo.Primary.attribute,Boolean.class));
+			attr.setRequired(minfo.getAttrValue(AttrInfo.Required.attribute,Boolean.class));
+			attr.setReadonly(minfo.getAttrValue(AttrInfo.Readonly.attribute,Boolean.class));
 
 		}catch(EntityException ee){
 			
@@ -113,21 +114,21 @@ public class MetaGenericAccessor extends HGenericAccessor implements IMetaGeneri
 			rtv = new ArrayList<EntityAttr>();
 			for(EntryInfo minfo:attrs){
 	
-				String attrName = minfo.getAttrValue("i_attr_name",String.class);
-				String column = minfo.getAttrValue("i_column",String.class);
-				String qualifier = minfo.getAttrValue("i_qualifier",String.class);
+				String attrName = minfo.getAttrValue(AttrInfo.AttrName.attribute,String.class);
+				String column = minfo.getAttrValue(AttrInfo.Column.attribute,String.class);
+				String qualifier = minfo.getAttrValue(AttrInfo.Qualifier.attribute,String.class);
 				
-				AttrType type = AttrType.valueOf(minfo.getAttrValue("i_type",String.class));
-				AttrMode mode = AttrMode.valueOf(minfo.getAttrValue("i_mode",String.class));
+				AttrType type = AttrType.valueOf(minfo.getAttrValue(AttrInfo.Type.attribute,String.class));
+				AttrMode mode = AttrMode.valueOf(minfo.getAttrValue(AttrInfo.Mode.attribute,String.class));
 				
 				EntityAttr attr = new EntityAttr(attrName,mode,type,column,qualifier);
-				attr.setEntityName(minfo.getAttrValue("i_entity",String.class));
-				attr.setDescription(minfo.getAttrValue("i_description",String.class));
-				attr.setFormat(minfo.getAttrValue("i_format",String.class));
-				attr.setHidden(minfo.getAttrValue("i_hidden",Boolean.class));
-				attr.setPrimary(minfo.getAttrValue("i_primary",Boolean.class));
-				attr.setRequired(minfo.getAttrValue("i_required",Boolean.class));
-				attr.setReadonly(minfo.getAttrValue("i_readonly",Boolean.class));
+				attr.setEntityName(minfo.getAttrValue(AttrInfo.Entity.attribute,String.class));
+				attr.setDescription(minfo.getAttrValue(AttrInfo.Description.attribute,String.class));
+				attr.setFormat(minfo.getAttrValue(AttrInfo.Format.attribute,String.class));
+				attr.setHidden(minfo.getAttrValue(AttrInfo.Hidden.attribute,Boolean.class));
+				attr.setPrimary(minfo.getAttrValue(AttrInfo.Primary.attribute,Boolean.class));
+				attr.setRequired(minfo.getAttrValue(AttrInfo.Required.attribute,Boolean.class));
+				attr.setReadonly(minfo.getAttrValue(AttrInfo.Readonly.attribute,Boolean.class));
 				
 				rtv.add(attr);
 			}
@@ -149,18 +150,18 @@ public class MetaGenericAccessor extends HGenericAccessor implements IMetaGeneri
 			EntryKey key = attraccessor.getEntitySchema().newKey(getContext().getPrincipal());
 			EntryInfo minfo = new EntryInfo(key);
 			EntityMeta meta = attraccessor.getEntitySchema().getEntityMeta();
-			minfo.setAttrValue(meta.getAttr("i_attr_name"), attr.getAttrName());
-			minfo.setAttrValue(meta.getAttr("i_description"), attr.getDescription());
-			minfo.setAttrValue(meta.getAttr("i_format"), attr.getFormat());
-			minfo.setAttrValue(meta.getAttr("i_column"), attr.getColumn());
-			minfo.setAttrValue(meta.getAttr("i_qualifier"), attr.getQualifier());
-			minfo.setAttrValue(meta.getAttr("i_hidden"), attr.isHidden());
-			minfo.setAttrValue(meta.getAttr("i_primary"), attr.isPrimary());
-			minfo.setAttrValue(meta.getAttr("i_required"), attr.isRequired());
-			minfo.setAttrValue(meta.getAttr("i_readonly"), attr.isReadonly());
-			minfo.setAttrValue(meta.getAttr("i_type"), attr.type.toString());
-			minfo.setAttrValue(meta.getAttr("i_mode"), attr.mode.toString());
-			minfo.setAttrValue(meta.getAttr("i_entity"), attr.getEntityName());
+			minfo.setAttrValue(meta.getAttr(AttrInfo.AttrName.attribute), attr.getAttrName());
+			minfo.setAttrValue(meta.getAttr(AttrInfo.Description.attribute), attr.getDescription());
+			minfo.setAttrValue(meta.getAttr(AttrInfo.Format.attribute), attr.getFormat());
+			minfo.setAttrValue(meta.getAttr(AttrInfo.Column.attribute), attr.getColumn());
+			minfo.setAttrValue(meta.getAttr(AttrInfo.Qualifier.attribute), attr.getQualifier());
+			minfo.setAttrValue(meta.getAttr(AttrInfo.Hidden.attribute), attr.isHidden());
+			minfo.setAttrValue(meta.getAttr(AttrInfo.Primary.attribute), attr.isPrimary());
+			minfo.setAttrValue(meta.getAttr(AttrInfo.Required.attribute), attr.isRequired());
+			minfo.setAttrValue(meta.getAttr(AttrInfo.Readonly.attribute), attr.isReadonly());
+			minfo.setAttrValue(meta.getAttr(AttrInfo.Type.attribute), attr.type.toString());
+			minfo.setAttrValue(meta.getAttr(AttrInfo.Mode.attribute), attr.mode.toString());
+			minfo.setAttrValue(meta.getAttr(AttrInfo.Entity.attribute), attr.getEntityName());
 						
 			return attraccessor.doPutEntry(minfo);
 			
@@ -188,11 +189,12 @@ public class MetaGenericAccessor extends HGenericAccessor implements IMetaGeneri
 		
 			EntryInfo minfo = metaAccr.doGetEntry(entityName);
 			meta = new EntityMeta(entityName);
-			meta.setSchemaClass(minfo.getAttrValue("i_schema_class",String.class));
-			meta.setDescription(minfo.getAttrValue("i_description",String.class));
-			meta.setEntityName(minfo.getAttrValue("i_entity_name",String.class));
-			meta.setSchema(minfo.getAttrValue("i_schema",String.class));	
-			meta.setTraceable(minfo.getAttrValue("i_traceable",Boolean.class));
+			meta.setSchemaClass(minfo.getAttrValue(MetaInfo.SchemaClass.attribute,String.class));
+			meta.setAccessorClass(minfo.getAttrValue(MetaInfo.AccessorClass.attribute,String.class));
+			meta.setDescription(minfo.getAttrValue(MetaInfo.Description.attribute,String.class));
+			meta.setEntityName(minfo.getAttrValue(MetaInfo.EntityName.attribute,String.class));
+			meta.setSchema(minfo.getAttrValue(MetaInfo.Schema.attribute,String.class));	
+			meta.setTraceable(minfo.getAttrValue(MetaInfo.Traceable.attribute,Boolean.class));
 			
 		}catch (EntityException ee){
 			
@@ -220,13 +222,14 @@ public class MetaGenericAccessor extends HGenericAccessor implements IMetaGeneri
 				
 				EntityMeta meta = new EntityMeta(metaAccr.getEntitySchema().getEntityName());
 				meta.setEntryKey(ri.getEntryKey());
-				meta.setSchemaClass(ri.getAttrValue("i_schema_class",String.class));
-				meta.setEntityName(ri.getAttrValue("i_entity_name",String.class));
-				meta.setDescription(ri.getAttrValue("i_description",String.class));
-				meta.setSchema(ri.getAttrValue("i_schema",String.class));	
-				meta.setTraceable(ri.getAttrValue("i_traceable",Boolean.class));
+				meta.setSchemaClass(ri.getAttrValue(MetaInfo.SchemaClass.attribute,String.class));
+				meta.setAccessorClass(ri.getAttrValue(MetaInfo.AccessorClass.attribute,String.class));
+				meta.setEntityName(ri.getAttrValue(MetaInfo.EntityName.attribute,String.class));
+				meta.setDescription(ri.getAttrValue(MetaInfo.Description.attribute,String.class));
+				meta.setSchema(ri.getAttrValue(MetaInfo.Schema.attribute,String.class));	
+				meta.setTraceable(ri.getAttrValue(MetaInfo.Traceable.attribute,Boolean.class));
 
-				Map<String, String> attrMap =(ri.getAttrValue("i_attributes",Map.class));
+				Map<String, String> attrMap =(ri.getAttrValue(MetaInfo.Attributes.attribute,Map.class));
 				
 				for(Map.Entry<String, String> et:attrMap.entrySet()){
 					// value is key of attribute
@@ -255,11 +258,12 @@ public class MetaGenericAccessor extends HGenericAccessor implements IMetaGeneri
 			EntryKey key = metaAccr.newKey();
 			EntryInfo minfo = new EntryInfo(key);
 			EntityMeta emeta = metaAccr.getEntitySchema().getEntityMeta();
-			minfo.setAttrValue(emeta.getAttr("i_entity_name"), meta.getEntityName());
-			minfo.setAttrValue(emeta.getAttr("i_schema_class"), meta.getSchemaClass());
-			minfo.setAttrValue(emeta.getAttr("i_description"), meta.getDescription());
-			minfo.setAttrValue(emeta.getAttr("i_traceable"), meta.getTraceable());
-			minfo.setAttrValue(emeta.getAttr("i_schema"), meta.getSchema());
+			minfo.setAttrValue(emeta.getAttr(MetaInfo.EntityName.attribute), meta.getEntityName());
+			minfo.setAttrValue(emeta.getAttr(MetaInfo.SchemaClass.attribute), meta.getSchemaClass());
+			minfo.setAttrValue(emeta.getAttr(MetaInfo.AccessorClass.attribute), meta.getAccessorClass());
+			minfo.setAttrValue(emeta.getAttr(MetaInfo.Description.attribute), meta.getDescription());
+			minfo.setAttrValue(emeta.getAttr(MetaInfo.Traceable.attribute), meta.getTraceable());
+			minfo.setAttrValue(emeta.getAttr(MetaInfo.Schema.attribute), meta.getSchema());
 			
 			EntryKey mkey = metaAccr.doPutEntry(minfo);
 			
@@ -274,7 +278,7 @@ public class MetaGenericAccessor extends HGenericAccessor implements IMetaGeneri
 			}
 			
 			if(!attrmap.isEmpty())
-				metaAccr.doPutEntryAttr(mkey.getKey(), "i_attributes", attrmap);
+				metaAccr.doPutEntryAttr(mkey.getKey(), MetaInfo.Attributes.attribute, attrmap);
 
 			return mkey;
 			

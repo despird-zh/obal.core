@@ -49,12 +49,17 @@ public abstract class GenericAccessor implements IBaseAccessor {
 		localVars.get().put(LOCAL_CONTEXT, context);
 	}
 
-	
+	/**
+	 * Set the context of GenericAccessor 
+	 **/
 	public void setContext(GenericContext context){
 		
 		localVars.get().put(LOCAL_CONTEXT, context);
 	}
 	
+	/**
+	 * Get the context of GenericAccessor 
+	 **/
 	public GenericContext getContext(){
 		
 		return (GenericContext)localVars.get().get(LOCAL_CONTEXT);

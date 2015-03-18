@@ -56,6 +56,9 @@ public abstract class EntityAccessor<GB extends EntryInfo> implements IEntityAcc
 		localVars.get().put(LOCAL_CONTEXT, context);
 	}
 	
+	/**
+	 * Set the context of EntityAccessor 
+	 **/
 	public void setContext(GenericContext context) throws AccessorException{
 		
 		if(!(context instanceof AccessorContext))
@@ -64,6 +67,9 @@ public abstract class EntityAccessor<GB extends EntryInfo> implements IEntityAcc
 		localVars.get().put(LOCAL_CONTEXT, context);
 	}
 	
+	/**
+	 * Get the context of EntityAccessor
+	 **/
 	public AccessorContext getContext(){
 		
 		return (AccessorContext)localVars.get().get(LOCAL_CONTEXT);
