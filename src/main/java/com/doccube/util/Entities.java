@@ -38,9 +38,9 @@ import com.doccube.meta.EntityMeta;
  * @version 0.1 2014-3-4
  *  
  **/
-public class EntityUtils {
+public class Entities {
 
-	static Logger LOGGER = LoggerFactory.getLogger(EntityUtils.class);
+	static Logger LOGGER = LoggerFactory.getLogger(Entities.class);
 	
 	/**
 	 * Get entity meta

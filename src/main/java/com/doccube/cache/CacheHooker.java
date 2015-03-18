@@ -12,7 +12,7 @@ import com.doccube.disruptor.EventType;
 import com.doccube.exception.AccessorException;
 import com.doccube.exception.EntityException;
 import com.doccube.exception.RingEventException;
-import com.doccube.util.AccessorUtils;
+import com.doccube.util.Accessors;
 
 public class CacheHooker<K extends EntryInfo>  extends EventHooker<CacheInfo>{
 
@@ -69,7 +69,7 @@ public class CacheHooker<K extends EntryInfo>  extends EventHooker<CacheInfo>{
 			
 			e.printStackTrace();
 		}finally{
-			AccessorUtils.closeAccessor(eaccessor);
+			Accessors.closeAccessor(eaccessor);
 		}
 	}
 
@@ -102,7 +102,7 @@ public class CacheHooker<K extends EntryInfo>  extends EventHooker<CacheInfo>{
 			e.printStackTrace();
 		}finally{
 			
-			AccessorUtils.closeAccessor(eaccessor);
+			Accessors.closeAccessor(eaccessor);
 		}
 	}
 	
@@ -131,7 +131,7 @@ public class CacheHooker<K extends EntryInfo>  extends EventHooker<CacheInfo>{
 			e.printStackTrace();
 		}finally{
 			
-			AccessorUtils.closeAccessor(eaccessor);
+			Accessors.closeAccessor(eaccessor);
 		}
 
 	}

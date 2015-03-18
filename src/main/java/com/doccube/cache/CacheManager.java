@@ -29,7 +29,7 @@ import com.doccube.disruptor.EventDispatcher;
 import com.doccube.disruptor.EventType;
 import com.doccube.exception.AccessorException;
 import com.doccube.exception.EntityException;
-import com.doccube.util.AccessorUtils;
+import com.doccube.util.Accessors;
 
 /**
  * CacheManager provide entrance to get/put entry in-out backend cache.
@@ -127,7 +127,7 @@ public class CacheManager{
 			e.printStackTrace();
 		}finally{
 			
-			AccessorUtils.closeAccessor(eaccessor);
+			Accessors.closeAccessor(eaccessor);
 		}
 		
 		return cacheData;
@@ -162,7 +162,7 @@ public class CacheManager{
 			e.printStackTrace();
 		}finally{
 			
-			AccessorUtils.closeAccessor(eaccessor);
+			Accessors.closeAccessor(eaccessor);
 		}
 		
 		return cacheAttr;

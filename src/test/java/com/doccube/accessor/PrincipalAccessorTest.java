@@ -15,7 +15,7 @@ import com.doccube.core.security.hbase.UserAccessor;
 import com.doccube.exception.AccessorException;
 import com.doccube.exception.BaseException;
 import com.doccube.exception.EntityException;
-import com.doccube.util.AccessorUtils;
+import com.doccube.util.Accessors;
 
 public class PrincipalAccessorTest extends BlankTester{
 
@@ -34,7 +34,7 @@ public class PrincipalAccessorTest extends BlankTester{
 			roles.put("rk1","role1");
 			roles.put("rk2","role2");
 			princ.setRoles(roles);
-			pa = AccessorUtils.getEntityAccessor(princ, "obal.user");
+			pa = Accessors.getEntityAccessor(princ, "obal.user");
 			
 			pa.doPutEntry(pa.toEntryInfo.convert(princ));
 			
@@ -50,7 +50,7 @@ public class PrincipalAccessorTest extends BlankTester{
 			e.printStackTrace();
 		}finally{
 			
-			AccessorUtils.closeAccessor(pa);
+			Accessors.closeAccessor(pa);
 		}
 	}
 		

@@ -22,7 +22,7 @@ import com.doccube.meta.GenericEntity;
 import com.doccube.meta.EntityAttr.AttrMode;
 import com.doccube.meta.EntityAttr.AttrType;
 import com.doccube.meta.accessor.IMetaGenericAccessor;
-import com.doccube.util.AccessorUtils;
+import com.doccube.util.Accessors;
 
 public class RedisTester extends BlankTester{
 
@@ -46,7 +46,7 @@ public class RedisTester extends BlankTester{
 		EntryInfo rentry = null;
 		Principal princ = new Principal("useracc","demouser","pwd");
 		try{
-			ta = AccessorUtils.getEntityAccessor("redis",princ, "obal.test");
+			ta = Accessors.getEntityAccessor("redis",princ, "obal.test");
 			rentry = ta.doGetEntry(key.getKey());
 			
 		}catch (EntityException e) {
@@ -58,7 +58,7 @@ public class RedisTester extends BlankTester{
 			e.printStackTrace();
 		}finally{
 			System.out.println("----end get entry");
-			AccessorUtils.closeAccessor(ta);
+			Accessors.closeAccessor(ta);
 		}
 		
 		return rentry;
@@ -69,7 +69,7 @@ public class RedisTester extends BlankTester{
 		TestAccessor ta = null;
 		Principal princ = new Principal("useracc","demouser","pwd");
 		try{
-			ta = AccessorUtils.getEntityAccessor("redis",princ, "obal.test");
+			ta = Accessors.getEntityAccessor("redis",princ, "obal.test");
 			ta.doDelEntry(key.getKey());
 			
 		}catch (EntityException e) {
@@ -81,7 +81,7 @@ public class RedisTester extends BlankTester{
 			e.printStackTrace();
 		}finally{
 			System.out.println("----end delete new entry");
-			AccessorUtils.closeAccessor(ta);
+			Accessors.closeAccessor(ta);
 		}
 	}
 	
@@ -90,7 +90,7 @@ public class RedisTester extends BlankTester{
 		TestAccessor ta = null;
 		Principal princ = new Principal("useracc","demouser","pwd");
 		try{
-			ta = AccessorUtils.getEntityAccessor("redis",princ, "obal.test");
+			ta = Accessors.getEntityAccessor("redis",princ, "obal.test");
 			
 			ta.doPutEntryAttr(key.getKey(), "i_int", 2211);
 			ta.doPutEntryAttr(key.getKey(), "i_double", 23.2222);
@@ -145,7 +145,7 @@ public class RedisTester extends BlankTester{
 			e.printStackTrace();
 		}finally{
 			System.out.println("----end update attr");
-			AccessorUtils.closeAccessor(ta);
+			Accessors.closeAccessor(ta);
 		}
 	}
 	
@@ -155,7 +155,7 @@ public class RedisTester extends BlankTester{
 		TestAccessor ta = null;
 		Principal princ = new Principal("useracc","demouser","pwd");
 		try {
-			ta = AccessorUtils.getEntityAccessor("redis",princ, "obal.test");
+			ta = Accessors.getEntityAccessor("redis",princ, "obal.test");
 			EntryKey key = ta.newKey();
 			EntryInfo re = new EntryInfo(key);
 			re.setAttrValue("i_int", 1211);
@@ -214,7 +214,7 @@ public class RedisTester extends BlankTester{
 			e.printStackTrace();
 		}finally{
 			System.out.println("----end create new entry");
-			AccessorUtils.closeAccessor(ta);
+			Accessors.closeAccessor(ta);
 		}
 		
 		return null;
@@ -265,7 +265,7 @@ public class RedisTester extends BlankTester{
 			
 			aa.createSchema("obal.test",meta.getAllAttrs());
 			
-			imeta = AccessorUtils.getGenericAccessor(princ, EntityConstants.ENTITY_META_GENERIC);
+			imeta = Accessors.getGenericAccessor(princ, EntityConstants.ENTITY_META_GENERIC);
 
 			imeta.putEntityMeta(meta);
 						
@@ -277,7 +277,7 @@ public class RedisTester extends BlankTester{
 			e.printStackTrace();
 		}finally{
 
-			AccessorUtils.closeAccessor(imeta,aa);
+			Accessors.closeAccessor(imeta,aa);
 		}
 	}
 	

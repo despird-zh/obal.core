@@ -3,19 +3,19 @@ package com.doccube.audit;
 import com.doccube.audit.AuditInfo;
 import com.doccube.base.BlankTester;
 import com.doccube.disruptor.EventDispatcher;
-import com.doccube.util.AuditUtils;
+import com.doccube.util.Audits;
 
 public class AuditTest extends BlankTester{
 
 	public void testAudit(){
 		EventDispatcher ed = EventDispatcher.getInstance();
 		ed.start();
-		AuditUtils.regAuditHooker();
+		Audits.regAuditHooker();
 		
 		for(int i = 1; i<100; i++){
 			
 			AuditInfo evt = new AuditInfo("key-"+i);
-			AuditUtils.doAudit(evt);
+			Audits.doAudit(evt);
 		}
 		
 		try {
