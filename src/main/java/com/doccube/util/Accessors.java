@@ -61,7 +61,7 @@ public class Accessors {
 	}	
 
 	/**
-	 * Get General Accessor
+	 * Get GenericAccessor
 	 * 
 	 * @param builderName the builder name
 	 * @param principal the user principal
