@@ -19,7 +19,6 @@
  */
 package com.doccube.cache;
 
-import com.doccube.core.EntryKey;
 import com.doccube.core.accessor.EntryInfo;
 import com.doccube.disruptor.EventPayload;
 

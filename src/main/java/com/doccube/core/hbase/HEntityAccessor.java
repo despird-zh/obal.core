@@ -21,7 +21,6 @@ package com.doccube.core.hbase;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -44,7 +43,6 @@ import org.slf4j.LoggerFactory;
 
 import com.doccube.core.EntryFilter;
 import com.doccube.core.EntryKey;
-import com.doccube.core.ITraceable;
 import com.doccube.core.accessor.AccessorContext;
 import com.doccube.core.accessor.EntityAccessor;
 import com.doccube.core.accessor.EntryCollection;
@@ -66,9 +64,7 @@ import com.doccube.meta.EntityAttr;
  * @see EntityAccessor
  **/
 public abstract class HEntityAccessor<GB extends EntryInfo> extends EntityAccessor<GB> implements HConnAware {
-	
-	private static final String LOCAL_CONNECT = "_CONNECTION";
-	
+
 	Logger LOGGER = LoggerFactory.getLogger(HEntityAccessor.class);
 	private HConnection connection;
 	

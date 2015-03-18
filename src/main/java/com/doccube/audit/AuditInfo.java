@@ -26,8 +26,6 @@ import com.lmax.disruptor.EventFactory;
 
 public class AuditInfo extends EntryInfo implements EventPayload{
 
-	private static final long serialVersionUID = 1L;
-
 	public static final String ENTRY_TYPE_AUDIT="_ENTRY_AUDIT";
 
 	private Date timestamp;

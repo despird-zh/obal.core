@@ -19,11 +19,8 @@
  */
 package com.doccube.core.accessor;
 
-import java.util.List;
-
 import com.doccube.core.EntryKey;
 import com.doccube.core.IEntryInfo;
-import com.doccube.core.accessor.GenericInfo.AttributeItem;
 import com.doccube.meta.EntityAttr;
 
 /**

@@ -19,9 +19,6 @@
  */
 package com.doccube.core.accessor;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.doccube.core.IEntityAccessor;
 import com.doccube.core.security.Principal;
 import com.doccube.exception.AccessorException;

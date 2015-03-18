@@ -23,7 +23,6 @@ import java.io.IOException;
 
 import org.apache.hadoop.hbase.client.HConnection;
 
-import com.doccube.core.accessor.AccessorContext;
 import com.doccube.core.accessor.GenericAccessor;
 import com.doccube.core.accessor.GenericContext;
 
@@ -32,7 +31,6 @@ import com.doccube.core.accessor.GenericContext;
  **/
 public abstract class HGenericAccessor extends GenericAccessor implements HConnAware{
 
-	private static final String LOCAL_CONNECT = "_CONNECTION";
 	private HConnection connection;
 	
 	public HGenericAccessor(String accessorName,GenericContext context) {

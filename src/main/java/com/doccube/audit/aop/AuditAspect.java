@@ -65,7 +65,7 @@ public abstract class AuditAspect {
 		DemoBean dp= cta.getdp();
 		System.out.println("DemoP is:"+dp.demoStr);
 		
-		if (rtv != null && (!(rtv instanceof List) || ((List) rtv).size() != 0)) {
+		if (rtv != null && (!(rtv instanceof List) || ((List<?>) rtv).size() != 0)) {
 			StringBuilder rv = new StringBuilder("Return Value : ");
 			rv.append(AspectUtils.toString(rtv));
 			AspectUtils.getLogger(jp).info(rv.toString());

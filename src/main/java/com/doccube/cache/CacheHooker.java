@@ -2,7 +2,6 @@ package com.doccube.cache;
 
 import com.doccube.core.AccessorFactory;
 import com.doccube.core.CoreConstants;
-import com.doccube.core.EntryKey;
 import com.doccube.core.IEntityAccessor;
 import com.doccube.core.accessor.EntryInfo;
 import com.doccube.core.security.Principal;

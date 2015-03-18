@@ -19,11 +19,8 @@
  */
 package com.doccube.core;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
@@ -32,7 +29,6 @@ import com.doccube.core.accessor.EntityAccessor;
 import com.doccube.core.accessor.GenericAccessor;
 import com.doccube.core.accessor.GenericContext;
 import com.doccube.core.security.Principal;
-import com.doccube.exception.AccessorException;
 import com.doccube.exception.EntityException;
 import com.doccube.exception.MetaException;
 import com.doccube.meta.BaseEntity;

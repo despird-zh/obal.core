@@ -36,16 +36,9 @@ import org.codehaus.jackson.type.TypeReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.doccube.core.EntryKey;
 import com.doccube.core.IEntryInfo;
-import com.doccube.core.ITraceable;
-import com.doccube.core.security.EntryAcl;
-import com.doccube.core.security.IAccessControl;
-import com.doccube.exception.SecurityException;
 import com.doccube.exception.WrapperException;
 import com.doccube.meta.EntityAttr;
-import com.doccube.meta.EntityConstants;
-import com.doccube.meta.EntityManager;
 
 
 /**
