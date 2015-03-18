@@ -54,7 +54,7 @@ public class EntityMeta{
 	private EntryKey entryKey = null;
 	private Boolean traceable = false;
 	private Boolean accessControllable = false;
-	private String accessorClazz = null;
+	private String accessorName = null;
 	/**
 	 * Entry Meta constructor 
 	 * 
@@ -151,15 +151,17 @@ public class EntityMeta{
 	/**
 	 * Get the accessor class
 	 **/
-	public String getAccessorClass() {
-		return accessorClazz;
+	public String getAccessorName() {
+		
+		return accessorName;
 	}
 
 	/**
 	 * Set the accessor class
 	 **/
-	public void setAccessorClass(String accessorClazz) {
-		this.accessorClazz = accessorClazz;
+	public void setAccessorName(String accessorName) {
+		
+		this.accessorName = accessorName;
 	}
 	
 	/**

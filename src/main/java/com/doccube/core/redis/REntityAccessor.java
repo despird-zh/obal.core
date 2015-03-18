@@ -46,8 +46,8 @@ public abstract class REntityAccessor <GB extends EntryInfo> extends EntityAcces
 	
 	private Jedis jedis;
 	
-	public REntityAccessor(AccessorContext context) {
-		super(context);
+	public REntityAccessor(String accessorName, AccessorContext context) {
+		super(accessorName, context);
 	}
 
 	/**
@@ -207,7 +207,7 @@ public abstract class REntityAccessor <GB extends EntryInfo> extends EntityAcces
 	}
 
 	@Override
-	public void close() throws Exception {
+	public void close(){
 		try {
 			// embed means share connection, close it directly affect other accessors using this conn.
 			if (jedis != null && !isEmbed()){

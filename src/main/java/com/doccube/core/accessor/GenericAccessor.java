@@ -19,8 +19,7 @@
  */
 package com.doccube.core.accessor;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Objects;
 
 import com.doccube.core.IBaseAccessor;
 
@@ -36,25 +35,34 @@ import com.doccube.core.IBaseAccessor;
 public abstract class GenericAccessor implements IBaseAccessor {
 		
 	/** thread local */
-	private ThreadLocal<Map<String, Object>> localVars = new ThreadLocal<Map<String, Object>>();
+	private GenericContext context;
+	
+	private String accessorName;
 	
 	/**
 	 * Constructor with entry schema information 
 	 * 
 	 * @param context the context that provides principal etc. 
 	 **/
-	public GenericAccessor(GenericContext context){
-		
-		localVars.set(new HashMap<String, Object>());
-		localVars.get().put(LOCAL_CONTEXT, context);
+	public GenericAccessor(String accessorName, GenericContext context){
+		this.accessorName = accessorName;
+		this.context = context;
 	}
 
+	/**
+	 * Get the accessor name 
+	 **/
+	public String getAccessorName(){
+		
+		return this.accessorName;
+	}
+	
 	/**
 	 * Set the context of GenericAccessor 
 	 **/
 	public void setContext(GenericContext context){
 		
-		localVars.get().put(LOCAL_CONTEXT, context);
+		this.context = context;
 	}
 	
 	/**
@@ -62,41 +70,28 @@ public abstract class GenericAccessor implements IBaseAccessor {
 	 **/
 	public GenericContext getContext(){
 		
-		return (GenericContext)localVars.get().get(LOCAL_CONTEXT);
-	}
-	
-	/**
-	 * Get the local variables 
-	 **/
-	protected ThreadLocal<Map<String, Object>> getLocalVars(){
-		
-		return localVars;
+		return this.context;
 	}
 	
 	/**
 	 * Release the entity schema and clear the principal in it.
 	 **/
-	public void release(){
+	public void close(){
 		
-		GenericContext context = (GenericContext)localVars.get().get(LOCAL_CONTEXT);
-
 		if(context != null){
 			// not embed accessor, purge all resource;embed only release object pointers.
 			context.clear();		
-			localVars.get().clear();// release objects.	
 			
 		}
 	}
 		
 	public boolean isEmbed(){
-		
-		GenericContext context = (GenericContext)localVars.get().get(LOCAL_CONTEXT);
+		Objects.requireNonNull(this.context);
 		return context.isEmbed();
 	}
 	
 	public void setEmbed(boolean embed){
-		
-		GenericContext context = (GenericContext)localVars.get().get(LOCAL_CONTEXT);
+		Objects.requireNonNull(this.context);
 		context.setEmbed(embed);
 	}
 }

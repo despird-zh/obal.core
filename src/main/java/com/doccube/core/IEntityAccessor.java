@@ -19,12 +19,8 @@
  */
 package com.doccube.core;
 
-import java.util.List;
-
-import com.doccube.core.accessor.AccessorContext;
 import com.doccube.core.accessor.EntryCollection;
 import com.doccube.core.accessor.EntryInfo;
-import com.doccube.core.accessor.GenericContext;
 import com.doccube.exception.AccessorException;
 import com.doccube.meta.BaseEntity;
 /**

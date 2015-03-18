@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
@@ -470,5 +471,22 @@ public class AccessorFactory {
 		K accessor = accessorbuilder.newBaseAccessor(ncontext, accessorName, true);
 		accessorbuilder.assembly(mockupAccessor, (IBaseAccessor) accessor);
 		return accessor;
+	}
+	
+	/**
+	 * Register accessor mapping information.
+	 * <p>This method will be used for accessor to register itself. </p> 
+	 * 
+	 * @param builderName the name of builder
+	 * @param accessorName the name of accessor
+	 * @param accessor the instance of accessor
+	 * 
+	 **/
+	public static void registerAccessor(String builderName,String accessorName, IBaseAccessor accessor){
+		
+		Objects.requireNonNull(accessor);
+		String accessorClass = accessor.getClass().getName();
+		AccessorBuilder builder = AccessorFactory.getInstance().getAccessorBuilder(builderName);
+		builder.appendAccessorMap(accessorName, accessorClass);
 	}
 }

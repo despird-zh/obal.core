@@ -11,7 +11,7 @@ public class TestAccessor extends HEntityAccessor<EntryInfo>{
 
 
 	public TestAccessor(AccessorContext context) {
-		super(context);
+		super("dcube.test",context);
 		// TODO Auto-generated constructor stub
 	}
 

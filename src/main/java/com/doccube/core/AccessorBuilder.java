@@ -48,7 +48,6 @@ import com.doccube.meta.EntityManager;
 public abstract class AccessorBuilder {
 
 	private Properties accessorProp = null;
-	private Map<String, IBaseAccessor> accessorCache = null;
 	private String builderName = null;
 	
 	/**
@@ -65,18 +64,17 @@ public abstract class AccessorBuilder {
 		
 		this.builderName = builderName;
 		
-		InputStream is = AccessorBuilder.class.getClassLoader().getResourceAsStream(accessormap);
+//		InputStream is = AccessorBuilder.class.getClassLoader().getResourceAsStream(accessormap);
 		accessorProp = new Properties();
-		
-		try {
-			
-			accessorProp.load(is);			
-		} catch (IOException e) {
-			
-			throw new EntityException("Fail build Accessor builder:{}", e, builderName);
-		}
-		
-		accessorCache = new HashMap<String, IBaseAccessor>();
+//		
+//		try {
+//			
+//			accessorProp.load(is);			
+//		} catch (IOException e) {
+//			
+//			throw new EntityException("Fail build Accessor builder:{}", e, builderName);
+//		}
+
 	}
 
 	/**
@@ -199,28 +197,7 @@ public abstract class AccessorBuilder {
 		
 		K result = null;
 		try {
-			// check the IBaseAccessor instance cached or not.
-			IBaseAccessor cachedAccessor = accessorCache.get(accessorName);
-			if(null != cachedAccessor && isGeneric){
-				// set context object
-				cachedAccessor.setContext(context);
-				return (K)cachedAccessor;
-				
-			}else if(null != cachedAccessor && !isGeneric){
-				// for entity accessor the accessorname is same as entity name.
-				BaseEntity schema;
-				try {
-					schema = EntityManager.getInstance().getEntitySchema(accessorName);
-				} catch (MetaException e) {
-					
-					throw new EntityException("Error when fetch schema object:{}-{}",e,accessorName);
-				}
-				// set the schema to context
-				((AccessorContext)context).setEntitySchema(schema);
-				// set context object
-				cachedAccessor.setContext(context);
-				return (K)cachedAccessor;
-			}
+
 			Class<?> clazz = this.getAccessorClass(accessorName);
 			
 			if(!GenericAccessor.class.isAssignableFrom(clazz) && isGeneric)
@@ -237,13 +214,9 @@ public abstract class AccessorBuilder {
 				constructor = (Constructor<K>)clazz.getConstructor(GenericContext.class);
 			else
 				constructor = (Constructor<K>)clazz.getConstructor(AccessorContext.class);
-			result = constructor.newInstance(context);
-			// cache the Accessor instance
-			accessorCache.put(accessorName,(IBaseAccessor)result);
 			
-		} catch (AccessorException e) {
+			result = constructor.newInstance(context);
 
-			throw new EntityException("Fail build Accessor-{}",e, accessorName);
 		} catch (IllegalArgumentException e) {
 
 			throw new EntityException("Fail build Accessor-{}",e, accessorName);
@@ -262,5 +235,17 @@ public abstract class AccessorBuilder {
 		} 
 		
 		return result;
+	}
+	
+	/**
+	 * Append accessor mapping
+	 * 
+	 * @param accessorName the name of accessor
+	 * @param accessorClass the class of accessor
+	 * 
+	 **/
+	public void appendAccessorMap(String accessorName, String accessorClass){
+		
+		accessorProp.put(accessorName, accessorClass);
 	}
 }

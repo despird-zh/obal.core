@@ -32,6 +32,7 @@ import com.doccube.core.security.IAccessControl;
 import com.doccube.exception.MetaException;
 import com.doccube.meta.EntityConstants.MetaInfo;
 import com.doccube.meta.EntityConstants.AttrInfo;
+import com.doccube.meta.EntityConstants.AccessControlTraceInfo;
 
 /**
  * EntityManager manage all the Entity schema object.
@@ -257,9 +258,9 @@ public class EntityManager {
 				MetaInfo.EntityName.qualifier);
 		meta.addAttr(attr);
 		
-		attr = new EntityAttr(MetaInfo.AccessorClass.attribute, 
-				MetaInfo.AccessorClass.colfamily, 
-				MetaInfo.AccessorClass.qualifier);
+		attr = new EntityAttr(MetaInfo.AccessorName.attribute, 
+				MetaInfo.AccessorName.colfamily, 
+				MetaInfo.AccessorName.qualifier);
 		meta.addAttr(attr);
 		
 		attr = new EntityAttr(MetaInfo.Description.attribute, 
@@ -297,16 +298,24 @@ public class EntityManager {
 	public List<EntityAttr> getTraceableAttributes(String entityname){
 		
 		List<EntityAttr> attrs = new ArrayList<EntityAttr>();
-		EntityAttr attr = new EntityAttr(ITraceable.ATTR_CREATOR, "c0", "creator");
+		EntityAttr attr = new EntityAttr(AccessControlTraceInfo.Creator.attribute, 
+				AccessControlTraceInfo.Creator.colfamily, 
+				AccessControlTraceInfo.Creator.qualifier);
 		attr.setEntityName(entityname);
 		attrs.add(attr);
-		attr = new EntityAttr(ITraceable.ATTR_MODIFIER, "c0", "modifier");
+		attr = new EntityAttr(AccessControlTraceInfo.Modifier.attribute, 
+				AccessControlTraceInfo.Modifier.colfamily, 
+				AccessControlTraceInfo.Modifier.qualifier);
 		attr.setEntityName(entityname);
 		attrs.add(attr);
-		attr = new EntityAttr(ITraceable.ATTR_NEWCREATE, EntityAttr.AttrType.DATE, "c0", "newcreate");
+		attr = new EntityAttr(AccessControlTraceInfo.NewCreate.attribute, EntityAttr.AttrType.DATE, 
+				AccessControlTraceInfo.NewCreate.colfamily, 
+				AccessControlTraceInfo.NewCreate.qualifier);
 		attr.setEntityName(entityname);
 		attrs.add(attr);
-		attr = new EntityAttr(ITraceable.ATTR_LASTMOFIFY, EntityAttr.AttrType.DATE, "c0", "lastmodify");
+		attr = new EntityAttr(AccessControlTraceInfo.LastModify.attribute, EntityAttr.AttrType.DATE, 
+				AccessControlTraceInfo.LastModify.colfamily, 
+				AccessControlTraceInfo.LastModify.qualifier);
 		attr.setEntityName(entityname);
 		attrs.add(attr);
 		return attrs;

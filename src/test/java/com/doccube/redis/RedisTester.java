@@ -265,7 +265,7 @@ public class RedisTester extends BlankTester{
 			
 			aa.createSchema("obal.test",meta.getAllAttrs());
 			
-			imeta = Accessors.getGenericAccessor(princ, EntityConstants.ENTITY_META_GENERIC);
+			imeta = Accessors.getGenericAccessor(princ, EntityConstants.ACCESSOR_GENERIC_META);
 
 			imeta.putEntityMeta(meta);
 						

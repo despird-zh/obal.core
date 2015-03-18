@@ -33,14 +33,6 @@ import com.doccube.core.accessor.EntryInfo;
  **/
 public interface ITraceable {
 	
-	public static final String ATTR_CREATOR = "i_creator";
-	
-	public static final String ATTR_MODIFIER = "i_modifier";
-	
-	public static final String ATTR_NEWCREATE = "i_newcreate";
-	
-	public static final String ATTR_LASTMOFIFY = "i_lastmodify";
-	
 	/**
 	 * The creator of entry 
 	 **/

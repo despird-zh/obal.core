@@ -35,11 +35,12 @@ import com.doccube.core.hbase.HAdminAware;
 import com.doccube.core.hbase.HGenericAccessor;
 import com.doccube.exception.AccessorException;
 import com.doccube.meta.EntityAttr;
+import com.doccube.meta.EntityConstants;
 
 public class AdminAccessor extends HGenericAccessor implements IAdminAccessor,HAdminAware{
 
 	public AdminAccessor(GenericContext context) {
-		super(context);
+		super(EntityConstants.ACCESSOR_GENERIC_ADMIN,context);
 	}
 
 	Logger LOGGER = LoggerFactory.getLogger(AdminAccessor.class);
@@ -154,9 +155,9 @@ public class AdminAccessor extends HGenericAccessor implements IAdminAccessor,HA
 	}
 		
 	@Override
-	public void release() {
+	public void close() {
 		// release super's HConnection
-		super.release();
+		super.close();
 		
 		if(this.admin != null){			
 			try {

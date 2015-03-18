@@ -12,7 +12,7 @@ import com.doccube.meta.BaseEntity;
 public class TestAccessor extends REntityAccessor{
 
 	public TestAccessor(AccessorContext context) {
-		super(context);
+		super("dcube.test",context);
 	}
 
 	@Override

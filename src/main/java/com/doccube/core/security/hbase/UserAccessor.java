@@ -18,7 +18,7 @@ import com.doccube.meta.EntityMeta;
 public class UserAccessor extends HEntityAccessor<TraceableEntry> {
 
 	public UserAccessor(AccessorContext context) {
-		super(context);
+		super(EntityConstants.ACCESSOR_ENTITY_USER,context);
 	}
 
 	@Override

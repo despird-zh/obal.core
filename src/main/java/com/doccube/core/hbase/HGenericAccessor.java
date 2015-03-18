@@ -33,32 +33,32 @@ import com.doccube.core.accessor.GenericContext;
 public abstract class HGenericAccessor extends GenericAccessor implements HConnAware{
 
 	private static final String LOCAL_CONNECT = "_CONNECTION";
+	private HConnection connection;
 	
-	public HGenericAccessor(GenericContext context) {
-		super(context);
+	public HGenericAccessor(String accessorName,GenericContext context) {
+		super(accessorName,context);
 	}
 
 	@Override
 	public void setConnection(HConnection connection) {
 		
-		getLocalVars().get().put(LOCAL_CONNECT, connection);
+		this.connection = connection;
 	}
 
 	@Override
 	public HConnection getConnection() {
-		
-		HConnection conn = (HConnection)getLocalVars().get().get(LOCAL_CONNECT);
-		return conn;
+				
+		return connection;
 	}
 	
 	@Override
-	public void close() throws Exception{
+	public void close(){
 		try {
 			HConnection conn = getConnection();
 			if (conn != null && !isEmbed())
 				conn.close();
 			
-			super.release();
+			super.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

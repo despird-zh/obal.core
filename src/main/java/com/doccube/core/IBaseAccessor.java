@@ -33,7 +33,10 @@ import com.doccube.exception.AccessorException;
  **/
 public interface IBaseAccessor extends AutoCloseable{
 
-	public static final String LOCAL_CONTEXT = "_CONTEXT";
+	/**
+	 * Get the accessor name 
+	 **/
+	public String getAccessorName();
 	
 	/**
 	 * Set the accessor context
@@ -48,13 +51,13 @@ public interface IBaseAccessor extends AutoCloseable{
 	public  GenericContext getContext();
 	
 	/**
-	 * get embed flag
+	 * Get embed flag
 	 * @return flag 
 	 **/
 	public boolean isEmbed();
 	
 	/**
-	 * set embed flag 
+	 * Set embed flag 
 	 * @param embed the flag
 	 **/
 	public void setEmbed(boolean embed);

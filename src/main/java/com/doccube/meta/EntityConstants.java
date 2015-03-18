@@ -7,33 +7,30 @@ package com.doccube.meta;
 public class EntityConstants {
 
 	public static final String ENTITY_PREFIX = "dcube.";
-	/** the blind entity */
+	// the blind entity 
 	public static String ENTITY_BLIND = ENTITY_PREFIX + "blind";
-	/** the meta info */
+	// the meta info 
 	public static String ENTITY_META_INFO = ENTITY_PREFIX + "meta.info";
-	/** the meta attr */
+	// the meta attr
 	public static String ENTITY_META_ATTR = ENTITY_PREFIX + "meta.attr";
-
-	/** 
-	 * the meta general , key of Accessor 
-	 * 
-	 * @see IMetaAttrGeneral
-	 **/
-	public static String ENTITY_META_GENERIC = ENTITY_PREFIX + "meta.generic";
-	/**
-	 * the entity name of principal
-	 **/
-	public static String ENTITY_PRINCIPAL = ENTITY_PREFIX + "user";
-	
-	/**
-	 * the entity name of role
-	 **/
-	public static String ENTITY_USER_ROLE = ENTITY_PREFIX + "user.role";
-	
-	/**
-	 * the entity name of group
-	 **/
+	//the entity name of principal
+	public static String ENTITY_PRINCIPAL = ENTITY_PREFIX + "user";	
+	// the entity name of role
+	public static String ENTITY_USER_ROLE = ENTITY_PREFIX + "user.role";	
+	// the entity name of group
 	public static String ENTITY_USER_GROUP = ENTITY_PREFIX + "user.group";
+	
+	//the meta general , key of Accessor 
+	public static String ACCESSOR_GENERIC_META = "generic.meta";
+	public static String ACCESSOR_GENERIC_USER = "generic.user";
+	public static String ACCESSOR_GENERIC_ADMIN = "generic.admin";
+	
+	public static String ACCESSOR_ENTITY_META  = "entity.meta";
+	public static String ACCESSOR_ENTITY_ATTR  = "entity.attr";
+	public static String ACCESSOR_ENTITY_USER  = "entity.user";
+	public static String ACCESSOR_ENTITY_ROLE  = "entity.role";
+	public static String ACCESSOR_ENTITY_GROUP = "entity.group";
+	public static String ACCESSOR_ENTITY_AUDIT = "entity.audit";
 	
 	public static String NAME_SEPARATOR = ".";
 	
@@ -41,14 +38,14 @@ public class EntityConstants {
 	 * The meta info enumerator 
 	 **/
 	public static enum MetaInfo{
-
+		
 		SchemaClass("i_schema_class","schemaclass"),
 		EntityName("i_entity_name" , "entityname"),
 		Description("i_description","description"),
 		Traceable("i_traceable","traceable"),
 		Attributes("i_attributes","attributes"),
 		Schema("i_schema","schema"),
-		AccessorClass("i_accessor_class","accessorclass");
+		AccessorName("i_accessor_name","accessorname");
 		
 		public final String attribute;
 		public final String qualifier;
@@ -199,4 +196,36 @@ public class EntityConstants {
 			this.colfamily = colfamily;
 	    }
 	}
+	
+	/**
+	 * The meta info enumerator 
+	 **/
+	public static enum AccessControlTraceInfo{
+
+		Creator(   "i_creator",    "creator"),
+		Modifier(  "i_modifier",   "modifier"),
+		LastModify("i_newcreate",  "newcreate"),
+		NewCreate( "i_lastmodify", "lastmodify"),
+		AccessControl( "i_acl", "acl");
+		
+		public final String attribute;
+		public final String qualifier;
+		public final String colfamily;
+		
+		/**
+		 * Hide default constructor 
+		 **/
+		private AccessControlTraceInfo(String attribute, String qualifier){  
+			this.attribute = attribute;
+			this.qualifier = qualifier;
+			this.colfamily = "c0";
+	    }
+		
+		private AccessControlTraceInfo(String attribute, String colfamily, String qualifier){  
+			this.attribute = attribute;
+			this.qualifier = qualifier;
+			this.colfamily = colfamily;
+	    }
+	}
+	
 }

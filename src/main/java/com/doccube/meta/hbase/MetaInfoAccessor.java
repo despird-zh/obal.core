@@ -27,11 +27,13 @@ import com.doccube.core.accessor.EntryInfo;
 import com.doccube.core.hbase.HEntityAccessor;
 import com.doccube.core.hbase.HEntryWrapper;
 import com.doccube.core.hbase.HRawWrapper;
+import com.doccube.meta.EntityConstants;
 
 public class MetaInfoAccessor extends HEntityAccessor<EntryInfo>{
 
 	public MetaInfoAccessor(AccessorContext context) {
-		super(context);
+		
+		super(EntityConstants.ACCESSOR_ENTITY_META,context);
 	}
 
 	public static Logger LOGGER = LoggerFactory.getLogger(MetaInfoAccessor.class);

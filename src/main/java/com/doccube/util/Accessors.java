@@ -58,7 +58,7 @@ public class Accessors {
 	public static <K> K getEntityAccessor(Principal principal,String entityName)throws EntityException{
 		
 		return AccessorFactory.getInstance().buildEntityAccessor(principal, entityName);
-	}	
+	}
 
 	/**
 	 * Get GenericAccessor

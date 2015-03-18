@@ -27,13 +27,14 @@ import com.doccube.core.accessor.EntryInfo;
 import com.doccube.core.hbase.HEntityAccessor;
 import com.doccube.core.hbase.HEntryWrapper;
 import com.doccube.core.hbase.HRawWrapper;
+import com.doccube.meta.EntityConstants;
 
 public class AttrInfoAccessor extends HEntityAccessor<EntryInfo>{
 
 	public static Logger LOGGER = LoggerFactory.getLogger(AttrInfoAccessor.class);
 	
 	public AttrInfoAccessor(AccessorContext context) {
-		super(context);
+		super(EntityConstants.ACCESSOR_ENTITY_ATTR,context);
 	}
 
 	@Override

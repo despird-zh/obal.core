@@ -55,7 +55,8 @@ import com.doccube.util.Accessors;
 public class MetaGenericAccessor extends HGenericAccessor implements IMetaGenericAccessor{
 
 	public MetaGenericAccessor(GenericContext context) {
-		super(context);
+		
+		super(EntityConstants.ACCESSOR_GENERIC_META,context);
 	}
 
 	static Logger LOGGER = LoggerFactory.getLogger(MetaGenericAccessor.class);
@@ -190,7 +191,7 @@ public class MetaGenericAccessor extends HGenericAccessor implements IMetaGeneri
 			EntryInfo minfo = metaAccr.doGetEntry(entityName);
 			meta = new EntityMeta(entityName);
 			meta.setSchemaClass(minfo.getAttrValue(MetaInfo.SchemaClass.attribute,String.class));
-			meta.setAccessorClass(minfo.getAttrValue(MetaInfo.AccessorClass.attribute,String.class));
+			meta.setAccessorName(minfo.getAttrValue(MetaInfo.AccessorName.attribute,String.class));
 			meta.setDescription(minfo.getAttrValue(MetaInfo.Description.attribute,String.class));
 			meta.setEntityName(minfo.getAttrValue(MetaInfo.EntityName.attribute,String.class));
 			meta.setSchema(minfo.getAttrValue(MetaInfo.Schema.attribute,String.class));	
@@ -223,7 +224,7 @@ public class MetaGenericAccessor extends HGenericAccessor implements IMetaGeneri
 				EntityMeta meta = new EntityMeta(metaAccr.getEntitySchema().getEntityName());
 				meta.setEntryKey(ri.getEntryKey());
 				meta.setSchemaClass(ri.getAttrValue(MetaInfo.SchemaClass.attribute,String.class));
-				meta.setAccessorClass(ri.getAttrValue(MetaInfo.AccessorClass.attribute,String.class));
+				meta.setAccessorName(ri.getAttrValue(MetaInfo.AccessorName.attribute,String.class));
 				meta.setEntityName(ri.getAttrValue(MetaInfo.EntityName.attribute,String.class));
 				meta.setDescription(ri.getAttrValue(MetaInfo.Description.attribute,String.class));
 				meta.setSchema(ri.getAttrValue(MetaInfo.Schema.attribute,String.class));	
@@ -260,7 +261,7 @@ public class MetaGenericAccessor extends HGenericAccessor implements IMetaGeneri
 			EntityMeta emeta = metaAccr.getEntitySchema().getEntityMeta();
 			minfo.setAttrValue(emeta.getAttr(MetaInfo.EntityName.attribute), meta.getEntityName());
 			minfo.setAttrValue(emeta.getAttr(MetaInfo.SchemaClass.attribute), meta.getSchemaClass());
-			minfo.setAttrValue(emeta.getAttr(MetaInfo.AccessorClass.attribute), meta.getAccessorClass());
+			minfo.setAttrValue(emeta.getAttr(MetaInfo.AccessorName.attribute), meta.getAccessorName());
 			minfo.setAttrValue(emeta.getAttr(MetaInfo.Description.attribute), meta.getDescription());
 			minfo.setAttrValue(emeta.getAttr(MetaInfo.Traceable.attribute), meta.getTraceable());
 			minfo.setAttrValue(emeta.getAttr(MetaInfo.Schema.attribute), meta.getSchema());

@@ -21,15 +21,15 @@ package com.doccube.audit.hbase;
 
 import com.doccube.audit.AuditInfo;
 import com.doccube.core.accessor.AccessorContext;
-import com.doccube.core.accessor.GenericContext;
 import com.doccube.core.hbase.HEntityAccessor;
 import com.doccube.core.hbase.HEntryWrapper;
 import com.doccube.meta.BaseEntity;
+import com.doccube.meta.EntityConstants;
 
 public class AuditAccessor extends HEntityAccessor<AuditInfo>{
 
 	public AuditAccessor(AccessorContext context) {
-		super(context);		
+		super(EntityConstants.ACCESSOR_ENTITY_AUDIT,context);		
 	}
 
 	@Override

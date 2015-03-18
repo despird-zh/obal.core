@@ -1,12 +1,13 @@
 package com.doccube.core.accessor;
 
 import java.util.Date;
-import java.util.List;
-
 import com.doccube.core.EntryKey;
 import com.doccube.core.ITraceable;
-import com.doccube.meta.EntityAttr;
+import com.doccube.meta.EntityConstants.AccessControlTraceInfo;
 
+/**
+ * TraceableEntry 
+ **/
 public class TraceableEntry extends EntryInfo implements ITraceable{
 
 	public TraceableEntry (String entityName,String key){
@@ -22,49 +23,49 @@ public class TraceableEntry extends EntryInfo implements ITraceable{
 	@Override
 	public String getCreator() {
 		
-		return super.getAttrValue(ITraceable.ATTR_CREATOR, String.class);
+		return super.getAttrValue(AccessControlTraceInfo.Creator.attribute, String.class);
 	}
 
 	@Override
 	public void setCreator(String creator) {
 		
-		super.setAttrValue(ITraceable.ATTR_CREATOR, creator);
+		super.setAttrValue(AccessControlTraceInfo.Creator.attribute, creator);
 		
 	}
 
 	@Override
 	public String getModifier() {
 		
-		return super.getAttrValue(ITraceable.ATTR_MODIFIER, String.class);
+		return super.getAttrValue(AccessControlTraceInfo.Modifier.attribute, String.class);
 	}
 
 	@Override
 	public void setModifier(String modifier) {
 		
-		super.setAttrValue(ITraceable.ATTR_MODIFIER, modifier);
+		super.setAttrValue(AccessControlTraceInfo.Modifier.attribute, modifier);
 	}
 
 	@Override
 	public Date getNewCreate() {
 		
-		return super.getAttrValue(ITraceable.ATTR_NEWCREATE, Date.class);
+		return super.getAttrValue(AccessControlTraceInfo.NewCreate.attribute, Date.class);
 	}
 
 	@Override
 	public void setNewCreate(Date newCreate) {
 
-		super.setAttrValue(ITraceable.ATTR_NEWCREATE, newCreate);
+		super.setAttrValue(AccessControlTraceInfo.NewCreate.attribute, newCreate);
 	}
 
 	@Override
 	public Date getLastModify() {
 		
-		return super.getAttrValue(ITraceable.ATTR_LASTMOFIFY, Date.class);
+		return super.getAttrValue(AccessControlTraceInfo.LastModify.attribute, Date.class);
 	}
 
 	@Override
 	public void setLastModify(Date lastModify) {
 
-		super.setAttrValue(ITraceable.ATTR_LASTMOFIFY, lastModify);
+		super.setAttrValue(AccessControlTraceInfo.LastModify.attribute, lastModify);
 	}
 }

@@ -7,11 +7,12 @@ import com.doccube.core.hbase.HGenericAccessor;
 import com.doccube.core.security.Principal;
 import com.doccube.core.security.accessor.IPrincipalAccessor;
 import com.doccube.exception.AccessorException;
+import com.doccube.meta.EntityConstants;
 
 public class PrincipalAccessor extends HGenericAccessor implements IPrincipalAccessor{
 
 	public PrincipalAccessor(AccessorContext context) {
-		super(context);
+		super(EntityConstants.ACCESSOR_GENERIC_USER,context);
 	}
 
 	@Override

@@ -43,17 +43,26 @@ import com.doccube.meta.BaseEntity;
 public abstract class EntityAccessor<GB extends EntryInfo> implements IEntityAccessor <GB>{
 
 	
-	private ThreadLocal<Map<String, Object>> localVars = new ThreadLocal<Map<String, Object>>();
+	private AccessorContext context;
+	
+	private String accessorName;
 	
 	/**
 	 * Constructor with entry schema information 
 	 * 
 	 * @param context the context that provides principal etc. 
 	 **/
-	public EntityAccessor(AccessorContext context){
+	public EntityAccessor(String accessorName, AccessorContext context){
+		this.accessorName = accessorName;
+		this.context = context;
+	}
+	
+	/**
+	 * Get the accessor name 
+	 **/
+	public String getAccessorName(){
 		
-		localVars.set(new HashMap<String, Object>());
-		localVars.get().put(LOCAL_CONTEXT, context);
+		return this.accessorName;
 	}
 	
 	/**
@@ -64,7 +73,7 @@ public abstract class EntityAccessor<GB extends EntryInfo> implements IEntityAcc
 		if(!(context instanceof AccessorContext))
 			throw new AccessorException("context must be AccessorContext.");
 		
-		localVars.get().put(LOCAL_CONTEXT, context);
+		this.context = (AccessorContext)context;
 	}
 	
 	/**
@@ -72,17 +81,9 @@ public abstract class EntityAccessor<GB extends EntryInfo> implements IEntityAcc
 	 **/
 	public AccessorContext getContext(){
 		
-		return (AccessorContext)localVars.get().get(LOCAL_CONTEXT);
+		return this.context;
 	}
-	
-	/**
-	 * Get the local variables 
-	 **/
-	protected ThreadLocal<Map<String, Object>> getLocalVars(){
 		
-		return localVars;
-	}
-	
 	/**
 	 * Get the entity schema  
 	 * 
@@ -90,8 +91,7 @@ public abstract class EntityAccessor<GB extends EntryInfo> implements IEntityAcc
 	 **/
 	@Override
 	public BaseEntity getEntitySchema(){
-		
-		AccessorContext context = (AccessorContext)localVars.get().get(LOCAL_CONTEXT);
+	
 		return context == null? null:context.getEntitySchema();
 	}
 	
@@ -99,34 +99,30 @@ public abstract class EntityAccessor<GB extends EntryInfo> implements IEntityAcc
 	 * Get the principal bound to the EntityAccessor object. 
 	 **/
 	public Principal getPrincipal(){
-		AccessorContext context = (AccessorContext)localVars.get().get(LOCAL_CONTEXT);
+		
 		return context == null? null:context.getPrincipal();
 	}
 	
 	/**
 	 * Release the entity schema and clear the principal in it.
 	 **/
-	public void close()throws Exception{
+	public void close(){
 		
-		GenericContext context = (GenericContext)localVars.get().get(LOCAL_CONTEXT);
-
+	
 		if(context != null){
 			// not embed accessor, purge all resource;embed only release object pointers.
 			context.clear();		
-			localVars.get().clear();// release objects.	
 			
 		}
 	}
 		
 	public boolean isEmbed(){
 		
-		AccessorContext context = (AccessorContext)localVars.get().get(LOCAL_CONTEXT);
 		return context.isEmbed();
 	}
 	
 	public void setEmbed(boolean embed){
 		
-		AccessorContext context = (AccessorContext)localVars.get().get(LOCAL_CONTEXT);
 		context.setEmbed(embed);
 	}
 

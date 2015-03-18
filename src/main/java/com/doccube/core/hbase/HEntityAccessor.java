@@ -70,9 +70,10 @@ public abstract class HEntityAccessor<GB extends EntryInfo> extends EntityAccess
 	private static final String LOCAL_CONNECT = "_CONNECTION";
 	
 	Logger LOGGER = LoggerFactory.getLogger(HEntityAccessor.class);
+	private HConnection connection;
 	
-	public HEntityAccessor(AccessorContext context) {
-		super(context);
+	public HEntityAccessor(String accessorName,AccessorContext context) {
+		super(accessorName,context);
 	}
 	
 	@Override
@@ -164,15 +165,14 @@ public abstract class HEntityAccessor<GB extends EntryInfo> extends EntityAccess
 	@Override
 	public void setConnection(HConnection connection) {
 		
-		getLocalVars().get().put(LOCAL_CONNECT, connection);
+		this.connection = connection;
 		
 	}
 
 	@Override
 	public HConnection getConnection() {
 		
-		HConnection conn = (HConnection)getLocalVars().get().get(LOCAL_CONNECT);
-		return conn;
+		return connection;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -401,7 +401,7 @@ public abstract class HEntityAccessor<GB extends EntryInfo> extends EntityAccess
 	}
 		
 	@Override	
-	public void close() throws Exception{
+	public void close(){
 		try {
 			HConnection conn = getConnection();
 			// embed means share connection, close it directly affect other accessors using this conn.
