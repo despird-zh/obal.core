@@ -1,11 +1,11 @@
-package com.doccube.core.security.hbase;
+package com.doccube.accessor.hbase;
 
 import java.util.List;
 
+import com.doccube.accessor.IPrincipalAccessor;
 import com.doccube.core.accessor.AccessorContext;
 import com.doccube.core.hbase.HGenericAccessor;
 import com.doccube.core.security.Principal;
-import com.doccube.core.security.accessor.IPrincipalAccessor;
 import com.doccube.exception.AccessorException;
 import com.doccube.meta.EntityConstants;
 

@@ -2,8 +2,8 @@ package com.doccube.util;
 
 import java.util.List;
 
+import com.doccube.accessor.IAdminAccessor;
 import com.doccube.admin.EntityAdmin;
-import com.doccube.admin.IAdminAccessor;
 import com.doccube.core.security.Principal;
 import com.doccube.exception.AccessorException;
 import com.doccube.meta.EntityAttr;

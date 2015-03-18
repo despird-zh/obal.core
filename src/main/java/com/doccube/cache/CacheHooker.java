@@ -54,7 +54,7 @@ public class CacheHooker<K extends EntryInfo>  extends EventHooker<CacheInfo>{
 		IEntityAccessor<K> eaccessor = null;
 		try {
 			eaccessor = 
-				AccessorFactory.getInstance().buildEntityAccessor(CoreConstants.BUILDER_REDIS, 
+				AccessorFactory.buildEntityAccessor(CoreConstants.BUILDER_REDIS, 
 						principal, 
 						cacheData.getEntryKey().getEntityName());	
 				
@@ -86,7 +86,7 @@ public class CacheHooker<K extends EntryInfo>  extends EventHooker<CacheInfo>{
 		IEntityAccessor<K> eaccessor = null;
 		try {
 			eaccessor = 
-				AccessorFactory.getInstance().buildEntityAccessor(CoreConstants.BUILDER_REDIS, 
+				AccessorFactory.buildEntityAccessor(CoreConstants.BUILDER_REDIS, 
 						principal, 
 						entity);	
 				
@@ -116,7 +116,7 @@ public class CacheHooker<K extends EntryInfo>  extends EventHooker<CacheInfo>{
 		IEntityAccessor<K> eaccessor = null;
 		try {
 			eaccessor = 
-				AccessorFactory.getInstance().buildEntityAccessor(CoreConstants.BUILDER_REDIS, 
+				AccessorFactory.buildEntityAccessor(CoreConstants.BUILDER_REDIS, 
 						principal, 
 						entityName);	
 				

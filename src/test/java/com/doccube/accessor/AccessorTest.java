@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.doccube.accessor.IMetaGenericAccessor;
 import com.doccube.admin.EntityAdmin;
-import com.doccube.admin.IAdminAccessor;
 import com.doccube.base.BlankTester;
 import com.doccube.core.EntryKey;
 import com.doccube.core.accessor.EntryInfo;
@@ -21,7 +21,6 @@ import com.doccube.meta.EntityMeta;
 import com.doccube.meta.GenericEntity;
 import com.doccube.meta.EntityAttr.AttrMode;
 import com.doccube.meta.EntityAttr.AttrType;
-import com.doccube.meta.accessor.IMetaGenericAccessor;
 import com.doccube.util.Accessors;
 
 public class AccessorTest extends BlankTester{

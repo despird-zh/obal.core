@@ -17,35 +17,11 @@
  * under the License.
  * 
  */
-package com.doccube.audit.accessor;
+package com.doccube.accessor;
 
-import com.doccube.core.EntryKey;
-import com.doccube.core.security.Principal;
-import com.doccube.exception.MetaException;
-import com.doccube.meta.BaseEntity;
-import com.doccube.meta.EntityMeta;
+import com.doccube.audit.AuditInfo;
+import com.doccube.core.IEntityAccessor;
 
-public class AuditEntity extends BaseEntity{
-
-	public AuditEntity(EntityMeta meta) {
-		super(meta);
-	}
-
-	@Override
-	public String getSchema(Principal principal, EntryKey key) {
-		
-		return "autit.info";
-	}
-
-	@Override
-	public EntryKey newKey(Principal principal, Object... parameter) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public EntryKey newKey(Principal principal) throws MetaException {
-		// TODO Auto-generated method stub
-		return null;
-	}
+public interface IAuditAccessor extends IEntityAccessor<AuditInfo>{
+	
 }

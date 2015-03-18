@@ -17,11 +17,33 @@
  * under the License.
  * 
  */
-package com.doccube.audit.accessor;
+package com.doccube.accessor.hbase;
 
-import com.doccube.audit.AuditInfo;
-import com.doccube.core.IEntityAccessor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public interface IAuditAccessor extends IEntityAccessor<AuditInfo>{
+import com.doccube.core.accessor.AccessorContext;
+import com.doccube.core.accessor.EntryInfo;
+import com.doccube.core.hbase.HEntityAccessor;
+import com.doccube.core.hbase.HEntryWrapper;
+import com.doccube.core.hbase.HRawWrapper;
+import com.doccube.meta.EntityConstants;
+
+public class MetaInfoAccessor extends HEntityAccessor<EntryInfo>{
+
+	public MetaInfoAccessor(AccessorContext context) {
+		
+		super(EntityConstants.ACCESSOR_ENTITY_META,context);
+	}
+
+	public static Logger LOGGER = LoggerFactory.getLogger(MetaInfoAccessor.class);
+
+	@Override
+	public HEntryWrapper<EntryInfo> getEntryWrapper() {
+		
+		HRawWrapper wrapper = new HRawWrapper();		
+
+		return wrapper;
+	}
 	
 }

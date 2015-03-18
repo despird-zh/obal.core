@@ -17,7 +17,7 @@
  * under the License.
  * 
  */
-package com.doccube.admin.hbase;
+package com.doccube.accessor.hbase;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.doccube.admin.IAdminAccessor;
+import com.doccube.accessor.IAdminAccessor;
 import com.doccube.core.accessor.GenericContext;
 import com.doccube.core.hbase.HAdminAware;
 import com.doccube.core.hbase.HGenericAccessor;

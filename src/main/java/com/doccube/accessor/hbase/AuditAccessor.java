@@ -17,7 +17,7 @@
  * under the License.
  * 
  */
-package com.doccube.audit.hbase;
+package com.doccube.accessor.hbase;
 
 import com.doccube.audit.AuditInfo;
 import com.doccube.core.accessor.AccessorContext;

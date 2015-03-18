@@ -17,11 +17,13 @@
  * under the License.
  * 
  */
-package com.doccube.meta.hbase;
+package com.doccube.accessor.hbase;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.doccube.core.AccessorFactory;
+import com.doccube.core.CoreConstants;
 import com.doccube.core.accessor.AccessorContext;
 import com.doccube.core.accessor.EntryInfo;
 import com.doccube.core.hbase.HEntityAccessor;
@@ -33,8 +35,13 @@ public class AttrInfoAccessor extends HEntityAccessor<EntryInfo>{
 
 	public static Logger LOGGER = LoggerFactory.getLogger(AttrInfoAccessor.class);
 	
+	static{
+		AccessorFactory.registerAccessor(CoreConstants.BUILDER_HBASE, new AttrInfoAccessor(null));
+	}
+	
 	public AttrInfoAccessor(AccessorContext context) {
 		super(EntityConstants.ACCESSOR_ENTITY_ATTR,context);
+		
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package com.doccube.core.security.accessor;
+package com.doccube.accessor;
 
 import java.util.List;
 

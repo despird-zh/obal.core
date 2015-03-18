@@ -5,13 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.doccube.accessor.hbase.UserAccessor;
 import com.doccube.base.BlankTester;
 import com.doccube.core.CoreManager;
 import com.doccube.core.EntryFilter;
 import com.doccube.core.accessor.EntryCollection;
 import com.doccube.core.accessor.TraceableEntry;
 import com.doccube.core.security.Principal;
-import com.doccube.core.security.hbase.UserAccessor;
 import com.doccube.exception.AccessorException;
 import com.doccube.exception.BaseException;
 import com.doccube.exception.EntityException;

@@ -1,5 +1,6 @@
 package com.doccube.admin;
 
+import com.doccube.accessor.IAdminAccessor;
 import com.doccube.core.security.Principal;
 import com.doccube.exception.AccessorException;
 import com.doccube.meta.EntityAttr;

@@ -5,6 +5,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.doccube.accessor.IAdminAccessor;
+import com.doccube.accessor.IMetaGenericAccessor;
 import com.doccube.core.AccessorFactory;
 import com.doccube.core.security.Principal;
 import com.doccube.exception.AccessorException;
@@ -13,7 +15,6 @@ import com.doccube.meta.EntityAttr;
 import com.doccube.meta.EntityConstants;
 import com.doccube.meta.EntityManager;
 import com.doccube.meta.EntityMeta;
-import com.doccube.meta.accessor.IMetaGenericAccessor;
 import com.doccube.util.Accessors;
 
 /**
@@ -34,7 +35,7 @@ public class EntityAdmin {
 		
 		String path = this.getClass().getPackage().getName().replace(".", "/");
 		path += "/AccessorMap.hbase.properties";
-		AccessorFactory.getInstance().appendMapping("hbase", path);		
+		AccessorFactory.appendMapping("hbase", path);		
 	}
 	
 	private static EntityAdmin instance;
@@ -62,7 +63,7 @@ public class EntityAdmin {
 		
 		IAdminAccessor aa = null;
 		try {
-			aa = AccessorFactory.getInstance().buildGenericAccessor(principal, ADMIN_ACCESSOR);
+			aa = AccessorFactory.buildGenericAccessor(principal, ADMIN_ACCESSOR);
 		} catch (EntityException e) {
 			
 			LOGGER.error("Error when getting Admin service",e);

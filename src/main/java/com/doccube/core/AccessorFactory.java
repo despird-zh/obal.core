@@ -48,11 +48,11 @@ import com.doccube.meta.EntityManager;
  * @version 0.1 2014-3-1
  * @see AccessorBuilder
  **/
-public class AccessorFactory {
+public final class AccessorFactory {
 
-	Logger LOGGER = LoggerFactory.getLogger(AccessorFactory.class);
+	static Logger LOGGER = LoggerFactory.getLogger(AccessorFactory.class);
 	/** AccessorBuilder cache */
-	private Map<String, AccessorBuilder> builderMap = new HashMap<String, AccessorBuilder>();
+	private static Map<String, AccessorBuilder> builderMap = new HashMap<String, AccessorBuilder>();
 
 	private static String BUILDER_PREFIX = "accessor.builder.";
 
@@ -91,7 +91,7 @@ public class AccessorFactory {
 
 		}
 
-		appendMapping(CoreConstants.BUILDER_HBASE, "com/doccube/meta/AccessorMap.hbase.properties");
+//		appendMapping(CoreConstants.BUILDER_HBASE, "com/doccube/meta/AccessorMap.hbase.properties");
 
 	}
 
@@ -101,20 +101,20 @@ public class AccessorFactory {
 	/** default builder */
 	// private AccessorBuilder defaultBuilder = null;
 
-	private String defaultBuilder = null;
+	private static String defaultBuilder = null;
 
 	/**
 	 * Singleton instance
 	 * 
 	 * @return AccessorFactory the singleton instance.
 	 **/
-	public static AccessorFactory getInstance() {
-
-		if (instance == null)
-			instance = new AccessorFactory();
-
-		return instance;
-	}
+//	public static AccessorFactory getInstance() {
+//
+//		if (instance == null)
+//			instance = new AccessorFactory();
+//
+//		return instance;
+//	}
 
 	/**
 	 * Set the default builder name
@@ -123,9 +123,9 @@ public class AccessorFactory {
 	 *            the default builder name
 	 * 
 	 **/
-	public void setDefaultBuilder(String defaultBuilder) {
+	public static void setDefaultBuilder(String dftBuilder) {
 
-		this.defaultBuilder = defaultBuilder;
+		defaultBuilder = dftBuilder;
 	}
 
 	/**
@@ -133,9 +133,9 @@ public class AccessorFactory {
 	 * 
 	 * @return String the default builder name
 	 **/
-	public String getDefaultBuilder() {
+	public static String getDefaultBuilder() {
 
-		return this.defaultBuilder;
+		return defaultBuilder;
 	}
 
 	/**
@@ -145,7 +145,7 @@ public class AccessorFactory {
 	 *            the accessor builder instance
 	 * 
 	 **/
-	public void addAccessorBuilder(AccessorBuilder accessBuilder) {
+	public static void addAccessorBuilder(AccessorBuilder accessBuilder) {
 
 		if (null == accessBuilder) {
 
@@ -164,7 +164,7 @@ public class AccessorFactory {
 	 * @return AccessorBuilder the builder instance
 	 * 
 	 **/
-	public AccessorBuilder getAccessorBuilder(String builderName) {
+	public static AccessorBuilder getAccessorBuilder(String builderName) {
 
 		return builderMap.get(builderName);
 	}
@@ -178,35 +178,35 @@ public class AccessorFactory {
 	 *            the path of resource file, eg. com/tt/xx/mm.properties
 	 * 
 	 **/
-	public void appendMapping(String builderName, String resourcePath) {
+	public static void appendMapping(String builderName, String resourcePath) {
 
-		if(!builderMap.containsKey(builderName)){
-			LOGGER.warn("builder:{} not exists",builderName);
-			return;
-		}
-		
-		LOGGER.debug("Load {}'s mapping resource:{}", new String[]{builderName,resourcePath});
-		InputStream is = this.getClass().getClassLoader().getResourceAsStream(resourcePath);
-		if(is == null){
-			
-			LOGGER.error("Cannot load accessor mapping:{}",resourcePath);
-			return;
-		}
-		Properties prop = new Properties();
-		try {
-			
-			prop.load(is);
-			Map<String, String> entries = new HashMap<String, String>();
-
-			for (final String name : prop.stringPropertyNames())
-				entries.put(name, prop.getProperty(name));
-
-			appendMapping(builderName, entries);
-
-		} catch (IOException e) {
-
-			LOGGER.error("Error during EntryAdmin contrustor.", e);
-		}
+//		if(!builderMap.containsKey(builderName)){
+//			LOGGER.warn("builder:{} not exists",builderName);
+//			return;
+//		}
+//		
+//		LOGGER.debug("Load {}'s mapping resource:{}", new String[]{builderName,resourcePath});
+//		InputStream is = this.getClass().getClassLoader().getResourceAsStream(resourcePath);
+//		if(is == null){
+//			
+//			LOGGER.error("Cannot load accessor mapping:{}",resourcePath);
+//			return;
+//		}
+//		Properties prop = new Properties();
+//		try {
+//			
+//			prop.load(is);
+//			Map<String, String> entries = new HashMap<String, String>();
+//
+//			for (final String name : prop.stringPropertyNames())
+//				entries.put(name, prop.getProperty(name));
+//
+//			appendMapping(builderName, entries);
+//
+//		} catch (IOException e) {
+//
+//			LOGGER.error("Error during EntryAdmin contrustor.", e);
+//		}
 	}
 
 	/**
@@ -217,7 +217,7 @@ public class AccessorFactory {
 	 * @param mapping
 	 *            the mapping of services
 	 **/
-	public void appendMapping(String builderName, Map<String, String> mapping) {
+	public static void appendMapping(String builderName, Map<String, String> mapping) {
 
 		builderMap.get(builderName).appendAccessorMap(mapping);
 	}
@@ -230,19 +230,19 @@ public class AccessorFactory {
 	 * @param entityName
 	 *            the name of entity, eg. the map key of service class
 	 **/
-	public <K> K buildEntityAccessor(Principal principal, String entityName)
+	public static <K> K buildEntityAccessor(Principal principal, String entityName)
 			throws EntityException {
 
-		AccessorBuilder defaultBuilder = builderMap.get(this.defaultBuilder);
+		AccessorBuilder dftBuilder = builderMap.get(defaultBuilder);
 		if (null == defaultBuilder) {
 
 			throw new EntityException(
 					"The Default AccessorBuilder instance:{} not existed.",
-					this.defaultBuilder);
+					defaultBuilder);
 		}
-		K accessor = defaultBuilder.newEntityAccessor(principal, entityName );
+		K accessor = dftBuilder.newEntityAccessor(principal, entityName );
 		// set other property as per builder
-		defaultBuilder.assembly(principal, (EntityAccessor<?>) accessor);
+		dftBuilder.assembly(principal, (EntityAccessor<?>) accessor);
 		return accessor;
 	}
 
@@ -254,17 +254,17 @@ public class AccessorFactory {
 	 * @param accessorName
 	 *            the name of entry, eg. the map key of service class
 	 **/
-	public <K> K buildGenericAccessor(Principal principal, String accessorName)
+	public static <K> K buildGenericAccessor(Principal principal, String accessorName)
 			throws EntityException {
-		AccessorBuilder defaultBuilder = builderMap.get(this.defaultBuilder);
+		AccessorBuilder dftBuilder = builderMap.get(defaultBuilder);
 		if (null == defaultBuilder) {
 
 			throw new EntityException(
 					"The Default AccessorBuilder instance:{} not existed.",
-					this.defaultBuilder);
+					defaultBuilder);
 		}
-		K accessor = defaultBuilder.newGenericAccessor(principal, accessorName);
-		defaultBuilder.assembly(principal, (GenericAccessor) accessor);
+		K accessor = dftBuilder.newGenericAccessor(principal, accessorName);
+		dftBuilder.assembly(principal, (GenericAccessor) accessor);
 		return accessor;
 	}
 
@@ -277,22 +277,22 @@ public class AccessorFactory {
 	 * @param entryName
 	 *            the name of entry
 	 **/
-	public <K> K buildEntityAccessor(IBaseAccessor mockupAccessor,
+	public static <K> K buildEntityAccessor(IBaseAccessor mockupAccessor,
 			String entityName) throws EntityException {
 
-		AccessorBuilder defaultBuilder = builderMap.get(this.defaultBuilder);
-		if (null == defaultBuilder) {
+		AccessorBuilder dftBuilder = builderMap.get(defaultBuilder);
+		if (null == dftBuilder) {
 
 			throw new EntityException(
 					"The Default AccessorBuilder instance:{} not existed.",
-					this.defaultBuilder);
+					defaultBuilder);
 		}
 
 		GenericContext context = mockupAccessor.getContext();
 		if(context == null){
 			throw new EntityException(
 					"The Mockup Accessor[from {}]'s AccessorContext not existed.",
-					this.defaultBuilder);
+					defaultBuilder);
 		}
 		BaseEntity schema;
 		try {
@@ -304,8 +304,8 @@ public class AccessorFactory {
 		AccessorContext econtext = new AccessorContext(context.getPrincipal(),schema);
 		context.copy(econtext);// copy principal and attached values
 		econtext.setEmbed(true);
-		K accessor = defaultBuilder.newBaseAccessor(econtext, entityName, false);
-		defaultBuilder.assembly(mockupAccessor, (IBaseAccessor) accessor);
+		K accessor = dftBuilder.newBaseAccessor(econtext, entityName, false);
+		dftBuilder.assembly(mockupAccessor, (IBaseAccessor) accessor);
 		return accessor;
 	}
 
@@ -318,29 +318,29 @@ public class AccessorFactory {
 	 * @param entryName
 	 *            the name of entry
 	 **/
-	public <K> K buildGenericAccessor(IBaseAccessor mockupAccessor,
+	public static <K> K buildGenericAccessor(IBaseAccessor mockupAccessor,
 			String accessorName) throws EntityException {
 
-		AccessorBuilder defaultBuilder = builderMap.get(this.defaultBuilder);
-		if (null == defaultBuilder) {
+		AccessorBuilder dftBuilder = builderMap.get(defaultBuilder);
+		if (null == dftBuilder) {
 
 			throw new EntityException(
 					"The Default AccessorBuilder instance:{} not existed.",
-					this.defaultBuilder);
+					defaultBuilder);
 		}
 		// retrieve the principal from mock-up accessor
 		GenericContext context = mockupAccessor.getContext();
 		if(context == null){
 			throw new EntityException(
 					"The Mockup Accessor[from {}]'s AccessorContext not existed.",
-					this.defaultBuilder);
+					defaultBuilder);
 		}
 		// new generic context
 		GenericContext ncontext = new GenericContext(context.getPrincipal());
 		context.copy(ncontext);
 		ncontext.setEmbed(true);
-		K accessor = defaultBuilder.newBaseAccessor(ncontext, accessorName, true);
-		defaultBuilder.assembly(mockupAccessor, (IBaseAccessor) accessor);
+		K accessor = dftBuilder.newBaseAccessor(ncontext, accessorName, true);
+		dftBuilder.assembly(mockupAccessor, (IBaseAccessor) accessor);
 		return accessor;
 	}
 
@@ -354,7 +354,7 @@ public class AccessorFactory {
 	 * @param entityName
 	 *            the name of entity, eg. the map key of service class
 	 **/
-	public <K> K buildEntityAccessor(String builderName, Principal principal,
+	public static <K> K buildEntityAccessor(String builderName, Principal principal,
 			String entityName) throws EntityException {
 
 		AccessorBuilder accessorbuilder = builderMap.get(builderName);
@@ -378,7 +378,7 @@ public class AccessorFactory {
 	 * @param accessorName
 	 *            the name of entry, eg. the map key of service class
 	 **/
-	public <K> K buildGenericAccessor(String builderName, Principal principal,
+	public static <K> K buildGenericAccessor(String builderName, Principal principal,
 			String accessorName) throws EntityException {
 
 		AccessorBuilder accessorbuilder = builderMap.get(builderName);
@@ -404,7 +404,7 @@ public class AccessorFactory {
 	 * @param entityName
 	 *            the name of entity
 	 **/
-	public <K> K buildEntityAccessor(String builderName,
+	public static <K> K buildEntityAccessor(String builderName,
 			IBaseAccessor mockupAccessor, String entityName)
 			throws EntityException {
 
@@ -447,7 +447,7 @@ public class AccessorFactory {
 	 * @param entryName
 	 *            the name of entry
 	 **/
-	public <K> K buildGenericAccessor(String builderName,
+	public static <K> K buildGenericAccessor(String builderName,
 			IBaseAccessor mockupAccessor, String accessorName)
 			throws EntityException {
 
@@ -482,11 +482,11 @@ public class AccessorFactory {
 	 * @param accessor the instance of accessor
 	 * 
 	 **/
-	public static void registerAccessor(String builderName,String accessorName, IBaseAccessor accessor){
+	public static void registerAccessor(String builderName, IBaseAccessor accessor){
 		
 		Objects.requireNonNull(accessor);
 		String accessorClass = accessor.getClass().getName();
-		AccessorBuilder builder = AccessorFactory.getInstance().getAccessorBuilder(builderName);
-		builder.appendAccessorMap(accessorName, accessorClass);
+		AccessorBuilder builder = AccessorFactory.getAccessorBuilder(builderName);
+		builder.appendAccessorMap(accessor.getAccessorName(), accessorClass);
 	}
 }

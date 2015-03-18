@@ -212,7 +212,7 @@ public abstract class REntityAccessor <GB extends EntryInfo> extends EntityAcces
 			// embed means share connection, close it directly affect other accessors using this conn.
 			if (jedis != null && !isEmbed()){
 				
-				RAccessorBuilder builder = (RAccessorBuilder)AccessorFactory.getInstance().getAccessorBuilder(CoreConstants.BUILDER_REDIS);
+				RAccessorBuilder builder = (RAccessorBuilder)AccessorFactory.getAccessorBuilder(CoreConstants.BUILDER_REDIS);
 				builder.returnJedis(jedis);
 			}
 

@@ -13,8 +13,8 @@ public class LaunchTest extends BlankTester{
 		System.out.println("---==: initial log4j");
 		initLog4j();
 		setSwitch(1,false);// prepare
-		setSwitch(2,true);// load meta
-		setSwitch(3,true);// principal test
+		setSwitch(2,false);// load meta
+		setSwitch(3,false);// principal test
 
 		setSwitch(999,false); // drop schema, clear
 	}

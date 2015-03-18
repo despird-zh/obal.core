@@ -113,7 +113,7 @@ public class CacheManager{
 		IEntityAccessor<K> eaccessor = null;
 		try {
 			eaccessor = 
-				AccessorFactory.getInstance().buildEntityAccessor(CoreConstants.BUILDER_REDIS, 
+				AccessorFactory.buildEntityAccessor(CoreConstants.BUILDER_REDIS, 
 						principal, 
 						entityName);	
 				
@@ -148,7 +148,7 @@ public class CacheManager{
 		IEntityAccessor<?> eaccessor = null;
 		try {
 			eaccessor = 
-				AccessorFactory.getInstance().buildEntityAccessor(CoreConstants.BUILDER_REDIS, 
+				AccessorFactory.buildEntityAccessor(CoreConstants.BUILDER_REDIS, 
 						principal, 
 						entityName);	
 				

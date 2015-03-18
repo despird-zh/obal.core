@@ -17,33 +17,35 @@
  * under the License.
  * 
  */
-package com.doccube.meta.hbase;
+package com.doccube.audit;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.doccube.core.EntryKey;
+import com.doccube.core.security.Principal;
+import com.doccube.exception.MetaException;
+import com.doccube.meta.BaseEntity;
+import com.doccube.meta.EntityMeta;
 
-import com.doccube.core.accessor.AccessorContext;
-import com.doccube.core.accessor.EntryInfo;
-import com.doccube.core.hbase.HEntityAccessor;
-import com.doccube.core.hbase.HEntryWrapper;
-import com.doccube.core.hbase.HRawWrapper;
-import com.doccube.meta.EntityConstants;
+public class AuditEntity extends BaseEntity{
 
-public class MetaInfoAccessor extends HEntityAccessor<EntryInfo>{
-
-	public MetaInfoAccessor(AccessorContext context) {
-		
-		super(EntityConstants.ACCESSOR_ENTITY_META,context);
+	public AuditEntity(EntityMeta meta) {
+		super(meta);
 	}
-
-	public static Logger LOGGER = LoggerFactory.getLogger(MetaInfoAccessor.class);
 
 	@Override
-	public HEntryWrapper<EntryInfo> getEntryWrapper() {
+	public String getSchema(Principal principal, EntryKey key) {
 		
-		HRawWrapper wrapper = new HRawWrapper();		
-
-		return wrapper;
+		return "autit.info";
 	}
-	
+
+	@Override
+	public EntryKey newKey(Principal principal, Object... parameter) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public EntryKey newKey(Principal principal) throws MetaException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

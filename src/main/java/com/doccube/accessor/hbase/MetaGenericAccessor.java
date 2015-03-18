@@ -17,7 +17,7 @@
  * under the License.
  * 
  */
-package com.doccube.meta.hbase;
+package com.doccube.accessor.hbase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,6 +31,7 @@ import org.apache.hadoop.hbase.filter.RowFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.doccube.accessor.IMetaGenericAccessor;
 import com.doccube.core.AccessorFactory;
 import com.doccube.core.EntryFilter;
 import com.doccube.core.EntryKey;
@@ -49,7 +50,6 @@ import com.doccube.meta.EntityConstants.AttrInfo;
 import com.doccube.meta.EntityMeta;
 import com.doccube.meta.EntityAttr.AttrMode;
 import com.doccube.meta.EntityAttr.AttrType;
-import com.doccube.meta.accessor.IMetaGenericAccessor;
 import com.doccube.util.Accessors;
 
 public class MetaGenericAccessor extends HGenericAccessor implements IMetaGenericAccessor{
@@ -67,7 +67,7 @@ public class MetaGenericAccessor extends HGenericAccessor implements IMetaGeneri
 		AttrInfoAccessor attraccessor = null;
 		EntityAttr attr = null;
 		try{
-			attraccessor = AccessorFactory.getInstance().buildEntityAccessor(this, EntityConstants.ENTITY_META_ATTR);
+			attraccessor = AccessorFactory.buildEntityAccessor(this, EntityConstants.ENTITY_META_ATTR);
 
 			EntryInfo minfo = attraccessor.doGetEntry(attrKey);
 		
@@ -108,7 +108,7 @@ public class MetaGenericAccessor extends HGenericAccessor implements IMetaGeneri
 		EntryCollection<EntryInfo> attrs = null;
 		List<EntityAttr> rtv = null;
 		try{
-			attraccessor = AccessorFactory.getInstance().buildEntityAccessor(this, EntityConstants.ENTITY_META_ATTR);
+			attraccessor = AccessorFactory.buildEntityAccessor(this, EntityConstants.ENTITY_META_ATTR);
 		
 			attrs = attraccessor.doScanEntry(new EntryFilter<Filter>(filter1));
 			
@@ -147,7 +147,7 @@ public class MetaGenericAccessor extends HGenericAccessor implements IMetaGeneri
 		AttrInfoAccessor attraccessor = null;
 		
 		try {
-			attraccessor = AccessorFactory.getInstance().buildEntityAccessor(this, EntityConstants.ENTITY_META_ATTR);
+			attraccessor = AccessorFactory.buildEntityAccessor(this, EntityConstants.ENTITY_META_ATTR);
 			EntryKey key = attraccessor.getEntitySchema().newKey(getContext().getPrincipal());
 			EntryInfo minfo = new EntryInfo(key);
 			EntityMeta meta = attraccessor.getEntitySchema().getEntityMeta();
@@ -186,7 +186,7 @@ public class MetaGenericAccessor extends HGenericAccessor implements IMetaGeneri
 		MetaInfoAccessor metaAccr = null;
 		EntityMeta meta = null;
 		try{
-			metaAccr = AccessorFactory.getInstance().buildEntityAccessor(this, EntityConstants.ENTITY_META_INFO);
+			metaAccr = AccessorFactory.buildEntityAccessor(this, EntityConstants.ENTITY_META_INFO);
 		
 			EntryInfo minfo = metaAccr.doGetEntry(entityName);
 			meta = new EntityMeta(entityName);
@@ -215,7 +215,7 @@ public class MetaGenericAccessor extends HGenericAccessor implements IMetaGeneri
 		List<EntityMeta> rtv = null;
 		try{
 			
-			metaAccr = AccessorFactory.getInstance().buildEntityAccessor(this, EntityConstants.ENTITY_META_INFO);
+			metaAccr = AccessorFactory.buildEntityAccessor(this, EntityConstants.ENTITY_META_INFO);
 			rlist = metaAccr.doScanEntry(null);
 			rtv = new ArrayList<EntityMeta>();
 		
@@ -255,7 +255,7 @@ public class MetaGenericAccessor extends HGenericAccessor implements IMetaGeneri
 		
 		MetaInfoAccessor metaAccr = null;
 		try {
-			metaAccr = AccessorFactory.getInstance().buildEntityAccessor(this, EntityConstants.ENTITY_META_INFO);
+			metaAccr = AccessorFactory.buildEntityAccessor(this, EntityConstants.ENTITY_META_INFO);
 			EntryKey key = metaAccr.newKey();
 			EntryInfo minfo = new EntryInfo(key);
 			EntityMeta emeta = metaAccr.getEntitySchema().getEntityMeta();

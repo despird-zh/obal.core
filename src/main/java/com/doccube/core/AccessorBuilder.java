@@ -24,6 +24,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.doccube.core.accessor.AccessorContext;
 import com.doccube.core.accessor.EntityAccessor;
 import com.doccube.core.accessor.GenericAccessor;
@@ -45,7 +48,7 @@ public abstract class AccessorBuilder {
 
 	private Properties accessorProp = null;
 	private String builderName = null;
-	
+	Logger LOGGER = LoggerFactory.getLogger(AccessorBuilder.class);
 	/**
 	 * Default Constructor 
 	 **/
@@ -59,17 +62,7 @@ public abstract class AccessorBuilder {
 	protected AccessorBuilder(String builderName, String accessormap)throws EntityException{
 		
 		this.builderName = builderName;
-		
-//		InputStream is = AccessorBuilder.class.getClassLoader().getResourceAsStream(accessormap);
 		accessorProp = new Properties();
-//		
-//		try {
-//			
-//			accessorProp.load(is);			
-//		} catch (IOException e) {
-//			
-//			throw new EntityException("Fail build Accessor builder:{}", e, builderName);
-//		}
 
 	}
 
@@ -242,6 +235,8 @@ public abstract class AccessorBuilder {
 	 **/
 	public void appendAccessorMap(String accessorName, String accessorClass){
 		
+		LOGGER.debug("Append [{}] entity mapping: {} -> {}" , 
+				new String[]{this.builderName, accessorName, accessorClass});
 		accessorProp.put(accessorName, accessorClass);
 	}
 }

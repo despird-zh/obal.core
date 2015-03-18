@@ -45,7 +45,7 @@ public class Accessors {
 	 **/
 	public static <K> K getEntityAccessor(String builderName, Principal principal,String entityName)throws EntityException{
 		
-		return AccessorFactory.getInstance().buildEntityAccessor(builderName,principal, entityName);
+		return AccessorFactory.buildEntityAccessor(builderName,principal, entityName);
 	}	
 	
 	/**
@@ -57,7 +57,7 @@ public class Accessors {
 	 **/
 	public static <K> K getEntityAccessor(Principal principal,String entityName)throws EntityException{
 		
-		return AccessorFactory.getInstance().buildEntityAccessor(principal, entityName);
+		return AccessorFactory.buildEntityAccessor(principal, entityName);
 	}
 
 	/**
@@ -71,7 +71,7 @@ public class Accessors {
 	 **/
 	public static <K> K getGenericAccessor(String builderName, Principal principal,String accessorName)throws EntityException{
 		
-		return AccessorFactory.getInstance().buildGenericAccessor(builderName, principal, accessorName);
+		return AccessorFactory.buildGenericAccessor(builderName, principal, accessorName);
 	}
 	
 	/**
@@ -83,7 +83,7 @@ public class Accessors {
 	 **/
 	public static <K> K getGenericAccessor(Principal principal,String accessorName)throws EntityException{
 		
-		return AccessorFactory.getInstance().buildGenericAccessor(principal, accessorName);
+		return AccessorFactory.buildGenericAccessor(principal, accessorName);
 	}
 
 
@@ -97,7 +97,7 @@ public class Accessors {
 	 **/
 	public static <K> K getGenericAccessor(IBaseAccessor mockupAccessor, String accessorName)throws EntityException{
 		
-		return AccessorFactory.getInstance().buildGenericAccessor(mockupAccessor, accessorName);
+		return AccessorFactory.buildGenericAccessor(mockupAccessor, accessorName);
 	}
 	
 	/**
@@ -110,7 +110,7 @@ public class Accessors {
 	 **/
 	public static <K> K getEntityAccessor(IBaseAccessor mockupAccessor, String entryName)throws EntityException{
 		
-		return AccessorFactory.getInstance().buildEntityAccessor(mockupAccessor, entryName);
+		return AccessorFactory.buildEntityAccessor(mockupAccessor, entryName);
 	}
 	
 	/**
