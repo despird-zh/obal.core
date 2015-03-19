@@ -291,7 +291,7 @@ public final class AccessorFactory {
 		AccessorContext econtext = new AccessorContext(context.getPrincipal(),schema);
 		context.copy(econtext);// copy principal and attached values
 		econtext.setEmbed(true);
-		K accessor = dftBuilder.newBaseAccessor(econtext, entityName, false);
+		K accessor = dftBuilder.newBaseAccessor(econtext, schema.getEntityMeta().getAccessorName(), false);
 		dftBuilder.assembly(mockupAccessor, (IBaseAccessor) accessor);
 		return accessor;
 	}
@@ -418,7 +418,7 @@ public final class AccessorFactory {
 		AccessorContext econtext = new AccessorContext(context.getPrincipal(),schema);
 		context.copy(econtext);
 		econtext.setEmbed(true);
-		K accessor = accessorbuilder.newBaseAccessor(econtext, entityName, false);
+		K accessor = accessorbuilder.newBaseAccessor(econtext, schema.getEntityMeta().getAccessorName(), false);
 		accessorbuilder.assembly(mockupAccessor, (IBaseAccessor) accessor);
 		return accessor;
 	}

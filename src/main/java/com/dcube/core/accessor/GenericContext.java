@@ -80,7 +80,8 @@ public class GenericContext {
 	public void copy(GenericContext target){
 		
 		target.setPrincipal(this.getPrincipal());
-		target.values = this.values;
+		target.values.clear();
+		target.values.putAll(this.values);
 	}
 	
 	/**

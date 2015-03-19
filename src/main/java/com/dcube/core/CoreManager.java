@@ -23,9 +23,7 @@ public class CoreManager implements ILifecycle{
 	private State state = State.UNKNOWN;
 	
 	private EventDispatcher eventDispatcher = null;
-	private EntityManager entityManager = null;
 	private EntityAdmin entityAdmin = null;
-	private CacheManager cacheManager = null;
 	
 	private ArrayList<LifecycleListener> listeners = new ArrayList<LifecycleListener>();
 	
@@ -46,11 +44,11 @@ public class CoreManager implements ILifecycle{
 		// initial the event dispatcher
 		this.eventDispatcher = EventDispatcher.getInstance();
 		// prepare the meta infor & attr data
-		this.entityManager = EntityManager.getInstance();
+		EntityManager.getInstance();
 		// initial the admin instance
 		this.entityAdmin = EntityAdmin.getInstance();		
 		// initial the cache manager
-		this.cacheManager = CacheManager.getInstance();
+		CacheManager.getInstance();
 	}
 	
 	@Override
