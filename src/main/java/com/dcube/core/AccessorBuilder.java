@@ -103,20 +103,19 @@ public abstract class AccessorBuilder {
 	protected void detectAccessors(String packagePath){
 		
 		Objects.requireNonNull(packagePath);
-		LOGGER.debug("Detecting package:{}",packagePath);
+		LOGGER.debug("Detecting package - {}",packagePath);
 		List<Class<?>> clazzList = AccessorDetector.getClassesForPackage(packagePath);
 		String accessorName = null;
 		String accessorClass = null;
 		for(Class<?> clazz : clazzList){
 			
-			try {
-				
+			try {				
 				IBaseAccessor instance = (IBaseAccessor) clazz.newInstance();
 				accessorName = instance.getAccessorName();
 				accessorClass = clazz.getCanonicalName();
 				accessorProp.put(accessorName, accessorClass);
 				
-				LOGGER.debug("found {} - {}", accessorName,accessorClass);
+				LOGGER.debug("Found {} - {}", accessorName,accessorClass);
 			} catch (InstantiationException e) {
 				
 				LOGGER.error("Fail instantiate accessor:{}-{}",new String[]{accessorName,accessorClass},e);
