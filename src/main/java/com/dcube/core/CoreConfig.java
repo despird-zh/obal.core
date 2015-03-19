@@ -41,7 +41,7 @@ public class CoreConfig extends PropertiesConfiguration{
 
 	private CoreConfig() throws ConfigurationException{
 		
-		super("doccube-config.properties");
+		super("dcube-config.properties");
 	}
 	
 	/**
