@@ -98,7 +98,7 @@ public class HAccessorBuilder extends AccessorBuilder{
 		
 		// detect the accessor classes under package
 		CoreConfig cc = CoreConfig.getInstance();
-		String packagename = cc.getString(CoreConstants.BUILDER_HBASE+CoreConstants.CONFIG_ACCESSOR_PACKAGE,"com.doccube.accessor.hbase");
+		String packagename = cc.getString(CoreConstants.BUILDER_HBASE+CoreConstants.CONFIG_ACCESSOR_PACKAGE,"com.dcube.accessor.hbase");
 		if(packagename.contains(",")){
 			
 			String[] packages = packagename.split(",");
