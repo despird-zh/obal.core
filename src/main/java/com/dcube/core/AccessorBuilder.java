@@ -109,7 +109,12 @@ public abstract class AccessorBuilder {
 		String accessorClass = null;
 		for(Class<?> clazz : clazzList){
 			
-			try {				
+			if(!IBaseAccessor.class.isAssignableFrom(clazz)){
+				
+				LOGGER.debug("Warning {} is not Accessor, ignore it.",clazz.getCanonicalName());
+				continue;
+			}
+			try {	
 				IBaseAccessor instance = (IBaseAccessor) clazz.newInstance();
 				accessorName = instance.getAccessorName();
 				accessorClass = clazz.getCanonicalName();

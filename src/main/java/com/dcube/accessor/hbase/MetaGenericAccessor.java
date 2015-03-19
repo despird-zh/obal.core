@@ -184,7 +184,6 @@ public class MetaGenericAccessor extends HGenericAccessor implements IMetaGeneri
 
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public EntityMeta getEntityMeta(String entityName) throws AccessorException {
 
