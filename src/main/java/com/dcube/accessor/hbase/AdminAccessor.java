@@ -42,10 +42,6 @@ public class AdminAccessor extends HGenericAccessor implements IAdminAccessor,HA
 	public AdminAccessor() {
 		super(EntityConstants.ACCESSOR_GENERIC_ADMIN);
 	}
-	
-	public AdminAccessor(GenericContext context) {
-		super(EntityConstants.ACCESSOR_GENERIC_ADMIN,context);
-	}
 
 	Logger LOGGER = LoggerFactory.getLogger(AdminAccessor.class);
 	private HBaseAdmin admin = null;

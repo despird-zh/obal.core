@@ -36,10 +36,6 @@ public class AttrInfoAccessor extends HEntityAccessor<EntryInfo>{
 	public AttrInfoAccessor() {
 		super(EntityConstants.ACCESSOR_ENTITY_ATTR);		
 	}
-	
-	public AttrInfoAccessor(AccessorContext context) {
-		super(EntityConstants.ACCESSOR_ENTITY_ATTR,context);		
-	}
 
 	@Override
 	public HEntryWrapper<EntryInfo> getEntryWrapper() {

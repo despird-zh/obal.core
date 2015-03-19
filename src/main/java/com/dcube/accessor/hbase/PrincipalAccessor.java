@@ -14,10 +14,6 @@ public class PrincipalAccessor extends HGenericAccessor implements IPrincipalAcc
 	public PrincipalAccessor() {
 		super(EntityConstants.ACCESSOR_GENERIC_USER);
 	}
-	
-	public PrincipalAccessor(AccessorContext context) {
-		super(EntityConstants.ACCESSOR_GENERIC_USER,context);
-	}
 
 	@Override
 	public Principal getPrincipalByAccount(String account)

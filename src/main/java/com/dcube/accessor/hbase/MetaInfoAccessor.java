@@ -35,11 +35,6 @@ public class MetaInfoAccessor extends HEntityAccessor<EntryInfo>{
 		
 		super(EntityConstants.ACCESSOR_ENTITY_META);
 	}
-	
-	public MetaInfoAccessor(AccessorContext context) {
-		
-		super(EntityConstants.ACCESSOR_ENTITY_META,context);
-	}
 
 	public static Logger LOGGER = LoggerFactory.getLogger(MetaInfoAccessor.class);
 

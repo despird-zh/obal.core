@@ -34,6 +34,7 @@ import com.dcube.core.accessor.EntityAccessor;
 import com.dcube.core.accessor.GenericAccessor;
 import com.dcube.core.accessor.GenericContext;
 import com.dcube.core.security.Principal;
+import com.dcube.exception.AccessorException;
 import com.dcube.exception.EntityException;
 import com.dcube.exception.MetaException;
 import com.dcube.meta.BaseEntity;
@@ -155,7 +156,7 @@ public abstract class AccessorBuilder {
 	public abstract void assembly(IBaseAccessor mockupAccessor, IBaseAccessor... accessors) throws EntityException;
 
 	/**
-	 * create new EntityAccessor instance. Accessor name and entity name is same.
+	 * create new EntityAccessor instance. 
 	 * 
 	 * @param principal
 	 * @param entityName  
@@ -163,37 +164,26 @@ public abstract class AccessorBuilder {
 	 * @return K the EntityAccessor instance
 	 **/
 	protected <K> K newEntityAccessor(Principal principal,String entityName) throws EntityException{
-		
-		return newEntityAccessor(principal,entityName,entityName );
-	}	
-
-	/**
-	 * create new EntityAccessor instance.
-	 * 
-	 * @param principal
-	 * @param accessorName 
-	 * @param entityName
-	 * 
-	 * @return K the EntityAccessor instance
-	 **/
-	protected <K> K newEntityAccessor(Principal principal,String accessorName,String entityName) throws EntityException{
-		
+		String accessorName = null;
 		BaseEntity schema;
 		try {
 			schema = EntityManager.getInstance().getEntitySchema(entityName);
+			accessorName = schema.getEntityMeta().getAccessorName();
 		} catch (MetaException e) {
 			
-			throw new EntityException("Error when fetch schema object:{}-{}",e,accessorName, entityName);
+			throw new EntityException("Error when fetching entity[{}] schema.", e, entityName);
 		}
 		// prepare context object
 		AccessorContext context = new AccessorContext(principal,schema);
-		
+				
 		return newBaseAccessor(context, accessorName,false);
-	}
+		
+	}	
 	
 	/**
 	 * create new GeneralAccessor instance.
 	 * 
+	 * @param principal
 	 * @param accessorName 
 	 * 
 	 * @return K the GenericAccessor instance
@@ -229,15 +219,11 @@ public abstract class AccessorBuilder {
 				
 				throw new EntityException("The {}-{} is not a EntityAccessor sub class.",accessorName, clazz.getName() );
 			}
-			
-			Constructor<K> constructor = null;
-		
-			if(isGeneric)
-				constructor = (Constructor<K>)clazz.getConstructor(GenericContext.class);
-			else
-				constructor = (Constructor<K>)clazz.getConstructor(AccessorContext.class);
-			
-			result = constructor.newInstance(context);
+	
+			result = (K)clazz.newInstance();
+			@SuppressWarnings("resource")
+			IBaseAccessor baseAccessor = (IBaseAccessor)result;
+			baseAccessor.setContext(context);
 
 		} catch (IllegalArgumentException e) {
 
@@ -248,10 +234,7 @@ public abstract class AccessorBuilder {
 		} catch (IllegalAccessException e) {
 
 			throw new EntityException("Fail build Accessor-{}",e, accessorName);
-		} catch (NoSuchMethodException e) {
-			
-			throw new EntityException("Fail build Accessor-{}",e, accessorName);
-		} catch (InvocationTargetException e) {
+		}  catch (AccessorException e) {
 			
 			throw new EntityException("Fail build Accessor-{}",e, accessorName);
 		} 

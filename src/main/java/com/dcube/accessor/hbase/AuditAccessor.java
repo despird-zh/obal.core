@@ -31,10 +31,6 @@ public class AuditAccessor extends HEntityAccessor<AuditInfo>{
 	public AuditAccessor() {
 		super(EntityConstants.ACCESSOR_ENTITY_AUDIT);		
 	}
-	
-	public AuditAccessor(AccessorContext context) {
-		super(EntityConstants.ACCESSOR_ENTITY_AUDIT,context);		
-	}
 
 	@Override
 	public BaseEntity getEntitySchema() {

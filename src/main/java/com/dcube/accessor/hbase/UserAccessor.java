@@ -21,10 +21,6 @@ public class UserAccessor extends HEntityAccessor<TraceableEntry> {
 	public UserAccessor() {
 		super(EntityConstants.ACCESSOR_ENTITY_USER);
 	}
-	
-	public UserAccessor(AccessorContext context) {
-		super(EntityConstants.ACCESSOR_ENTITY_USER,context);
-	}
 
 	@Override
 	public HEntryWrapper<TraceableEntry> getEntryWrapper() {

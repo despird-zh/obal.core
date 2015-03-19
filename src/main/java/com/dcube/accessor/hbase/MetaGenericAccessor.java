@@ -58,11 +58,6 @@ public class MetaGenericAccessor extends HGenericAccessor implements IMetaGeneri
 		
 		super(EntityConstants.ACCESSOR_GENERIC_META);
 	}
-	
-	public MetaGenericAccessor(GenericContext context) {
-		
-		super(EntityConstants.ACCESSOR_GENERIC_META,context);
-	}
 
 	static Logger LOGGER = LoggerFactory.getLogger(MetaGenericAccessor.class);
 	
