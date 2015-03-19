@@ -1,11 +1,11 @@
 package com.doccube.audit;
 
 import com.doccube.audit.AuditInfo;
-import com.doccube.base.BlankTester;
+import com.doccube.base.BaseTester;
 import com.doccube.disruptor.EventDispatcher;
 import com.doccube.util.Audits;
 
-public class AuditTest extends BlankTester{
+public class AuditTest extends BaseTester{
 
 	public void testAudit(){
 		EventDispatcher ed = EventDispatcher.getInstance();

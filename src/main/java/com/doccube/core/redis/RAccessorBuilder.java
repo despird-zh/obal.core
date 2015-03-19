@@ -30,6 +30,7 @@ import com.doccube.core.AccessorBuilder;
 import com.doccube.core.CoreConstants;
 import com.doccube.core.IBaseAccessor;
 import com.doccube.core.security.Principal;
+import com.doccube.exception.AccessorException;
 import com.doccube.exception.EntityException;
 /**
  * Jedis-wise implementation of AccessorBuilder.
@@ -53,20 +54,18 @@ public class RAccessorBuilder extends AccessorBuilder{
 	/**
 	 * Default Constructor 
 	 **/
-	public RAccessorBuilder() throws EntityException{
+	public RAccessorBuilder() throws AccessorException{
 		
-		this(CoreConstants.BUILDER_REDIS,"com/doccube/core/AccessorMap.redis.properties");
+		super(CoreConstants.BUILDER_REDIS);
+		initial(); // initialize hbase access 
 	}
-	
-	
+
 	/**
 	 * constructor 
 	 * @param builderName 
 	 * @param accessorMap 
 	 **/
-	public RAccessorBuilder(String builderName, String accessormap) throws EntityException{
-		
-		super(builderName,accessormap);
+	public void initial() throws AccessorException{
 		
 		config = new JedisPoolConfig();  
 	    config.setMaxIdle(20000);  

@@ -5,16 +5,19 @@ import java.util.Properties;
 import junit.framework.TestCase;
 
 import org.apache.log4j.PropertyConfigurator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Base blank tester 
  **/
-public class BlankTester extends TestCase{
+public class BaseTester extends TestCase{
 	
 	static boolean LOG4J_INIT = false;
 	
 	static boolean[] onoffswitch = new boolean[1000];
 	
+	static Logger LOGGER = LoggerFactory.getLogger(BaseTester.class);
 	public static void setSwitch(int index ,boolean onoffFlag){
 		
 		onoffswitch[index] = onoffFlag;
@@ -28,7 +31,7 @@ public class BlankTester extends TestCase{
 	public static void initLog4j() {
 		
 		if(LOG4J_INIT) {
-			System.out.println("---==: LOG4J Ready ...");
+			debug("---==: LOG4J Ready ...");
 			return;
 		}
 		
@@ -42,5 +45,10 @@ public class BlankTester extends TestCase{
 		PropertyConfigurator.configure(prop);
 		
 		LOG4J_INIT = true;
+	}
+	
+	public static void debug(String msg, String ...parameters){
+		
+		LOGGER.debug(msg, parameters);
 	}
 }

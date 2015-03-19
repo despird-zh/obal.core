@@ -35,13 +35,12 @@ public class AttrInfoAccessor extends HEntityAccessor<EntryInfo>{
 
 	public static Logger LOGGER = LoggerFactory.getLogger(AttrInfoAccessor.class);
 	
-	static{
-		AccessorFactory.registerAccessor(CoreConstants.BUILDER_HBASE, new AttrInfoAccessor(null));
+	public AttrInfoAccessor() {
+		super(EntityConstants.ACCESSOR_ENTITY_ATTR);		
 	}
 	
 	public AttrInfoAccessor(AccessorContext context) {
-		super(EntityConstants.ACCESSOR_ENTITY_ATTR,context);
-		
+		super(EntityConstants.ACCESSOR_ENTITY_ATTR,context);		
 	}
 
 	@Override

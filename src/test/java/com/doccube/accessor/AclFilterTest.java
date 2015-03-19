@@ -5,12 +5,12 @@ import java.util.Map;
 
 import org.apache.hadoop.hbase.exceptions.DeserializationException;
 
-import com.doccube.base.BlankTester;
+import com.doccube.base.BaseTester;
 import com.doccube.core.CoreManager;
 import com.doccube.core.hbase.HAclFilter;
 import com.doccube.core.security.Principal;
 
-public class AclFilterTest extends BlankTester{
+public class AclFilterTest extends BaseTester{
 	
 	public void testSerialize(){
 		Principal princ = new Principal("demo1","demouser1","demopwd","demosrc");

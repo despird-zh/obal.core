@@ -7,7 +7,7 @@ import com.doccube.core.CoreConfig;
 
 import java.io.*;
 //import com.sun.org.apache.xerces.internal.parsers.SAXParser;
-public class SaxTester extends BlankTester {
+public class SaxTester extends BaseTester {
 
 	public static void main(String[] argv) {
 

@@ -4,14 +4,14 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
 import com.doccube.admin.EntitySetup;
-import com.doccube.base.BlankTester;
+import com.doccube.base.BaseTester;
 import com.doccube.meta.EntityAttr;
 import com.doccube.serializer.EntityAttrSerializer;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
-public class EntityAttrSerialTest extends BlankTester{
+public class EntityAttrSerialTest extends BaseTester{
 	
 	public void testInitializer(){
 		Kryo kryo = new Kryo();

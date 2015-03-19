@@ -8,11 +8,11 @@ import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
-import com.doccube.base.BlankTester;
+import com.doccube.base.BaseTester;
 import com.doccube.core.security.Principal;
 import com.doccube.core.security.Profile;
 
-public class PrincipalTest extends BlankTester{
+public class PrincipalTest extends BaseTester{
 	
 	public void testPrincipal2Json(){
 		

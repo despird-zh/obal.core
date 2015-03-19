@@ -1,8 +1,8 @@
 package com.doccube.dsl;
 
-import com.doccube.base.BlankTester;
+import com.doccube.base.BaseTester;
 
-public class HScanTest extends BlankTester{
+public class HScanTest extends BaseTester{
 	
 	public void testScan(){
 		

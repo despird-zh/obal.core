@@ -31,9 +31,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.doccube.core.AccessorBuilder;
+import com.doccube.core.CoreConfig;
 import com.doccube.core.CoreConstants;
 import com.doccube.core.IBaseAccessor;
 import com.doccube.core.security.Principal;
+import com.doccube.exception.AccessorException;
 import com.doccube.exception.EntityException;
 /**
  * Hbase-wise implementation of AccessorBuilder.
@@ -55,19 +57,21 @@ public class HAccessorBuilder extends AccessorBuilder{
 	/**
 	 * Default Constructor 
 	 **/
-	public HAccessorBuilder() throws EntityException{
+	public HAccessorBuilder() throws AccessorException{
 		
-		this(CoreConstants.BUILDER_HBASE,"com/doccube/core/AccessorMap.hbase.properties");
+		super(CoreConstants.BUILDER_HBASE);
+		initial(); // initialize hbase access 
+		loadAccessors(); // load accessors
 	}
 	
 	/**
-	 * constructor 
+	 * Initial necessary resources for data accessing.
+	 *  
 	 * @param builderName 
 	 * @param accessorMap 
 	 **/
-	public HAccessorBuilder(String builderName, String accessormap) throws EntityException{
-		super(builderName,accessormap);
-		
+	private void initial() throws AccessorException{
+
 		config = HBaseConfiguration.create();
 		config.set("hbase.zookeeper.property.clientPort", "2181");
 		config.set("hbase.zookeeper.quorum", "192.168.1.133");
@@ -81,9 +85,33 @@ public class HAccessorBuilder extends AccessorBuilder{
 
 		} catch (IOException e) {
 			LOGGER.error("Error when create AccessorBuilder",e);
-		}
+			throw new AccessorException("Fail initial builder:{}",e, CoreConstants.BUILDER_HBASE);
+		}		
+		
 	}
 
+	/**
+	 * Load Accessor classes 
+	 *  
+	 **/
+	private void loadAccessors(){
+		
+		// detect the accessor classes under package
+		CoreConfig cc = CoreConfig.getInstance();
+		String packagename = cc.getString(CoreConstants.BUILDER_HBASE+CoreConstants.CONFIG_ACCESSOR_PACKAGE,"com.doccube.accessor.hbase");
+		if(packagename.contains(",")){
+			
+			String[] packages = packagename.split(",");
+			for(String pkg: packages){
+				
+				detectAccessors(pkg);
+			}
+		}else{
+			
+			detectAccessors(packagename);
+		}
+	}
+	
 	@Override
 	public void assembly(Principal principal,IBaseAccessor accessor) {
 		HConnection connection = null;		

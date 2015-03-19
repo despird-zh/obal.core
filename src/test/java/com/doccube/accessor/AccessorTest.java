@@ -8,7 +8,7 @@ import java.util.Map;
 
 import com.doccube.accessor.IMetaGenericAccessor;
 import com.doccube.admin.EntityAdmin;
-import com.doccube.base.BlankTester;
+import com.doccube.base.BaseTester;
 import com.doccube.core.EntryKey;
 import com.doccube.core.accessor.EntryInfo;
 import com.doccube.core.security.Principal;
@@ -23,7 +23,7 @@ import com.doccube.meta.EntityAttr.AttrMode;
 import com.doccube.meta.EntityAttr.AttrType;
 import com.doccube.util.Accessors;
 
-public class AccessorTest extends BlankTester{
+public class AccessorTest extends BaseTester{
 
 	public void testMain(){
 		//createTestSchema();

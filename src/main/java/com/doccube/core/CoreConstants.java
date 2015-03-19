@@ -35,4 +35,6 @@ public class CoreConstants {
 	/** the builder name : redis */
 	public static final String BUILDER_REDIS = "redis";
 	
+	public static final String CONFIG_DFT_BUILDER = "builder.default";
+	public static final String CONFIG_ACCESSOR_PACKAGE = ".package";
 }

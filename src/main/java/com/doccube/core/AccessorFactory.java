@@ -19,14 +19,11 @@
  */
 package com.doccube.core;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Properties;
+import java.util.ServiceLoader;
 
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,55 +51,45 @@ public final class AccessorFactory {
 	/** AccessorBuilder cache */
 	private static Map<String, AccessorBuilder> builderMap = new HashMap<String, AccessorBuilder>();
 
-	private static String BUILDER_PREFIX = "accessor.builder.";
+	/** singleton */
+	private static AccessorFactory instance;
 
+	/** default builder */
+	private static String defaultBuilder = null;
+	
+	/**
+	 * Automatically create the factory instance, and load the builder instance.
+	 **/
+	static{
+		
+		instance = new AccessorFactory();
+		instance.loadAccessorBuilder();
+	}
+	
 	/**
 	 * Hide from explicit invoke
 	 **/
 	private AccessorFactory() {
 
 		CoreConfig cc = CoreConfig.getInstance();
-		String defaultName = cc.getString("builder.default",CoreConstants.BUILDER_HBASE);
+		String defaultName = cc.getString(CoreConstants.CONFIG_DFT_BUILDER,CoreConstants.BUILDER_HBASE);
 		defaultBuilder = defaultName;
 		LOGGER.info("default builder is {}", defaultName);
-		for (int i = 0; i < 20; i++) {
-
-			String builderClass = cc.getString(BUILDER_PREFIX + i);
-			
-			if(StringUtils.isBlank(builderClass)){
-				
-				continue;
-			}
-			LOGGER.debug("builder {} is {}", new String[]{String.valueOf(i), builderClass});
-			try {
-				Class<?> builderClazz = getClass().getClassLoader().loadClass(builderClass);
-
-				AccessorBuilder hbaseBuilder = (AccessorBuilder) builderClazz.newInstance();
-
-				builderMap.put(hbaseBuilder.getBuilderName(), hbaseBuilder);
-
-			} catch (ClassNotFoundException e) {
-				LOGGER.error("class:{} is not found.", builderClass);
-			} catch (InstantiationException e) {
-				LOGGER.error("class:{} error in instantiation.", builderClass);
-			} catch (IllegalAccessException e) {
-				LOGGER.error("class:{} be illegal accessed.", builderClass);
-			}
-
-		}
-
-//		appendMapping(CoreConstants.BUILDER_HBASE, "com/doccube/meta/AccessorMap.hbase.properties");
-
+		
 	}
 
-	/** singleton */
-	private static AccessorFactory instance;
-
-	/** default builder */
-	// private AccessorBuilder defaultBuilder = null;
-
-	private static String defaultBuilder = null;
-
+	private void loadAccessorBuilder(){
+		
+        ServiceLoader<AccessorBuilder> svcloader = ServiceLoader
+                .load(AccessorBuilder.class, ClassLoader.getSystemClassLoader());
+        // ServiceConfigurationError may be throw here
+        for (AccessorBuilder builder: svcloader) {
+            String name = builder.getBuilderName();
+            LOGGER.debug("Loaded AccessorBuilder[{}]",name);
+            builderMap.put(name, builder);
+        }
+	}
+	
 	/**
 	 * Singleton instance
 	 * 

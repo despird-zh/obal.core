@@ -1,8 +1,8 @@
 package com.doccube.aop;
 
-import com.doccube.base.BlankTester;
+import com.doccube.base.BaseTester;
 
-public class CacheTest extends BlankTester{
+public class CacheTest extends BaseTester{
 	
 	public void testCache(){
 		

@@ -44,7 +44,7 @@ import org.apache.hadoop.hbase.util.Bytes;
 
 import com.doccube.aop.ByteValueUtils;
   
-public class HTester extends BlankTester{  
+public class HTester extends BaseTester{  
   
     public static Configuration configuration;  
     static {  

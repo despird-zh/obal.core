@@ -21,7 +21,9 @@ package com.doccube.core;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
 
 import org.slf4j.Logger;
@@ -36,6 +38,7 @@ import com.doccube.exception.EntityException;
 import com.doccube.exception.MetaException;
 import com.doccube.meta.BaseEntity;
 import com.doccube.meta.EntityManager;
+import com.doccube.util.AccessorDetector;
 
 /**
  * Base class of AccessorBuilder, provides common operation when create accessor instance
@@ -49,17 +52,13 @@ public abstract class AccessorBuilder {
 	private Properties accessorProp = null;
 	private String builderName = null;
 	Logger LOGGER = LoggerFactory.getLogger(AccessorBuilder.class);
-	/**
-	 * Default Constructor 
-	 **/
-	protected AccessorBuilder() throws EntityException{}
-	
+
 	/**
 	 * Constructor
 	 * @param builderName builder name eg. hbase, redis
 	 * @param accessormap the accessor mapping 
 	 **/
-	protected AccessorBuilder(String builderName, String accessormap)throws EntityException{
+	protected AccessorBuilder(String builderName){
 		
 		this.builderName = builderName;
 		accessorProp = new Properties();
@@ -67,7 +66,7 @@ public abstract class AccessorBuilder {
 	}
 
 	/**
-	 * get the builder name
+	 * Get the builder name
 	 * @return String builder name 
 	 **/
 	protected String getBuilderName(){
@@ -75,7 +74,7 @@ public abstract class AccessorBuilder {
 	}
 	
 	/**
-	 * get the accessor's class object
+	 * Get the IBaseAccessor implementation class object
 	 * 
 	 * @param accessor the accessor name
 	 * @return Class object of accessor
@@ -97,7 +96,35 @@ public abstract class AccessorBuilder {
 		
 		return entryAccessorClazz;
 	}
+	
+	/**
+	 * detect the Accessors
+	 **/
+	protected void detectAccessors(String packagePath){
 		
+		Objects.requireNonNull(packagePath);
+		List<Class<?>> clazzList = AccessorDetector.getClassesForPackage(packagePath);
+		String accessorName = null;
+		String accessorClass = null;
+		for(Class<?> clazz : clazzList){
+			
+			try {
+				
+				IBaseAccessor instance = (IBaseAccessor) clazz.newInstance();
+				accessorName = instance.getAccessorName();
+				accessorClass = clazz.getCanonicalName();
+				accessorProp.put(accessorName, accessorClass);
+				
+			} catch (InstantiationException e) {
+				
+				LOGGER.debug("Fail instantiate accessor:{}-{}",new String[]{accessorName,accessorClass},e);
+			} catch (IllegalAccessException e) {
+				
+				LOGGER.debug("Fail instantiate accessor:{}-{}",new String[]{accessorName,accessorClass},e);
+			}
+		}
+	}
+	
 	/**
 	 * Append accessor map to builder. 
 	 **/

@@ -1,9 +1,9 @@
 package com.doccube.exception;
 
-import com.doccube.base.BlankTester;
+import com.doccube.base.BaseTester;
 import com.doccube.exception.EntityException;
 
-public class ExceptionTest extends BlankTester {
+public class ExceptionTest extends BaseTester {
 
 	
 	public void testException(){

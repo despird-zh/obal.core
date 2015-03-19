@@ -41,6 +41,7 @@ import org.apache.hadoop.hbase.filter.QualifierFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.doccube.accessor.hbase.AttrInfoAccessor;
 import com.doccube.core.EntryFilter;
 import com.doccube.core.EntryKey;
 import com.doccube.core.accessor.AccessorContext;
@@ -52,12 +53,30 @@ import com.doccube.exception.MetaException;
 import com.doccube.exception.WrapperException;
 import com.doccube.meta.BaseEntity;
 import com.doccube.meta.EntityAttr;
+import com.doccube.meta.EntityConstants;
 
 /**
  * Base class of EntitAccessor, it holds HConnection object to access HBase 
- * <p>
+ * <pre>
+ * public class DemoAccessor extends HEntityAccessor<EntryInfo>{
+ *  
+ *  // this constructor is required
+ * 	public DemoAccessor() {
+ *      // initial the name of accessor
+ * 		super(EntityConstants.ACCESSOR_ENTITY_ATTR);		
+ * 	}
+ *  // this constructor is required
+ * 	public DemoAccessor(AccessorContext context) {
+ *      // initial with name and context for further operation
+ * 		super(EntityConstants.ACCESSOR_ENTITY_ATTR,context);		
+ * 	}
  * 	
- * </p>
+ * 	public HEntryWrapper<EntryInfo> getEntryWrapper() {
+ *       .....
+ * 	}
+ * }
+ * </pre>
+ * 
  * @author despird
  * @version 0.1 2014-5-2
  * 
@@ -68,6 +87,19 @@ public abstract class HEntityAccessor<GB extends EntryInfo> extends EntityAccess
 	Logger LOGGER = LoggerFactory.getLogger(HEntityAccessor.class);
 	private HConnection connection;
 	
+	/**
+	 * Constructor with accessor name and context.
+	 * @param accessorName the name of accessor
+	 **/	
+	public HEntityAccessor(String accessorName) {
+		super(accessorName,null);
+	}
+	
+	/**
+	 * Constructor with accessor name and context.
+	 * @param accessorName the name of accessor
+	 * @param context the context during operation  
+	 **/
 	public HEntityAccessor(String accessorName,AccessorContext context) {
 		super(accessorName,context);
 	}
