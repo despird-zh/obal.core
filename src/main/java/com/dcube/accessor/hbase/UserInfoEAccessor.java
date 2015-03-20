@@ -15,9 +15,9 @@ import com.dcube.meta.EntityManager;
 import com.dcube.meta.EntityMeta;
 import com.dcube.meta.EntityConstants.UserInfo;
 
-public class UserAccessor extends HEntityAccessor<TraceableEntry> {
+public class UserInfoEAccessor extends HEntityAccessor<TraceableEntry> {
 
-	public UserAccessor() {
+	public UserInfoEAccessor() {
 		super(EntityConstants.ACCESSOR_ENTITY_USER);
 	}
 

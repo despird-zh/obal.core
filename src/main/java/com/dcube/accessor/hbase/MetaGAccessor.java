@@ -51,19 +51,19 @@ import com.dcube.meta.EntityConstants.AttrInfo;
 import com.dcube.meta.EntityConstants.MetaInfo;
 import com.dcube.util.Accessors;
 
-public class MetaGenericAccessor extends HGenericAccessor implements IMetaGenericAccessor{
+public class MetaGAccessor extends HGenericAccessor implements IMetaGenericAccessor{
 
-	public MetaGenericAccessor() {
+	public MetaGAccessor() {
 		
 		super(EntityConstants.ACCESSOR_GENERIC_META);
 	}
 
-	static Logger LOGGER = LoggerFactory.getLogger(MetaGenericAccessor.class);
+	static Logger LOGGER = LoggerFactory.getLogger(MetaGAccessor.class);
 	
 	@Override
 	public EntityAttr getEntityAttr(String attrKey) throws AccessorException {
 		
-		AttrInfoAccessor attraccessor = null;
+		AttrInfoEAccessor attraccessor = null;
 		EntityAttr attr = null;
 		try{
 			attraccessor = AccessorFactory.buildEntityAccessor(this, EntityConstants.ENTITY_META_ATTR);
@@ -103,7 +103,7 @@ public class MetaGenericAccessor extends HGenericAccessor implements IMetaGeneri
 		
 		Filter filter1 = new RowFilter(CompareFilter.CompareOp.EQUAL,
 				new BinaryComparator(entityName.getBytes()));
-		AttrInfoAccessor attraccessor = null;
+		AttrInfoEAccessor attraccessor = null;
 		EntryCollection<EntryInfo> attrs = null;
 		List<EntityAttr> rtv = null;
 		try{
@@ -143,7 +143,7 @@ public class MetaGenericAccessor extends HGenericAccessor implements IMetaGeneri
 
 	@Override
 	public EntryKey putEntityAttr(EntityAttr attr) throws AccessorException {
-		AttrInfoAccessor attraccessor = null;
+		AttrInfoEAccessor attraccessor = null;
 		
 		try {
 			attraccessor = AccessorFactory.buildEntityAccessor(this, EntityConstants.ENTITY_META_ATTR);
@@ -181,7 +181,7 @@ public class MetaGenericAccessor extends HGenericAccessor implements IMetaGeneri
 	@Override
 	public EntityMeta getEntityMeta(String entityName) throws AccessorException {
 
-		MetaInfoAccessor metaAccr = null;
+		MetaInfoEAccessor metaAccr = null;
 		EntityMeta meta = null;
 		try{
 			metaAccr = AccessorFactory.buildEntityAccessor(this, EntityConstants.ENTITY_META_INFO);
@@ -208,7 +208,7 @@ public class MetaGenericAccessor extends HGenericAccessor implements IMetaGeneri
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<EntityMeta> getEntityMetaList() throws AccessorException {
-		MetaInfoAccessor metaAccr = null;
+		MetaInfoEAccessor metaAccr = null;
 		EntryCollection<EntryInfo> rlist = null;
 		List<EntityMeta> rtv = null;
 		try{
@@ -251,7 +251,7 @@ public class MetaGenericAccessor extends HGenericAccessor implements IMetaGeneri
 	@Override
 	public EntryKey putEntityMeta(EntityMeta meta) throws AccessorException {
 		
-		MetaInfoAccessor metaAccr = null;
+		MetaInfoEAccessor metaAccr = null;
 		try {
 			metaAccr = AccessorFactory.buildEntityAccessor(this, EntityConstants.ENTITY_META_INFO);
 			EntryKey key = metaAccr.newKey();

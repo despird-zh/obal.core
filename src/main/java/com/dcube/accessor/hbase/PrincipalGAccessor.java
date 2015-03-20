@@ -8,9 +8,9 @@ import com.dcube.core.security.Principal;
 import com.dcube.exception.AccessorException;
 import com.dcube.meta.EntityConstants;
 
-public class PrincipalAccessor extends HGenericAccessor implements IPrincipalAccessor{
+public class PrincipalGAccessor extends HGenericAccessor implements IPrincipalAccessor{
 
-	public PrincipalAccessor() {
+	public PrincipalGAccessor() {
 		super(EntityConstants.ACCESSOR_GENERIC_USER);
 	}
 

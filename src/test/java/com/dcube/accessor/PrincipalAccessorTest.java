@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.dcube.accessor.hbase.UserAccessor;
+import com.dcube.accessor.hbase.UserInfoEAccessor;
 import com.dcube.base.BaseTester;
 import com.dcube.core.CoreLauncher;
 import com.dcube.core.EntryFilter;
@@ -21,7 +21,7 @@ public class PrincipalAccessorTest extends BaseTester{
 
 	public void testCore(){
 		
-		UserAccessor pa = null;
+		UserInfoEAccessor pa = null;
 		Principal princ = new Principal("demo1","demouser1","demopwd","demosrc");
 		//princ.setKey("101001");
 		try {

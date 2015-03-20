@@ -41,7 +41,7 @@ import org.apache.hadoop.hbase.filter.QualifierFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.dcube.accessor.hbase.AttrInfoAccessor;
+import com.dcube.accessor.hbase.AttrInfoEAccessor;
 import com.dcube.core.EntryFilter;
 import com.dcube.core.EntryKey;
 import com.dcube.core.accessor.AccessorContext;

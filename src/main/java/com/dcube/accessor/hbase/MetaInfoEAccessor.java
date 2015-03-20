@@ -28,14 +28,14 @@ import com.dcube.core.hbase.HEntryWrapper;
 import com.dcube.core.hbase.HRawWrapper;
 import com.dcube.meta.EntityConstants;
 
-public class MetaInfoAccessor extends HEntityAccessor<EntryInfo>{
+public class MetaInfoEAccessor extends HEntityAccessor<EntryInfo>{
 
-	public MetaInfoAccessor() {
+	public MetaInfoEAccessor() {
 		
 		super(EntityConstants.ACCESSOR_ENTITY_META);
 	}
 
-	public static Logger LOGGER = LoggerFactory.getLogger(MetaInfoAccessor.class);
+	public static Logger LOGGER = LoggerFactory.getLogger(MetaInfoEAccessor.class);
 
 	@Override
 	public HEntryWrapper<EntryInfo> getEntryWrapper() {

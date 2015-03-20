@@ -28,11 +28,11 @@ import com.dcube.core.hbase.HEntryWrapper;
 import com.dcube.core.hbase.HRawWrapper;
 import com.dcube.meta.EntityConstants;
 
-public class AttrInfoAccessor extends HEntityAccessor<EntryInfo>{
+public class AttrInfoEAccessor extends HEntityAccessor<EntryInfo>{
 
-	public static Logger LOGGER = LoggerFactory.getLogger(AttrInfoAccessor.class);
+	public static Logger LOGGER = LoggerFactory.getLogger(AttrInfoEAccessor.class);
 	
-	public AttrInfoAccessor() {
+	public AttrInfoEAccessor() {
 		super(EntityConstants.ACCESSOR_ENTITY_ATTR);		
 	}
 

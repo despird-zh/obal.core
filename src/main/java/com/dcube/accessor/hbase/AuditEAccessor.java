@@ -25,9 +25,9 @@ import com.dcube.core.hbase.HEntryWrapper;
 import com.dcube.meta.BaseEntity;
 import com.dcube.meta.EntityConstants;
 
-public class AuditAccessor extends HEntityAccessor<AuditInfo>{
+public class AuditEAccessor extends HEntityAccessor<AuditInfo>{
 
-	public AuditAccessor() {
+	public AuditEAccessor() {
 		super(EntityConstants.ACCESSOR_ENTITY_AUDIT);		
 	}
 
