@@ -73,7 +73,7 @@ public class MetaGAccessor extends HGenericAccessor implements IMetaGAccessor{
 			String attrName = minfo.getAttrValue(AttrInfo.AttrName.attribute,String.class);
 			String column = minfo.getAttrValue(AttrInfo.Column.attribute,String.class);
 			String qualifier = minfo.getAttrValue(AttrInfo.Qualifier.attribute,String.class);
-			LOGGER.debug("the qualifier:"+qualifier);
+			
 			AttrType type = AttrType.valueOf(minfo.getAttrValue(AttrInfo.Type.attribute,String.class));
 			AttrMode mode = AttrMode.valueOf(minfo.getAttrValue(AttrInfo.Mode.attribute,String.class));
 			

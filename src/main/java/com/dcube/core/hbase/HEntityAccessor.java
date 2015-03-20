@@ -300,7 +300,7 @@ public abstract class HEntityAccessor<GB extends EntryInfo> extends EntityAccess
             Put put =  new Put(entryKey.getBytes());
             
             if(LOGGER.isDebugEnabled()){
-                LOGGER.debug("--==>>attr:{} - value:{}",attr.getAttrName(),value);
+                LOGGER.debug("Put{} => attribute:{} - value:{}",new Object[]{entryKey,attr.getAttrName(),value});
             }
             switch(attr.mode){
             

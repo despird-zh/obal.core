@@ -86,7 +86,7 @@ public class HTraceableEntryWrapper extends HEntryWrapper<TraceableEntry>{
 
         	Object value = entryInfo.getAttrValue(attr.getAttrName());
         	if(LOGGER.isDebugEnabled()){
-        		LOGGER.debug("-=>parsing attr:{} - value:{}",attr.getAttrName(),value);
+        		LOGGER.debug("Put -> attribute:{} - value:{}",attr.getAttrName(),value);
         	}
         	if(null == value) continue;
         	

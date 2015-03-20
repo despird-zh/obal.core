@@ -38,7 +38,7 @@ public class PrincipalAccessorTest extends BaseTester{
 			IEntryConverter<TraceableEntry,Principal > converter = pa.getEntryConverter(Principal.class);
 			TraceableEntry princ0 = converter.toSource(princ);
 			princ0.setEntryKey(key);
-			//pa.doPutEntry(princ0);
+			pa.doPutEntry(princ0);
 			
 			pa.doPutEntryAttr(key.getKey(), "i_name", "newdemoname");			
 			EntryCollection<TraceableEntry> pl = pa.doScanEntry(null);
