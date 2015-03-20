@@ -105,6 +105,7 @@ public class CoreLauncher{
 	 **/
 	private static class CoreDelegator implements ILifecycle{
 		
+		@SuppressWarnings("unused")
 		static Logger LOGGER = LoggerFactory.getLogger(CoreLauncher.class);
 				
 		private State state = State.UNKNOWN;

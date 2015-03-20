@@ -4,7 +4,6 @@ import java.util.Map;
 
 import com.dcube.core.EntryKey;
 import com.dcube.core.IEntryConverter;
-import com.dcube.core.accessor.AccessorContext;
 import com.dcube.core.accessor.TraceableEntry;
 import com.dcube.core.hbase.HEntityAccessor;
 import com.dcube.core.hbase.HEntryWrapper;

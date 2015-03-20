@@ -30,7 +30,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.dcube.accessor.IAdminAccessor;
-import com.dcube.core.accessor.GenericContext;
 import com.dcube.core.hbase.HAdminAware;
 import com.dcube.core.hbase.HGenericAccessor;
 import com.dcube.exception.AccessorException;

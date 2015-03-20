@@ -20,7 +20,6 @@
 package com.dcube.accessor.hbase;
 
 import com.dcube.audit.AuditInfo;
-import com.dcube.core.accessor.AccessorContext;
 import com.dcube.core.hbase.HEntityAccessor;
 import com.dcube.core.hbase.HEntryWrapper;
 import com.dcube.meta.BaseEntity;

@@ -37,7 +37,6 @@ import com.dcube.core.EntryFilter;
 import com.dcube.core.EntryKey;
 import com.dcube.core.accessor.EntryCollection;
 import com.dcube.core.accessor.EntryInfo;
-import com.dcube.core.accessor.GenericContext;
 import com.dcube.core.hbase.HGenericAccessor;
 import com.dcube.exception.AccessorException;
 import com.dcube.exception.BaseException;

@@ -22,7 +22,6 @@ package com.dcube.accessor.hbase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.dcube.core.accessor.AccessorContext;
 import com.dcube.core.accessor.EntryInfo;
 import com.dcube.core.hbase.HEntityAccessor;
 import com.dcube.core.hbase.HEntryWrapper;

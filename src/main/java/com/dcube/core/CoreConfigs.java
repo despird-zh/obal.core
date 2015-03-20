@@ -24,9 +24,6 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.dcube.exception.BaseException;
-import com.google.common.base.Strings;
-
 /**
  * Retrieve the configuration variables from environment configuration properties
  * file. 

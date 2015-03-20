@@ -3,7 +3,6 @@ package com.dcube.accessor.hbase;
 import java.util.List;
 
 import com.dcube.accessor.IPrincipalAccessor;
-import com.dcube.core.accessor.AccessorContext;
 import com.dcube.core.hbase.HGenericAccessor;
 import com.dcube.core.security.Principal;
 import com.dcube.exception.AccessorException;
