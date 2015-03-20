@@ -2,7 +2,7 @@ package com.dcube.disruptor;
 
 import com.dcube.exception.RingEventException;
 
-public class RingEventUtils {
+public class RingEvents {
 
 	public static void sendPayload(EventPayload payload, EventType eventType){
 		
