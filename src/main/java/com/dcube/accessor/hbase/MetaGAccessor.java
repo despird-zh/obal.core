@@ -31,7 +31,7 @@ import org.apache.hadoop.hbase.filter.RowFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.dcube.accessor.IMetaGenericAccessor;
+import com.dcube.accessor.IMetaGAccessor;
 import com.dcube.core.AccessorFactory;
 import com.dcube.core.EntryFilter;
 import com.dcube.core.EntryKey;
@@ -51,7 +51,7 @@ import com.dcube.meta.EntityConstants.AttrInfo;
 import com.dcube.meta.EntityConstants.MetaInfo;
 import com.dcube.util.Accessors;
 
-public class MetaGAccessor extends HGenericAccessor implements IMetaGenericAccessor{
+public class MetaGAccessor extends HGenericAccessor implements IMetaGAccessor{
 
 	public MetaGAccessor() {
 		

@@ -15,7 +15,7 @@ import com.dcube.meta.EntityMeta;
  * @version 0.1 2014-2-1
  * 
  **/
-public interface IMetaGenericAccessor extends IBaseAccessor{
+public interface IMetaGAccessor extends IBaseAccessor{
 
 	/**
 	 * Get entity attribute

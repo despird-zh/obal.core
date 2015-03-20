@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.dcube.accessor.IAdminAccessor;
-import com.dcube.accessor.IMetaGenericAccessor;
+import com.dcube.accessor.IMetaGAccessor;
 import com.dcube.accessor.TestAccessor;
 import com.dcube.admin.EntityAdmin;
 import com.dcube.base.BaseTester;
@@ -226,7 +226,7 @@ public class RedisTester extends BaseTester{
 		Principal princ = new Principal("useracc","demouser","pwd");
 		
 		IAdminAccessor aa = ea.getAdminAccessor(princ);
-		IMetaGenericAccessor imeta = null;
+		IMetaGAccessor imeta = null;
 		try {
 			
 			EntityMeta meta = new EntityMeta("obal.test");

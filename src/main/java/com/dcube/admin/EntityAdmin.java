@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.dcube.accessor.IAdminAccessor;
-import com.dcube.accessor.IMetaGenericAccessor;
+import com.dcube.accessor.IMetaGAccessor;
 import com.dcube.core.AccessorFactory;
 import com.dcube.core.security.Principal;
 import com.dcube.exception.AccessorException;
@@ -75,7 +75,7 @@ public class EntityAdmin {
 	 **/
 	public void loadEntityMeta() {
 
-		IMetaGenericAccessor imeta = null;
+		IMetaGAccessor imeta = null;
 		Principal princ = new Principal("acc", "demo", "pwd");
 		try {
 			EntityManager smgr = EntityManager.getInstance();
@@ -110,7 +110,7 @@ public class EntityAdmin {
 		Principal princ = new Principal("acc", "demo", "pwd");
 
 		IAdminAccessor adminAccessor = getAdminAccessor(princ);
-		IMetaGenericAccessor metaAttrAccessor = null;
+		IMetaGAccessor metaAttrAccessor = null;
 		List<EntityAttr> attrs = meta.getAllAttrs();
 
 		try {
