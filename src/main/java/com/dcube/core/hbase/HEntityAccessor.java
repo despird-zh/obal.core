@@ -41,7 +41,6 @@ import org.apache.hadoop.hbase.filter.QualifierFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.dcube.accessor.hbase.AttrInfoEAccessor;
 import com.dcube.core.EntryFilter;
 import com.dcube.core.EntryKey;
 import com.dcube.core.IEntryConverter;
@@ -54,7 +53,6 @@ import com.dcube.exception.MetaException;
 import com.dcube.exception.WrapperException;
 import com.dcube.meta.BaseEntity;
 import com.dcube.meta.EntityAttr;
-import com.dcube.meta.EntityConstants;
 
 /**
  * Base class of EntitAccessor, it holds HConnection object to access HBase 
@@ -119,23 +117,6 @@ public abstract class HEntityAccessor<GB extends EntryInfo> extends EntityAccess
 		return true;
 	}
 
-
-	@Override
-	public EntryKey newKey(Object ... parameter) throws AccessorException{
-		
-		EntryKey key = null;
-		try {
-			if(null == super.getEntitySchema())
-				throw new AccessorException("The entity schema not set yet");
-			
-			key = super.getEntitySchema().newKey(getContext().getPrincipal(),parameter);
-		} catch (MetaException e) {
-			
-			throw new AccessorException("Error when generating entry key",e);
-		}
-		
-		return key;
-	}
 	/**
 	 * get entry wrapper
 	 * @return wrapper object 

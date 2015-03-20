@@ -19,10 +19,12 @@
  */
 package com.dcube.core.accessor;
 
+import com.dcube.core.EntryKey;
 import com.dcube.core.IEntityAccessor;
 import com.dcube.core.IEntryConverter;
 import com.dcube.core.security.Principal;
 import com.dcube.exception.AccessorException;
+import com.dcube.exception.MetaException;
 import com.dcube.meta.BaseEntity;
 
 /**
@@ -81,7 +83,26 @@ public abstract class EntityAccessor<GB extends EntryInfo> implements IEntityAcc
 		
 		return this.context;
 	}
+	
+
+
+	@Override
+	public EntryKey newKey(Object ... parameter) throws AccessorException{
 		
+		EntryKey key = null;
+		try {
+			if(null == getEntitySchema())
+				throw new AccessorException("The entity schema not set yet");
+			
+			key = getEntitySchema().newKey(getContext().getPrincipal(),parameter);
+		} catch (MetaException e) {
+			
+			throw new AccessorException("Error when generating entry key",e);
+		}
+		
+		return key;
+	}
+	
 	/**
 	 * Get the entity schema  
 	 * 

@@ -16,12 +16,6 @@ public class TestAccessor extends REntityAccessor{
 	}
 
 	@Override
-	public EntryKey newKey() throws AccessorException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public REntryWrapper getEntryWrapper() {
 		// TODO Auto-generated method stub
 		return new RRawWrapper();
