@@ -27,15 +27,10 @@ import com.dcube.util.Accessors;
  **/
 public class EntityAdmin {
 
-	public static final String ADMIN_ACCESSOR = EntityConstants.ENTITY_PREFIX+ "admin";
-	
 	Logger LOGGER = LoggerFactory.getLogger(EntityAdmin.class);
 	
 	private EntityAdmin(){
-		
-		String path = this.getClass().getPackage().getName().replace(".", "/");
-		path += "/AccessorMap.hbase.properties";
-		AccessorFactory.appendMapping("hbase", path);		
+	
 	}
 	
 	private static EntityAdmin instance;
@@ -63,7 +58,7 @@ public class EntityAdmin {
 		
 		IAdminAccessor aa = null;
 		try {
-			aa = AccessorFactory.buildGenericAccessor(principal, ADMIN_ACCESSOR);
+			aa = AccessorFactory.buildGenericAccessor(principal, EntityConstants.ACCESSOR_GENERIC_ADMIN);
 		} catch (EntityException e) {
 			
 			LOGGER.error("Error when getting Admin service",e);

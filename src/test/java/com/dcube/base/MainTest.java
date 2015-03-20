@@ -13,7 +13,7 @@ import com.dcube.exception.BaseException;
 import com.dcube.util.AccessorDetector;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING) 
-public class LaunchTest extends BaseTester{
+public class MainTest extends BaseTester{
 	
 	static{
 		debug("---==: initial log4j");

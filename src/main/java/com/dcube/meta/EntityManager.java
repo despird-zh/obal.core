@@ -182,6 +182,7 @@ public class EntityManager {
 		/** ---------- obal.meta.attr ------------- */
 		EntityMeta meta = new EntityMeta(EntityConstants.ENTITY_META_ATTR);
 		meta.setSchemaClass(GenericEntity.class.getName());
+		meta.setAccessorName(EntityConstants.ACCESSOR_ENTITY_ATTR);
 		EntityAttr attr = new EntityAttr(AttrInfo.AttrName.attribute, 
 				AttrInfo.AttrName.colfamily, 
 				AttrInfo.AttrName.qualifier);
@@ -248,6 +249,8 @@ public class EntityManager {
 		/** ---------- obal.meta.info ------------- */
 		meta = new EntityMeta(EntityConstants.ENTITY_META_INFO);
 		meta.setSchemaClass(GenericEntity.class.getName());
+		meta.setAccessorName(EntityConstants.ACCESSOR_ENTITY_META);
+		
 		attr = new EntityAttr(MetaInfo.SchemaClass.attribute, 
 							  MetaInfo.SchemaClass.colfamily, 
 							  MetaInfo.SchemaClass.qualifier);
