@@ -31,10 +31,11 @@ public class PrincipalAccessorTest extends BaseTester{
 			roles.put("rk1","role1");
 			roles.put("rk2","role2");
 			princ.setRoles(roles);
-			pa = Accessors.getEntityAccessor(princ, EntityConstants.ACCESSOR_ENTITY_USER);
+			pa = Accessors.getEntityAccessor(princ, EntityConstants.ENTITY_PRINCIPAL);
 			// get converter
 			IEntryConverter<TraceableEntry,Principal > converter = pa.getEntryConverter(Principal.class);
-			pa.doPutEntry(converter.toSource(princ));
+			TraceableEntry princ0 = converter.toSource(princ);
+			pa.doPutEntry(princ0);
 			
 			pa.doPutEntryAttr("101001", "i_name", "newdemoname");			
 			EntryCollection<TraceableEntry> pl = pa.doScanEntry(null);

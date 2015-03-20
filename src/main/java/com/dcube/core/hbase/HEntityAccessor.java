@@ -121,14 +121,14 @@ public abstract class HEntityAccessor<GB extends EntryInfo> extends EntityAccess
 
 
 	@Override
-	public EntryKey newKey() throws AccessorException{
+	public EntryKey newKey(Object ... parameter) throws AccessorException{
 		
 		EntryKey key = null;
 		try {
 			if(null == super.getEntitySchema())
 				throw new AccessorException("The entity schema not set yet");
 			
-			key = super.getEntitySchema().newKey(getContext().getPrincipal());
+			key = super.getEntitySchema().newKey(getContext().getPrincipal(),parameter);
 		} catch (MetaException e) {
 			
 			throw new AccessorException("Error when generating entry key",e);

@@ -35,13 +35,13 @@ import com.dcube.meta.BaseEntity;
  * @see EntryKey
  **/
 public interface IEntityAccessor <GB extends EntryInfo> extends IBaseAccessor{
-		
+			
 	/**
 	 * Generate new key for entity 
 	 * @throws AccessorException 
 	 * 
 	 **/
-	public abstract EntryKey newKey() throws AccessorException;
+	public abstract EntryKey newKey(Object ... parameter) throws AccessorException;
 	
 	/**
 	 * Get the entry schema  
