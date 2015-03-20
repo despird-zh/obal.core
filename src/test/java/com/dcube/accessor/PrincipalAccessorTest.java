@@ -6,6 +6,7 @@ import java.util.Map;
 import com.dcube.accessor.hbase.UserInfoEAccessor;
 import com.dcube.base.BaseTester;
 import com.dcube.core.CoreLauncher;
+import com.dcube.core.EntryKey;
 import com.dcube.core.IEntryConverter;
 import com.dcube.core.accessor.EntryCollection;
 import com.dcube.core.accessor.TraceableEntry;
@@ -32,15 +33,17 @@ public class PrincipalAccessorTest extends BaseTester{
 			roles.put("rk2","role2");
 			princ.setRoles(roles);
 			pa = Accessors.getEntityAccessor(princ, EntityConstants.ENTITY_PRINCIPAL);
+			EntryKey key = pa.newKey();
 			// get converter
 			IEntryConverter<TraceableEntry,Principal > converter = pa.getEntryConverter(Principal.class);
 			TraceableEntry princ0 = converter.toSource(princ);
-			pa.doPutEntry(princ0);
+			princ0.setEntryKey(key);
+			//pa.doPutEntry(princ0);
 			
-			pa.doPutEntryAttr("101001", "i_name", "newdemoname");			
+			pa.doPutEntryAttr(key.getKey(), "i_name", "newdemoname");			
 			EntryCollection<TraceableEntry> pl = pa.doScanEntry(null);
-			
-			TraceableEntry princ2 = pa.doGetEntry("101001");
+			pl.getAttrList();
+			TraceableEntry princ2 = pa.doGetEntry(key.getKey());
 			System.out.println("p-name:"+converter.toTarget(princ2).getName());
 			
 		} catch (BaseException e) {

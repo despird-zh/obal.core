@@ -34,29 +34,30 @@ public class HTraceableEntryWrapper extends HEntryWrapper<TraceableEntry>{
 			byte[] column = attr.getColumn().getBytes();
 			byte[] qualifier = attr.getQualifier().getBytes();
 			byte[] cell = entry.getValue(column, qualifier);
+			
 			switch(attr.mode){
 			
 				case PRIMITIVE :
 				
-					Object value = super.getPrimitiveValue(attr, cell);
+					Object value =(cell== null)? null: super.getPrimitiveValue(attr, cell);
 					gei.setAttrValue(attr, value);	
 					break;
 					
 				case MAP :
 					
-					Map<String, Object> map = super.getMapValue(attr, cell);				
+					Map<String, Object> map = (cell== null)? null: super.getMapValue(attr, cell);				
 					gei.setAttrValue(attr, map);
 					break;
 					
 				case LIST :
 					
-					List<Object> list = super.getListValue(attr, cell);					
+					List<Object> list = (cell== null)? null: super.getListValue(attr, cell);					
 					gei.setAttrValue(attr, list);
 					break;
 					
 				case SET :
 					
-					Set<Object> set = super.getSetValue(attr, cell);					
+					Set<Object> set = (cell== null)? null: super.getSetValue(attr, cell);					
 					gei.setAttrValue(attr, set);
 					break;
 					

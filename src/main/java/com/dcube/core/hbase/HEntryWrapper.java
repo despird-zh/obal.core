@@ -90,7 +90,7 @@ public abstract class HEntryWrapper<GB extends IEntryInfo> {
 		}
 		if(LOGGER.isDebugEnabled()){
 			
-			LOGGER.debug("PRIMITIVE -> attribute:{} | value:{}", new String[]{attr.getAttrName(),String.valueOf(rtv)});
+			LOGGER.debug("Get Primitive -> attribute:{} | value:{}", new String[]{attr.getAttrName(),String.valueOf(rtv)});
 		}
 		return rtv;
 	}
@@ -144,7 +144,7 @@ public abstract class HEntryWrapper<GB extends IEntryInfo> {
 			
 			if(LOGGER.isDebugEnabled()){
 						
-				LOGGER.debug("SET -> attribute:{} - value:{}", 
+				LOGGER.debug("Get Map -> attribute:{} - value:{}", 
 								new Object[]{attr.getAttrName(), jsonStr});
 			}
 			
@@ -207,7 +207,7 @@ public abstract class HEntryWrapper<GB extends IEntryInfo> {
 			
 			if(LOGGER.isDebugEnabled()){
 						
-				LOGGER.debug("SET -> attribute:{} - value:{}", 
+				LOGGER.debug("Get List -> attribute:{} - value:{}", 
 								new Object[]{attr.getAttrName(), jsonStr});
 			}
 			
@@ -271,7 +271,7 @@ public abstract class HEntryWrapper<GB extends IEntryInfo> {
 			
 			if(LOGGER.isDebugEnabled()){
 						
-				LOGGER.debug("SET -> attribute:{} - value:{}", 
+				LOGGER.debug("Get Set -> attribute:{} - value:{}", 
 								new Object[]{attr.getAttrName(), jsonStr});
 			}
 			
