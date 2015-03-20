@@ -230,7 +230,7 @@ public class RedisTester extends BaseTester{
 		try {
 			
 			EntityMeta meta = new EntityMeta("obal.test");
-			meta.setSchemaClass(GenericEntity.class.getName());
+			meta.setEntityClass(GenericEntity.class.getName());
 			meta.setDescription("user schema descriptionxxx");
 			
 			EntityAttr attr = null;

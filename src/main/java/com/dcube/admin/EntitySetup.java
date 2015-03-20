@@ -66,7 +66,8 @@ public class EntitySetup {
 		EntityAdmin eadmin = EntityAdmin.getInstance();
 		
 		EntityMeta meta = new EntityMeta(EntityConstants.ENTITY_PRINCIPAL);
-		meta.setSchemaClass(GenericEntity.class.getName());
+		meta.setEntityClass(GenericEntity.class.getName());
+		meta.setAccessorName(EntityConstants.ACCESSOR_ENTITY_USER);
 		meta.setDescription("user schema ");
 		meta.setTraceable(true);
 		EntityAttr attr = new EntityAttr(UserInfo.Account.attribute, 
@@ -111,7 +112,8 @@ public class EntitySetup {
 		EntityAdmin eadmin = EntityAdmin.getInstance();
 		
 		EntityMeta meta = new EntityMeta(EntityConstants.ENTITY_USER_GROUP);
-		meta.setSchemaClass(GenericEntity.class.getName());
+		meta.setEntityClass(GenericEntity.class.getName());
+		meta.setAccessorName(EntityConstants.ACCESSOR_ENTITY_GROUP);
 		meta.setDescription("user Group schema ");
 		meta.setTraceable(true);
 		EntityAttr attr = new EntityAttr(GroupInfo.Name.attribute, 
@@ -137,7 +139,8 @@ public class EntitySetup {
 		EntityAdmin eadmin = EntityAdmin.getInstance();
 		
 		EntityMeta meta = new EntityMeta(EntityConstants.ENTITY_USER_ROLE);
-		meta.setSchemaClass(GenericEntity.class.getName());
+		meta.setEntityClass(GenericEntity.class.getName());
+		meta.setAccessorName(EntityConstants.ACCESSOR_ENTITY_ROLE);
 		meta.setDescription("user Group schema ");
 		meta.setTraceable(true);
 		

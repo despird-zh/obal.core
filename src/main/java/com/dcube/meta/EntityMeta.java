@@ -46,7 +46,7 @@ import com.dcube.core.EntryKey;
  **/
 public class EntityMeta{
 
-	private String schemaClazz = null;
+	private String entityClazz = null;
 	private Map<String, EntityAttr> attrMap = new HashMap<String, EntityAttr>();
 	private String entityName;
 	private String description;
@@ -66,15 +66,16 @@ public class EntityMeta{
 	 * @see com.dcube.core.EntryKey
 	 * 
 	 **/
-	public EntityMeta(String entityName, String schemaClazz){
+	public EntityMeta(String entityName, String entityClazz){
 		
 		this.entityName = entityName;
-		this.schemaClazz = schemaClazz;
+		this.entityClazz = entityClazz;
 		this.schema = entityName;
 	}
 
 	/**
 	 * Entry Meta constructor 
+	 * The schema name is same as entityName by default.
 	 * 
 	 * @param entryName The name of Entry
 	 * 
@@ -91,9 +92,9 @@ public class EntityMeta{
 	 * 
 	 * @param  entrySchemaClazz the class name of entry schema
 	 **/
-	public void setSchemaClass(String schemaClazz){
+	public void setEntityClass(String entityClazz){
 		
-		this.schemaClazz = schemaClazz;
+		this.entityClazz = entityClazz;
 		
 	}
 	
@@ -102,9 +103,9 @@ public class EntityMeta{
 	 * 
 	 * @return String the class name of entry schema 
 	 **/
-	public String getSchemaClass(){
+	public String getEntityClass(){
 		
-		return this.schemaClazz;
+		return this.entityClazz;
 	}
 		
 	/**

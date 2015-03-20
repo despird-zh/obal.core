@@ -39,7 +39,7 @@ public class EntityConstants {
 	 **/
 	public static enum MetaInfo{
 		
-		SchemaClass("i_schema_class","schemaclass"),
+		EntityClass("i_entity_class","entityclass"),
 		EntityName("i_entity_name" , "entityname"),
 		Description("i_description","description"),
 		Traceable("i_traceable","traceable"),

@@ -134,7 +134,7 @@ public class EntityManager {
 			// schema not exists create new one
 
 			Class<?> t = ClassLoader.getSystemClassLoader().loadClass(
-					entitymeta.getSchemaClass());
+					entitymeta.getEntityClass());
 			if (BaseEntity.class.isAssignableFrom(t)) {
 
 				schemaclz = (Class<BaseEntity>) t;
@@ -145,32 +145,32 @@ public class EntityManager {
 
 		} catch (ClassNotFoundException e) {
 
-			throw new MetaException("The schema class-{} is not found", e,
-					entitymeta.getSchemaClass());
+			throw new MetaException("The entity class-{} is not found", e,
+					entitymeta.getEntityClass());
 		} catch (InstantiationException e) {
 
 			throw new MetaException("The class-{} fail Instantize", e,
-					entitymeta.getSchemaClass());
+					entitymeta.getEntityClass());
 		} catch (IllegalAccessException e) {
 
 			throw new MetaException("The class-{} illegal access", e,
-					entitymeta.getSchemaClass());
+					entitymeta.getEntityClass());
 		} catch (SecurityException e) {
 
 			throw new MetaException("The class-{} illegal access", e,
-					entitymeta.getSchemaClass());
+					entitymeta.getEntityClass());
 		} catch (NoSuchMethodException e) {
 
 			throw new MetaException("The class-{} no constructor", e,
-					entitymeta.getSchemaClass());
+					entitymeta.getEntityClass());
 		} catch (IllegalArgumentException e) {
 
 			throw new MetaException("The class-{} illegal parameter", e,
-					entitymeta.getSchemaClass());
+					entitymeta.getEntityClass());
 		} catch (InvocationTargetException e) {
 
 			throw new MetaException("The class-{} fail invocation", e,
-					entitymeta.getSchemaClass());
+					entitymeta.getEntityClass());
 		}
 
 		return schemainstance;
@@ -180,7 +180,7 @@ public class EntityManager {
 	private void initialMetaSchema() {
 		/** ---------- obal.meta.attr ------------- */
 		EntityMeta meta = new EntityMeta(EntityConstants.ENTITY_META_ATTR);
-		meta.setSchemaClass(GenericEntity.class.getName());
+		meta.setEntityClass(GenericEntity.class.getName());
 		meta.setAccessorName(EntityConstants.ACCESSOR_ENTITY_ATTR);
 		EntityAttr attr = new EntityAttr(AttrInfo.AttrName.attribute, 
 				AttrInfo.AttrName.colfamily, 
@@ -247,12 +247,12 @@ public class EntityManager {
 		
 		/** ---------- obal.meta.info ------------- */
 		meta = new EntityMeta(EntityConstants.ENTITY_META_INFO);
-		meta.setSchemaClass(GenericEntity.class.getName());
+		meta.setEntityClass(GenericEntity.class.getName());
 		meta.setAccessorName(EntityConstants.ACCESSOR_ENTITY_META);
 		
-		attr = new EntityAttr(MetaInfo.SchemaClass.attribute, 
-							  MetaInfo.SchemaClass.colfamily, 
-							  MetaInfo.SchemaClass.qualifier);
+		attr = new EntityAttr(MetaInfo.EntityClass.attribute, 
+							  MetaInfo.EntityClass.colfamily, 
+							  MetaInfo.EntityClass.qualifier);
 		meta.addAttr(attr);
 		
 		attr = new EntityAttr(MetaInfo.EntityName.attribute, 
