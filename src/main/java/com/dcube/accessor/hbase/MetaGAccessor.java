@@ -49,7 +49,7 @@ import com.dcube.meta.EntityAttr.AttrMode;
 import com.dcube.meta.EntityAttr.AttrType;
 import com.dcube.meta.EntityConstants.AttrInfo;
 import com.dcube.meta.EntityConstants.MetaInfo;
-import com.dcube.util.Accessors;
+import com.dcube.util.AccessorUtils;
 
 public class MetaGAccessor extends HGenericAccessor implements IMetaGAccessor{
 
@@ -92,7 +92,7 @@ public class MetaGAccessor extends HGenericAccessor implements IMetaGAccessor{
 			throw new AccessorException("Error when build embed accessor:{}",ee,EntityConstants.ENTITY_META_ATTR);
 		}finally{
 			
-			Accessors.closeAccessor(attraccessor);
+			AccessorUtils.closeAccessor(attraccessor);
 		}
 		return attr;
 
@@ -136,7 +136,7 @@ public class MetaGAccessor extends HGenericAccessor implements IMetaGAccessor{
 			
 		}finally{
 			
-			Accessors.closeAccessor(attraccessor);
+			AccessorUtils.closeAccessor(attraccessor);
 		}
 		return rtv;
 	}
@@ -173,7 +173,7 @@ public class MetaGAccessor extends HGenericAccessor implements IMetaGAccessor{
 			throw new AccessorException("Error when create meta attr key.",e);
 		}finally{
 			
-			Accessors.closeAccessor(attraccessor);
+			AccessorUtils.closeAccessor(attraccessor);
 		}
 
 	}
@@ -200,7 +200,7 @@ public class MetaGAccessor extends HGenericAccessor implements IMetaGAccessor{
 			throw new AccessorException("Error when get meta info data.",ee);
 		}finally{
 			
-			Accessors.closeAccessor(metaAccr);
+			AccessorUtils.closeAccessor(metaAccr);
 		}
 		return meta;
 	}
@@ -243,7 +243,7 @@ public class MetaGAccessor extends HGenericAccessor implements IMetaGAccessor{
 			
 		}finally{
 			
-			Accessors.closeAccessor(metaAccr);
+			AccessorUtils.closeAccessor(metaAccr);
 		}
 		return rtv;
 	}
@@ -286,7 +286,7 @@ public class MetaGAccessor extends HGenericAccessor implements IMetaGAccessor{
 			throw new AccessorException("Error when put metadata.",e);
 		}finally{
 			
-			Accessors.closeAccessor(metaAccr);
+			AccessorUtils.closeAccessor(metaAccr);
 		}
 
 	}

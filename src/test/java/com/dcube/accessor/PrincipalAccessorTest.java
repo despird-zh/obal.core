@@ -13,7 +13,7 @@ import com.dcube.core.accessor.TraceableEntry;
 import com.dcube.core.security.Principal;
 import com.dcube.exception.BaseException;
 import com.dcube.meta.EntityConstants;
-import com.dcube.util.Accessors;
+import com.dcube.util.AccessorUtils;
 
 public class PrincipalAccessorTest extends BaseTester{
 
@@ -32,7 +32,7 @@ public class PrincipalAccessorTest extends BaseTester{
 			roles.put("rk1","role1");
 			roles.put("rk2","role2");
 			princ.setRoles(roles);
-			pa = Accessors.getEntityAccessor(princ, EntityConstants.ENTITY_PRINCIPAL);
+			pa = AccessorUtils.getEntityAccessor(princ, EntityConstants.ENTITY_PRINCIPAL);
 			EntryKey key = pa.newKey();
 			// get converter
 			IEntryConverter<TraceableEntry,Principal > converter = pa.getEntryConverter(Principal.class);
@@ -51,7 +51,7 @@ public class PrincipalAccessorTest extends BaseTester{
 			e.printStackTrace();
 		}finally{
 			
-			Accessors.closeAccessor(pa);
+			AccessorUtils.closeAccessor(pa);
 		}
 	}
 		

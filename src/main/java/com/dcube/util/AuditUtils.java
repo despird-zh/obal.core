@@ -6,7 +6,7 @@ import com.dcube.disruptor.EventDispatcher;
 import com.dcube.disruptor.EventPayload;
 import com.dcube.disruptor.EventType;
 
-public class Audits {
+public class AuditUtils {
 
 	public static void regAuditHooker(){
 		

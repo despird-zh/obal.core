@@ -29,7 +29,7 @@ import com.dcube.disruptor.EventDispatcher;
 import com.dcube.disruptor.EventType;
 import com.dcube.exception.AccessorException;
 import com.dcube.exception.EntityException;
-import com.dcube.util.Accessors;
+import com.dcube.util.AccessorUtils;
 
 /**
  * CacheManager provide entrance to get/put entry in-out backend cache.
@@ -127,7 +127,7 @@ public class CacheManager{
 			e.printStackTrace();
 		}finally{
 			
-			Accessors.closeAccessor(eaccessor);
+			AccessorUtils.closeAccessor(eaccessor);
 		}
 		
 		return cacheData;
@@ -162,7 +162,7 @@ public class CacheManager{
 			e.printStackTrace();
 		}finally{
 			
-			Accessors.closeAccessor(eaccessor);
+			AccessorUtils.closeAccessor(eaccessor);
 		}
 		
 		return cacheAttr;

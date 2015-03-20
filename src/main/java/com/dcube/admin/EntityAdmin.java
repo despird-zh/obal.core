@@ -15,7 +15,7 @@ import com.dcube.meta.EntityAttr;
 import com.dcube.meta.EntityConstants;
 import com.dcube.meta.EntityManager;
 import com.dcube.meta.EntityMeta;
-import com.dcube.util.Accessors;
+import com.dcube.util.AccessorUtils;
 
 /**
  * EntityAdmin in charge of the entity loading and create, drop etc. operation.
@@ -80,7 +80,7 @@ public class EntityAdmin {
 		try {
 			EntityManager smgr = EntityManager.getInstance();
 			
-			imeta = Accessors.getGenericAccessor(princ,
+			imeta = AccessorUtils.getGenericAccessor(princ,
 					EntityConstants.ACCESSOR_GENERIC_META);
 			// query all the entity list data.
 			List<EntityMeta> entrymetas = imeta.getEntityMetaList();
@@ -96,7 +96,7 @@ public class EntityAdmin {
 			
 			LOGGER.debug("Error when loading entity meta information",e);
 		} finally {
-			Accessors.closeAccessor(imeta);
+			AccessorUtils.closeAccessor(imeta);
 		}
 	}
 	
@@ -117,7 +117,7 @@ public class EntityAdmin {
 			// create the schema table and columnfamily
 			adminAccessor.createSchema(meta.getSchema(),attrs);
 
-			metaAttrAccessor = Accessors.getGenericAccessor(princ,
+			metaAttrAccessor = AccessorUtils.getGenericAccessor(princ,
 					EntityConstants.ACCESSOR_GENERIC_META);
 			// save the entity info and entity attributes data.
 			metaAttrAccessor.putEntityMeta(meta);
@@ -130,7 +130,7 @@ public class EntityAdmin {
 			LOGGER.debug("Error when loading entity meta information",e);
 		} finally {
 
-			Accessors.closeAccessor(metaAttrAccessor, adminAccessor);
+			AccessorUtils.closeAccessor(metaAttrAccessor, adminAccessor);
 		}
 	}
 	
@@ -152,7 +152,7 @@ public class EntityAdmin {
 			LOGGER.debug("Error when drop schema-{}",e, schemaName);
 		}finally {
 
-			Accessors.closeAccessor(adminAccessor);
+			AccessorUtils.closeAccessor(adminAccessor);
 		}
 		
 	}

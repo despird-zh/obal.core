@@ -10,8 +10,8 @@ import com.dcube.meta.GenericEntity;
 import com.dcube.meta.EntityConstants.GroupInfo;
 import com.dcube.meta.EntityConstants.RoleInfo;
 import com.dcube.meta.EntityConstants.UserInfo;
-import com.dcube.util.Accessors;
-import com.dcube.util.Entities;
+import com.dcube.util.AccessorUtils;
+import com.dcube.util.EntitieUtils;
 
 /**
  * EntitySetup prepare the installation of doccube package.
@@ -44,11 +44,11 @@ public class EntitySetup {
 
 		try {
 
-			EntityMeta infoMeta = Entities
+			EntityMeta infoMeta = EntitieUtils
 					.getEntityMeta(EntityConstants.ENTITY_META_INFO);
 			aa.createSchema(infoMeta.getEntityName(), infoMeta.getAllAttrs());
 
-			EntityMeta arrtMeta = Entities
+			EntityMeta arrtMeta = EntitieUtils
 					.getEntityMeta(EntityConstants.ENTITY_META_ATTR);
 			aa.createSchema(arrtMeta.getEntityName(), arrtMeta.getAllAttrs());
 
@@ -57,7 +57,7 @@ public class EntitySetup {
 			e.printStackTrace();
 		} finally {
 
-			Accessors.closeAccessor(aa);
+			AccessorUtils.closeAccessor(aa);
 		}
 	}
 

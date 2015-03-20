@@ -32,7 +32,7 @@ import com.dcube.exception.EntityException;
  * 
  * @see AccessorFactory
  **/
-public class Accessors {
+public class AccessorUtils {
 
 	/**
 	 * Get Entry Accessor

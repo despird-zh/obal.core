@@ -3,19 +3,19 @@ package com.dcube.audit;
 import com.dcube.audit.AuditInfo;
 import com.dcube.base.BaseTester;
 import com.dcube.disruptor.EventDispatcher;
-import com.dcube.util.Audits;
+import com.dcube.util.AuditUtils;
 
 public class AuditTest extends BaseTester{
 
 	public void testAudit(){
 		EventDispatcher ed = EventDispatcher.getInstance();
 		ed.start();
-		Audits.regAuditHooker();
+		AuditUtils.regAuditHooker();
 		
 		for(int i = 1; i<100; i++){
 			
 			AuditInfo evt = new AuditInfo("key-"+i);
-			Audits.doAudit(evt);
+			AuditUtils.doAudit(evt);
 		}
 		
 		try {

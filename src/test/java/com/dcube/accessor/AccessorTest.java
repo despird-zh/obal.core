@@ -22,7 +22,7 @@ import com.dcube.meta.EntityMeta;
 import com.dcube.meta.GenericEntity;
 import com.dcube.meta.EntityAttr.AttrMode;
 import com.dcube.meta.EntityAttr.AttrType;
-import com.dcube.util.Accessors;
+import com.dcube.util.AccessorUtils;
 
 public class AccessorTest extends BaseTester{
 
@@ -43,7 +43,7 @@ public class AccessorTest extends BaseTester{
 		EntryInfo rentry = null;
 		Principal princ = new Principal("useracc","demouser","pwd");
 		try{
-			ta = Accessors.getEntityAccessor(princ, "obal.test");
+			ta = AccessorUtils.getEntityAccessor(princ, "obal.test");
 			rentry = ta.doGetEntry(key.getKey());
 			
 		}catch (EntityException e) {
@@ -55,7 +55,7 @@ public class AccessorTest extends BaseTester{
 			e.printStackTrace();
 		}finally{
 			System.out.println("----end get entry");
-			Accessors.closeAccessor(ta);
+			AccessorUtils.closeAccessor(ta);
 		}
 		
 		return rentry;
@@ -66,7 +66,7 @@ public class AccessorTest extends BaseTester{
 		TestAccessor ta = null;
 		Principal princ = new Principal("useracc","demouser","pwd");
 		try{
-			ta = Accessors.getEntityAccessor(princ, "obal.test");
+			ta = AccessorUtils.getEntityAccessor(princ, "obal.test");
 			ta.doDelEntry(key.getKey());
 			
 		}catch (EntityException e) {
@@ -78,7 +78,7 @@ public class AccessorTest extends BaseTester{
 			e.printStackTrace();
 		}finally{
 			System.out.println("----end delete new entry");
-			Accessors.closeAccessor(ta);
+			AccessorUtils.closeAccessor(ta);
 		}
 	}
 	
@@ -87,7 +87,7 @@ public class AccessorTest extends BaseTester{
 		TestAccessor ta = null;
 		Principal princ = new Principal("useracc","demouser","pwd");
 		try{
-			ta = Accessors.getEntityAccessor(princ, "obal.test");
+			ta = AccessorUtils.getEntityAccessor(princ, "obal.test");
 			
 			ta.doPutEntryAttr(key.getKey(), "i_int", 2211);
 			ta.doPutEntryAttr(key.getKey(), "i_double", 23.2222);
@@ -142,7 +142,7 @@ public class AccessorTest extends BaseTester{
 			e.printStackTrace();
 		}finally{
 			System.out.println("----end update attr");
-			Accessors.closeAccessor(ta);
+			AccessorUtils.closeAccessor(ta);
 		}
 	}
 	
@@ -152,7 +152,7 @@ public class AccessorTest extends BaseTester{
 		TestAccessor ta = null;
 		Principal princ = new Principal("useracc","demouser","pwd");
 		try {
-			ta = Accessors.getEntityAccessor(princ, "obal.test");
+			ta = AccessorUtils.getEntityAccessor(princ, "obal.test");
 			EntryKey key = ta.newKey();
 			EntryInfo re = new EntryInfo(key);
 			re.setAttrValue("i_int", 1211);
@@ -211,7 +211,7 @@ public class AccessorTest extends BaseTester{
 			e.printStackTrace();
 		}finally{
 			System.out.println("----end create new entry");
-			Accessors.closeAccessor(ta);
+			AccessorUtils.closeAccessor(ta);
 		}
 		
 		return null;
@@ -262,7 +262,7 @@ public class AccessorTest extends BaseTester{
 			
 			aa.createSchema("obal.test",meta.getAllAttrs());
 			
-			imeta = Accessors.getGenericAccessor(princ, EntityConstants.ACCESSOR_GENERIC_META);
+			imeta = AccessorUtils.getGenericAccessor(princ, EntityConstants.ACCESSOR_GENERIC_META);
 
 			imeta.putEntityMeta(meta);
 						
@@ -274,7 +274,7 @@ public class AccessorTest extends BaseTester{
 			e.printStackTrace();
 		}finally{
 
-			Accessors.closeAccessor(imeta,aa);
+			AccessorUtils.closeAccessor(imeta,aa);
 		}
 	}
 	
