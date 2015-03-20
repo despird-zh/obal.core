@@ -15,11 +15,7 @@ public class AccessorException  extends BaseException{
 	
 	static{
 		
-		Class<?> selfclazz = EntityException.class;
-		String fullname = selfclazz.getName();
-		fullname = fullname.replace('.', '/');
-		fullname = fullname + ".properties";
-		InputStream is = selfclazz.getClassLoader().getResourceAsStream(fullname);
+		InputStream is = loadStream(AccessorException.class);
 		accessor_exceps = new Properties();
 		try {
 			accessor_exceps.load(is);

@@ -20,6 +20,7 @@
 package com.dcube.core.accessor;
 
 import com.dcube.core.IEntityAccessor;
+import com.dcube.core.IEntryConverter;
 import com.dcube.core.security.Principal;
 import com.dcube.exception.AccessorException;
 import com.dcube.meta.BaseEntity;
@@ -123,4 +124,15 @@ public abstract class EntityAccessor<GB extends EntryInfo> implements IEntityAcc
 		context.setEmbed(embed);
 	}
 
+	/**
+	 * Get the entry converter object.
+	 **/
+	
+	/**
+	 * Here define a blank method  
+	 **/
+	public <To> IEntryConverter<GB, To> getEntryConverter(Class<To> cto){
+		
+		throw new UnsupportedOperationException("Not define any converter yet.");
+	}
 }

@@ -29,41 +29,53 @@ public class UserInfoEAccessor extends HEntityAccessor<TraceableEntry> {
 		return wrapper;
 	}
 
-	public static IEntryConverter<TraceableEntry,Principal> toPrincipal = new IEntryConverter<TraceableEntry,Principal>(){
+	@SuppressWarnings("unchecked")
+	@Override 
+	public <To> IEntryConverter<TraceableEntry, To> getEntryConverter(Class<To> cto){
+		
+		if(cto.equals(Principal.class)){
+			
+			IEntryConverter<TraceableEntry,Principal> converter = new IEntryConverter<TraceableEntry,Principal>(){
 
-		@Override
-		public Principal convert(TraceableEntry fromObject)
-				throws BaseException {
+				@Override
+				public Principal toTarget(TraceableEntry fromObject)
+						throws BaseException {
+					EntryKey key = fromObject.getEntryKey();
+					Principal principal = new Principal(key.getKey());
+					principal.setAccount(fromObject.getAttrValue(UserInfo.Account.attribute, String.class));
+					principal.setName(fromObject.getAttrValue(UserInfo.Name.attribute, String.class));
+					principal.setSource(fromObject.getAttrValue(UserInfo.Source.attribute, String.class));
+					principal.setPassword(fromObject.getAttrValue(UserInfo.Password.attribute, String.class));
+					principal.setGroups(fromObject.getAttrValue(UserInfo.Groups.attribute, Map.class));
+					principal.setRoles(fromObject.getAttrValue(UserInfo.Roles.attribute, Map.class));
+					
+					return principal;
+				}
+
+				@Override
+				public TraceableEntry toSource(Principal toObject)
+						throws BaseException {
+					
+					String id = toObject.getId();
+					
+					TraceableEntry entry = new TraceableEntry(EntityConstants.ENTITY_PRINCIPAL,id);
+					EntityMeta meta = EntityManager.getInstance().getEntityMeta(EntityConstants.ENTITY_PRINCIPAL);
+					entry.setAttrValue(meta.getAttr(UserInfo.Account.attribute), toObject.getAccount());
+					entry.setAttrValue(meta.getAttr(UserInfo.Name.attribute), toObject.getName());
+					entry.setAttrValue(meta.getAttr(UserInfo.Source.attribute), toObject.getSource());
+					entry.setAttrValue(meta.getAttr(UserInfo.Password.attribute), toObject.getPassword());
+					entry.setAttrValue(meta.getAttr(UserInfo.Groups.attribute), toObject.getGroups());
+					entry.setAttrValue(meta.getAttr(UserInfo.Roles.attribute), toObject.getRoles());
+					
+					return entry;
+				}
+				
+			};
 			
-			EntryKey key = fromObject.getEntryKey();
-			Principal principal = new Principal(key.getKey());
-			principal.setAccount(fromObject.getAttrValue(UserInfo.Account.attribute, String.class));
-			principal.setName(fromObject.getAttrValue(UserInfo.Name.attribute, String.class));
-			principal.setSource(fromObject.getAttrValue(UserInfo.Source.attribute, String.class));
-			principal.setPassword(fromObject.getAttrValue(UserInfo.Password.attribute, String.class));
-			principal.setGroups(fromObject.getAttrValue(UserInfo.Groups.attribute, Map.class));
-			principal.setRoles(fromObject.getAttrValue(UserInfo.Roles.attribute, Map.class));
-			
-			return principal;
-		}};
+			return (IEntryConverter<TraceableEntry, To>) converter;
+		}
+		
+		return super.getEntryConverter(cto);
+	}
 	
-	public static IEntryConverter<Principal,TraceableEntry> toEntryInfo = new IEntryConverter<Principal,TraceableEntry>(){
-
-		@Override
-		public TraceableEntry convert(Principal fromObject)
-				throws BaseException {
-			String id = fromObject.getId();
-			
-			TraceableEntry entry = new TraceableEntry(EntityConstants.ENTITY_PRINCIPAL,id);
-			EntityMeta meta = EntityManager.getInstance().getEntityMeta(EntityConstants.ENTITY_PRINCIPAL);
-			entry.setAttrValue(meta.getAttr(UserInfo.Account.attribute), fromObject.getAccount());
-			entry.setAttrValue(meta.getAttr(UserInfo.Name.attribute), fromObject.getName());
-			entry.setAttrValue(meta.getAttr(UserInfo.Source.attribute), fromObject.getSource());
-			entry.setAttrValue(meta.getAttr(UserInfo.Password.attribute), fromObject.getPassword());
-			entry.setAttrValue(meta.getAttr(UserInfo.Groups.attribute), fromObject.getGroups());
-			entry.setAttrValue(meta.getAttr(UserInfo.Roles.attribute), fromObject.getRoles());
-			
-			return entry;
-		}};
-
 }

@@ -13,12 +13,7 @@ public class WrapperException  extends BaseException{
 	private static Properties wrapper_exceps = null;
 	
 	static{
-		
-		Class<?> selfclazz = EntityException.class;
-		String fullname = selfclazz.getName();
-		fullname = fullname.replace('.', '/');
-		fullname = fullname + ".properties";
-		InputStream is = selfclazz.getClassLoader().getResourceAsStream(fullname);
+		InputStream is = loadStream(WrapperException.class);
 		wrapper_exceps = new Properties();
 		try {
 			wrapper_exceps.load(is);

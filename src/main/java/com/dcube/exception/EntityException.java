@@ -15,11 +15,7 @@ public class EntityException extends BaseException{
 	
 	static{
 		
-		Class<?> selfclazz = EntityException.class;
-		String fullname = selfclazz.getName();
-		fullname = fullname.replace('.', '/');
-		fullname = fullname + ".properties";
-		InputStream is = selfclazz.getClassLoader().getResourceAsStream(fullname);
+		InputStream is = loadStream(EntityException.class);
 		entry_exceps = new Properties();
 		try {
 			entry_exceps.load(is);

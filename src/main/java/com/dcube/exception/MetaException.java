@@ -13,12 +13,8 @@ public class MetaException extends BaseException{
 	private static Properties meta_exceps = null;
 	
 	static{
-		
-		Class<?> selfclazz = MetaException.class;
-		String fullname = selfclazz.getName();
-		fullname = fullname.replace('.', '/');
-		fullname = fullname + ".properties";
-		InputStream is = selfclazz.getClassLoader().getResourceAsStream(fullname);
+
+		InputStream is = loadStream(MetaException.class);
 		meta_exceps = new Properties();
 		try {
 			meta_exceps.load(is);

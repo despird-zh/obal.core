@@ -44,6 +44,7 @@ import org.slf4j.LoggerFactory;
 import com.dcube.accessor.hbase.AttrInfoEAccessor;
 import com.dcube.core.EntryFilter;
 import com.dcube.core.EntryKey;
+import com.dcube.core.IEntryConverter;
 import com.dcube.core.accessor.AccessorContext;
 import com.dcube.core.accessor.EntityAccessor;
 import com.dcube.core.accessor.EntryCollection;
@@ -442,5 +443,14 @@ public abstract class HEntityAccessor<GB extends EntryInfo> extends EntityAccess
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * Here define a blank method, not supported by default.
+	 **/
+	@Override 
+	public <To> IEntryConverter<GB, To> getEntryConverter(Class<To> cto){
+		
+		throw new UnsupportedOperationException("Not define any converter yet.");
 	}
 }

@@ -19,9 +19,7 @@ public class BaseException extends Exception {
 	protected String message;
 	
 	static{
-		
-		Class<?> selfclazz = BaseException.class;
-		InputStream is = selfclazz.getClassLoader().getResourceAsStream("com/obal/exception/BaseException.properties");
+		InputStream is = loadStream(BaseException.class);
 		base_exceps = new Properties();
 		try {
 			base_exceps.load(is);
@@ -29,6 +27,16 @@ public class BaseException extends Exception {
 
 			e.printStackTrace();
 		}
+	}
+	
+	public static InputStream loadStream(Class<?> selfclazz){
+
+		String fullname = selfclazz.getName();
+		fullname = fullname.replace('.', '/');
+		fullname = fullname + ".properties";
+		InputStream is = selfclazz.getClassLoader().getResourceAsStream(fullname);
+		
+		return is;
 	}
 	
 	public BaseException(String errorcode,String ...param){

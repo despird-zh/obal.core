@@ -37,7 +37,7 @@ public class BaseTester extends TestCase{
 		
 		Properties prop = new Properties();
 
-		prop.setProperty("log4j.rootCategory", "ERROR, CONSOLE");
+		prop.setProperty("log4j.rootCategory", "DEBUG, CONSOLE");
 		prop.setProperty("log4j.appender.CONSOLE", "org.apache.log4j.ConsoleAppender");
 		prop.setProperty("log4j.appender.CONSOLE.layout", "org.apache.log4j.PatternLayout");
 		prop.setProperty("log4j.appender.CONSOLE.layout.ConversionPattern", "%d{HH:mm:ss,SSS} [%t] %-5p %C{1} : %m%n");

@@ -14,11 +14,7 @@ public class SecurityException extends BaseException{
 	
 	static{
 		
-		Class<?> selfclazz = MetaException.class;
-		String fullname = selfclazz.getName();
-		fullname = fullname.replace('.', '/');
-		fullname = fullname + ".properties";
-		InputStream is = selfclazz.getClassLoader().getResourceAsStream(fullname);
+		InputStream is = loadStream(SecurityException.class);
 		secu_exceps = new Properties();
 		try {
 			secu_exceps.load(is);

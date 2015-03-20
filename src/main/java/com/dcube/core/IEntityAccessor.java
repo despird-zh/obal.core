@@ -101,4 +101,10 @@ public interface IEntityAccessor <GB extends EntryInfo> extends IBaseAccessor{
 	 * @param throwExcep in case not supported, true:throw exception; false:return false;  
 	 **/
 	public abstract boolean isFilterSupported(EntryFilter<?> scanfilter,boolean throwExcep) throws AccessorException;
+	
+	
+	/**
+	 * Here define a blank method  
+	 **/
+	public <To> IEntryConverter<GB, To> getEntryConverter(Class<To> cto);
 }

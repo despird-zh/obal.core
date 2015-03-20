@@ -13,12 +13,8 @@ public class RingEventException  extends BaseException{
 	private static Properties event_exceps = null;
 	
 	static{
-		
-		Class<?> selfclazz = EntityException.class;
-		String fullname = selfclazz.getName();
-		fullname = fullname.replace('.', '/');
-		fullname = fullname + ".properties";
-		InputStream is = selfclazz.getClassLoader().getResourceAsStream(fullname);
+
+		InputStream is = loadStream(RingEventException.class);
 		event_exceps = new Properties();
 		try {
 			event_exceps.load(is);
