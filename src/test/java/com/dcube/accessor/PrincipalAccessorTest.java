@@ -7,7 +7,7 @@ import java.util.Map;
 
 import com.dcube.accessor.hbase.UserAccessor;
 import com.dcube.base.BaseTester;
-import com.dcube.core.CoreManager;
+import com.dcube.core.CoreLauncher;
 import com.dcube.core.EntryFilter;
 import com.dcube.core.accessor.EntryCollection;
 import com.dcube.core.accessor.TraceableEntry;
@@ -56,13 +56,13 @@ public class PrincipalAccessorTest extends BaseTester{
 		
 	protected void setUp() throws Exception {  
 		initLog4j();
-		CoreManager.getInstance().initial();
-		CoreManager.getInstance().start();
+		CoreLauncher.initial();
+		CoreLauncher.start();
 	    super.setUp();  
 	}  
 	  
 	protected void tearDown() throws Exception {  
-	    CoreManager.getInstance().stop();
+	    CoreLauncher.stop();
 		super.tearDown();  
 	} 
 }
