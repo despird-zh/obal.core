@@ -37,7 +37,8 @@ public class CoreLauncher{
 	 **/
 	private CoreLauncher(){
 		
-		coreDelegator = new CoreDelegator();
+		if(coreDelegator == null) 
+			coreDelegator = new CoreDelegator();
 	}
 	
 	/**

@@ -21,6 +21,11 @@ package com.dcube.core;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.dcube.exception.BaseException;
+import com.google.common.base.Strings;
 
 /**
  * Retrieve the configuration variables from environment configuration properties
@@ -32,30 +37,55 @@ import org.apache.commons.configuration.PropertiesConfiguration;
  * </p>
  * 
  * @see org.apache.commons.configuration.ConfigurationException
- * @author G.Obal
+ * @author Despird-zh
  * @version 0.1 2014-1-1
  **/
-public class CoreConfig extends PropertiesConfiguration{
+public class CoreConfigs{
 
-	private static CoreConfig instance;
-
-	private CoreConfig() throws ConfigurationException{
+	private static Logger LOGGER = LoggerFactory.getLogger(CoreConfigs.class);
+	
+	private static PropertiesConfiguration selfConfig = null;
+	private static PropertiesConfiguration overrideConfig = null;
+	
+	static{
+		try {
+			selfConfig = new PropertiesConfiguration("META-INF/dcube-config.properties");
+			overrideConfig = new PropertiesConfiguration("dcube-config.properties");
+		} catch (ConfigurationException e) {
+			if(LOGGER.isDebugEnabled())
+				LOGGER.debug("Fail to load configuration properties file",e);
+			else
+				LOGGER.warn("Fail to load configuration properties file");
+		}	
+	}
+	
+	private CoreConfigs() throws ConfigurationException{}
+	
+	/**
+	 * Get the String value of key 
+	 * 
+	 * @param key
+	 * @param defaultVal
+	 **/
+	public static String getString(String key,String defaultVal){
 		
-		super("dcube-config.properties");
+		String val = null;
+		if(overrideConfig != null){
+			overrideConfig.getString(key);
+		}
+		
+		if(val == null || "".equals(val)){
+			val = selfConfig.getString(key, defaultVal);
+		}
+		
+		return val;
 	}
 	
 	/**
-	 * Get single instance of configuration, use it get variables by Key. 
+	 * Get the String value of key 
 	 **/
-	public static CoreConfig getInstance(){
+	public static String getString(String key){
 		
-		if(null == instance)
-			try {
-				instance = new CoreConfig();
-			} catch (ConfigurationException e) {
-				e.printStackTrace();
-			}
-		
-		return instance;
+		return getString(key,null);
 	}
 }

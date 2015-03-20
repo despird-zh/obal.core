@@ -3,7 +3,7 @@ package com.dcube.base;
 import javax.xml.parsers.*;
 
 import com.dcube.aop.EnvConfigHelper;
-import com.dcube.core.CoreConfig;
+import com.dcube.core.CoreConfigs;
 
 import java.io.*;
 //import com.sun.org.apache.xerces.internal.parsers.SAXParser;
@@ -36,7 +36,7 @@ public class SaxTester extends BaseTester {
 			e.printStackTrace();
 		}
 
-		String s = CoreConfig.getInstance().getString("aa");
+		String s = CoreConfigs.getString("aa");
 		System.out.println(s);
 	}
 

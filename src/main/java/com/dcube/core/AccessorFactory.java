@@ -71,8 +71,7 @@ public final class AccessorFactory {
 	 **/
 	private AccessorFactory() {
 
-		CoreConfig cc = CoreConfig.getInstance();
-		String defaultName = cc.getString(CoreConstants.CONFIG_DFT_BUILDER,CoreConstants.BUILDER_HBASE);
+		String defaultName = CoreConfigs.getString(CoreConstants.CONFIG_DFT_BUILDER,CoreConstants.BUILDER_HBASE);
 		defaultBuilder = defaultName;
 		LOGGER.info("default builder is {}", defaultName);
 		

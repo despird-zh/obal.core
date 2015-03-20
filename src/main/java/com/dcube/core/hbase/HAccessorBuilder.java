@@ -31,7 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.dcube.core.AccessorBuilder;
-import com.dcube.core.CoreConfig;
+import com.dcube.core.CoreConfigs;
 import com.dcube.core.CoreConstants;
 import com.dcube.core.IBaseAccessor;
 import com.dcube.core.security.Principal;
@@ -97,8 +97,7 @@ public class HAccessorBuilder extends AccessorBuilder{
 	private void loadAccessors(){
 		
 		// detect the accessor classes under package
-		CoreConfig cc = CoreConfig.getInstance();
-		String packagename = cc.getString(CoreConstants.BUILDER_HBASE+CoreConstants.CONFIG_ACCESSOR_PACKAGE,"com.dcube.accessor.hbase");
+		String packagename = CoreConfigs.getString(CoreConstants.BUILDER_HBASE+CoreConstants.CONFIG_ACCESSOR_PACKAGE,"com.dcube.accessor.hbase");
 		if(packagename.contains(",")){
 			
 			String[] packages = packagename.split(",");
