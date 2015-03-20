@@ -27,7 +27,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.dcube.core.ITraceable;
 import com.dcube.core.security.IAccessControl;
 import com.dcube.exception.MetaException;
 import com.dcube.meta.EntityConstants.AccessControlTraceInfo;
