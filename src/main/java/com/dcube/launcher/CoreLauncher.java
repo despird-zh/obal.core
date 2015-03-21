@@ -13,7 +13,6 @@ import com.dcube.admin.EntityAdmin;
 import com.dcube.audit.AuditHooker;
 import com.dcube.cache.CacheHooker;
 import com.dcube.cache.CacheManager;
-import com.dcube.core.AccessorBuilder;
 import com.dcube.core.AccessorFactory;
 import com.dcube.core.accessor.EntryInfo;
 import com.dcube.disruptor.EventDispatcher;
