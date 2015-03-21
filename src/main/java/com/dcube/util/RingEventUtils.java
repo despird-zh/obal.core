@@ -1,8 +1,13 @@
-package com.dcube.disruptor;
+package com.dcube.util;
 
+import com.dcube.disruptor.EventDispatcher;
+import com.dcube.disruptor.EventHooker;
+import com.dcube.disruptor.EventPayload;
+import com.dcube.disruptor.EventProducer;
+import com.dcube.disruptor.EventType;
 import com.dcube.exception.RingEventException;
 
-public class RingEvents {
+public class RingEventUtils {
 
 	public static void sendPayload(EventPayload payload, EventType eventType){
 		

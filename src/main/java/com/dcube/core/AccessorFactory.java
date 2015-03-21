@@ -34,6 +34,8 @@ import com.dcube.core.accessor.GenericContext;
 import com.dcube.core.security.Principal;
 import com.dcube.exception.EntityException;
 import com.dcube.exception.MetaException;
+import com.dcube.launcher.ILifecycle.LifeState;
+import com.dcube.launcher.LifecycleHooker;
 import com.dcube.meta.BaseEntity;
 import com.dcube.meta.EntityManager;
 
@@ -46,8 +48,8 @@ import com.dcube.meta.EntityManager;
  * @see AccessorBuilder
  **/
 public final class AccessorFactory {
-
-	static Logger LOGGER = LoggerFactory.getLogger(AccessorFactory.class);
+	
+	private static Logger LOGGER = LoggerFactory.getLogger(AccessorFactory.class);
 	/** AccessorBuilder cache */
 	private static Map<String, AccessorBuilder> builderMap = new HashMap<String, AccessorBuilder>();
 
@@ -57,14 +59,15 @@ public final class AccessorFactory {
 	/** default builder */
 	private static String defaultBuilder = null;
 	
+	private static LifecycleHooker hooker;
 	/**
 	 * Automatically create the factory instance, and load the builder instance.
 	 **/
-	static{
-		
-		instance = new AccessorFactory();
-		instance.loadAccessorBuilder();
-	}
+//	static{
+//		
+//		instance = new AccessorFactory();
+//		instance.loadAccessorBuilder();
+//	}
 	
 	/**
 	 * Hide from explicit invoke
@@ -74,7 +77,24 @@ public final class AccessorFactory {
 		String defaultName = CoreConfigs.getString(CoreConstants.CONFIG_DFT_BUILDER,CoreConstants.BUILDER_HBASE);
 		defaultBuilder = defaultName;
 		LOGGER.info("default builder is {}", defaultName);
-		
+		hooker = new LifecycleHooker("AccessorFactory", 0){
+
+			@Override
+			public void onEvent(LifeState event) {
+				switch(event){
+				case INIT:					
+					break;
+				case START:
+					instance.loadAccessorBuilder();
+					break;
+				case STOP:
+					break;
+				default:
+					;
+				}
+			}
+			
+		};
 	}
 
 	private void loadAccessorBuilder(){
@@ -90,17 +110,17 @@ public final class AccessorFactory {
 	}
 	
 	/**
-	 * Singleton instance
+	 * Initial instance
 	 * 
 	 * @return AccessorFactory the singleton instance.
 	 **/
-//	public static AccessorFactory getInstance() {
-//
-//		if (instance == null)
-//			instance = new AccessorFactory();
-//
-//		return instance;
-//	}
+	public static LifecycleHooker initial() {
+
+		if (instance == null)
+			instance = new AccessorFactory();
+
+		return hooker;
+	}
 
 	/**
 	 * Set the default builder name
