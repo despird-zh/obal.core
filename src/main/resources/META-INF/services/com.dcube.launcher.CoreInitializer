@@ -1,2 +1,3 @@
 com.dcube.core.AccessorInitializer # initialize the accessor factory
-com.dcube.core.EntityInitializer
+com.dcube.admin.EntityInitializer
+com.dcube.admin.EventInitializer

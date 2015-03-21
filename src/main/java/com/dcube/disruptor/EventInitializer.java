@@ -1,19 +1,19 @@
-package com.dcube.core;
+package com.dcube.disruptor;
 
 import com.dcube.exception.BaseException;
 import com.dcube.launcher.CoreInitializer;
 import com.dcube.launcher.LifecycleHooker;
 
-public class AccessorInitializer extends CoreInitializer {
+public class EventInitializer extends CoreInitializer{
 
-	public AccessorInitializer() throws BaseException {
+	public EventInitializer() throws BaseException {
 		super();
 	}
 
 	@Override
 	public LifecycleHooker setupHooker() throws BaseException {
-		
-		return AccessorFactory.getHooker();
+		EventDispatcher instance = EventDispatcher.getInstance();
+		return instance.getHooker();
 	}
 
 }

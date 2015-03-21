@@ -10,6 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.dcube.exception.RingEventException;
+import com.dcube.launcher.ILifecycle.LifeState;
+import com.dcube.launcher.LifecycleHooker;
 import com.lmax.disruptor.EventFactory;
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.RingBuffer;
@@ -44,11 +46,31 @@ public class EventDispatcher {
 	/** single instance */
 	private static EventDispatcher instance;
 
+	private LifecycleHooker hooker = null;
+	
 	/**
 	 * default event disptacher
 	 **/
 	private EventDispatcher() {
-		initial();
+		
+		hooker = new LifecycleHooker("EventDispatcher", 2){
+
+			@Override
+			public void onEvent(LifeState event) {
+				switch(event){
+				case INIT:		
+					instance.initial();
+					break;
+				case START:
+					instance.start();
+					break;
+				case STOP:
+					instance.shutdown();
+					break;
+				default:
+					;
+				}
+			}};
 	}
 
 	/**
@@ -79,6 +101,10 @@ public class EventDispatcher {
 		
 		disruptor.shutdown();
 		executor.shutdown();
+	}
+	
+	public LifecycleHooker getHooker(){
+		return this.hooker;
 	}
 	
 	/**

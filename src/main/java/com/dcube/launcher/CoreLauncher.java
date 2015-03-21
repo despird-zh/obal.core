@@ -3,6 +3,7 @@ package com.dcube.launcher;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.ServiceLoader;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.slf4j.Logger;
@@ -12,6 +13,7 @@ import com.dcube.admin.EntityAdmin;
 import com.dcube.audit.AuditHooker;
 import com.dcube.cache.CacheHooker;
 import com.dcube.cache.CacheManager;
+import com.dcube.core.AccessorBuilder;
 import com.dcube.core.AccessorFactory;
 import com.dcube.core.accessor.EntryInfo;
 import com.dcube.disruptor.EventDispatcher;
@@ -42,6 +44,14 @@ public class CoreLauncher{
 		
 		if(coreDelegator == null) 
 			coreDelegator = new CoreDelegator();
+		
+        ServiceLoader<CoreInitializer> svcloader = ServiceLoader
+                .load(CoreInitializer.class, ClassLoader.getSystemClassLoader());
+        
+        for (CoreInitializer initializer : svcloader) {
+        	
+        	coreDelegator.LOGGER.info("Initializer:{} is loaded.",initializer.hookerName);
+        }
 	}
 	
 	/**

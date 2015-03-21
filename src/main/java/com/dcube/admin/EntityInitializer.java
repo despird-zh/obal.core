@@ -11,7 +11,7 @@ public class EntityInitializer extends CoreInitializer{
 	}
 
 	@Override
-	public LifecycleHooker initial() throws BaseException {
+	public LifecycleHooker setupHooker() throws BaseException {
 
 		EntityAdmin instance = EntityAdmin.getInstance();
 		return instance.getHooker();

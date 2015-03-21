@@ -7,15 +7,17 @@ import com.dcube.exception.BaseException;
  **/
 public abstract class CoreInitializer {
 
+	public String hookerName = null;
 	/**
 	 * Default constructor, here the hooker will be bind to CoreLauncher
 	 **/
 	public CoreInitializer() throws BaseException{
 		
-		LifecycleHooker hooker = initial();
+		LifecycleHooker hooker = setupHooker();
+		this.hookerName = hooker.name();
 		CoreLauncher.regHooker(hooker);
 	}
 	
-	public abstract LifecycleHooker initial() throws BaseException;
+	public abstract LifecycleHooker setupHooker() throws BaseException;
 	
 }

@@ -114,7 +114,7 @@ public final class AccessorFactory {
 	 * 
 	 * @return AccessorFactory the singleton instance.
 	 **/
-	public static LifecycleHooker initial() {
+	public static LifecycleHooker getHooker() {
 
 		if (instance == null)
 			instance = new AccessorFactory();
