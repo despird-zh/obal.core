@@ -4,8 +4,11 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Random;
+
 import org.apache.commons.codec.binary.Base64;
+
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
@@ -178,4 +181,35 @@ public class SecurityUtils {
 		}
 		return sb.toString();
 	}
+	
+	public static void main(String[] args){
+		String helpmsg = "--Description: This used to generate the hashcode for password and salt pair.\n"
+		  + "--Usage: --password xxxx";
+		if(args.length == 0)
+			System.out.println(helpmsg);
+		
+		String password = null;
+		String salt = null;
+		String hashcode = null;
+		for (int i =0 ; i< args.length; i++){
+			if("--password".equalsIgnoreCase(args[i]) && i < args.length -1){
+				password = args[i+1];
+			}
+		}
+		
+		if(password == null){
+			System.out.println(helpmsg);
+			return;
+		}
+		
+		salt = generateSaltStr();
+		hashcode = hash(password, salt);
+		
+		System.out.println(
+				"-- Generated salt and hashcode \n"
+			   +"-- Password: "+password +"\n"
+			   +"-- Salt: " + salt + "\n"
+			   +"-- Hashcode: " + hashcode);
+	}
+	
 }

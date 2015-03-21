@@ -5,13 +5,13 @@ import java.util.Map;
 
 import com.dcube.accessor.hbase.UserInfoEAccessor;
 import com.dcube.base.BaseTester;
-import com.dcube.core.CoreLauncher;
 import com.dcube.core.EntryKey;
 import com.dcube.core.IEntryConverter;
 import com.dcube.core.accessor.EntryCollection;
 import com.dcube.core.accessor.TraceableEntry;
 import com.dcube.core.security.Principal;
 import com.dcube.exception.BaseException;
+import com.dcube.launcher.CoreLauncher;
 import com.dcube.meta.EntityConstants;
 import com.dcube.util.AccessorUtils;
 

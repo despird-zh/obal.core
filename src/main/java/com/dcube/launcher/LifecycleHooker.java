@@ -1,17 +1,21 @@
-package com.dcube.core;
+package com.dcube.launcher;
+
+import java.util.Date;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-import com.dcube.core.ILifecycle.State;
+import com.dcube.launcher.ILifecycle.LifeState;
 
-public abstract class LifecycleListener {
+public abstract class LifecycleHooker {
 	
-	public LifecycleListener(String name, int priority){
+	public LifecycleHooker(String name, int priority){
 		
 		this.name = name;
 		this.priority = priority;
 	}
+	
+	private ILifecycle launcher;
 	
 	private String name = "listener";
 	
@@ -36,9 +40,24 @@ public abstract class LifecycleListener {
 	/**
 	 * Disgest event  
 	 **/
-	public abstract void onEvent(State event);
+	public abstract void onEvent(LifeState event);
 	
-
+	/**
+	 * Set the ILifecycle launcher
+	 **/
+	public void setLauncher(ILifecycle launcher){
+		
+		this.launcher = launcher;
+	}
+	
+	/**
+	 * Send feedback to launcher 
+	 **/
+	public void sendFeedback(boolean errorFlag, String message){
+		
+		launcher.receiveFeedback(this.name, errorFlag, new Date(), message);
+	}
+	
 	@Override
 	public boolean equals(Object other) {
 		// step 1
@@ -46,11 +65,11 @@ public abstract class LifecycleListener {
 			return true;
 		}
 		// step 2
-		if (!(other instanceof LifecycleListener)) {
+		if (!(other instanceof LifecycleHooker)) {
 			return false;
 		}
 		// step 3
-		LifecycleListener that = (LifecycleListener) other;
+		LifecycleHooker that = (LifecycleHooker) other;
 
 		return new EqualsBuilder()
 			.append(this.priority, that.priority)

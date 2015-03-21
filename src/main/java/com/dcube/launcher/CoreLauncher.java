@@ -1,6 +1,8 @@
-package com.dcube.core;
+package com.dcube.launcher;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.slf4j.Logger;
@@ -10,10 +12,11 @@ import com.dcube.admin.EntityAdmin;
 import com.dcube.audit.AuditHooker;
 import com.dcube.cache.CacheHooker;
 import com.dcube.cache.CacheManager;
-import com.dcube.core.ILifecycle.State;
+import com.dcube.core.AccessorFactory;
 import com.dcube.core.accessor.EntryInfo;
 import com.dcube.disruptor.EventDispatcher;
 import com.dcube.exception.BaseException;
+import com.dcube.launcher.ILifecycle.LifeState;
 import com.dcube.meta.EntityManager;
 
 /**
@@ -69,7 +72,7 @@ public class CoreLauncher{
 	/**
 	 * State of core 
 	 **/
-	public static State state() {
+	public static LifeState state() {
 		
 		return coreDelegator.state;
 	}
@@ -78,18 +81,18 @@ public class CoreLauncher{
 	 * Register the life cycle listener
 	 * @param listener  
 	 **/
-	public static void regListener(LifecycleListener listener) {
+	public static void regHooker(LifecycleHooker hooker) {
 		
-		coreDelegator.regListener(listener);
+		coreDelegator.regHooker(hooker);
 	}
 	
 	/**
 	 * Unregister the life cycle listener
 	 * @param listener  
 	 **/
-	public static void unregListener(LifecycleListener listener) {
+	public static void unregHooker(LifecycleHooker hooker) {
 
-		coreDelegator.unregListener(listener);
+		coreDelegator.unregHooker(hooker);
 	}
 
 	/**
@@ -97,7 +100,7 @@ public class CoreLauncher{
 	 **/
 	public static void clearListener() {
 
-		coreDelegator.clearListener();
+		coreDelegator.clearHooker();
 	}
 	
 	/**
@@ -107,14 +110,18 @@ public class CoreLauncher{
 		
 		@SuppressWarnings("unused")
 		static Logger LOGGER = LoggerFactory.getLogger(CoreLauncher.class);
-				
-		private State state = State.UNKNOWN;
-		
+		// current state
+		private LifeState state = LifeState.UNKNOWN;
+		// event dispatcher
 		private EventDispatcher eventDispatcher = null;
+		// entity admin
 		private EntityAdmin entityAdmin = null;
-		
+		// entrant lock
 		private ReentrantLock lock = new ReentrantLock(); // lock
-		private ArrayList<LifecycleListener> listeners = new ArrayList<LifecycleListener>();
+		// hooker list
+		private ArrayList<LifecycleHooker> hookers = new ArrayList<LifecycleHooker>();
+		// message list
+		private List<LifeCycleMessage> messageList = new ArrayList<LifeCycleMessage>();
 		
 		public CoreDelegator(){
 			
@@ -135,7 +142,7 @@ public class CoreLauncher{
 		@Override
 		public void initial() throws BaseException{
 			
-			dispatchEvent(State.BEFORE_INIT);
+			dispatchEvent(LifeState.BEFORE_INIT);
 			// build accessor builder and detect all the accessor classes
 			AccessorFactory.getDefaultBuilder();
 			
@@ -150,82 +157,109 @@ public class CoreLauncher{
 			// load the entity meta
 			this.entityAdmin.loadEntityMeta();
 			
-			dispatchEvent(State.AFTER_INIT);
-			this.state = State.INIT;
+			dispatchEvent(LifeState.AFTER_INIT);
+			this.state = LifeState.INIT;
 		}
 		
 		@Override
 		public void start() throws BaseException{
 			
-			dispatchEvent(State.BEFORE_START);
-			this.state = State.START;
+			dispatchEvent(LifeState.BEFORE_START);
+			this.state = LifeState.START;
 			this.eventDispatcher.start();
-			this.state = State.RUNNING;
-			dispatchEvent(State.AFTER_START);
+			this.state = LifeState.RUNNING;
+			dispatchEvent(LifeState.AFTER_START);
 		}
 		
 		@Override
 		public void stop()throws BaseException{
 			
-			dispatchEvent(State.BEFORE_STOP);
+			dispatchEvent(LifeState.BEFORE_STOP);
 			this.eventDispatcher.shutdown();
-			dispatchEvent(State.AFTER_STOP);
-			this.state = State.STOP;
+			dispatchEvent(LifeState.AFTER_STOP);
+			this.state = LifeState.STOP;
 		}
 		
 		@Override
-		public State state() {
+		public LifeState state() {
 			
 			return this.state;
 		}
 
 		@Override
-		public void regListener(LifecycleListener listener) {
+		public void regHooker(LifecycleHooker hooker) {
 			
 			lock.lock();
-			int count = listeners.size()-1;
-			while(count >=0){
-				
-				if( listeners.get(count).priority() == listener.priority() )
-					listeners.add(count, listener);
-				
-				else if( listeners.get(count).priority() > listener.priority() )
-					listeners.add( listener);
-				
-				else if(count == 0){
-					listeners.add(count, listener);
+			int count = hookers.size()-1;
+			if(count < 0){
+				hookers.add( hooker);
+				hooker.setLauncher(this);
+			}else{
+				while(count >=0){
+					
+					if( hookers.get(count).priority() == hooker.priority() )
+						hookers.add(count, hooker);
+					
+					else if( hookers.get(count).priority() > hooker.priority() )
+						hookers.add( hooker);
+					
+					else if(count == 0){
+						hookers.add(count, hooker);
+					}
+					
+					count--;
 				}
-				
-				count--;
+				hooker.setLauncher(this);
 			}
 			lock.unlock();
 		}
 
 		@Override
-		public void unregListener(LifecycleListener listener) {
+		public void unregHooker(LifecycleHooker listener) {
 			lock.lock();
-			listeners.remove(listener);
+			hookers.remove(listener);
 			lock.unlock();
 		}
 
 		@Override
-		public void clearListener() {
+		public void clearHooker() {
 			lock.lock();
-			listeners.clear();
+			hookers.clear();
 			lock.unlock();
 		}
 
 		/**
 		 * Send event to different listener. 
 		 **/
-		private void dispatchEvent(State state){
+		private void dispatchEvent(LifeState state){
 			lock.lock();
-			int count = this.listeners.size();
+			int count = this.hookers.size();
 			for(int i = 0 ; i < count ; i++){
 				
-				listeners.get(i).onEvent(state);
+				hookers.get(i).onEvent(state);
 			}
 			lock.unlock();
 		}
+
+		@Override
+		public void receiveFeedback(String hookerName, boolean errorFlag,
+				Date time, String message) {
+			LifeCycleMessage msg = new LifeCycleMessage(time, errorFlag, message);
+			messageList.add(msg);
+		}
+		
+		//////====== Inner Message class ====/////
+		protected class LifeCycleMessage{
+			Date time = null;
+			String message = null;
+			boolean errorFlag = false;
+			public LifeCycleMessage(Date time,boolean errorFlag, String message){
+				this.time = time;
+				this.errorFlag = errorFlag;
+				this.message = message;
+			}
+		}
 	}
+	
+	
 }

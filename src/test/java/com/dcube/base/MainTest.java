@@ -8,8 +8,8 @@ import org.junit.runners.MethodSorters;
 import com.dcube.admin.EntityAdmin;
 import com.dcube.admin.EntitySetup;
 import com.dcube.core.AccessorFactory;
-import com.dcube.core.CoreLauncher;
 import com.dcube.exception.BaseException;
+import com.dcube.launcher.CoreLauncher;
 import com.dcube.util.AccessorDetector;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING) 
