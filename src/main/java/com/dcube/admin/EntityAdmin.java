@@ -11,6 +11,8 @@ import com.dcube.core.AccessorFactory;
 import com.dcube.core.security.Principal;
 import com.dcube.exception.AccessorException;
 import com.dcube.exception.EntityException;
+import com.dcube.launcher.ILifecycle.LifeState;
+import com.dcube.launcher.LifecycleHooker;
 import com.dcube.meta.EntityAttr;
 import com.dcube.meta.EntityConstants;
 import com.dcube.meta.EntityManager;
@@ -29,8 +31,28 @@ public class EntityAdmin {
 
 	Logger LOGGER = LoggerFactory.getLogger(EntityAdmin.class);
 	
-	private EntityAdmin(){
+	LifecycleHooker hooker = null;
 	
+	private EntityAdmin(){
+		
+		hooker = new LifecycleHooker("EntityAdmin", 1){
+
+			@Override
+			public void onEvent(LifeState event) {
+				switch(event){
+				case INIT:					
+					break;
+				case START:
+					instance.loadEntityMeta();
+					break;
+				case STOP:
+					break;
+				default:
+					;
+				}
+			}
+			
+		};
 	}
 	
 	private static EntityAdmin instance;
@@ -41,8 +63,7 @@ public class EntityAdmin {
 	 **/
 	public static EntityAdmin getInstance(){
 		
-		if(instance == null){
-			
+		if(instance == null){			
 			instance = new EntityAdmin();
 		}
 		
@@ -67,6 +88,10 @@ public class EntityAdmin {
 		return aa;
 	}
 
+	public LifecycleHooker getHooker(){
+		
+		return hooker;
+	}
 
 	/**
 	 * Load all the entity meta information from hbase.

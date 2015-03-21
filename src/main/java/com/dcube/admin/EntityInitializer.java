@@ -1,19 +1,20 @@
-package com.dcube.core;
+package com.dcube.admin;
 
 import com.dcube.exception.BaseException;
 import com.dcube.launcher.CoreInitializer;
 import com.dcube.launcher.LifecycleHooker;
 
-public class AccessorInitializer extends CoreInitializer {
+public class EntityInitializer extends CoreInitializer{
 
-	public AccessorInitializer() throws BaseException {
+	public EntityInitializer() throws BaseException {
 		super();
 	}
 
 	@Override
 	public LifecycleHooker initial() throws BaseException {
-		
-		return AccessorFactory.initial();
+
+		EntityAdmin instance = EntityAdmin.getInstance();
+		return instance.getHooker();
 	}
 
 }
