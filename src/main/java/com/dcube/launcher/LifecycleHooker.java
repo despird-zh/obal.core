@@ -40,7 +40,27 @@ public abstract class LifecycleHooker {
 	/**
 	 * Disgest event  
 	 **/
-	public abstract void onEvent(LifeState event);
+	public void onEvent(LifeState event){
+		switch(event){
+		case INITIAL:		
+			initial();
+			break;
+		case STARTUP:
+			startup();
+			break;
+		case SHUTDOWN:
+			shutdown();
+			break;
+		default:
+			;
+		}
+	}
+	
+	public abstract void initial();
+	
+	public abstract void startup();
+	
+	public abstract void shutdown();
 	
 	/**
 	 * Set the ILifecycle launcher

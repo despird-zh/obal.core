@@ -9,16 +9,12 @@ import java.util.concurrent.locks.ReentrantLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.dcube.admin.EntityAdmin;
 import com.dcube.audit.AuditHooker;
 import com.dcube.cache.CacheHooker;
-import com.dcube.cache.CacheManager;
-import com.dcube.core.AccessorFactory;
 import com.dcube.core.accessor.EntryInfo;
 import com.dcube.disruptor.EventDispatcher;
 import com.dcube.exception.BaseException;
 import com.dcube.launcher.ILifecycle.LifeState;
-import com.dcube.meta.EntityManager;
 
 /**
  * CoreLauncher is the core start entrance.
@@ -44,13 +40,7 @@ public class CoreLauncher{
 		if(coreDelegator == null) 
 			coreDelegator = new CoreDelegator();
 		
-        ServiceLoader<CoreInitializer> svcloader = ServiceLoader
-                .load(CoreInitializer.class, ClassLoader.getSystemClassLoader());
-        
-        for (CoreInitializer initializer : svcloader) {
-        	
-        	coreDelegator.LOGGER.info("Initializer:{} is loaded.",initializer.hookerName);
-        }
+		coreDelegator.setup();
 	}
 	
 	/**
@@ -117,14 +107,9 @@ public class CoreLauncher{
 	 **/
 	private static class CoreDelegator implements ILifecycle{
 		
-		@SuppressWarnings("unused")
 		static Logger LOGGER = LoggerFactory.getLogger(CoreLauncher.class);
 		// current state
 		private LifeState state = LifeState.UNKNOWN;
-		// event dispatcher
-		private EventDispatcher eventDispatcher = null;
-		// entity admin
-		private EntityAdmin entityAdmin = null;
 		// entrant lock
 		private ReentrantLock lock = new ReentrantLock(); // lock
 		// hooker list
@@ -132,61 +117,51 @@ public class CoreLauncher{
 		// message list
 		private List<LifeCycleMessage> messageList = new ArrayList<LifeCycleMessage>();
 		
-		public CoreDelegator(){
-			
-			setup();
-		}
+		public CoreDelegator(){	}
 		
-		private void setup(){
-			// initial the event dispatcher
-			this.eventDispatcher = EventDispatcher.getInstance();
-			// prepare the meta infor & attr data
-			EntityManager.getInstance();
-			// initial the admin instance
-			this.entityAdmin = EntityAdmin.getInstance();		
-			// initial the cache manager
-			CacheManager.getInstance();
+		/**
+		 * Trigger the CoreInitializers to setup LifecycleHooker
+		 **/
+		public void setup(){
+			
+	        ServiceLoader<CoreInitializer> svcloader = ServiceLoader
+	                .load(CoreInitializer.class, ClassLoader.getSystemClassLoader());
+	        
+	        for (CoreInitializer initializer : svcloader) {
+	        	
+	        	LOGGER.info("Initializer:{} is loaded.",initializer.hookerName);
+	        }
 		}
 		
 		@Override
 		public void initial() throws BaseException{
 			
-			dispatchEvent(LifeState.BEFORE_INIT);
-			// build accessor builder and detect all the accessor classes
-			AccessorFactory.getDefaultBuilder();
+			dispatchEvent(LifeState.INITIAL);
 			
 			// register audit event hooker
 			AuditHooker auditHooker = new AuditHooker();
-			this.eventDispatcher.regEventHooker(auditHooker);
+			EventDispatcher.getInstance().regEventHooker(auditHooker);
 			
 			// register cache event hooker
 			CacheHooker<?> cacheHooker = new CacheHooker<EntryInfo>();
-			this.eventDispatcher.regEventHooker(cacheHooker);
+			EventDispatcher.getInstance().regEventHooker(cacheHooker);
 			
-			// load the entity meta
-			this.entityAdmin.loadEntityMeta();
-			
-			dispatchEvent(LifeState.AFTER_INIT);
-			this.state = LifeState.INIT;
+			this.state = LifeState.INITIAL;
 		}
 		
 		@Override
 		public void start() throws BaseException{
 			
-			dispatchEvent(LifeState.BEFORE_START);
-			this.state = LifeState.START;
-			this.eventDispatcher.start();
+			this.state = LifeState.STARTUP;
+			dispatchEvent(LifeState.STARTUP);
 			this.state = LifeState.RUNNING;
-			dispatchEvent(LifeState.AFTER_START);
 		}
 		
 		@Override
 		public void stop()throws BaseException{
 			
-			dispatchEvent(LifeState.BEFORE_STOP);
-			this.eventDispatcher.shutdown();
-			dispatchEvent(LifeState.AFTER_STOP);
-			this.state = LifeState.STOP;
+			dispatchEvent(LifeState.SHUTDOWN);
+			this.state = LifeState.SHUTDOWN;
 		}
 		
 		@Override
@@ -269,6 +244,5 @@ public class CoreLauncher{
 			}
 		}
 	}
-	
 	
 }

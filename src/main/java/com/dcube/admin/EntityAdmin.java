@@ -38,19 +38,21 @@ public class EntityAdmin {
 		hooker = new LifecycleHooker("EntityAdmin", 1){
 
 			@Override
-			public void onEvent(LifeState event) {
-				switch(event){
-				case INIT:					
-					break;
-				case START:
-					instance.loadEntityMeta();
-					break;
-				case STOP:
-					break;
-				default:
-					;
-				}
+			public void initial() {
+				// TODO Auto-generated method stub
+				
 			}
+
+			@Override
+			public void startup() {
+				loadEntityMeta();
+			}
+
+			@Override
+			public void shutdown() {
+				// TODO Auto-generated method stub
+				
+			}		
 			
 		};
 	}

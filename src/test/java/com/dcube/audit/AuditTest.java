@@ -9,7 +9,7 @@ public class AuditTest extends BaseTester{
 
 	public void testAudit(){
 		EventDispatcher ed = EventDispatcher.getInstance();
-		ed.start();
+		ed.startup();
 		AuditUtils.regAuditHooker();
 		
 		for(int i = 1; i<100; i++){

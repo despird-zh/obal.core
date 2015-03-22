@@ -60,6 +60,7 @@ public final class AccessorFactory {
 	private static String defaultBuilder = null;
 	
 	private static LifecycleHooker hooker;
+	
 	/**
 	 * Automatically create the factory instance, and load the builder instance.
 	 **/
@@ -80,18 +81,20 @@ public final class AccessorFactory {
 		hooker = new LifecycleHooker("AccessorFactory", 0){
 
 			@Override
-			public void onEvent(LifeState event) {
-				switch(event){
-				case INIT:					
-					break;
-				case START:
-					instance.loadAccessorBuilder();
-					break;
-				case STOP:
-					break;
-				default:
-					;
-				}
+			public void initial() {
+				loadAccessorBuilder();
+			}
+
+			@Override
+			public void startup() {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void shutdown() {
+				// TODO Auto-generated method stub
+				
 			}
 			
 		};
@@ -173,46 +176,6 @@ public final class AccessorFactory {
 	public static AccessorBuilder getAccessorBuilder(String builderName) {
 
 		return builderMap.get(builderName);
-	}
-
-	/**
-	 * Append service mapping to Factory
-	 * 
-	 * @param builderName
-	 *            the name of builder
-	 * @param resourcePath
-	 *            the path of resource file, eg. com/tt/xx/mm.properties
-	 * 
-	 **/
-	public static void appendMapping(String builderName, String resourcePath) {
-
-//		if(!builderMap.containsKey(builderName)){
-//			LOGGER.warn("builder:{} not exists",builderName);
-//			return;
-//		}
-//		
-//		LOGGER.debug("Load {}'s mapping resource:{}", new String[]{builderName,resourcePath});
-//		InputStream is = this.getClass().getClassLoader().getResourceAsStream(resourcePath);
-//		if(is == null){
-//			
-//			LOGGER.error("Cannot load accessor mapping:{}",resourcePath);
-//			return;
-//		}
-//		Properties prop = new Properties();
-//		try {
-//			
-//			prop.load(is);
-//			Map<String, String> entries = new HashMap<String, String>();
-//
-//			for (final String name : prop.stringPropertyNames())
-//				entries.put(name, prop.getProperty(name));
-//
-//			appendMapping(builderName, entries);
-//
-//		} catch (IOException e) {
-//
-//			LOGGER.error("Error during EntryAdmin contrustor.", e);
-//		}
 	}
 
 	/**

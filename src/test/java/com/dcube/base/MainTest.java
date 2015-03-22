@@ -18,9 +18,9 @@ public class MainTest extends BaseTester{
 	static{
 		debug("---==: initial log4j");
 		initLog4j();
-		setSwitch(0,false);// prepare
+		setSwitch(0,true);// prepare
 		setSwitch(1,false);// prepare
-		setSwitch(2,true);// load meta
+		setSwitch(2,false);// load meta
 		setSwitch(3,false);// principal test
 
 		setSwitch(999,false); // drop schema, clear

@@ -56,21 +56,21 @@ public class EventDispatcher {
 		hooker = new LifecycleHooker("EventDispatcher", 2){
 
 			@Override
-			public void onEvent(LifeState event) {
-				switch(event){
-				case INIT:		
-					instance.initial();
-					break;
-				case START:
-					instance.start();
-					break;
-				case STOP:
-					instance.shutdown();
-					break;
-				default:
-					;
-				}
-			}};
+			public void initial() {
+				instance.initial();
+			}
+
+			@Override
+			public void startup() {
+				instance.startup();
+			}
+
+			@Override
+			public void shutdown() {
+				instance.shutdown();
+			}
+
+		};
 	}
 
 	/**
@@ -89,7 +89,7 @@ public class EventDispatcher {
 	/**
 	 * Start the disruptor
 	 **/
-	public void start() {
+	public void startup() {
 		
 		disruptor.start();
 	}
