@@ -78,17 +78,17 @@ public final class AccessorFactory {
 		String defaultName = CoreConfigs.getString(CoreConstants.CONFIG_DFT_BUILDER,CoreConstants.BUILDER_HBASE);
 		defaultBuilder = defaultName;
 		LOGGER.info("default builder is {}", defaultName);
-		hooker = new LifecycleHooker("AccessorFactory", 0){
+		hooker = new LifecycleHooker("AccessorFactory", 999){
 
 			@Override
 			public void initial() {
+				sendFeedback(false, "AccessorFactory load all accessor builders.");
 				loadAccessorBuilder();
 			}
 
 			@Override
 			public void startup() {
-				// TODO Auto-generated method stub
-				
+				sendFeedback(false, "AccessorFactory startup nothing done.");
 			}
 
 			@Override

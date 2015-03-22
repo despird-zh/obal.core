@@ -175,22 +175,25 @@ public class CoreLauncher{
 			
 			lock.lock();
 			int count = hookers.size()-1;
+			
 			if(count < 0){
 				hookers.add( hooker);
 				hooker.setLauncher(this);
 			}else{
 				while(count >=0){
 					
-					if( hookers.get(count).priority() == hooker.priority() )
+					if( hookers.get(count).priority() == hooker.priority() ){
 						hookers.add(count, hooker);
-					
-					else if( hookers.get(count).priority() > hooker.priority() )
-						hookers.add( hooker);
-					
+						break;
+					}					
+					else if( hookers.get(count).priority() > hooker.priority() ){
+						hookers.add(count +1, hooker);
+						break;
+					}					
 					else if(count == 0){
 						hookers.add(count, hooker);
+						break;
 					}
-					
 					count--;
 				}
 				hooker.setLauncher(this);
@@ -229,6 +232,7 @@ public class CoreLauncher{
 		public void receiveFeedback(String hookerName, boolean errorFlag,
 				Date time, String message) {
 			LifeCycleMessage msg = new LifeCycleMessage(time, errorFlag, message);
+			LOGGER.debug("Feedback -> {} - {} - {}", new Object[]{time,errorFlag?"ERROR":"NORMAL",message});
 			messageList.add(msg);
 		}
 		

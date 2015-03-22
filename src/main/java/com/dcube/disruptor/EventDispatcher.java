@@ -53,16 +53,19 @@ public class EventDispatcher {
 	 **/
 	private EventDispatcher() {
 		
-		hooker = new LifecycleHooker("EventDispatcher", 2){
+		hooker = new LifecycleHooker("EventDispatcher", 0){
 
 			@Override
 			public void initial() {
+				
 				instance.initial();
+				sendFeedback(false, "EventDispatcher initial done");
 			}
 
 			@Override
 			public void startup() {
 				instance.startup();
+				sendFeedback(false, "EventDispatcher startup done");
 			}
 
 			@Override

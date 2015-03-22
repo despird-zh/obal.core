@@ -35,17 +35,18 @@ public class EntityAdmin {
 	
 	private EntityAdmin(){
 		
-		hooker = new LifecycleHooker("EntityAdmin", 1){
+		hooker = new LifecycleHooker("EntityAdmin", 990){
 
 			@Override
 			public void initial() {
-				// TODO Auto-generated method stub
-				
+				sendFeedback(false,"EntityAdmin initial nothing done");
 			}
 
 			@Override
 			public void startup() {
+				sendFeedback(false,"EntityAdmin trying load EntityMeta.");
 				loadEntityMeta();
+				sendFeedback(false,"EntityAdmin loadEntityMeta done.");
 			}
 
 			@Override
