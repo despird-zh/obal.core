@@ -5,7 +5,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.dcube.accessor.IAdminAccessor;
+import com.dcube.accessor.IAdminGAccessor;
 import com.dcube.accessor.IMetaGAccessor;
 import com.dcube.core.AccessorFactory;
 import com.dcube.core.security.Principal;
@@ -78,9 +78,9 @@ public class EntityAdmin {
 	 * 
 	 * @param principal the principal object. 
 	 **/
-	public IAdminAccessor getAdminAccessor(Principal principal){
+	public IAdminGAccessor getAdminAccessor(Principal principal){
 		
-		IAdminAccessor aa = null;
+		IAdminGAccessor aa = null;
 		try {
 			aa = AccessorFactory.buildGenericAccessor(principal, EntityConstants.ACCESSOR_GENERIC_ADMIN);
 		} catch (EntityException e) {
@@ -137,7 +137,7 @@ public class EntityAdmin {
 
 		Principal princ = new Principal("acc", "demo", "pwd");
 
-		IAdminAccessor adminAccessor = getAdminAccessor(princ);
+		IAdminGAccessor adminAccessor = getAdminAccessor(princ);
 		IMetaGAccessor metaAttrAccessor = null;
 		List<EntityAttr> attrs = meta.getAllAttrs();
 
@@ -171,7 +171,7 @@ public class EntityAdmin {
 		
 		Principal princ = new Principal("acc", "demo", "pwd");
 
-		IAdminAccessor adminAccessor = getAdminAccessor(princ);
+		IAdminGAccessor adminAccessor = getAdminAccessor(princ);
 		
 		try {
 			adminAccessor.dropSchema(schemaName);

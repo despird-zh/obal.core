@@ -1,6 +1,6 @@
 package com.dcube.admin;
 
-import com.dcube.accessor.IAdminAccessor;
+import com.dcube.accessor.IAdminGAccessor;
 import com.dcube.core.security.Principal;
 import com.dcube.exception.AccessorException;
 import com.dcube.meta.EntityAttr;
@@ -40,7 +40,7 @@ public class EntitySetup {
 		EntityAdmin ea = EntityAdmin.getInstance();
 		Principal princ = new Principal("acc", "demo", "pwd");
 
-		IAdminAccessor aa = ea.getAdminAccessor(princ);
+		IAdminGAccessor aa = ea.getAdminAccessor(princ);
 
 		try {
 

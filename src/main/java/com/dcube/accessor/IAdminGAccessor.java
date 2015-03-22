@@ -32,7 +32,7 @@ import com.dcube.meta.EntityAttr;
  * @version 0.1 2014-3-1
  * 
  **/
-public interface IAdminAccessor extends IBaseAccessor{
+public interface IAdminGAccessor extends IBaseAccessor{
 	
 	/**
 	 * create schema 

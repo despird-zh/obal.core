@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.dcube.accessor.IAdminAccessor;
+import com.dcube.accessor.IAdminGAccessor;
 import com.dcube.accessor.IMetaGAccessor;
 import com.dcube.admin.EntityAdmin;
 import com.dcube.base.BaseTester;
@@ -222,7 +222,7 @@ public class AccessorTest extends BaseTester{
 		EntityAdmin ea = EntityAdmin.getInstance();
 		Principal princ = new Principal("useracc","demouser","pwd");
 		
-		IAdminAccessor aa = ea.getAdminAccessor(princ);
+		IAdminGAccessor aa = ea.getAdminAccessor(princ);
 		IMetaGAccessor imeta = null;
 		try {
 			

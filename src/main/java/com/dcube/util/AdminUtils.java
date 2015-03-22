@@ -2,7 +2,7 @@ package com.dcube.util;
 
 import java.util.List;
 
-import com.dcube.accessor.IAdminAccessor;
+import com.dcube.accessor.IAdminGAccessor;
 import com.dcube.admin.EntityAdmin;
 import com.dcube.core.security.Principal;
 import com.dcube.exception.AccessorException;
@@ -21,7 +21,7 @@ public class AdminUtils {
 	 **/
 	public static void createSchema(String schemaName, List<EntityAttr> attrs) throws AccessorException{
 		Principal principal = null;
-		IAdminAccessor aa = EntityAdmin.getInstance().getAdminAccessor(principal);
+		IAdminGAccessor aa = EntityAdmin.getInstance().getAdminAccessor(principal);
 		
 		aa.createSchema(schemaName, attrs);
 	}
@@ -33,7 +33,7 @@ public class AdminUtils {
 	 **/
 	public static void updateSchema(String entryName, List<EntityAttr> attrs) throws AccessorException{
 		Principal principal = null;
-		IAdminAccessor aa = EntityAdmin.getInstance().getAdminAccessor(principal);
+		IAdminGAccessor aa = EntityAdmin.getInstance().getAdminAccessor(principal);
 		
 		aa.updateSchema(entryName, attrs);
 	}
@@ -41,7 +41,7 @@ public class AdminUtils {
 	public static void dropSchema(String schemaName) throws AccessorException{
 		
 		Principal principal = null;
-		IAdminAccessor aa = EntityAdmin.getInstance().getAdminAccessor(principal);
+		IAdminGAccessor aa = EntityAdmin.getInstance().getAdminAccessor(principal);
 		
 		aa.dropSchema(schemaName);
 	}
