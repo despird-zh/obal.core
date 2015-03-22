@@ -1,2 +1,2 @@
-com.dcube.core.hbase.HAccessorBuilder
-com.dcube.core.redis.RAccessorBuilder
+com.dcube.core.hbase.HAccessorBuilder  # builder for hbase
+com.dcube.core.redis.RAccessorBuilder  # builder for redis
