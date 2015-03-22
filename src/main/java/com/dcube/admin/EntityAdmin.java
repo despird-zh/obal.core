@@ -25,7 +25,7 @@ import com.dcube.util.AccessorUtils;
  * @author despird
  * @version 0.1 2014-11-15 
  * 
- * @see AdminAccessor
+ * @see AdminGAccessor
  **/
 public class EntityAdmin {
 

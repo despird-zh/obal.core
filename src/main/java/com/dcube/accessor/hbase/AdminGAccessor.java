@@ -36,13 +36,13 @@ import com.dcube.exception.AccessorException;
 import com.dcube.meta.EntityAttr;
 import com.dcube.meta.EntityConstants;
 
-public class AdminAccessor extends HGenericAccessor implements IAdminAccessor,HAdminAware{
+public class AdminGAccessor extends HGenericAccessor implements IAdminAccessor,HAdminAware{
 
-	public AdminAccessor() {
+	public AdminGAccessor() {
 		super(EntityConstants.ACCESSOR_GENERIC_ADMIN);
 	}
 
-	Logger LOGGER = LoggerFactory.getLogger(AdminAccessor.class);
+	Logger LOGGER = LoggerFactory.getLogger(AdminGAccessor.class);
 	private HBaseAdmin admin = null;
 	
 	@Override
