@@ -88,7 +88,7 @@ public class SecurityTest extends BaseTester{
 		}
 	}
 	
-	public void testCore(){
+	public void test003Core(){
 		
 		PrincipalGAccessor pa = null;
 		try {
