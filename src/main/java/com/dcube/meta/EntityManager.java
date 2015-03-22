@@ -110,6 +110,25 @@ public class EntityManager {
 	}
 
 	/**
+	 * Get the entity attribute info 
+	 * 
+	 * @param entityName the name of entity
+	 * @param attrName the name of attribute.
+	 **/
+	public EntityAttr getEntityAttr(String entityName, String attrName)throws MetaException{
+		
+		EntityMeta emeta = metaMap.get(entityName);
+		if(emeta == null)
+			throw new MetaException("The meta[{}] info not exists.",entityName);
+		
+		EntityAttr eattr = emeta.getAttr(attrName);
+		if(eattr == null)
+			throw new MetaException("The attr[{}-{}] info not exists.",entityName,attrName);
+		
+		return eattr;
+	}
+	
+	/**
 	 * Get the entry schema instance
 	 * 
 	 * @param entryName  the entry name

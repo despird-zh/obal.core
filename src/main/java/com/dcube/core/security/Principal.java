@@ -83,7 +83,8 @@ public class Principal{
 	private String password = "";
 	/** the source of principal information */
 	private String source = "";
-
+	/** the salt to hash password */
+	private String salt = "";
 	/** the user profile info holder */
 	private Profile profile = null;
 	private Map<String,Object> groups;
@@ -107,6 +108,16 @@ public class Principal{
 	public void setAccount(String account){
 		
 		this.account = account;
+	}
+	
+	public String getSalt(){
+		
+		return this.salt;
+	}
+	
+	public void setSalt(String salt){
+		
+		this.salt = salt;
 	}
 	
 	@JsonProperty("name")

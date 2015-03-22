@@ -78,29 +78,13 @@ public final class AccessorFactory {
 		String defaultName = CoreConfigs.getString(CoreConstants.CONFIG_DFT_BUILDER,CoreConstants.BUILDER_HBASE);
 		defaultBuilder = defaultName;
 		LOGGER.info("default builder is {}", defaultName);
-		hooker = new LifecycleHooker("AccessorFactory", 999){
 
-			@Override
-			public void initial() {
-				sendFeedback(false, "AccessorFactory load all accessor builders.");
-				loadAccessorBuilder();
-			}
-
-			@Override
-			public void startup() {
-				sendFeedback(false, "AccessorFactory startup nothing done.");
-			}
-
-			@Override
-			public void shutdown() {
-				// TODO Auto-generated method stub
-				
-			}
-			
-		};
 	}
 
-	private void loadAccessorBuilder(){
+	public static void loadAccessorBuilder(){
+		
+		if (instance == null)
+			instance = new AccessorFactory();
 		
         ServiceLoader<AccessorBuilder> svcloader = ServiceLoader
                 .load(AccessorBuilder.class, ClassLoader.getSystemClassLoader());
@@ -121,7 +105,26 @@ public final class AccessorFactory {
 
 		if (instance == null)
 			instance = new AccessorFactory();
+		hooker = new LifecycleHooker("AccessorFactory", 999){
 
+			@Override
+			public void initial() {
+				sendFeedback(false, "AccessorFactory load all accessor builders.");
+				loadAccessorBuilder();
+			}
+
+			@Override
+			public void startup() {
+				sendFeedback(false, "AccessorFactory startup nothing done.");
+			}
+
+			@Override
+			public void shutdown() {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		};
 		return hooker;
 	}
 

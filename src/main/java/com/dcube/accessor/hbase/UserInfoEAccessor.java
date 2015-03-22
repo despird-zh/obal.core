@@ -45,6 +45,7 @@ public class UserInfoEAccessor extends HEntityAccessor<TraceableEntry> {
 					principal.setAccount(fromObject.getAttrValue(UserInfo.Account.attribute, String.class));
 					principal.setName(fromObject.getAttrValue(UserInfo.Name.attribute, String.class));
 					principal.setSource(fromObject.getAttrValue(UserInfo.Source.attribute, String.class));
+					principal.setSalt(fromObject.getAttrValue(UserInfo.Salt.attribute, String.class));
 					principal.setPassword(fromObject.getAttrValue(UserInfo.Password.attribute, String.class));
 					principal.setGroups(fromObject.getAttrValue(UserInfo.Groups.attribute, Map.class));
 					principal.setRoles(fromObject.getAttrValue(UserInfo.Roles.attribute, Map.class));
@@ -63,6 +64,7 @@ public class UserInfoEAccessor extends HEntityAccessor<TraceableEntry> {
 					entry.setAttrValue(meta.getAttr(UserInfo.Account.attribute), toObject.getAccount());
 					entry.setAttrValue(meta.getAttr(UserInfo.Name.attribute), toObject.getName());
 					entry.setAttrValue(meta.getAttr(UserInfo.Source.attribute), toObject.getSource());
+					entry.setAttrValue(meta.getAttr(UserInfo.Salt.attribute), toObject.getSalt());
 					entry.setAttrValue(meta.getAttr(UserInfo.Password.attribute), toObject.getPassword());
 					entry.setAttrValue(meta.getAttr(UserInfo.Groups.attribute), toObject.getGroups());
 					entry.setAttrValue(meta.getAttr(UserInfo.Roles.attribute), toObject.getRoles());

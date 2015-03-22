@@ -61,6 +61,22 @@ public class EntryCollection<GB extends GenericInfo> implements Iterable<GB> {
 	}
 	
 	/**
+	 * Get the entry list 
+	 **/
+	public List<GB> getEntryList(){
+		
+		return this.entrylist;
+	}
+	
+	/**
+	 * Check if the collection is null 
+	 **/
+	public boolean isEmpty(){
+		
+		return this.entrylist == null | entrylist.size() == 0;
+	}
+	
+	/**
 	 * Get Iterator object 
 	 **/
 	@Override

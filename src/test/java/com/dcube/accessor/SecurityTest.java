@@ -3,8 +3,14 @@ package com.dcube.accessor;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.junit.Assert;
+import org.junit.FixMethodOrder;
+import org.junit.runners.MethodSorters;
+
+import com.dcube.accessor.hbase.PrincipalGAccessor;
 import com.dcube.accessor.hbase.UserInfoEAccessor;
 import com.dcube.base.BaseTester;
+import com.dcube.core.AccessorFactory;
 import com.dcube.core.EntryKey;
 import com.dcube.core.IEntryConverter;
 import com.dcube.core.accessor.EntryCollection;
@@ -15,9 +21,10 @@ import com.dcube.launcher.CoreLauncher;
 import com.dcube.meta.EntityConstants;
 import com.dcube.util.AccessorUtils;
 
-public class PrincipalAccessorTest extends BaseTester{
+@FixMethodOrder(MethodSorters.NAME_ASCENDING) 
+public class SecurityTest extends BaseTester{
 
-	public void testCore(){
+	public void Dtest001CreatePrincipal(){
 		
 		UserInfoEAccessor pa = null;
 		Principal princ = new Principal("demo1","demouser1","demopwd","demosrc");
@@ -54,7 +61,52 @@ public class PrincipalAccessorTest extends BaseTester{
 			AccessorUtils.closeAccessor(pa);
 		}
 	}
+
+	public void test002UpdateAttr(){
 		
+		PrincipalGAccessor pa = null;
+		UserInfoEAccessor uea = null;
+		Principal princ = new Principal("demo1","demouser1","demopwd","demosrc");
+		//princ.setKey("101001");
+		try {
+			pa = AccessorUtils.getEntityAccessor(princ, EntityConstants.ACCESSOR_GENERIC_USER);
+			Principal princ2 = pa.getPrincipalByAccount("demo1");
+			uea = AccessorFactory.buildEntityAccessor(princ, EntityConstants.ENTITY_PRINCIPAL);
+
+			uea.doPutEntryAttr(princ2.getId(), "i_name", "newUserName");
+			
+			princ2 = pa.getPrincipalByAccount("demo1");
+			
+			Assert.assertEquals(princ2.getName(), "newUserName");
+			
+		} catch (BaseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			
+			AccessorUtils.closeAccessor(pa,uea);
+		}
+	}
+	
+	public void testCore(){
+		
+		PrincipalGAccessor pa = null;
+		try {
+			Principal princ2 = new Principal("demo2","demouser1","demopwd","demosrc");
+			pa = AccessorFactory.buildGenericAccessor(princ2, EntityConstants.ACCESSOR_GENERIC_USER);
+			Principal princ = pa.getPrincipalByAccount("demo1");
+			
+			Assert.assertEquals(princ.getAccount(), "demo1");
+			
+		} catch (BaseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			
+			AccessorUtils.closeAccessor(pa);
+		}
+	}
+	
 	protected void setUp() throws Exception {  
 		initLog4j();
 		CoreLauncher.initial();

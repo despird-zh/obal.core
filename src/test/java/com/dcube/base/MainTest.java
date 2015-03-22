@@ -18,8 +18,8 @@ public class MainTest extends BaseTester{
 	static{
 		debug("---==: initial log4j");
 		initLog4j();
-		setSwitch(0,true);// prepare
-		setSwitch(1,false);// prepare
+		setSwitch(0,false);// prepare
+		setSwitch(1,true);// prepare
 		setSwitch(2,false);// load meta
 		setSwitch(3,false);// principal test
 
@@ -42,11 +42,14 @@ public class MainTest extends BaseTester{
 
     }
     
-    public void test001Prepare() {     
+    public void test001SetupTables() {     
     	if(!switchOn(1))
     		return;
     	
     	debug("---==: Test 001 schema create ");
+    	//step1 detect all the accessor builder
+    	AccessorFactory.loadAccessorBuilder();
+    	//setp2 setup all the tables.
     	EntitySetup ei = new EntitySetup();
 		ei.setup();		
     }
