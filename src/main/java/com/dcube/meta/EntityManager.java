@@ -347,7 +347,7 @@ public class EntityManager {
 	 * @param entityname the attribute name 
 	 **/
 	public EntityAttr getAccessControlAttribute(String entityname){
-		EntityAttr attr = new EntityAttr(IAccessControl.ATTR_ACL, "acl", "");
+		EntityAttr attr = new EntityAttr(IAccessControl.ATTR_ACL, EntityConstants.ATTR_ACL_COLUMN, "dummy");
 		attr.setEntityName(entityname);
 		return attr;
 	}

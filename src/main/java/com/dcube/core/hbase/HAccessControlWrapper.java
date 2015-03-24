@@ -7,16 +7,15 @@ import java.util.Set;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
 
-import com.dcube.core.accessor.TraceableEntry;
+import com.dcube.core.accessor.AccessControlEntry;
 import com.dcube.exception.WrapperException;
 import com.dcube.meta.EntityAttr;
 import com.dcube.meta.EntityConstants;
 
-public class HAccessControlWrapper extends HEntryWrapper<TraceableEntry>{
-
+public class HAccessControlWrapper extends HEntryWrapper<AccessControlEntry>{
 
 	@Override
-	public TraceableEntry wrap(List<EntityAttr> attrs, Result rawEntry)
+	public AccessControlEntry wrap(List<EntityAttr> attrs, Result rawEntry)
 			throws WrapperException {
 		
 		Result entry = (Result)rawEntry;
@@ -25,7 +24,7 @@ public class HAccessControlWrapper extends HEntryWrapper<TraceableEntry>{
 			
 			entityName = EntityConstants.ENTITY_BLIND;
 		}
-		TraceableEntry gei = new TraceableEntry(entityName,new String(entry.getRow()));
+		AccessControlEntry gei = new AccessControlEntry(entityName,new String(entry.getRow()));
 		
 		for(EntityAttr attr: attrs){
 			
@@ -71,7 +70,7 @@ public class HAccessControlWrapper extends HEntryWrapper<TraceableEntry>{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Put parse(List<EntityAttr> attrs, TraceableEntry entryInfo)
+	public Put parse(List<EntityAttr> attrs, AccessControlEntry entryInfo)
 			throws WrapperException {
 		
 		byte[] keybytes = entryInfo.getEntryKey().getKeyBytes();
