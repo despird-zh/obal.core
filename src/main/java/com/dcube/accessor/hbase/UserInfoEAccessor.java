@@ -59,8 +59,8 @@ public class UserInfoEAccessor extends HEntityAccessor<TraceableEntry> {
 					
 					String id = toObject.getId();
 					
-					TraceableEntry entry = new TraceableEntry(EntityConstants.ENTITY_PRINCIPAL,id);
-					EntityMeta meta = EntityManager.getInstance().getEntityMeta(EntityConstants.ENTITY_PRINCIPAL);
+					TraceableEntry entry = new TraceableEntry(EntityConstants.ENTITY_USER,id);
+					EntityMeta meta = EntityManager.getInstance().getEntityMeta(EntityConstants.ENTITY_USER);
 					entry.setAttrValue(meta.getAttr(UserInfo.Account.attribute), toObject.getAccount());
 					entry.setAttrValue(meta.getAttr(UserInfo.Name.attribute), toObject.getName());
 					entry.setAttrValue(meta.getAttr(UserInfo.Source.attribute), toObject.getSource());

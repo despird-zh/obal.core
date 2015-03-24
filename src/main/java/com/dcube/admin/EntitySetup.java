@@ -65,7 +65,7 @@ public class EntitySetup {
 
 		EntityAdmin eadmin = EntityAdmin.getInstance();
 		
-		EntityMeta meta = new EntityMeta(EntityConstants.ENTITY_PRINCIPAL);
+		EntityMeta meta = new EntityMeta(EntityConstants.ENTITY_USER);
 		meta.setEntityClass(GenericEntity.class.getName());
 		meta.setAccessorName(EntityConstants.ACCESSOR_ENTITY_USER);
 		meta.setDescription("user schema ");
@@ -165,7 +165,7 @@ public class EntitySetup {
 		EntityAdmin eadmin = EntityAdmin.getInstance();
 		eadmin.dropSchema(EntityConstants.ENTITY_USER_ROLE);
 		eadmin.dropSchema(EntityConstants.ENTITY_USER_GROUP);
-		eadmin.dropSchema(EntityConstants.ENTITY_PRINCIPAL);
+		eadmin.dropSchema(EntityConstants.ENTITY_USER);
 		eadmin.dropSchema(EntityConstants.ENTITY_META_INFO);
 		eadmin.dropSchema(EntityConstants.ENTITY_META_ATTR);
 	}

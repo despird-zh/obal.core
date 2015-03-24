@@ -33,7 +33,7 @@ public class PrincipalGAccessor extends HGenericAccessor implements IPrincipalGA
 		Principal rtv = null;
 		UserInfoEAccessor uea = null;
 		try{
-			uea = (UserInfoEAccessor)AccessorFactory.buildEntityAccessor(this, EntityConstants.ENTITY_PRINCIPAL);
+			uea = (UserInfoEAccessor)AccessorFactory.buildEntityAccessor(this, EntityConstants.ENTITY_USER);
 			UserInfo attrInfo = UserInfo.Account;
 	
 			Filter filter = new SingleColumnValueFilter(attrInfo.colfamily.getBytes(), 
@@ -68,7 +68,7 @@ public class PrincipalGAccessor extends HGenericAccessor implements IPrincipalGA
 		Principal rtv = null;
 		UserInfoEAccessor uea = null;
 		try{
-			uea = (UserInfoEAccessor)AccessorFactory.buildEntityAccessor(this, EntityConstants.ENTITY_PRINCIPAL);
+			uea = (UserInfoEAccessor)AccessorFactory.buildEntityAccessor(this, EntityConstants.ENTITY_USER);
 			UserInfo attrName = UserInfo.Name;
 	
 			Filter filter = new SingleColumnValueFilter(attrName.colfamily.getBytes(), 

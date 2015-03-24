@@ -12,7 +12,7 @@ import com.dcube.exception.SecurityException;
 /**
  * EntryAcl is the entry access control list, item of it is access control setting for visitor
  * 
- * @author despird
+ * @author despird-zh
  * @version 0.1 2014-3-1
  * @since 0.1
  * 

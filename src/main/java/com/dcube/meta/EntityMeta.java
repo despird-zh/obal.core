@@ -21,6 +21,7 @@
 package com.dcube.meta;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -371,6 +372,34 @@ public class EntityMeta{
 				
 				rtv = attr;
 				break;
+			}
+		}
+		
+		return rtv;
+	}
+
+	/**
+	 * Get EntityAttr info List by attribute names
+	 * @param attrName the attribute names
+	 * @return EntryAttr  
+	 **/
+	public List<EntityAttr> getAttrs(String... attrName){
+		
+		List<String> attrnames = Arrays.asList(attrName);
+
+		ArrayList<EntityAttr> rtv = new ArrayList<EntityAttr>();
+		
+		for(Map.Entry<String, EntityAttr> entry:attrMap.entrySet()){
+			
+			EntityAttr attr = entry.getValue();
+			if(null == attr) 
+				continue;
+			else {
+				
+				if(attrnames.contains(attr.getAttrName())){			
+				
+					rtv.add(attr);
+				}
 			}
 		}
 		

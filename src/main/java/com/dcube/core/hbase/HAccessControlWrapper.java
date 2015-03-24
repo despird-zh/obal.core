@@ -12,7 +12,8 @@ import com.dcube.exception.WrapperException;
 import com.dcube.meta.EntityAttr;
 import com.dcube.meta.EntityConstants;
 
-public class HTraceableEntryWrapper extends HEntryWrapper<TraceableEntry>{
+public class HAccessControlWrapper extends HEntryWrapper<TraceableEntry>{
+
 
 	@Override
 	public TraceableEntry wrap(List<EntityAttr> attrs, Result rawEntry)
@@ -27,6 +28,7 @@ public class HTraceableEntryWrapper extends HEntryWrapper<TraceableEntry>{
 		TraceableEntry gei = new TraceableEntry(entityName,new String(entry.getRow()));
 		
 		for(EntityAttr attr: attrs){
+			
 			byte[] column = attr.getColumn().getBytes();
 			byte[] qualifier = attr.getQualifier().getBytes();
 			byte[] cell = entry.getValue(column, qualifier);

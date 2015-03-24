@@ -7,6 +7,7 @@ import org.junit.Assert;
 import org.junit.FixMethodOrder;
 import org.junit.runners.MethodSorters;
 
+import com.dcube.accessor.hbase.GroupInfoEAccessor;
 import com.dcube.accessor.hbase.PrincipalGAccessor;
 import com.dcube.accessor.hbase.UserInfoEAccessor;
 import com.dcube.base.BaseTester;
@@ -24,6 +25,11 @@ import com.dcube.util.AccessorUtils;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING) 
 public class SecurityTest extends BaseTester{
 
+	public void test000Initial() throws Exception{
+		CoreLauncher.initial();
+		CoreLauncher.start();
+	}
+	
 	public void Dtest001CreatePrincipal(){
 		
 		UserInfoEAccessor pa = null;
@@ -39,7 +45,7 @@ public class SecurityTest extends BaseTester{
 			roles.put("rk1","role1");
 			roles.put("rk2","role2");
 			princ.setRoles(roles);
-			pa = AccessorUtils.getEntityAccessor(princ, EntityConstants.ENTITY_PRINCIPAL);
+			pa = AccessorUtils.getEntityAccessor(princ, EntityConstants.ENTITY_USER);
 			EntryKey key = pa.newKey();
 			// get converter
 			IEntryConverter<TraceableEntry,Principal > converter = pa.getEntryConverter(Principal.class);
@@ -71,7 +77,7 @@ public class SecurityTest extends BaseTester{
 		try {
 			pa = AccessorUtils.getEntityAccessor(princ, EntityConstants.ACCESSOR_GENERIC_USER);
 			Principal princ2 = pa.getPrincipalByAccount("demo1");
-			uea = AccessorFactory.buildEntityAccessor(princ, EntityConstants.ENTITY_PRINCIPAL);
+			uea = AccessorFactory.buildEntityAccessor(princ, EntityConstants.ENTITY_USER);
 
 			uea.doPutEntryAttr(princ2.getId(), "i_name", "newUserName");
 			
@@ -88,15 +94,12 @@ public class SecurityTest extends BaseTester{
 		}
 	}
 	
-	public void test003Core(){
+	public void test003Group(){
 		
-		PrincipalGAccessor pa = null;
+		GroupInfoEAccessor pa = null;
 		try {
 			Principal princ2 = new Principal("demo2","demouser1","demopwd","demosrc");
-			pa = AccessorFactory.buildGenericAccessor(princ2, EntityConstants.ACCESSOR_GENERIC_USER);
-			Principal princ = pa.getPrincipalByAccount("demo1");
-			
-			Assert.assertEquals(princ.getAccount(), "demo1");
+			pa = AccessorFactory.buildEntityAccessor(princ2, EntityConstants.ACCESSOR_ENTITY_GROUP);
 			
 		} catch (BaseException e) {
 			// TODO Auto-generated catch block
@@ -107,15 +110,17 @@ public class SecurityTest extends BaseTester{
 		}
 	}
 	
+	public void test999End() throws Exception{
+		
+		  CoreLauncher.stop();
+	}
+	
 	protected void setUp() throws Exception {  
 		initLog4j();
-		CoreLauncher.initial();
-		CoreLauncher.start();
-	    super.setUp();  
-	}  
+	}
 	  
 	protected void tearDown() throws Exception {  
-	    CoreLauncher.stop();
+	  
 		super.tearDown();  
 	} 
 }

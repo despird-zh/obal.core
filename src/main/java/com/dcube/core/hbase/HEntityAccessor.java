@@ -21,6 +21,7 @@ package com.dcube.core.hbase;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -130,6 +131,7 @@ public abstract class HEntityAccessor<GB extends EntryInfo> extends EntityAccess
 		HEntryWrapper<GB> wrapper = this.getEntryWrapper();
 		HTableInterface table = null;
 		Scan scan=new Scan();
+		ResultScanner scanner = null;
 		try {
 			
 			if(scanfilter != null && scanfilter != null){
@@ -144,9 +146,9 @@ public abstract class HEntityAccessor<GB extends EntryInfo> extends EntityAccess
 			table = conn.getTable(context.getEntitySchema().getSchemaBytes(getContext().getPrincipal(),null));
 			BaseEntity schema = context.getEntitySchema();
 			List<EntityAttr> attrs = schema.getEntityMeta().getAllAttrs();
-			ResultScanner rs = table.getScanner(scan);
+			scanner = table.getScanner(scan);
 			
-			for (Result r : rs) {  
+			for (Result r : scanner) {  
 			     GB entry = wrapper.wrap(attrs,r);
 			     
 			     entryColl.addEntry(entry);
@@ -162,6 +164,61 @@ public abstract class HEntityAccessor<GB extends EntryInfo> extends EntityAccess
 			
 			if(table != null)
 				try {
+					scanner.close();
+					table.close();
+				} catch (IOException e) {
+					
+					e.printStackTrace();
+				}
+		}
+		
+		return entryColl;
+	}
+
+	@Override
+	public EntryCollection<GB> doScanEntry(EntryFilter<?> scanfilter, String... attributes)throws AccessorException{
+		
+		EntryCollection<GB> entryColl = new EntryCollection<GB>();
+		HEntryWrapper<GB> wrapper = this.getEntryWrapper();
+		HTableInterface table = null;
+		Scan scan=new Scan();
+		ResultScanner scanner = null;
+		BaseEntity entitySchema = (BaseEntity)getEntitySchema();
+		try {
+			
+			if(scanfilter != null && scanfilter != null){
+				
+				isFilterSupported(scanfilter,true);
+				
+				Filter hfilter = (Filter) scanfilter.getFilter();
+				scan.setFilter(hfilter);
+			}
+			HConnection conn = getConnection();
+			AccessorContext context = super.getContext();
+			table = conn.getTable(context.getEntitySchema().getSchemaBytes(getContext().getPrincipal(),null));
+			List<EntityAttr> attrs = entitySchema.getEntityMeta().getAttrs(attributes);
+        	for(EntityAttr attr: attrs){
+        		scan.addColumn(attr.getColumn().getBytes(), attr.getQualifier().getBytes());
+        	}
+			scanner = table.getScanner(scan);
+			
+			for (Result r : scanner) {  
+			     GB entry = wrapper.wrap(attrs,r);
+			     
+			     entryColl.addEntry(entry);
+			}
+		} catch (IOException e) {
+			
+			throw new AccessorException("Scan exception .",e);
+		} catch (WrapperException e) {
+			throw new AccessorException("Scan exception .",e);
+		} catch (MetaException e) {
+			throw new AccessorException("Scan exception .",e);
+		}finally{
+			
+			if(table != null)
+				try {
+					scanner.close();
 					table.close();
 				} catch (IOException e) {
 					
@@ -262,9 +319,47 @@ public abstract class HEntityAccessor<GB extends EntryInfo> extends EntityAccess
            
            Result r = table.get(get);
            HEntryWrapper<GB> wrapper = (HEntryWrapper<GB>)getEntryWrapper();
-           AccessorContext context = super.getContext();
-           BaseEntity schema = context.getEntitySchema();
-           rtv = wrapper.wrap(schema.getEntityMeta().getAllAttrs(),r);
+
+           rtv = wrapper.wrap(entrySchema.getEntityMeta().getAllAttrs(),r);
+
+        } catch (IOException e) {  
+        	
+            throw new AccessorException("Error get entry row,key:{}",e,entryKey);
+        } catch (WrapperException e) {
+        	 throw new AccessorException("Error get entry row,key:{}",e,entryKey);
+		} catch (MetaException e) {
+			throw new AccessorException("Error get entry row,key:{}",e,entryKey);
+		}finally{
+        	
+        	try {
+				table.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}        	
+        }
+		return rtv;
+	}
+	
+	@Override
+	public GB doGetEntry(String entryKey, String... attributes)throws AccessorException{
+		
+		HTableInterface table = null;
+		GB rtv = null;
+		BaseEntity entitySchema = (BaseEntity)getEntitySchema();
+        try {
+
+        	table = getConnection().getTable(entitySchema.getSchema(getContext().getPrincipal(),entryKey));
+        	List<EntityAttr> attrs = entitySchema.getEntityMeta().getAttrs(attributes);
+        	
+        	Get get = new Get(entryKey.getBytes());
+        	for(EntityAttr attr: attrs){
+        		get.addColumn(attr.getColumn().getBytes(), attr.getQualifier().getBytes());
+        	}
+        	Result result = table.get(get);
+        	
+        	HEntryWrapper<GB> wrapper = (HEntryWrapper<GB>)getEntryWrapper();
+        	
+        	rtv = wrapper.wrap(attrs, result);
 
         } catch (IOException e) {  
         	
@@ -382,24 +477,58 @@ public abstract class HEntityAccessor<GB extends EntryInfo> extends EntityAccess
 	
 	@Override
 	public void doDelEntry(String... rowkey) throws AccessorException {
-		HTableInterface table = null;
+
 		BaseEntity entrySchema = (BaseEntity)getEntitySchema();
+		HashMap<String, List<String>> map = new HashMap<String, List<String>>();
 		try {
-						
-			List<Delete> list = new ArrayList<Delete>();
+
 			for(String key:rowkey){
-				table = getConnection().getTable(entrySchema.getSchema(getContext().getPrincipal(),key));
-				if(StringUtils.isBlank(key)) continue;
-				
-				Delete d1 = new Delete(key.getBytes());  
-				list.add(d1); 
+				String schemaname = entrySchema.getSchema(getContext().getPrincipal(),key);
+				List<String> keys = map.get(schemaname);
+				keys = keys == null? new ArrayList<String>(): keys;
+				keys.add(key);
+				map.put(schemaname, keys);				
 			}
-	        table.delete(list);
-	        table.flushCommits();
-		} catch (IOException e) {
-			throw new AccessorException("Error delete entry row, key:{}",e,rowkey);
+			
+			for(Map.Entry<String, List<String>> e:map.entrySet()){
+				doDelEntry(e.getKey(), e.getValue(), null);
+			}
+
 		} catch (MetaException e) {
 			throw new AccessorException("Error delete entry row, key:{}",e,rowkey);
+		}      
+	}
+	
+	/**
+	 * Delete specified table entries with keys 
+	 **/
+	private void doDelEntry(String schemaname, List<String> keys, EntityAttr attr) throws AccessorException{
+		HTableInterface table = null;
+		String akey = null;
+		
+		try {
+			
+			List<Delete> list = new ArrayList<Delete>();
+			table = getConnection().getTable(schemaname);
+			for(String key:keys){
+				akey = key;
+				if(StringUtils.isBlank(key)) continue;
+				
+				Delete del = new Delete(key.getBytes());
+				if(attr != null){
+					
+					del.deleteColumn(attr.getColumn().getBytes(), attr.getQualifier().getBytes());
+				}
+				list.add(del); 
+			}
+			
+	        table.delete(list);
+	        table.flushCommits();
+	        
+		} catch (IOException e) {
+			
+			throw new AccessorException("Error delete entry row, key:{}-{}",e,schemaname,akey);
+
 		}finally{
         	
         	try {
@@ -407,9 +536,33 @@ public abstract class HEntityAccessor<GB extends EntryInfo> extends EntityAccess
 			} catch (IOException e) {
 				e.printStackTrace();
 			}        	
-        }        
+        }   
 	}
-		
+	
+	@Override
+	public void doDelEntryAttr(String attribute, String... rowkeys)throws AccessorException{
+		BaseEntity entrySchema = (BaseEntity)getEntitySchema();
+		EntityAttr attr = null;
+		HashMap<String, List<String>> map = new HashMap<String, List<String>>();
+		try {
+			attr = entrySchema.getEntityMeta().getAttr(attribute);
+			for(String key:rowkeys){
+				String schemaname = entrySchema.getSchema(getContext().getPrincipal(),key);
+				List<String> keys = map.get(schemaname);
+				keys = keys == null? new ArrayList<String>(): keys;
+				keys.add(key);
+				map.put(schemaname, keys);				
+			}
+			
+			for(Map.Entry<String, List<String>> e:map.entrySet()){
+				doDelEntry(e.getKey(), e.getValue(), attr);
+			}
+
+		} catch (MetaException e) {
+			throw new AccessorException("Error delete entry row, key:{}",e,rowkeys);
+		}        
+	}
+	
 	@Override	
 	public void close(){
 		try {

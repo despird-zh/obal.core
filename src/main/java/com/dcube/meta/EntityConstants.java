@@ -6,19 +6,21 @@ package com.dcube.meta;
  **/
 public class EntityConstants {
 
+	public static final String ATTR_ACL_COLUMN = "acl";
+	
 	public static final String ENTITY_PREFIX = "dcube.";
 	// the blind entity 
-	public static String ENTITY_BLIND = ENTITY_PREFIX + "blind";
+	public static final String ENTITY_BLIND = ENTITY_PREFIX + "blind";
 	// the meta info 
-	public static String ENTITY_META_INFO = ENTITY_PREFIX + "meta.info";
+	public static final String ENTITY_META_INFO = ENTITY_PREFIX + "meta.info";
 	// the meta attr
-	public static String ENTITY_META_ATTR = ENTITY_PREFIX + "meta.attr";
+	public static final String ENTITY_META_ATTR = ENTITY_PREFIX + "meta.attr";
 	//the entity name of principal
-	public static String ENTITY_PRINCIPAL = ENTITY_PREFIX + "user";	
+	public static final String ENTITY_USER = ENTITY_PREFIX + "user";	
 	// the entity name of role
-	public static String ENTITY_USER_ROLE = ENTITY_PREFIX + "user.role";	
+	public static final String ENTITY_USER_ROLE = ENTITY_PREFIX + "user.role";	
 	// the entity name of group
-	public static String ENTITY_USER_GROUP = ENTITY_PREFIX + "user.group";
+	public static final String ENTITY_USER_GROUP = ENTITY_PREFIX + "user.group";
 	
 	//the meta general , key of Accessor 
 	public static String ACCESSOR_GENERIC_META = "generic.meta";

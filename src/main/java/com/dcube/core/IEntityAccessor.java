@@ -74,6 +74,13 @@ public interface IEntityAccessor <GB extends EntryInfo> extends IBaseAccessor{
 	public abstract GB doGetEntry(String entryKey)throws AccessorException;
 
 	/**
+	 * get entry object
+	 * @param entrykey the entry key
+	 * @return GB - the entry information
+	 **/
+	public abstract GB doGetEntry(String entryKey, String... attributes)throws AccessorException;
+	
+	/**
 	 * get entry attribute 
 	 * @param entryKey the entry key
 	 * @param attrName the attribute name
@@ -89,12 +96,27 @@ public interface IEntityAccessor <GB extends EntryInfo> extends IBaseAccessor{
 	public abstract void doDelEntry(String... entryKey)throws AccessorException;
 
 	/**
+	 * delete entry object's specified attribute
+	 * @param entrykey the entry key array
+	 **/
+	public abstract void doDelEntryAttr(String attribute, String... entryKey)throws AccessorException;
+	
+	/**
 	 * get entry object list
 	 * @param scan the scan object
 	 * @return List<GB> - the entry information
 	 **/
 	public abstract EntryCollection<GB> doScanEntry(EntryFilter<?> scanfilter)throws AccessorException;
 
+
+	/**
+	 * get entry object list
+	 * @param scan the scan object
+	 * @return List<GB> - the entry information
+	 **/
+	public abstract EntryCollection<GB> doScanEntry(EntryFilter<?> scanfilter, String... attributes)throws AccessorException;
+
+	
 	/**
 	 * check filter object is supported or not
 	 * @param scanfilter the filter used to scan entries
