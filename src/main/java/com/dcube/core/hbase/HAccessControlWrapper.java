@@ -70,7 +70,10 @@ public class HAccessControlWrapper extends HEntryWrapper<AccessControlEntry>{
 			}
 			
 		}
-
+		
+		EntryAcl acl = wrapEntryAcl(rawEntry);
+		gei.setEntryAcl(acl);
+		
 		return gei;
 	}
 

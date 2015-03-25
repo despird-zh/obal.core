@@ -10,7 +10,7 @@ import com.dcube.core.security.IAccessControl;
 import com.dcube.exception.SecurityException;
 import com.dcube.meta.EntityConstants.TraceableInfo;
 
-@Deprecated
+
 public class AccessControlEntry extends EntryInfo implements ITraceable ,IAccessControl{
 
 	private EntryAcl acl = null;
@@ -72,17 +72,17 @@ public class AccessControlEntry extends EntryInfo implements ITraceable ,IAccess
 		super.setAttrValue(TraceableInfo.LastModify.attribute, lastModify);
 	}
 	
-	public EntryAcl getEntryAcl() throws SecurityException{
+	public EntryAcl getEntryAcl() {
 		
 		return acl;
 	}
 	
-	public void setEntryAcl(EntryAcl acl) throws SecurityException{
+	public void setEntryAcl(EntryAcl acl) {
 		
 		this.acl = acl;
 	}
 	
-	public void addEntryAce(EntryAce ace, boolean merge) throws SecurityException{
+	public void addEntryAce(EntryAce ace, boolean merge) {
 			
 		acl.addEntryAce(ace,merge);	//merge ace	
 

@@ -1,6 +1,4 @@
 package com.dcube.core.security;
-
-import com.dcube.exception.SecurityException;
 /**
  * IAccessControl indicates implementation support Access control
  * 
@@ -10,10 +8,10 @@ import com.dcube.exception.SecurityException;
  **/
 public interface IAccessControl {
 
-	public EntryAcl getEntryAcl() throws SecurityException;
+	public EntryAcl getEntryAcl() ;
 	
-	public void setEntryAcl(EntryAcl acl) throws SecurityException;
+	public void setEntryAcl(EntryAcl acl) ;
 	
-	public void addEntryAce(EntryAce ace, boolean merge) throws SecurityException;
+	public void addEntryAce(EntryAce ace, boolean merge) ;
 	
 }
