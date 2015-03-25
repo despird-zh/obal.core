@@ -50,7 +50,7 @@ public class AclTest extends BaseTester{
 		EntryAce ea2 = new EntryAce(CoreConstants.ACE_TYPE_GROUP,"dgrp2",AclPrivilege.WRITE,"2x1","s2","t3");
 		EntryAce ea3 = new EntryAce(CoreConstants.ACE_TYPE_USER,"duser3",AclPrivilege.BROWSE,"3x1","s2","t3");
 		
-		EntryAcl eal = new EntryAcl("acl1",ea,ea1,ea2,ea3);
+		EntryAcl eal = new EntryAcl(ea,ea1,ea2,ea3);
 		
 		String val;
 		try {
@@ -60,7 +60,7 @@ public class AclTest extends BaseTester{
 			
 			System.out.println("------Json String 2 Java Object:");
 			EntryAcl eacl2 = mapper.readValue(val, EntryAcl.class);
-			System.out.println(eacl2.name());
+		
 			List<EntryAce> aces = eacl2.allAces();
 			for(EntryAce ace:aces){
 				System.out.print("------ACE value:");

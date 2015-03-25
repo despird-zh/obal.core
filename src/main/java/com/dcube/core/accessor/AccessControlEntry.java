@@ -8,10 +8,13 @@ import com.dcube.core.security.EntryAce;
 import com.dcube.core.security.EntryAcl;
 import com.dcube.core.security.IAccessControl;
 import com.dcube.exception.SecurityException;
-import com.dcube.meta.EntityConstants.AccessControlTraceInfo;
+import com.dcube.meta.EntityConstants.TraceableInfo;
 
+@Deprecated
 public class AccessControlEntry extends EntryInfo implements ITraceable ,IAccessControl{
 
+	private EntryAcl acl = null;
+	
 	public AccessControlEntry (String entityName,String key){
 		
 		super(entityName, key);
@@ -25,73 +28,64 @@ public class AccessControlEntry extends EntryInfo implements ITraceable ,IAccess
 
 	public String getCreator() {
 		
-		return super.getAttrValue(AccessControlTraceInfo.Creator.attribute, String.class);
+		return super.getAttrValue(TraceableInfo.Creator.attribute, String.class);
 	}
 
 
 	public void setCreator(String creator) {
 		
-		super.setAttrValue(AccessControlTraceInfo.Creator.attribute, creator);
+		super.setAttrValue(TraceableInfo.Creator.attribute, creator);
 		
 	}
 
 	public String getModifier() {
 		
-		return super.getAttrValue(AccessControlTraceInfo.Modifier.attribute, String.class);
+		return super.getAttrValue(TraceableInfo.Modifier.attribute, String.class);
 	}
 
 	public void setModifier(String modifier) {
 		
-		super.setAttrValue(AccessControlTraceInfo.Modifier.attribute, modifier);
+		super.setAttrValue(TraceableInfo.Modifier.attribute, modifier);
 	}
 
 
 	public Date getNewCreate() {
 		
-		return super.getAttrValue(AccessControlTraceInfo.NewCreate.attribute, Date.class);
+		return super.getAttrValue(TraceableInfo.NewCreate.attribute, Date.class);
 	}
 
 
 	public void setNewCreate(Date newCreate) {
 
-		super.setAttrValue(AccessControlTraceInfo.NewCreate.attribute, newCreate);
+		super.setAttrValue(TraceableInfo.NewCreate.attribute, newCreate);
 	}
 
 
 	public Date getLastModify() {
 		
-		return super.getAttrValue(AccessControlTraceInfo.LastModify.attribute, Date.class);
+		return super.getAttrValue(TraceableInfo.LastModify.attribute, Date.class);
 	}
 
 
 	public void setLastModify(Date lastModify) {
 
-		super.setAttrValue(AccessControlTraceInfo.LastModify.attribute, lastModify);
+		super.setAttrValue(TraceableInfo.LastModify.attribute, lastModify);
 	}
 	
 	public EntryAcl getEntryAcl() throws SecurityException{
 		
-		String aclStr = super.getAttrValue(AccessControlTraceInfo.AccessControl.attribute, String.class);
-		EntryAcl acl = null;
-
-		acl = EntryAcl.readJson(aclStr);
-
 		return acl;
 	}
 	
 	public void setEntryAcl(EntryAcl acl) throws SecurityException{
 		
-		String jsonStr = null;
-		jsonStr = EntryAcl.writeJson(acl);
-		super.setAttrValue(AccessControlTraceInfo.AccessControl.attribute, jsonStr);
-		
+		this.acl = acl;
 	}
 	
-	public void addEntryAce(EntryAce ace) throws SecurityException{
-		
-		EntryAcl acl = getEntryAcl();		
-		acl.addEntryAce(ace);		
-		setEntryAcl(acl);
+	public void addEntryAce(EntryAce ace, boolean merge) throws SecurityException{
+			
+		acl.addEntryAce(ace,merge);	//merge ace	
+
 	}
 
 }

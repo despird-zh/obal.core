@@ -450,14 +450,7 @@ public class EntityMeta{
 	 * set the entity access controllable flag
 	 **/
 	public void setAccessControllable(Boolean accessControllable){
-		EntityAttr attr = EntityManager.getInstance().getAccessControlAttribute(entityName);
-		if(!accessControllable){
-			
-			attrMap.remove(attr.getFullName());
-		}else{
-			
-			attrMap.put(attr.getFullName(),attr);
-		}
+
 		this.accessControllable = accessControllable;
 	}
 	

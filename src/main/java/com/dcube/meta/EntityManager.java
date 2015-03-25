@@ -29,7 +29,7 @@ import java.util.Map;
 
 import com.dcube.core.security.IAccessControl;
 import com.dcube.exception.MetaException;
-import com.dcube.meta.EntityConstants.AccessControlTraceInfo;
+import com.dcube.meta.EntityConstants.TraceableInfo;
 import com.dcube.meta.EntityConstants.AttrInfo;
 import com.dcube.meta.EntityConstants.MetaInfo;
 
@@ -319,36 +319,27 @@ public class EntityManager {
 	public List<EntityAttr> getTraceableAttributes(String entityname){
 		
 		List<EntityAttr> attrs = new ArrayList<EntityAttr>();
-		EntityAttr attr = new EntityAttr(AccessControlTraceInfo.Creator.attribute, 
-				AccessControlTraceInfo.Creator.colfamily, 
-				AccessControlTraceInfo.Creator.qualifier);
+		EntityAttr attr = new EntityAttr(TraceableInfo.Creator.attribute, 
+				TraceableInfo.Creator.colfamily, 
+				TraceableInfo.Creator.qualifier);
 		attr.setEntityName(entityname);
 		attrs.add(attr);
-		attr = new EntityAttr(AccessControlTraceInfo.Modifier.attribute, 
-				AccessControlTraceInfo.Modifier.colfamily, 
-				AccessControlTraceInfo.Modifier.qualifier);
+		attr = new EntityAttr(TraceableInfo.Modifier.attribute, 
+				TraceableInfo.Modifier.colfamily, 
+				TraceableInfo.Modifier.qualifier);
 		attr.setEntityName(entityname);
 		attrs.add(attr);
-		attr = new EntityAttr(AccessControlTraceInfo.NewCreate.attribute, EntityAttr.AttrType.DATE, 
-				AccessControlTraceInfo.NewCreate.colfamily, 
-				AccessControlTraceInfo.NewCreate.qualifier);
+		attr = new EntityAttr(TraceableInfo.NewCreate.attribute, EntityAttr.AttrType.DATE, 
+				TraceableInfo.NewCreate.colfamily, 
+				TraceableInfo.NewCreate.qualifier);
 		attr.setEntityName(entityname);
 		attrs.add(attr);
-		attr = new EntityAttr(AccessControlTraceInfo.LastModify.attribute, EntityAttr.AttrType.DATE, 
-				AccessControlTraceInfo.LastModify.colfamily, 
-				AccessControlTraceInfo.LastModify.qualifier);
+		attr = new EntityAttr(TraceableInfo.LastModify.attribute, EntityAttr.AttrType.DATE, 
+				TraceableInfo.LastModify.colfamily, 
+				TraceableInfo.LastModify.qualifier);
 		attr.setEntityName(entityname);
 		attrs.add(attr);
 		return attrs;
 	}
 	
-	/**
-	 * Get the access control attribute
-	 * @param entityname the attribute name 
-	 **/
-	public EntityAttr getAccessControlAttribute(String entityname){
-		EntityAttr attr = new EntityAttr(IAccessControl.ATTR_ACL, EntityConstants.ATTR_ACL_COLUMN, "dummy");
-		attr.setEntityName(entityname);
-		return attr;
-	}
 }

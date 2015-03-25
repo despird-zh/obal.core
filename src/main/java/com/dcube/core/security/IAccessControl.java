@@ -9,13 +9,11 @@ import com.dcube.exception.SecurityException;
  * 
  **/
 public interface IAccessControl {
-	
-	public static final String ATTR_ACL = "i_acl";
-	
+
 	public EntryAcl getEntryAcl() throws SecurityException;
 	
 	public void setEntryAcl(EntryAcl acl) throws SecurityException;
 	
-	public void addEntryAce(EntryAce ace) throws SecurityException;
+	public void addEntryAce(EntryAce ace, boolean merge) throws SecurityException;
 	
 }

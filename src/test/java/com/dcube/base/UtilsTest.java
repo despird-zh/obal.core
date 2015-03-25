@@ -2,6 +2,8 @@ package com.dcube.base;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.hadoop.hbase.util.Bytes;
 import org.junit.FixMethodOrder;
 import org.junit.runners.MethodSorters;
 
@@ -38,16 +40,12 @@ public class UtilsTest extends BaseTester{
     	if(!switchOn(1))
     		return;
     	
-    	try {
-			Class.forName("com.esotericsoftware.kryo.serializers.ClosureSerializer");
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
-		}
+    	String t = "group:000101";
+    	
+    	String[] ps = StringUtils.split(t, ":");
+    	for(int i =0; i< ps.length; i++){
+    		System.out.println("-->"+ps[i]);
+    	}
     }
-    
-    public static void main(String[] ars){
-    	UtilsTest t = new UtilsTest();
-    	t.test001Initial();
-    }
+
 }

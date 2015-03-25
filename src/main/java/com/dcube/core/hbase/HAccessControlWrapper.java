@@ -2,12 +2,18 @@ package com.dcube.core.hbase;
 
 import java.util.List;
 import java.util.Map;
+import java.util.NavigableMap;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
+import org.apache.hadoop.hbase.util.Bytes;
 
 import com.dcube.core.accessor.AccessControlEntry;
+import com.dcube.core.security.AclPrivilege;
+import com.dcube.core.security.EntryAce;
+import com.dcube.core.security.EntryAcl;
 import com.dcube.exception.WrapperException;
 import com.dcube.meta.EntityAttr;
 import com.dcube.meta.EntityConstants;
@@ -111,4 +117,34 @@ public class HAccessControlWrapper extends HEntryWrapper<AccessControlEntry>{
         return put;
 	}
 
+	public EntryAcl wrapEntryAcl(Result rawEntry){
+		
+		NavigableMap<byte[], byte[]> acemap = rawEntry.getFamilyMap(EntityConstants.ATTR_ACL_COLUMN.getBytes());
+		EntryAcl acl = new EntryAcl();
+		for(Map.Entry<byte[], byte[]> entry: acemap.entrySet()){
+			
+			String[] parts = StringUtils.split( Bytes.toString(entry.getKey()), ":");
+			String value = Bytes.toString(entry.getValue());
+			EntryAce ace = null;
+			if(parts.length == 2){
+				// eg. acl:group:001001 -> WRITE
+				//     CF | TYPE| KEY     Privilege
+				// here group:001001 is the qualifier name
+				AclPrivilege priv = AclPrivilege.valueOf(value);
+				ace = new EntryAce(parts[0],parts[1],priv);
+				
+			}else if(parts.length == 3){
+				// eg. acl:group:001001:upgrade -> WRITE
+				//     CF | TYPE| KEY  | ACTION   Privilege
+				// here group:001001:upgrade is the qualifier name
+				ace = new EntryAce(parts[0],parts[1],parts[2]);
+				
+			}
+			
+			acl.addEntryAce(ace, true);
+		}
+
+		
+		return null;
+	}
 }

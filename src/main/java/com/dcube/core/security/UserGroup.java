@@ -12,6 +12,7 @@ import com.dcube.meta.EntityConstants;
 /**
  * UserGroup collects users from same business entity or organization,
  * the user group usually used define the organize hierarchy.
+ * The group name is unique amount Group table.
  * <p>A group include many subgroups, but has only one parent group
  * </p>
  * <pre>

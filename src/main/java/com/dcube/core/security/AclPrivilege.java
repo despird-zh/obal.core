@@ -6,7 +6,7 @@ public enum AclPrivilege {
 	BROWSE("BROWSE",1),
 	READ("READ",2),
 	WRITE("WRITE",3),
-	EXECUTE("EXECUTE",4);
+	EXECUTE("DELETE",4);
 	
 	private String privilege = null;
 	private int priority = -1;

@@ -47,6 +47,12 @@ public class AdminGAccessor extends HGenericAccessor implements IAdminGAccessor,
 	
 	@Override
 	public void createSchema(String schemaName, List<EntityAttr> attrs) throws AccessorException {
+		// not access controllable
+		createSchema(schemaName, attrs, false);
+	}
+	
+	@Override
+	public void createSchema(String schemaName, List<EntityAttr> attrs,boolean accessControllable) throws AccessorException {
 		
 		HBaseAdmin hadmin = this.getAdmin();
 		try{
@@ -67,7 +73,9 @@ public class AdminGAccessor extends HGenericAccessor implements IAdminGAccessor,
 				}
 				
 			}
-			
+			if(accessControllable){
+				tableDescriptor.addFamily(new HColumnDescriptor(EntityConstants.ATTR_ACL_COLUMN));
+			}
 			hadmin.createTable(tableDescriptor);  
 			
 		}catch(IOException ioe){

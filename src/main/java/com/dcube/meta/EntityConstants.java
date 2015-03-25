@@ -202,14 +202,13 @@ public class EntityConstants {
 	/**
 	 * The meta info enumerator 
 	 **/
-	public static enum AccessControlTraceInfo{
+	public static enum TraceableInfo{
 
 		Creator(   "i_creator",    "creator"),
 		Modifier(  "i_modifier",   "modifier"),
 		LastModify("i_newcreate",  "newcreate"),
-		NewCreate( "i_lastmodify", "lastmodify"),
-		AccessControl( "i_acl", "acl");
-		
+		NewCreate( "i_lastmodify", "lastmodify");
+
 		public final String attribute;
 		public final String qualifier;
 		public final String colfamily;
@@ -217,17 +216,39 @@ public class EntityConstants {
 		/**
 		 * Hide default constructor 
 		 **/
-		private AccessControlTraceInfo(String attribute, String qualifier){  
+		private TraceableInfo(String attribute, String qualifier){  
 			this.attribute = attribute;
 			this.qualifier = qualifier;
 			this.colfamily = "c0";
 	    }
 		
-		private AccessControlTraceInfo(String attribute, String colfamily, String qualifier){  
+		private TraceableInfo(String attribute, String colfamily, String qualifier){  
 			this.attribute = attribute;
 			this.qualifier = qualifier;
 			this.colfamily = colfamily;
 	    }
+	}
+	
+	/**
+	 * The Acl info enumerator 
+	 **/
+	public static enum AclInfo{
+
+		User( "user"),
+		Group( "group"),
+		Role( "role");
+
+		public final String qualifier;
+		public final String colfamily;
+		
+		/**
+		 * Hide default constructor 
+		 **/
+		private AclInfo( String qualifier){  
+			this.qualifier = qualifier;
+			this.colfamily = EntityConstants.ATTR_ACL_COLUMN;
+	    }
+		
 	}
 	
 }

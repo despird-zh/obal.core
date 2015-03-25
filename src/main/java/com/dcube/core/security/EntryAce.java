@@ -5,9 +5,6 @@ import java.util.Set;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.codehaus.jackson.annotate.JsonCreator;
-import org.codehaus.jackson.annotate.JsonProperty;
-
 import com.dcube.core.CoreConstants;
 
 /**
@@ -21,9 +18,9 @@ import com.dcube.core.CoreConstants;
  * The setting include privilege and Permission for operation.
  * </p>
  * <pre>
- *   type:_user
+ *   type:user
  *   name:demo_account
- *   privilege:EXECUTE
+ *   privilege: WRITE
  *   permissionSet:MOVE,AUDIT,APPROVE
  * </pre>
  * 
@@ -45,6 +42,7 @@ public class EntryAce implements Comparable<EntryAce> {
 	private Set<String> permissionSet;
 	
 	private int typePriority = -1;
+	
 	/**
 	 * Constructor for user ACE item.
 	 * 
@@ -55,7 +53,7 @@ public class EntryAce implements Comparable<EntryAce> {
 		
 		this.type = aceType;
 		this.name = name;
-		this.privilege = AclPrivilege.READ;
+		this.privilege = AclPrivilege.NONE;
 		this.setTypePriotiry();
 	}
 	
@@ -90,6 +88,7 @@ public class EntryAce implements Comparable<EntryAce> {
 		this.setTypePriotiry();
 	}
 	
+	//
 	private void setTypePriotiry(){
 		
 		if(CoreConstants.ACE_TYPE_USER.equals(this.type))
@@ -107,12 +106,13 @@ public class EntryAce implements Comparable<EntryAce> {
 	 * @param privilege the access control privilege
 	 *  
 	 **/
-	@JsonCreator
-	public EntryAce(@JsonProperty("type") String aceType, @JsonProperty("name") String name, @JsonProperty("privilege") AclPrivilege privilege, @JsonProperty("permissions") String ... permissions){
+
+	public EntryAce(String aceType,  String name, AclPrivilege privilege, String ... permissions){
 		
 		this.type = aceType;
 		this.name = name;
 		this.privilege = privilege;
+		
 		if(permissions == null || permissions.length ==0)
 			return;
 		else
@@ -124,28 +124,67 @@ public class EntryAce implements Comparable<EntryAce> {
 		}
 	}
 	
-	@JsonProperty("name")
+	public EntryAce(String aceType,  String name, String ... permissions){
+		
+		this.type = aceType;
+		this.name = name;
+		
+		if(permissions == null || permissions.length ==0)
+			return;
+		else
+			permissionSet = new HashSet<String>();
+		
+		for(String permission:permissions){
+			
+			permissionSet.add(permission);
+		}
+	}
+	
 	public String name(){
 		
 		return this.name;
 	}
 	
-	@JsonProperty("type")
 	public String type(){
 		
 		return this.type;
 	}
 	
-	@JsonProperty("privilege")
 	public AclPrivilege privilege(){
 		
 		return this.privilege;
 	}
 	
-	@JsonProperty("permissions")
+	public void setPrivilege(AclPrivilege privilege){
+		
+		this.privilege = privilege;
+	}
+	
 	public Set<String> permissions(){
 		
 		return this.permissionSet;
+	}
+	
+	/**
+	 * Grant permission setting to current ace.
+	 * 
+	 * @param permission
+	 **/
+	public void grant(String ... permission){
+		for(String p:permission){
+			this.permissionSet.add(p);
+		}
+	}
+	
+	/**
+	 * Revoke permission setting from current ace.
+	 * 
+	 * @param permission
+	 **/
+	public void revoke(String ... permission){
+		for(String p:permission){
+			this.permissionSet.remove(p);
+		}
 	}
 	
 	@Override
@@ -178,47 +217,19 @@ public class EntryAce implements Comparable<EntryAce> {
 		}
 		// step 3
 		EntryAce that = (EntryAce) other;
-		// step 4
-		/*int sumPerms = 0;
-		if(null != permissionSet){
-			for(String perm:permissionSet){
-				
-				sumPerms += perm.hashCode();
-			}
-		}
-		int sumPermsThat = 0;
-		Set<String> perms = that.permissions();
-		if(null != perms){
-			
-			for(String perm:perms){
-				
-				sumPermsThat += perm.hashCode();
-			}
-		}*/
+
 		return new EqualsBuilder()
 			.append(this.type, that.type())
 			.append(this.name, that.name()).isEquals();
-			//.append(this.privilege, that.privilege())
-			//.append(sumPerms, sumPermsThat)
 		
 	}
 
 	@Override
 	public int hashCode() {
-		
-		/*int sumPerms = 0;
-		if(null != permissionSet){
-			for(String perm:permissionSet){
 				
-				sumPerms += perm.hashCode();
-			}
-		}*/
-		
 		return new HashCodeBuilder(17, 37)
 			.append(this.type)
 			.append(this.name).toHashCode();
-			//.append(this.privilege)
-			//.append(sumPerms)
 			
 	}
 	

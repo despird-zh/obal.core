@@ -23,19 +23,15 @@ public class EntryAcl {
 	public static int PERFER_PRIVILEGE = 11;
 	public static int PERFER_GRANULAR = 12;
 	
-	private String aclName = null;
-	
-	private List<EntryAce> aces = new ArrayList<EntryAce>();
+	private List<EntryAce> aces = null;
 	
 	/**
 	 * Constructor with acl name 
 	 * 
 	 * @param aclName the acl name
 	 **/
-	public EntryAcl(String aclName){
-		
-		this.aclName = aclName;
-		
+	public EntryAcl(){
+		aces = new ArrayList<EntryAce>();
 	}
 	
 	/**
@@ -45,9 +41,8 @@ public class EntryAcl {
 	 * @param aceArray the ace array
 	 **/
 	@JsonCreator
-	public EntryAcl(@JsonProperty("acl") String aclName, @JsonProperty("acelist")EntryAce ... aceArray){
-		
-		this.aclName = aclName;
+	public EntryAcl(EntryAce ... aceArray){
+		aces = new ArrayList<EntryAce>();
 		if(null == aceArray)
 			return;
 		else{
@@ -57,19 +52,32 @@ public class EntryAcl {
 			}
 		}
 	}
-	
-	public void addEntryAce(EntryAce ace){
-		
-		this.aces.add(ace);
-	}
-	
+
 	/**
-	 * Get the acl name
+	 * Add EntryAce to Acl
+	 * 
+	 * @param ace the access control entry
+	 * @param merge true:merge;false override.
 	 **/
-	@JsonProperty("acl")
-	public String name(){
+	public void addEntryAce(EntryAce ace,boolean merge){
 		
-		return this.aclName;
+		int i = this.aces.indexOf(ace);
+		if(i > -1){
+			// exist
+			EntryAce e = this.aces.get(i);
+			if(merge){// merge over original
+				if(e.privilege().priority() < ace.privilege().priority())
+					e.setPrivilege(ace.privilege());
+				
+				e.grant((String[])ace.permissions().toArray());
+			}else{// replace original
+				aces.remove(i);
+				aces.add(ace);
+			}
+		}else{
+			// none
+			this.aces.add(ace);
+		}
 	}
 	
 	/**
@@ -192,6 +200,7 @@ public class EntryAcl {
 	 * @param aclJsonStr the acl json String
 	 * @return EntryAcl the acl object
 	 **/
+	@Deprecated
 	public static EntryAcl readJson(String aclJsonStr)throws SecurityException{
 		
 		EntryAcl entryAcl = null;
@@ -217,6 +226,7 @@ public class EntryAcl {
 	 * @param entryAcl the entry acl object
 	 * @return String the json string of entry acl
 	 **/
+	@Deprecated
 	public static String writeJson(EntryAcl entryAcl)throws SecurityException{
 		
 		String jsonStr = null;

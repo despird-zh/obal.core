@@ -42,6 +42,14 @@ public interface IAdminGAccessor extends IBaseAccessor{
 	public void createSchema(String schemaName, List<EntityAttr> attrs) throws AccessorException;
 
 	/**
+	 * create schema 
+	 * @param schemaName the schema name
+	 * @param attrs the list of entry attribute objects
+	 * @param accessControllable access controllable flag
+	 **/
+	public void createSchema(String schemaName, List<EntityAttr> attrs, boolean accessControllable) throws AccessorException;
+	
+	/**
 	 * update schema 
 	 * @param schemaName the schema name
 	 * @param attrs the list of entry attribute objects
