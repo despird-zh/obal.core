@@ -8,6 +8,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import com.dcube.core.CoreConstants;
+import com.dcube.core.security.EntryAce.AceType;
 import com.dcube.exception.SecurityException;
 /**
  * EntryAcl is the entry access control list, item of it is access control setting for visitor
@@ -84,7 +85,7 @@ public class EntryAcl {
 	 * Get all ace list
 	 **/
 	@JsonProperty("acelist")
-	public List<EntryAce> allAces(){
+	public List<EntryAce> getAllAces(){
 		
 		return aces;
 	}
@@ -93,12 +94,12 @@ public class EntryAcl {
 	 * Get the user aces
 	 * @return the entry ace list 
 	 **/
-	public List<EntryAce> userAces(){
+	public List<EntryAce> getUserAces(){
 		List<EntryAce> uaces = new ArrayList<EntryAce>();
 		
 		for(EntryAce e:aces){
 			
-			if(CoreConstants.ACE_TYPE_USER.equals(e.type()))
+			if(AceType.User == e.type())
 				uaces.add(e);
 		}
 		
@@ -109,13 +110,13 @@ public class EntryAcl {
 	 * Get the role aces
 	 * @return the entry ace list 
 	 **/
-	public List<EntryAce> roleAces(){
+	public List<EntryAce> getRoleAces(){
 		
 		List<EntryAce> races = new ArrayList<EntryAce>();
 		
 		for(EntryAce e:aces){
 			
-			if(CoreConstants.ACE_TYPE_ROLE.equals(e.type()))
+			if(AceType.Role == e.type())
 				races.add(e);
 		}
 		
@@ -126,13 +127,13 @@ public class EntryAcl {
 	 * Get the group aces
 	 * @return the entry ace list 
 	 **/
-	public List<EntryAce> groupAces(){
+	public List<EntryAce> getGroupAces(){
 		
 		List<EntryAce> gaces = new ArrayList<EntryAce>();
 		
 		for(EntryAce e:aces){
 			
-			if(CoreConstants.ACE_TYPE_GROUP.equals(e.type()))
+			if(AceType.Group == e.type())
 				gaces.add(e);
 		}
 		
@@ -151,15 +152,15 @@ public class EntryAcl {
 		
 		for(EntryAce ace:aces){
 			
-			if(CoreConstants.ACE_TYPE_USER.equals(ace.type()) && ace.name().equals(principal.getAccount())){
+			if(AceType.User == ace.type() && ace.name().equals(principal.getAccount())){
 				
 				readPriv = readPriv.priority() < ace.privilege().priority() ? ace.privilege():readPriv;
 				
-			}else if(CoreConstants.ACE_TYPE_GROUP.equals(ace.type()) && principal.inGroup(ace.name())){
+			}else if(AceType.Group == ace.type() && principal.inGroup(ace.name())){
 				
 				readPriv = readPriv.priority() < ace.privilege().priority() ? ace.privilege():readPriv;
 					
-			}else if(CoreConstants.ACE_TYPE_ROLE.equals(ace.type()) && principal.inRole(ace.name())){
+			}else if(AceType.Role == ace.type() && principal.inRole(ace.name())){
 				
 				readPriv = readPriv.priority() < ace.privilege().priority() ? ace.privilege():readPriv;
 					
@@ -191,58 +192,5 @@ public class EntryAcl {
 		
 		return sumAces;
 	}
-	
-	private static ObjectMapper jsonMapper = null;
-	
-	/**
-	 * Read json string into EntryAcl object
-	 * 
-	 * @param aclJsonStr the acl json String
-	 * @return EntryAcl the acl object
-	 **/
-	@Deprecated
-	public static EntryAcl readJson(String aclJsonStr)throws SecurityException{
-		
-		EntryAcl entryAcl = null;
-		if(null == jsonMapper){
-			
-			jsonMapper = new ObjectMapper();
-		}		
-		try {
-			
-			entryAcl = jsonMapper.readValue(aclJsonStr, EntryAcl.class);
-			
-		} catch (Exception e) {
 
-			throw new SecurityException("Error when parse acl from json:{}", e, aclJsonStr);
-		}
-		
-		return entryAcl;
-	}
-	
-	/**
-	 * Write entry acl object into json string
-	 * 
-	 * @param entryAcl the entry acl object
-	 * @return String the json string of entry acl
-	 **/
-	@Deprecated
-	public static String writeJson(EntryAcl entryAcl)throws SecurityException{
-		
-		String jsonStr = null;
-		if(null == jsonMapper){
-			
-			jsonMapper = new ObjectMapper();
-		}
-		try {
-			
-			jsonStr = jsonMapper.writeValueAsString(entryAcl);
-			
-		} catch (Exception e) {
-			
-			throw new SecurityException("Error when wrap acl to json:{}", e, jsonStr);
-		}
-		
-		return jsonStr;
-	}
 }

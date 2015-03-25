@@ -5,7 +5,9 @@ import java.util.Set;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+
 import com.dcube.core.CoreConstants;
+import com.dcube.meta.EntityConstants;
 
 /**
  * EntryAce is the access control setting for operator, it could be set at three levels.
@@ -29,6 +31,29 @@ import com.dcube.core.CoreConstants;
  **/
 public class EntryAce implements Comparable<EntryAce> {
 	
+	/**
+	 * The Acl info enumerator 
+	 **/
+	public static enum AceType{
+
+		User( "user",3),
+		Group( "group",1),
+		Role( "role",2);
+
+		public final String qualifier;
+		public final String colfamily;
+		public final int priority;
+		/**
+		 * Hide default constructor 
+		 **/
+		private AceType( String qualifier, int priority){  
+			this.qualifier = qualifier;
+			this.colfamily = EntityConstants.ATTR_ACL_COLUMN;
+			this.priority = priority;
+	    }
+		
+	}
+	
 	/** the role name */
 	private String name;
 	
@@ -36,12 +61,10 @@ public class EntryAce implements Comparable<EntryAce> {
 	private AclPrivilege privilege;
 	
 	/** the entry type */
-	private String type;
+	private AceType type;
 	
 	/** the permission set */
 	private Set<String> permissionSet;
-	
-	private int typePriority = -1;
 	
 	/**
 	 * Constructor for user ACE item.
@@ -49,12 +72,12 @@ public class EntryAce implements Comparable<EntryAce> {
 	 * @param combinedValue
 	 *  
 	 **/
-	public EntryAce(String aceType, String name){
+	public EntryAce(AceType aceType, String name){
 		
 		this.type = aceType;
 		this.name = name;
 		this.privilege = AclPrivilege.NONE;
-		this.setTypePriotiry();
+
 	}
 	
 	/**
@@ -66,10 +89,10 @@ public class EntryAce implements Comparable<EntryAce> {
 	 **/
 	public EntryAce(String name, AclPrivilege privilege){
 		
-		this.type = CoreConstants.ACE_TYPE_USER;
+		this.type = AceType.User;
 		this.name = name;
 		this.privilege = privilege;
-		this.setTypePriotiry();
+
 	}
 	
 	/**
@@ -80,24 +103,14 @@ public class EntryAce implements Comparable<EntryAce> {
 	 * @param privilege the access control privilege
 	 *  
 	 **/
-	public EntryAce(String aceType, String name, AclPrivilege privilege){
+	public EntryAce(AceType aceType, String name, AclPrivilege privilege){
 		
 		this.type = aceType;
 		this.name = name;
 		this.privilege = privilege;
-		this.setTypePriotiry();
+
 	}
 	
-	//
-	private void setTypePriotiry(){
-		
-		if(CoreConstants.ACE_TYPE_USER.equals(this.type))
-			this.typePriority = 3;
-		if(CoreConstants.ACE_TYPE_GROUP.equals(this.type))
-			this.typePriority = 2;
-		if(CoreConstants.ACE_TYPE_ROLE.equals(this.type))
-			this.typePriority = 1;
-	}
 	/**
 	 * Constructor 
 	 * 
@@ -107,7 +120,7 @@ public class EntryAce implements Comparable<EntryAce> {
 	 *  
 	 **/
 
-	public EntryAce(String aceType,  String name, AclPrivilege privilege, String ... permissions){
+	public EntryAce(AceType aceType,  String name, AclPrivilege privilege, String ... permissions){
 		
 		this.type = aceType;
 		this.name = name;
@@ -124,7 +137,7 @@ public class EntryAce implements Comparable<EntryAce> {
 		}
 	}
 	
-	public EntryAce(String aceType,  String name, String ... permissions){
+	public EntryAce(AceType aceType,  String name, String ... permissions){
 		
 		this.type = aceType;
 		this.name = name;
@@ -145,7 +158,7 @@ public class EntryAce implements Comparable<EntryAce> {
 		return this.name;
 	}
 	
-	public String type(){
+	public AceType type(){
 		
 		return this.type;
 	}
@@ -241,7 +254,7 @@ public class EntryAce implements Comparable<EntryAce> {
 	    	return this.name.compareTo(o.name);
 	    }else {
 	    	
-	    	return this.typePriority - o.typePriority;
+	    	return this.type.priority - o.type.priority;
 	    }
 	}
 }

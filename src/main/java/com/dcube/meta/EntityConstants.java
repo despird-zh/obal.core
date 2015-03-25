@@ -228,27 +228,5 @@ public class EntityConstants {
 			this.colfamily = colfamily;
 	    }
 	}
-	
-	/**
-	 * The Acl info enumerator 
-	 **/
-	public static enum AclInfo{
-
-		User( "user"),
-		Group( "group"),
-		Role( "role");
-
-		public final String qualifier;
-		public final String colfamily;
 		
-		/**
-		 * Hide default constructor 
-		 **/
-		private AclInfo( String qualifier){  
-			this.qualifier = qualifier;
-			this.colfamily = EntityConstants.ATTR_ACL_COLUMN;
-	    }
-		
-	}
-	
 }

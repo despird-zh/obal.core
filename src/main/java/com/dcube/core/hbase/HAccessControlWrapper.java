@@ -10,18 +10,28 @@ import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.util.Bytes;
 
+import com.dcube.core.CoreConstants;
 import com.dcube.core.accessor.AccessControlEntry;
 import com.dcube.core.security.AclPrivilege;
 import com.dcube.core.security.EntryAce;
+import com.dcube.core.security.EntryAce.AceType;
 import com.dcube.core.security.EntryAcl;
 import com.dcube.exception.WrapperException;
 import com.dcube.meta.EntityAttr;
 import com.dcube.meta.EntityConstants;
 
+/**
+ * HAccessControlWrapper convert the byte[] data into EntryInfo object.
+ * Specially read/write the EntryAcl information
+ * 
+ * @author despird-zh
+ * @version 0.1 2015-3-25
+ * 
+ **/
 public class HAccessControlWrapper extends HEntryWrapper<AccessControlEntry>{
 
 	@Override
-	public AccessControlEntry wrap(List<EntityAttr> attrs, Result rawEntry)
+	public AccessControlEntry wrap(final List<EntityAttr> attrs, Result rawEntry)
 			throws WrapperException {
 		
 		Result entry = (Result)rawEntry;
@@ -79,7 +89,7 @@ public class HAccessControlWrapper extends HEntryWrapper<AccessControlEntry>{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Put parse(List<EntityAttr> attrs, AccessControlEntry entryInfo)
+	public Put parse(final List<EntityAttr> attrs, AccessControlEntry entryInfo)
 			throws WrapperException {
 		
 		byte[] keybytes = entryInfo.getEntryKey().getKeyBytes();
@@ -120,6 +130,10 @@ public class HAccessControlWrapper extends HEntryWrapper<AccessControlEntry>{
         return put;
 	}
 
+	/**
+	 * Wrap the Acl information from acl column family.
+	 * 
+	 **/
 	public EntryAcl wrapEntryAcl(Result rawEntry){
 		
 		NavigableMap<byte[], byte[]> acemap = rawEntry.getFamilyMap(EntityConstants.ATTR_ACL_COLUMN.getBytes());
@@ -134,20 +148,49 @@ public class HAccessControlWrapper extends HEntryWrapper<AccessControlEntry>{
 				//     CF | TYPE| KEY     Privilege
 				// here group:001001 is the qualifier name
 				AclPrivilege priv = AclPrivilege.valueOf(value);
-				ace = new EntryAce(parts[0],parts[1],priv);
+				AceType type = AceType.valueOf(parts[0]);
+				ace = new EntryAce(type,parts[1],priv);
 				
 			}else if(parts.length == 3){
 				// eg. acl:group:001001:upgrade -> WRITE
 				//     CF | TYPE| KEY  | ACTION   Privilege
 				// here group:001001:upgrade is the qualifier name
-				ace = new EntryAce(parts[0],parts[1],parts[2]);
+				AceType type = AceType.valueOf(parts[0]);
+				ace = new EntryAce(type,parts[1],parts[2]);
 				
 			}
 			
 			acl.addEntryAce(ace, true);
 		}
-
 		
 		return null;
+	}
+	
+	/**
+	 * Parse the acl information to Put
+	 *  
+	 **/
+	public void wrapEntryAcl(Put put,  EntryAcl acl){
+		
+		List<EntryAce> aces = acl.getAllAces();
+		byte[] cf = null;
+		byte[] enable = "enable".getBytes();
+		for(EntryAce ace: aces){
+			
+			String qualifier = ace.type().qualifier
+					+ CoreConstants.KEYS_SEPARATOR
+					+ ace.name();
+			cf = ace.type().colfamily.getBytes();
+			put.add(cf, qualifier.getBytes(), ace.privilege().toString().getBytes());
+			
+			Set<String> permissionSet = ace.permissions();
+			for(String permission : permissionSet){
+				
+				String permQualifier = qualifier 
+						+ CoreConstants.KEYS_SEPARATOR
+						+ permission;
+				put.add(cf, permQualifier.getBytes(), enable);
+			}
+		}
 	}
 }

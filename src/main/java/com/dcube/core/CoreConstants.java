@@ -17,13 +17,6 @@ public class CoreConstants {
 	 **/
 	public static final String COLLECT_ELM_SEPARATOR = ",";
 	
-	/** Ace type user */
-	public static final String ACE_TYPE_USER = "user";
-	/** Ace type role */
-	public static final String ACE_TYPE_ROLE = "role";
-	/** Ace type group */
-	public static final String ACE_TYPE_GROUP = "group";
-	
 	/** the builder name : hbase */
 	public static final String BUILDER_HBASE = "hbase";
 	
