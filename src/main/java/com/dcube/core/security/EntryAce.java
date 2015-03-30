@@ -153,17 +153,17 @@ public class EntryAce implements Comparable<EntryAce> {
 		}
 	}
 	
-	public String name(){
+	public String getName(){
 		
 		return this.name;
 	}
 	
-	public AceType type(){
+	public AceType getType(){
 		
 		return this.type;
 	}
 	
-	public AclPrivilege privilege(){
+	public AclPrivilege getPrivilege(){
 		
 		return this.privilege;
 	}
@@ -173,7 +173,7 @@ public class EntryAce implements Comparable<EntryAce> {
 		this.privilege = privilege;
 	}
 	
-	public Set<String> permissions(){
+	public Set<String> getPermissions(){
 		
 		return this.permissionSet;
 	}
@@ -232,8 +232,8 @@ public class EntryAce implements Comparable<EntryAce> {
 		EntryAce that = (EntryAce) other;
 
 		return new EqualsBuilder()
-			.append(this.type, that.type())
-			.append(this.name, that.name()).isEquals();
+			.append(this.type, that.getType())
+			.append(this.name, that.getName()).isEquals();
 		
 	}
 

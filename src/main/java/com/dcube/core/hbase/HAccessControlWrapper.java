@@ -181,13 +181,13 @@ public class HAccessControlWrapper extends HEntryWrapper<AccessControlEntry>{
 		byte[] enable = "enable".getBytes();
 		for(EntryAce ace: aces){
 			
-			String qualifier = ace.type().qualifier
+			String qualifier = ace.getType().qualifier
 					+ CoreConstants.KEYS_SEPARATOR
-					+ ace.name();
-			cf = ace.type().colfamily.getBytes();
-			put.add(cf, qualifier.getBytes(), ace.privilege().toString().getBytes());
+					+ ace.getName();
+			cf = ace.getType().colfamily.getBytes();
+			put.add(cf, qualifier.getBytes(), ace.getPrivilege().toString().getBytes());
 			
-			Set<String> permissionSet = ace.permissions();
+			Set<String> permissionSet = ace.getPermissions();
 			for(String permission : permissionSet){
 				
 				String permQualifier = qualifier 

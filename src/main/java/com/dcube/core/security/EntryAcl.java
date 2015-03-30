@@ -67,10 +67,10 @@ public class EntryAcl {
 			// exist
 			EntryAce e = this.aces.get(i);
 			if(merge){// merge over original
-				if(e.privilege().priority() < ace.privilege().priority())
-					e.setPrivilege(ace.privilege());
+				if(e.getPrivilege().priority() < ace.getPrivilege().priority())
+					e.setPrivilege(ace.getPrivilege());
 				
-				e.grant((String[])ace.permissions().toArray());
+				e.grant((String[])ace.getPermissions().toArray());
 			}else{// replace original
 				aces.remove(i);
 				aces.add(ace);
@@ -99,7 +99,7 @@ public class EntryAcl {
 		
 		for(EntryAce e:aces){
 			
-			if(AceType.User == e.type())
+			if(AceType.User == e.getType())
 				uaces.add(e);
 		}
 		
@@ -116,7 +116,7 @@ public class EntryAcl {
 		
 		for(EntryAce e:aces){
 			
-			if(AceType.Role == e.type())
+			if(AceType.Role == e.getType())
 				races.add(e);
 		}
 		
@@ -133,7 +133,7 @@ public class EntryAcl {
 		
 		for(EntryAce e:aces){
 			
-			if(AceType.Group == e.type())
+			if(AceType.Group == e.getType())
 				gaces.add(e);
 		}
 		
@@ -152,17 +152,17 @@ public class EntryAcl {
 		
 		for(EntryAce ace:aces){
 			
-			if(AceType.User == ace.type() && ace.name().equals(principal.getAccount())){
+			if(AceType.User == ace.getType() && ace.getName().equals(principal.getAccount())){
 				
-				readPriv = readPriv.priority() < ace.privilege().priority() ? ace.privilege():readPriv;
+				readPriv = readPriv.priority() < ace.getPrivilege().priority() ? ace.getPrivilege():readPriv;
 				
-			}else if(AceType.Group == ace.type() && principal.inGroup(ace.name())){
+			}else if(AceType.Group == ace.getType() && principal.inGroup(ace.getName())){
 				
-				readPriv = readPriv.priority() < ace.privilege().priority() ? ace.privilege():readPriv;
+				readPriv = readPriv.priority() < ace.getPrivilege().priority() ? ace.getPrivilege():readPriv;
 					
-			}else if(AceType.Role == ace.type() && principal.inRole(ace.name())){
+			}else if(AceType.Role == ace.getType() && principal.inRole(ace.getName())){
 				
-				readPriv = readPriv.priority() < ace.privilege().priority() ? ace.privilege():readPriv;
+				readPriv = readPriv.priority() < ace.getPrivilege().priority() ? ace.getPrivilege():readPriv;
 					
 			}
 			
