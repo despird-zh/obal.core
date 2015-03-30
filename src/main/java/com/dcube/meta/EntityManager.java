@@ -29,9 +29,9 @@ import java.util.Map;
 
 import com.dcube.core.security.IAccessControl;
 import com.dcube.exception.MetaException;
-import com.dcube.meta.EntityConstants.TraceableInfo;
-import com.dcube.meta.EntityConstants.AttrInfo;
-import com.dcube.meta.EntityConstants.MetaInfo;
+import com.dcube.meta.EntityConstants.TraceableEnum;
+import com.dcube.meta.EntityConstants.AttrEnum;
+import com.dcube.meta.EntityConstants.MetaEnum;
 
 /**
  * EntityManager manage all the Entity schema object.
@@ -201,64 +201,64 @@ public class EntityManager {
 		EntityMeta meta = new EntityMeta(EntityConstants.ENTITY_META_ATTR);
 		meta.setEntityClass(GenericEntity.class.getName());
 		meta.setAccessorName(EntityConstants.ACCESSOR_ENTITY_ATTR);
-		EntityAttr attr = new EntityAttr(AttrInfo.AttrName.attribute, 
-				AttrInfo.AttrName.colfamily, 
-				AttrInfo.AttrName.qualifier);
+		EntityAttr attr = new EntityAttr(AttrEnum.AttrName.attribute, 
+				AttrEnum.AttrName.colfamily, 
+				AttrEnum.AttrName.qualifier);
 		meta.addAttr(attr);
 		
-		attr = new EntityAttr(AttrInfo.Format.attribute, 
-				AttrInfo.Format.colfamily, 
-				AttrInfo.Format.qualifier);
+		attr = new EntityAttr(AttrEnum.Format.attribute, 
+				AttrEnum.Format.colfamily, 
+				AttrEnum.Format.qualifier);
 		meta.addAttr(attr);
 		
-		attr = new EntityAttr(AttrInfo.Column.attribute, 
-				AttrInfo.Column.colfamily, 
-				AttrInfo.Column.qualifier);
+		attr = new EntityAttr(AttrEnum.Column.attribute, 
+				AttrEnum.Column.colfamily, 
+				AttrEnum.Column.qualifier);
 		meta.addAttr(attr);
 		
-		attr = new EntityAttr(AttrInfo.Qualifier.attribute, 
-				AttrInfo.Qualifier.colfamily, 
-				AttrInfo.Qualifier.qualifier);
+		attr = new EntityAttr(AttrEnum.Qualifier.attribute, 
+				AttrEnum.Qualifier.colfamily, 
+				AttrEnum.Qualifier.qualifier);
 		meta.addAttr(attr);
 		
-		attr = new EntityAttr(AttrInfo.Hidden.attribute, EntityAttr.AttrType.BOOL, 
-				AttrInfo.Hidden.colfamily, 
-				AttrInfo.Hidden.qualifier);
+		attr = new EntityAttr(AttrEnum.Hidden.attribute, EntityAttr.AttrType.BOOL, 
+				AttrEnum.Hidden.colfamily, 
+				AttrEnum.Hidden.qualifier);
 		meta.addAttr(attr);
 		
-		attr = new EntityAttr(AttrInfo.Readonly.attribute, EntityAttr.AttrType.BOOL, 				
-				AttrInfo.Readonly.colfamily, 
-				AttrInfo.Readonly.qualifier);
+		attr = new EntityAttr(AttrEnum.Readonly.attribute, EntityAttr.AttrType.BOOL, 				
+				AttrEnum.Readonly.colfamily, 
+				AttrEnum.Readonly.qualifier);
 		meta.addAttr(attr);
 		
-		attr = new EntityAttr(AttrInfo.Required.attribute, EntityAttr.AttrType.BOOL, 
-				AttrInfo.Required.colfamily, 
-				AttrInfo.Required.qualifier);
+		attr = new EntityAttr(AttrEnum.Required.attribute, EntityAttr.AttrType.BOOL, 
+				AttrEnum.Required.colfamily, 
+				AttrEnum.Required.qualifier);
 		meta.addAttr(attr);
 		
-		attr = new EntityAttr(AttrInfo.Primary.attribute, EntityAttr.AttrType.BOOL, 				
-				AttrInfo.Primary.colfamily, 
-				AttrInfo.Primary.qualifier);
+		attr = new EntityAttr(AttrEnum.Primary.attribute, EntityAttr.AttrType.BOOL, 				
+				AttrEnum.Primary.colfamily, 
+				AttrEnum.Primary.qualifier);
 		meta.addAttr(attr);
 		
-		attr = new EntityAttr(AttrInfo.Entity.attribute, 				
-				AttrInfo.Entity.colfamily, 
-				AttrInfo.Entity.qualifier);
+		attr = new EntityAttr(AttrEnum.Entity.attribute, 				
+				AttrEnum.Entity.colfamily, 
+				AttrEnum.Entity.qualifier);
 		meta.addAttr(attr);
 		
-		attr = new EntityAttr(AttrInfo.Type.attribute, 				
-				AttrInfo.Type.colfamily, 
-				AttrInfo.Type.qualifier);
+		attr = new EntityAttr(AttrEnum.Type.attribute, 				
+				AttrEnum.Type.colfamily, 
+				AttrEnum.Type.qualifier);
 		meta.addAttr(attr);
 		
-		attr = new EntityAttr(AttrInfo.Mode.attribute, 				
-				AttrInfo.Mode.colfamily, 
-				AttrInfo.Mode.qualifier);
+		attr = new EntityAttr(AttrEnum.Mode.attribute, 				
+				AttrEnum.Mode.colfamily, 
+				AttrEnum.Mode.qualifier);
 		meta.addAttr(attr);
 		
-		attr = new EntityAttr(AttrInfo.Description.attribute, 				
-				AttrInfo.Description.colfamily, 
-				AttrInfo.Description.qualifier);
+		attr = new EntityAttr(AttrEnum.Description.attribute, 				
+				AttrEnum.Description.colfamily, 
+				AttrEnum.Description.qualifier);
 		meta.addAttr(attr);
 		
 		GenericEntity ae = new GenericEntity(meta);
@@ -269,43 +269,51 @@ public class EntityManager {
 		meta.setEntityClass(GenericEntity.class.getName());
 		meta.setAccessorName(EntityConstants.ACCESSOR_ENTITY_META);
 		
-		attr = new EntityAttr(MetaInfo.EntityClass.attribute, 
-							  MetaInfo.EntityClass.colfamily, 
-							  MetaInfo.EntityClass.qualifier);
+		attr = new EntityAttr(MetaEnum.EntityClass.attribute, 
+							  MetaEnum.EntityClass.colfamily, 
+							  MetaEnum.EntityClass.qualifier);
 		meta.addAttr(attr);
 		
-		attr = new EntityAttr(MetaInfo.EntityName.attribute, 
-				MetaInfo.EntityName.colfamily, 
-				MetaInfo.EntityName.qualifier);
+		attr = new EntityAttr(MetaEnum.EntityName.attribute, 
+				MetaEnum.EntityName.colfamily, 
+				MetaEnum.EntityName.qualifier);
 		meta.addAttr(attr);
 		
-		attr = new EntityAttr(MetaInfo.AccessorName.attribute, 
-				MetaInfo.AccessorName.colfamily, 
-				MetaInfo.AccessorName.qualifier);
+		attr = new EntityAttr(MetaEnum.AccessorName.attribute, 
+				MetaEnum.AccessorName.colfamily, 
+				MetaEnum.AccessorName.qualifier);
 		meta.addAttr(attr);
 		
-		attr = new EntityAttr(MetaInfo.Description.attribute, 
-				MetaInfo.Description.colfamily, 
-				MetaInfo.Description.qualifier);
+		attr = new EntityAttr(MetaEnum.Description.attribute, 
+				MetaEnum.Description.colfamily, 
+				MetaEnum.Description.qualifier);
 		meta.addAttr(attr);
 		
-		attr = new EntityAttr(MetaInfo.Traceable.attribute, 
+		attr = new EntityAttr(MetaEnum.Traceable.attribute, 
 				EntityAttr.AttrType.BOOL, 
-				MetaInfo.Traceable.colfamily, 
-				MetaInfo.Traceable.qualifier);
+				MetaEnum.Traceable.colfamily, 
+				MetaEnum.Traceable.qualifier);
 		meta.addAttr(attr);
 		
-		attr = new EntityAttr(MetaInfo.Attributes.attribute, 
-				EntityAttr.AttrMode.MAP, 
+		attr = new EntityAttr(MetaEnum.Attributes.attribute, 
+				EntityAttr.AttrMode.JMAP, 
 				EntityAttr.AttrType.STRING, 
-				MetaInfo.Attributes.colfamily, 
-				MetaInfo.Attributes.qualifier);
+				MetaEnum.Attributes.colfamily, 
+				MetaEnum.Attributes.qualifier);
 		meta.addAttr(attr);
 		
-		attr = new EntityAttr(MetaInfo.Schema.attribute, 
+		attr = new EntityAttr(MetaEnum.Schema.attribute, 
 				EntityAttr.AttrType.STRING, 				
-				MetaInfo.Schema.colfamily, 
-				MetaInfo.Schema.qualifier);		
+				MetaEnum.Schema.colfamily, 
+				MetaEnum.Schema.qualifier);		
+		meta.addAttr(attr);
+		/**
+		 * 2014-12-1 Add category attribute.
+		 **/ 
+		attr = new EntityAttr(MetaEnum.Category.attribute, 
+				EntityAttr.AttrType.STRING, 				
+				MetaEnum.Category.colfamily, 
+				MetaEnum.Category.qualifier);		
 		meta.addAttr(attr);
 		
 		GenericEntity me = new GenericEntity(meta);
@@ -319,24 +327,24 @@ public class EntityManager {
 	public List<EntityAttr> getTraceableAttributes(String entityname){
 		
 		List<EntityAttr> attrs = new ArrayList<EntityAttr>();
-		EntityAttr attr = new EntityAttr(TraceableInfo.Creator.attribute, 
-				TraceableInfo.Creator.colfamily, 
-				TraceableInfo.Creator.qualifier);
+		EntityAttr attr = new EntityAttr(TraceableEnum.Creator.attribute, 
+				TraceableEnum.Creator.colfamily, 
+				TraceableEnum.Creator.qualifier);
 		attr.setEntityName(entityname);
 		attrs.add(attr);
-		attr = new EntityAttr(TraceableInfo.Modifier.attribute, 
-				TraceableInfo.Modifier.colfamily, 
-				TraceableInfo.Modifier.qualifier);
+		attr = new EntityAttr(TraceableEnum.Modifier.attribute, 
+				TraceableEnum.Modifier.colfamily, 
+				TraceableEnum.Modifier.qualifier);
 		attr.setEntityName(entityname);
 		attrs.add(attr);
-		attr = new EntityAttr(TraceableInfo.NewCreate.attribute, EntityAttr.AttrType.DATE, 
-				TraceableInfo.NewCreate.colfamily, 
-				TraceableInfo.NewCreate.qualifier);
+		attr = new EntityAttr(TraceableEnum.NewCreate.attribute, EntityAttr.AttrType.DATE, 
+				TraceableEnum.NewCreate.colfamily, 
+				TraceableEnum.NewCreate.qualifier);
 		attr.setEntityName(entityname);
 		attrs.add(attr);
-		attr = new EntityAttr(TraceableInfo.LastModify.attribute, EntityAttr.AttrType.DATE, 
-				TraceableInfo.LastModify.colfamily, 
-				TraceableInfo.LastModify.qualifier);
+		attr = new EntityAttr(TraceableEnum.LastModify.attribute, EntityAttr.AttrType.DATE, 
+				TraceableEnum.LastModify.colfamily, 
+				TraceableEnum.LastModify.qualifier);
 		attr.setEntityName(entityname);
 		attrs.add(attr);
 		return attrs;

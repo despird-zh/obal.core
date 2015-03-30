@@ -265,25 +265,25 @@ public abstract class HEntityAccessor<GB extends EntryInfo> extends EntityAccess
 				get.addColumn(column, qualifier);
 	        	entry = table.get(get);
 	        	cell = entry.getValue(column, qualifier);
-				rtv = wrapper.getPrimitiveValue(attr, cell);		
+				rtv = HEntryWrapperUtils.getPrimitiveValue(attr, cell);		
         		break;
-        	case MAP:
+        	case JMAP:
 				get.addFamily(column);
 	        	entry = table.get(get);
 	        	cell = entry.getValue(column, qualifier);
-				rtv = wrapper.getMapValue(attr, cell);
+				rtv = HEntryWrapperUtils.getJMapValue(attr, cell);
 				break;
-        	case LIST:
+        	case JLIST:
 				get.addFamily(column);
 	        	entry = table.get(get);
 	        	cell = entry.getValue(column, qualifier);
-				rtv = wrapper.getListValue(attr, cell);
+				rtv = HEntryWrapperUtils.getJListValue(attr, cell);
 				break;
-        	case SET:
+        	case JSET:
         		get.addFamily(column);
 	        	entry = table.get(get);
 	        	cell = entry.getValue(column, qualifier);
-				rtv = wrapper.getSetValue(attr, cell);
+				rtv = HEntryWrapperUtils.getJSetValue(attr, cell);
 				break;
 			default:
 				break;
@@ -400,22 +400,22 @@ public abstract class HEntityAccessor<GB extends EntryInfo> extends EntityAccess
             switch(attr.mode){
             
 	            case PRIMITIVE:
-	            	wrapper.putPrimitiveValue(put, attr, value);
+	            	HEntryWrapperUtils.putPrimitiveValue(put, attr, value);
 	            	break;
-	            case MAP:
+	            case JMAP:
 	            	if(!(value instanceof Map<?,?>))
 	        			throw new AccessorException("the attr:{} value is not Map object",attrName);        		
-	        		wrapper.putMapValue(put, attr, (Map<String,Object>)value);	
+	            	HEntryWrapperUtils.putMapValue(put, attr, (Map<String,Object>)value);	
 	        		break;
-	            case LIST:
+	            case JLIST:
 	            	if(!(value instanceof List<?>))
 	        			throw new AccessorException("the attr:{} value is not List object",attrName);        		
-	        		wrapper.putListValue(put, attr, (List<Object>)value);	
+	            	HEntryWrapperUtils.putListValue(put, attr, (List<Object>)value);	
 	        		break;
-	            case SET:
+	            case JSET:
 	            	if(!(value instanceof List<?>))
 	        			throw new AccessorException("the attr:{} value is not List object",attrName);        		
-	        		wrapper.putSetValue(put, attr, (Set<Object>)value);	
+	            	HEntryWrapperUtils.putSetValue(put, attr, (Set<Object>)value);	
 	        		break;
 	            default:
 	            	break;      	
@@ -517,7 +517,8 @@ public abstract class HEntityAccessor<GB extends EntryInfo> extends EntityAccess
 				Delete del = new Delete(key.getBytes());
 				if(attr != null){
 					
-					del.deleteColumn(attr.getColumn().getBytes(), attr.getQualifier().getBytes());
+					del.deleteColumns(attr.getColumn().getBytes(), attr.getQualifier().getBytes());
+				
 				}
 				list.add(del); 
 			}

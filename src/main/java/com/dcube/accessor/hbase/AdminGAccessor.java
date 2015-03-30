@@ -73,6 +73,7 @@ public class AdminGAccessor extends HGenericAccessor implements IAdminGAccessor,
 				}
 				
 			}
+			// acl entity create [acl] column family.
 			if(accessControllable){
 				tableDescriptor.addFamily(new HColumnDescriptor(EntityConstants.ATTR_ACL_COLUMN));
 			}

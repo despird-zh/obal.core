@@ -79,13 +79,13 @@ public class RRawWrapper extends REntryWrapper<EntryInfo> {
 				Object value = super.getPrimitiveValue(attr, cell);
 				gei.setAttrValue(attr, value);
 				break;
-			case MAP:
+			case JMAP:
 				String mapkey = redisKey + CoreConstants.KEYS_SEPARATOR + attr.getAttrName();
 				cells = entry.hgetAll(mapkey.getBytes());
 				Map<String, Object> map = super.getMapValue(attr, cells);
 				gei.setAttrValue(attr, map);
 				break;
-			case LIST:
+			case JLIST:
 				String listkey = redisKey + CoreConstants.KEYS_SEPARATOR + attr.getAttrName();
 				Long llen = entry.llen(listkey.getBytes());
 				List<byte[]> listcells = entry.lrange(listkey.getBytes(), 0,llen);
@@ -93,7 +93,7 @@ public class RRawWrapper extends REntryWrapper<EntryInfo> {
 				gei.setAttrValue(attr, list);
 				break;
 
-			case SET:
+			case JSET:
 				String setkey = redisKey + CoreConstants.KEYS_SEPARATOR + attr.getAttrName();
 				Set<byte[]> setcells = entry.smembers(setkey.getBytes());
 
@@ -145,13 +145,13 @@ public class RRawWrapper extends REntryWrapper<EntryInfo> {
 					Object value = super.getPrimitiveValue(attr, cell);
 					gei.setAttrValue(attr, value);
 					break;
-				case MAP:
+				case JMAP:
 					String mapkey = redisKey + CoreConstants.KEYS_SEPARATOR + attr.getAttrName();
 					cells = entry.hgetAll(mapkey.getBytes());
 					Map<String, Object> map = super.getMapValue(attr, cells);
 					gei.setAttrValue(attr, map);
 					break;
-				case LIST:
+				case JLIST:
 					String listkey = redisKey + CoreConstants.KEYS_SEPARATOR + attr.getAttrName();
 					Long llen = entry.llen(listkey.getBytes());
 					List<byte[]> listcells = entry.lrange(listkey.getBytes(), 0,llen);
@@ -159,7 +159,7 @@ public class RRawWrapper extends REntryWrapper<EntryInfo> {
 					gei.setAttrValue(attr, list);
 					break;
 	
-				case SET:
+				case JSET:
 					String setkey = redisKey + CoreConstants.KEYS_SEPARATOR + attr.getAttrName();
 					Set<byte[]> setcells = entry.smembers(setkey.getBytes());
 	
@@ -200,13 +200,13 @@ public class RRawWrapper extends REntryWrapper<EntryInfo> {
 			case PRIMITIVE:
 				super.putPrimitiveValue(jedis,redisKey, attr, value);
 				break;
-			case MAP:
+			case JMAP:
 				super.putMapValue(jedis, redisKey, attr, (Map<String, Object>) value);
 				break;
-			case LIST:
+			case JLIST:
 				super.putListValue(jedis, redisKey, attr, (List<Object>) value);
 				break;
-			case SET:
+			case JSET:
 				super.putSetValue(jedis, redisKey, attr, (Set<Object>) value);
 				break;
 			default:

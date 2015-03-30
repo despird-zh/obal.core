@@ -9,6 +9,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.util.Bytes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.dcube.core.CoreConstants;
 import com.dcube.core.accessor.AccessControlEntry;
@@ -30,6 +32,8 @@ import com.dcube.meta.EntityConstants;
  **/
 public class HAccessControlWrapper extends HEntryWrapper<AccessControlEntry>{
 
+	public static Logger LOGGER = LoggerFactory.getLogger(HAccessControlWrapper.class);
+	
 	@Override
 	public AccessControlEntry wrap(final List<EntityAttr> attrs, Result rawEntry)
 			throws WrapperException {
@@ -52,25 +56,25 @@ public class HAccessControlWrapper extends HEntryWrapper<AccessControlEntry>{
 			
 				case PRIMITIVE :
 				
-					Object value =(cell== null)? null: super.getPrimitiveValue(attr, cell);
+					Object value =(cell== null)? null: HEntryWrapperUtils.getPrimitiveValue(attr, cell);
 					gei.setAttrValue(attr, value);	
 					break;
 					
-				case MAP :
+				case JMAP :
 					
-					Map<String, Object> map = (cell== null)? null: super.getMapValue(attr, cell);				
+					Map<String, Object> map = (cell== null)? null: HEntryWrapperUtils.getJMapValue(attr, cell);				
 					gei.setAttrValue(attr, map);
 					break;
 					
-				case LIST :
+				case JLIST :
 					
-					List<Object> list = (cell== null)? null: super.getListValue(attr, cell);					
+					List<Object> list = (cell== null)? null: HEntryWrapperUtils.getJListValue(attr, cell);					
 					gei.setAttrValue(attr, list);
 					break;
 					
-				case SET :
+				case JSET :
 					
-					Set<Object> set = (cell== null)? null: super.getSetValue(attr, cell);					
+					Set<Object> set = (cell== null)? null: HEntryWrapperUtils.getJSetValue(attr, cell);					
 					gei.setAttrValue(attr, set);
 					break;
 					
@@ -109,17 +113,17 @@ public class HAccessControlWrapper extends HEntryWrapper<AccessControlEntry>{
         	switch(attr.mode){
         	
         		case PRIMITIVE:
-        			super.putPrimitiveValue(put, attr, value);					
+        			HEntryWrapperUtils.putPrimitiveValue(put, attr, value);					
         			break;
-        		case MAP:
-        			super.putMapValue(put, attr, (Map<String,Object>)value);	
+        		case JMAP:
+        			HEntryWrapperUtils.putMapValue(put, attr, (Map<String,Object>)value);	
         			break;
-        		case LIST:
-        			super.putListValue(put, attr, (List<Object>)value);	
+        		case JLIST:
+        			HEntryWrapperUtils.putListValue(put, attr, (List<Object>)value);	
         			
         			break;
-        		case SET:
-        			super.putSetValue(put, attr, (Set<Object>)value);				
+        		case JSET:
+        			HEntryWrapperUtils.putSetValue(put, attr, (Set<Object>)value);				
         			break;
         		default:
         			break;

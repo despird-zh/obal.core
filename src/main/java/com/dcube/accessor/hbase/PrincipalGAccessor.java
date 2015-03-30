@@ -17,7 +17,7 @@ import com.dcube.core.security.Principal;
 import com.dcube.exception.AccessorException;
 import com.dcube.exception.BaseException;
 import com.dcube.meta.EntityConstants;
-import com.dcube.meta.EntityConstants.UserInfo;
+import com.dcube.meta.EntityConstants.UserEnum;
 import com.dcube.util.AccessorUtils;
 
 public class PrincipalGAccessor extends HGenericAccessor implements IPrincipalGAccessor{
@@ -34,7 +34,7 @@ public class PrincipalGAccessor extends HGenericAccessor implements IPrincipalGA
 		UserInfoEAccessor uea = null;
 		try{
 			uea = (UserInfoEAccessor)AccessorFactory.buildEntityAccessor(this, EntityConstants.ENTITY_USER);
-			UserInfo attrInfo = UserInfo.Account;
+			UserEnum attrInfo = UserEnum.Account;
 	
 			Filter filter = new SingleColumnValueFilter(attrInfo.colfamily.getBytes(), 
 						attrInfo.qualifier.getBytes(), 
@@ -69,7 +69,7 @@ public class PrincipalGAccessor extends HGenericAccessor implements IPrincipalGA
 		UserInfoEAccessor uea = null;
 		try{
 			uea = (UserInfoEAccessor)AccessorFactory.buildEntityAccessor(this, EntityConstants.ENTITY_USER);
-			UserInfo attrName = UserInfo.Name;
+			UserEnum attrName = UserEnum.Name;
 	
 			Filter filter = new SingleColumnValueFilter(attrName.colfamily.getBytes(), 
 					attrName.qualifier.getBytes(), 

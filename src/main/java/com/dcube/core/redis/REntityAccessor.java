@@ -88,17 +88,17 @@ public abstract class REntityAccessor <GB extends EntryInfo> extends EntityAcces
             case PRIMITIVE:
             	wrapper.putPrimitiveValue(jedis,redisKey, attr, value);
             	break;
-            case MAP:
+            case JMAP:
             	if(!(value instanceof Map<?,?>))
         			throw new AccessorException("the attr:{} value is not Map object",attrName);        		
         		wrapper.putMapValue(jedis,redisKey, attr, (Map<String,Object>)value);	
         		break;
-            case LIST:
+            case JLIST:
             	if(!(value instanceof List<?>))
         			throw new AccessorException("the attr:{} value is not List object",attrName);        		
         		wrapper.putListValue(jedis,redisKey, attr, (List<Object>)value);	
         		break;
-            case SET:
+            case JSET:
             	if(!(value instanceof List<?>))
         			throw new AccessorException("the attr:{} value is not List object",attrName);        		
         		wrapper.putSetValue(jedis, redisKey, attr, (Set<Object>)value);	
@@ -132,18 +132,18 @@ public abstract class REntityAccessor <GB extends EntryInfo> extends EntityAcces
 	    		byte[] cell = jedis.hget(redisKey.getBytes(), attr.getAttrName().getBytes());
 				rtv = wrapper.getPrimitiveValue(attr, cell);
 	    		break;
-	    	case MAP:
+	    	case JMAP:
 	    		redisKey += CoreConstants.KEYS_SEPARATOR + attr.getAttrName();
 	        	Map<byte[], byte[]> cells = jedis.hgetAll(redisKey.getBytes());
 				rtv = wrapper.getMapValue(attr, cells);		    		
 	    		break;
-	    	case LIST:
+	    	case JLIST:
 	    		redisKey += CoreConstants.KEYS_SEPARATOR + attr.getAttrName();
 	    		long len = jedis.llen(redisKey);
 	    		List<byte[]> celllist = jedis.lrange(redisKey.getBytes(), 0, len);
 				rtv = wrapper.getListValue(attr, celllist);		    		
 	    		break;
-	    	case SET:
+	    	case JSET:
 	    		redisKey += CoreConstants.KEYS_SEPARATOR + attr.getAttrName();
 	    		Set<byte[]> cellset = jedis.smembers(redisKey.getBytes());
 				rtv = wrapper.getSetValue(attr, cellset);	

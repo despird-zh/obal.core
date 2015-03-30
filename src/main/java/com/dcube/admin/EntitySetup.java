@@ -7,9 +7,9 @@ import com.dcube.meta.EntityAttr;
 import com.dcube.meta.EntityConstants;
 import com.dcube.meta.EntityMeta;
 import com.dcube.meta.GenericEntity;
-import com.dcube.meta.EntityConstants.GroupInfo;
-import com.dcube.meta.EntityConstants.RoleInfo;
-import com.dcube.meta.EntityConstants.UserInfo;
+import com.dcube.meta.EntityConstants.GroupEnum;
+import com.dcube.meta.EntityConstants.RoleEnum;
+import com.dcube.meta.EntityConstants.UserEnum;
 import com.dcube.util.AccessorUtils;
 import com.dcube.util.EntitieUtils;
 
@@ -70,37 +70,37 @@ public class EntitySetup {
 		meta.setAccessorName(EntityConstants.ACCESSOR_ENTITY_USER);
 		meta.setDescription("user schema ");
 		meta.setTraceable(true);
-		EntityAttr attr = new EntityAttr(UserInfo.Account.attribute, 
-				UserInfo.Account.colfamily, 
-				UserInfo.Account.qualifier);
+		EntityAttr attr = new EntityAttr(UserEnum.Account.attribute, 
+				UserEnum.Account.colfamily, 
+				UserEnum.Account.qualifier);
 		meta.addAttr(attr);
-		attr = new EntityAttr(UserInfo.Domain.attribute, 
-				UserInfo.Domain.colfamily, 
-				UserInfo.Domain.qualifier);
+		attr = new EntityAttr(UserEnum.Domain.attribute, 
+				UserEnum.Domain.colfamily, 
+				UserEnum.Domain.qualifier);
 		meta.addAttr(attr);
-		attr = new EntityAttr(UserInfo.Name.attribute, 
-				UserInfo.Name.colfamily, 
-				UserInfo.Name.qualifier);
+		attr = new EntityAttr(UserEnum.Name.attribute, 
+				UserEnum.Name.colfamily, 
+				UserEnum.Name.qualifier);
 		meta.addAttr(attr);
-		attr = new EntityAttr(UserInfo.Source.attribute, 
-				UserInfo.Source.colfamily, 
-				UserInfo.Source.qualifier);
+		attr = new EntityAttr(UserEnum.Source.attribute, 
+				UserEnum.Source.colfamily, 
+				UserEnum.Source.qualifier);
 		meta.addAttr(attr);
-		attr = new EntityAttr(UserInfo.Password.attribute, 
-				UserInfo.Password.colfamily, 
-				UserInfo.Password.qualifier);
+		attr = new EntityAttr(UserEnum.Password.attribute, 
+				UserEnum.Password.colfamily, 
+				UserEnum.Password.qualifier);
 		meta.addAttr(attr);
-		attr = new EntityAttr(UserInfo.Salt.attribute, 
-				UserInfo.Salt.colfamily, 
-				UserInfo.Salt.qualifier);
+		attr = new EntityAttr(UserEnum.Salt.attribute, 
+				UserEnum.Salt.colfamily, 
+				UserEnum.Salt.qualifier);
 		meta.addAttr(attr);
-		attr = new EntityAttr(UserInfo.Groups.attribute, EntityAttr.AttrMode.MAP, EntityAttr.AttrType.STRING, 
-				UserInfo.Groups.colfamily, 
-				UserInfo.Groups.qualifier);
+		attr = new EntityAttr(UserEnum.Groups.attribute, EntityAttr.AttrMode.JMAP, EntityAttr.AttrType.STRING, 
+				UserEnum.Groups.colfamily, 
+				UserEnum.Groups.qualifier);
 		meta.addAttr(attr);
-		attr = new EntityAttr(UserInfo.Roles.attribute, EntityAttr.AttrMode.MAP, EntityAttr.AttrType.STRING, 				
-				UserInfo.Roles.colfamily, 
-				UserInfo.Roles.qualifier);
+		attr = new EntityAttr(UserEnum.Roles.attribute, EntityAttr.AttrMode.JMAP, EntityAttr.AttrType.STRING, 				
+				UserEnum.Roles.colfamily, 
+				UserEnum.Roles.qualifier);
 		meta.addAttr(attr);
 		
 		eadmin.setupSchema(meta);
@@ -116,19 +116,19 @@ public class EntitySetup {
 		meta.setAccessorName(EntityConstants.ACCESSOR_ENTITY_GROUP);
 		meta.setDescription("user Group schema ");
 		meta.setTraceable(true);
-		EntityAttr attr = new EntityAttr(GroupInfo.Name.attribute, 
-				GroupInfo.Name.colfamily, 
-				GroupInfo.Name.qualifier);
+		EntityAttr attr = new EntityAttr(GroupEnum.Name.attribute, 
+				GroupEnum.Name.colfamily, 
+				GroupEnum.Name.qualifier);
 		meta.addAttr(attr);
 		
-		attr = new EntityAttr(GroupInfo.Users.attribute, EntityAttr.AttrMode.MAP, EntityAttr.AttrType.STRING, 
-				GroupInfo.Users.colfamily, 
-				GroupInfo.Users.qualifier);
+		attr = new EntityAttr(GroupEnum.Users.attribute, EntityAttr.AttrMode.JMAP, EntityAttr.AttrType.STRING, 
+				GroupEnum.Users.colfamily, 
+				GroupEnum.Users.qualifier);
 		meta.addAttr(attr);
 		
-		attr = new EntityAttr(GroupInfo.Groups.attribute, EntityAttr.AttrMode.MAP, EntityAttr.AttrType.STRING, 
-				GroupInfo.Groups.colfamily, 
-				GroupInfo.Groups.qualifier);
+		attr = new EntityAttr(GroupEnum.Groups.attribute, EntityAttr.AttrMode.JMAP, EntityAttr.AttrType.STRING, 
+				GroupEnum.Groups.colfamily, 
+				GroupEnum.Groups.qualifier);
 		meta.addAttr(attr);
 		
 		eadmin.setupSchema(meta);
@@ -144,14 +144,14 @@ public class EntitySetup {
 		meta.setDescription("user Group schema ");
 		meta.setTraceable(true);
 		
-		EntityAttr attr = new EntityAttr(RoleInfo.Name.attribute, 
-				RoleInfo.Name.colfamily, 
-				RoleInfo.Name.qualifier);
+		EntityAttr attr = new EntityAttr(RoleEnum.Name.attribute, 
+				RoleEnum.Name.colfamily, 
+				RoleEnum.Name.qualifier);
 		meta.addAttr(attr);
 		
-		attr = new EntityAttr(RoleInfo.Users.attribute, EntityAttr.AttrMode.MAP, EntityAttr.AttrType.STRING, 
-				RoleInfo.Users.colfamily, 
-				RoleInfo.Users.qualifier);
+		attr = new EntityAttr(RoleEnum.Users.attribute, EntityAttr.AttrMode.JMAP, EntityAttr.AttrType.STRING, 
+				RoleEnum.Users.colfamily, 
+				RoleEnum.Users.qualifier);
 		meta.addAttr(attr);
 
 		eadmin.setupSchema(meta);

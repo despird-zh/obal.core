@@ -242,22 +242,22 @@ public class AccessorTest extends BaseTester{
 			meta.addAttr(attr);
 			attr = new EntityAttr("i_string",AttrType.STRING,"c2","str-val");
 			meta.addAttr(attr);
-			attr = new EntityAttr("i_list_str",AttrMode.LIST,AttrType.STRING,"c3","list-str");
+			attr = new EntityAttr("i_list_str",AttrMode.JLIST,AttrType.STRING,"c3","list-str");
 			meta.addAttr(attr);
 			
-			attr = new EntityAttr("i_list_int",AttrMode.LIST,AttrType.INTEGER,"c3","list-int");
+			attr = new EntityAttr("i_list_int",AttrMode.JLIST,AttrType.INTEGER,"c3","list-int");
 			meta.addAttr(attr);
 
-			attr = new EntityAttr("i_list_dt",AttrMode.LIST,AttrType.DATE,"c3","list-dt");
+			attr = new EntityAttr("i_list_dt",AttrMode.JLIST,AttrType.DATE,"c3","list-dt");
 			meta.addAttr(attr);
 			
-			attr = new EntityAttr("i_map_str",AttrMode.MAP,AttrType.STRING,"c4","map-str");
+			attr = new EntityAttr("i_map_str",AttrMode.JMAP,AttrType.STRING,"c4","map-str");
 			meta.addAttr(attr);
 			
-			attr = new EntityAttr("i_map_int",AttrMode.MAP,AttrType.INTEGER,"c4","map-int");
+			attr = new EntityAttr("i_map_int",AttrMode.JMAP,AttrType.INTEGER,"c4","map-int");
 			meta.addAttr(attr);
 
-			attr = new EntityAttr("i_map_dt",AttrMode.MAP,AttrType.DATE,"c4","map-dt");
+			attr = new EntityAttr("i_map_dt",AttrMode.JMAP,AttrType.DATE,"c4","map-dt");
 			meta.addAttr(attr);
 			
 			aa.createSchema("obal.test",meta.getAllAttrs());

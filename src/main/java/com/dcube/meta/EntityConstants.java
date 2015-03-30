@@ -2,11 +2,14 @@ package com.dcube.meta;
 
 /**
  * Define necessary entity names
- *  
+ * dcube.meta.info table store normal entity and repository entity.
+ * the two parts entities is identified by the category field
  **/
 public class EntityConstants {
 
 	public static final String ATTR_ACL_COLUMN = "acl";
+	
+	public static final String ATTR_DFT_COLUMN = "c0";
 	
 	public static final String ENTITY_PREFIX = "dcube.";
 	// the blind entity 
@@ -39,7 +42,7 @@ public class EntityConstants {
 	/**
 	 * The meta info enumerator 
 	 **/
-	public static enum MetaInfo{
+	public static enum MetaEnum{
 		
 		EntityClass("i_entity_class","entityclass"),
 		EntityName("i_entity_name" , "entityname"),
@@ -47,7 +50,8 @@ public class EntityConstants {
 		Traceable("i_traceable","traceable"),
 		Attributes("i_attributes","attributes"),
 		Schema("i_schema","schema"),
-		AccessorName("i_accessor_name","accessorname");
+		AccessorName("i_accessor_name","accessorname"),
+		Category("i_category","category");
 		
 		public final String attribute;
 		public final String qualifier;
@@ -56,13 +60,13 @@ public class EntityConstants {
 		/**
 		 * Hide default constructor 
 		 **/
-		private MetaInfo(String attribute, String qualifier){  
+		private MetaEnum(String attribute, String qualifier){  
 			this.attribute = attribute;
 			this.qualifier = qualifier;
-			this.colfamily = "c0";
+			this.colfamily = ATTR_DFT_COLUMN;
 	    }
 		
-		private MetaInfo(String attribute, String colfamily, String qualifier){  
+		private MetaEnum(String attribute, String colfamily, String qualifier){  
 			this.attribute = attribute;
 			this.qualifier = qualifier;
 			this.colfamily = colfamily;
@@ -72,7 +76,7 @@ public class EntityConstants {
 	/**
 	 * The attribute info enumerator 
 	 **/
-	public static enum AttrInfo{
+	public static enum AttrEnum{
 
 		AttrName("i_attr_name","attrname"),
 		Format("i_format" , "format"),
@@ -94,13 +98,13 @@ public class EntityConstants {
 		/**
 		 * Hide default constructor 
 		 **/
-		private AttrInfo(String attribute, String qualifier){  
+		private AttrEnum(String attribute, String qualifier){  
 			this.attribute = attribute;
 			this.qualifier = qualifier;
-			this.colfamily = "c0";
+			this.colfamily = ATTR_DFT_COLUMN;
 	    }
 		
-		private AttrInfo(String attribute, String colfamily, String qualifier){  
+		private AttrEnum(String attribute, String colfamily, String qualifier){  
 			this.attribute = attribute;
 			this.qualifier = qualifier;
 			this.colfamily = colfamily;
@@ -111,7 +115,7 @@ public class EntityConstants {
 	/**
 	 * The meta info enumerator 
 	 **/
-	public static enum UserInfo{
+	public static enum UserEnum{
 
 		Account("i_account","account"),
 		Domain("i_domain" , "domain"),
@@ -129,13 +133,13 @@ public class EntityConstants {
 		/**
 		 * Hide default constructor 
 		 **/
-		private UserInfo(String attribute, String qualifier){  
+		private UserEnum(String attribute, String qualifier){  
 			this.attribute = attribute;
 			this.qualifier = qualifier;
-			this.colfamily = "c0";
+			this.colfamily = ATTR_DFT_COLUMN;
 	    }
 		
-		private UserInfo(String attribute, String colfamily, String qualifier){  
+		private UserEnum(String attribute, String colfamily, String qualifier){  
 			this.attribute = attribute;
 			this.qualifier = qualifier;
 			this.colfamily = colfamily;
@@ -145,7 +149,7 @@ public class EntityConstants {
 	/**
 	 * The meta info enumerator 
 	 **/
-	public static enum GroupInfo{
+	public static enum GroupEnum{
 
 		Name("i_group_name","groupname"),
 		Users("i_users" , "users"),
@@ -158,13 +162,13 @@ public class EntityConstants {
 		/**
 		 * Hide default constructor 
 		 **/
-		private GroupInfo(String attribute, String qualifier){  
+		private GroupEnum(String attribute, String qualifier){  
 			this.attribute = attribute;
 			this.qualifier = qualifier;
-			this.colfamily = "c0";
+			this.colfamily = ATTR_DFT_COLUMN;
 	    }
 		
-		private GroupInfo(String attribute, String colfamily, String qualifier){  
+		private GroupEnum(String attribute, String colfamily, String qualifier){  
 			this.attribute = attribute;
 			this.qualifier = qualifier;
 			this.colfamily = colfamily;
@@ -174,7 +178,7 @@ public class EntityConstants {
 	/**
 	 * The meta info enumerator 
 	 **/
-	public static enum RoleInfo{
+	public static enum RoleEnum{
 
 		Name("i_role_name","rolename"),
 		Users("i_users" , "users");
@@ -186,13 +190,13 @@ public class EntityConstants {
 		/**
 		 * Hide default constructor 
 		 **/
-		private RoleInfo(String attribute, String qualifier){  
+		private RoleEnum(String attribute, String qualifier){  
 			this.attribute = attribute;
 			this.qualifier = qualifier;
-			this.colfamily = "c0";
+			this.colfamily = ATTR_DFT_COLUMN;
 	    }
 		
-		private RoleInfo(String attribute, String colfamily, String qualifier){  
+		private RoleEnum(String attribute, String colfamily, String qualifier){  
 			this.attribute = attribute;
 			this.qualifier = qualifier;
 			this.colfamily = colfamily;
@@ -202,7 +206,7 @@ public class EntityConstants {
 	/**
 	 * The meta info enumerator 
 	 **/
-	public static enum TraceableInfo{
+	public static enum TraceableEnum{
 
 		Creator(   "i_creator",    "creator"),
 		Modifier(  "i_modifier",   "modifier"),
@@ -216,13 +220,13 @@ public class EntityConstants {
 		/**
 		 * Hide default constructor 
 		 **/
-		private TraceableInfo(String attribute, String qualifier){  
+		private TraceableEnum(String attribute, String qualifier){  
 			this.attribute = attribute;
 			this.qualifier = qualifier;
-			this.colfamily = "c0";
+			this.colfamily = ATTR_DFT_COLUMN;
 	    }
 		
-		private TraceableInfo(String attribute, String colfamily, String qualifier){  
+		private TraceableEnum(String attribute, String colfamily, String qualifier){  
 			this.attribute = attribute;
 			this.qualifier = qualifier;
 			this.colfamily = colfamily;

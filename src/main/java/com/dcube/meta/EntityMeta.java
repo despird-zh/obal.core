@@ -56,15 +56,14 @@ public class EntityMeta{
 	private Boolean traceable = false;
 	private Boolean accessControllable = false;
 	private String accessorName = null;
+	private String category = null;
+	
 	/**
 	 * Entry Meta constructor 
 	 * 
 	 * @param entryName The name of Entry
-	 * @param schemaClazz the class name of EntrySchema
-	 * @param keyclazz the class name of EntryKey
+	 * @param entityClazz the class name of Entity class
 	 * 
-	 * @see com.dcube.meta.BaseEntity
-	 * @see com.dcube.core.EntryKey
 	 * 
 	 **/
 	public EntityMeta(String entityName, String entityClazz){
@@ -74,6 +73,22 @@ public class EntityMeta{
 		this.schema = entityName;
 	}
 
+	/**
+	 * Entry Meta constructor 
+	 * 
+	 * @param entryName The name of Entry
+	 * @param entityClazz the class name of Entity Class
+	 * @param schema the schema name
+	 * 
+	 * 
+	 **/
+	public EntityMeta(String entityName, String entityClazz, String schema){
+		
+		this.entityName = entityName;
+		this.entityClazz = entityClazz;
+		this.schema = schema;
+	}
+	
 	/**
 	 * Entry Meta constructor 
 	 * The schema name is same as entityName by default.
@@ -460,6 +475,14 @@ public class EntityMeta{
 	public Boolean getAccessControllable(){
 		
 		return this.accessControllable;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
 	}
 	
 }

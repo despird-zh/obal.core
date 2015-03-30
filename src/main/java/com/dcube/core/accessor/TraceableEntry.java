@@ -4,7 +4,7 @@ import java.util.Date;
 
 import com.dcube.core.EntryKey;
 import com.dcube.core.ITraceable;
-import com.dcube.meta.EntityConstants.TraceableInfo;
+import com.dcube.meta.EntityConstants.TraceableEnum;
 
 /**
  * TraceableEntry 
@@ -24,49 +24,49 @@ public class TraceableEntry extends EntryInfo implements ITraceable{
 	@Override
 	public String getCreator() {
 		
-		return super.getAttrValue(TraceableInfo.Creator.attribute, String.class);
+		return super.getAttrValue(TraceableEnum.Creator.attribute, String.class);
 	}
 
 	@Override
 	public void setCreator(String creator) {
 		
-		super.setAttrValue(TraceableInfo.Creator.attribute, creator);
+		super.setAttrValue(TraceableEnum.Creator.attribute, creator);
 		
 	}
 
 	@Override
 	public String getModifier() {
 		
-		return super.getAttrValue(TraceableInfo.Modifier.attribute, String.class);
+		return super.getAttrValue(TraceableEnum.Modifier.attribute, String.class);
 	}
 
 	@Override
 	public void setModifier(String modifier) {
 		
-		super.setAttrValue(TraceableInfo.Modifier.attribute, modifier);
+		super.setAttrValue(TraceableEnum.Modifier.attribute, modifier);
 	}
 
 	@Override
 	public Date getNewCreate() {
 		
-		return super.getAttrValue(TraceableInfo.NewCreate.attribute, Date.class);
+		return super.getAttrValue(TraceableEnum.NewCreate.attribute, Date.class);
 	}
 
 	@Override
 	public void setNewCreate(Date newCreate) {
 
-		super.setAttrValue(TraceableInfo.NewCreate.attribute, newCreate);
+		super.setAttrValue(TraceableEnum.NewCreate.attribute, newCreate);
 	}
 
 	@Override
 	public Date getLastModify() {
 		
-		return super.getAttrValue(TraceableInfo.LastModify.attribute, Date.class);
+		return super.getAttrValue(TraceableEnum.LastModify.attribute, Date.class);
 	}
 
 	@Override
 	public void setLastModify(Date lastModify) {
 
-		super.setAttrValue(TraceableInfo.LastModify.attribute, lastModify);
+		super.setAttrValue(TraceableEnum.LastModify.attribute, lastModify);
 	}
 }

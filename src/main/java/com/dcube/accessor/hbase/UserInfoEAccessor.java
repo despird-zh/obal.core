@@ -13,7 +13,7 @@ import com.dcube.exception.BaseException;
 import com.dcube.meta.EntityConstants;
 import com.dcube.meta.EntityManager;
 import com.dcube.meta.EntityMeta;
-import com.dcube.meta.EntityConstants.UserInfo;
+import com.dcube.meta.EntityConstants.UserEnum;
 
 public class UserInfoEAccessor extends HEntityAccessor<TraceableEntry> {
 
@@ -42,13 +42,13 @@ public class UserInfoEAccessor extends HEntityAccessor<TraceableEntry> {
 						throws BaseException {
 					EntryKey key = fromObject.getEntryKey();
 					Principal principal = new Principal(key.getKey());
-					principal.setAccount(fromObject.getAttrValue(UserInfo.Account.attribute, String.class));
-					principal.setName(fromObject.getAttrValue(UserInfo.Name.attribute, String.class));
-					principal.setSource(fromObject.getAttrValue(UserInfo.Source.attribute, String.class));
-					principal.setSalt(fromObject.getAttrValue(UserInfo.Salt.attribute, String.class));
-					principal.setPassword(fromObject.getAttrValue(UserInfo.Password.attribute, String.class));
-					principal.setGroups(fromObject.getAttrValue(UserInfo.Groups.attribute, Map.class));
-					principal.setRoles(fromObject.getAttrValue(UserInfo.Roles.attribute, Map.class));
+					principal.setAccount(fromObject.getAttrValue(UserEnum.Account.attribute, String.class));
+					principal.setName(fromObject.getAttrValue(UserEnum.Name.attribute, String.class));
+					principal.setSource(fromObject.getAttrValue(UserEnum.Source.attribute, String.class));
+					principal.setSalt(fromObject.getAttrValue(UserEnum.Salt.attribute, String.class));
+					principal.setPassword(fromObject.getAttrValue(UserEnum.Password.attribute, String.class));
+					principal.setGroups(fromObject.getAttrValue(UserEnum.Groups.attribute, Map.class));
+					principal.setRoles(fromObject.getAttrValue(UserEnum.Roles.attribute, Map.class));
 					
 					return principal;
 				}
@@ -61,13 +61,13 @@ public class UserInfoEAccessor extends HEntityAccessor<TraceableEntry> {
 					
 					TraceableEntry entry = new TraceableEntry(EntityConstants.ENTITY_USER,id);
 					EntityMeta meta = EntityManager.getInstance().getEntityMeta(EntityConstants.ENTITY_USER);
-					entry.setAttrValue(meta.getAttr(UserInfo.Account.attribute), toObject.getAccount());
-					entry.setAttrValue(meta.getAttr(UserInfo.Name.attribute), toObject.getName());
-					entry.setAttrValue(meta.getAttr(UserInfo.Source.attribute), toObject.getSource());
-					entry.setAttrValue(meta.getAttr(UserInfo.Salt.attribute), toObject.getSalt());
-					entry.setAttrValue(meta.getAttr(UserInfo.Password.attribute), toObject.getPassword());
-					entry.setAttrValue(meta.getAttr(UserInfo.Groups.attribute), toObject.getGroups());
-					entry.setAttrValue(meta.getAttr(UserInfo.Roles.attribute), toObject.getRoles());
+					entry.setAttrValue(meta.getAttr(UserEnum.Account.attribute), toObject.getAccount());
+					entry.setAttrValue(meta.getAttr(UserEnum.Name.attribute), toObject.getName());
+					entry.setAttrValue(meta.getAttr(UserEnum.Source.attribute), toObject.getSource());
+					entry.setAttrValue(meta.getAttr(UserEnum.Salt.attribute), toObject.getSalt());
+					entry.setAttrValue(meta.getAttr(UserEnum.Password.attribute), toObject.getPassword());
+					entry.setAttrValue(meta.getAttr(UserEnum.Groups.attribute), toObject.getGroups());
+					entry.setAttrValue(meta.getAttr(UserEnum.Roles.attribute), toObject.getRoles());
 					
 					return entry;
 				}

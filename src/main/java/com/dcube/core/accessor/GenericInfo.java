@@ -72,7 +72,7 @@ public class GenericInfo implements IGenericInfo{
 		AttributeItem e = itemMap.get(entityname + EntityConstants.NAME_SEPARATOR + attrname);
 		if(null == e)
 			return null;
-		Object value = e.value;
+		Object value = e.currentVal;
 		if(null!=value && targetType.isAssignableFrom(value.getClass())){
 			
 			return (K) value;
@@ -86,19 +86,33 @@ public class GenericInfo implements IGenericInfo{
 		if(null == e)
 			return null;
 		
-		return e.value;
+		return e.currentVal;
 	}
 	
 	public void setAttrValue(EntityAttr attribute, Object value) {
 		
-		AttributeItem item = new AttributeItem(attribute, value);
-		itemMap.put(item.getFullName(),item);
+		AttributeItem item = itemMap.get(attribute.getFullName());
+		
+		if(item == null){
+			item = new AttributeItem(attribute, value);
+			itemMap.put(item.getFullName(),item);
+		}
+		else
+			item.setNewValue(value);
+				
 	}
 	
 	public void setAttrValue(String entityname, String attrname, Object value) {
 		
-		AttributeItem item = new AttributeItem(entityname, attrname, value);
-		itemMap.put(item.getFullName(),item);
+		AttributeItem item = itemMap.get(entityname + EntityConstants.NAME_SEPARATOR + attrname);
+		
+		if(item == null){
+			item = new AttributeItem(entityname,attrname, value);
+			itemMap.put(item.getFullName(),item);
+		}
+		else
+			item.setNewValue(value);
+		
 	}
 	
 	protected Map<String, AttributeItem> getItemMap(){
@@ -110,16 +124,29 @@ public class GenericInfo implements IGenericInfo{
 		
 		return itemMap.get(entityname + EntityConstants.NAME_SEPARATOR + attrname);
 	}
+	
+	public List<AttributeItem> getChangedItems(){
+		
+		List<AttributeItem> rtv = new ArrayList<AttributeItem>();
+		
+		for(Map.Entry<String, AttributeItem> e:itemMap.entrySet()){
+			if(e.getValue() != null && e.getValue().isChanged())
+				rtv.add(e.getValue());
+		}
+		
+		return rtv.size() == 0? null:rtv;
+	}
 	/**
 	 * Inner class to wrap value and attribute 
 	 **/
-	protected static class AttributeItem{
+	public static class AttributeItem{
 		
 		public AttributeItem(String entityname, String attrname, Object value){
 			
 			this.entityname = entityname;
 			this.attrname = attrname;
-			this.value = value;
+			this.currentVal = value;
+			
 		}
 		
 		public AttributeItem(EntityAttr attribute, Object value){
@@ -127,7 +154,7 @@ public class GenericInfo implements IGenericInfo{
 			this.attribute = attribute;
 			this.entityname = attribute.getEntityName();
 			this.attrname = attribute.getAttrName();
-			this.value = value;
+			this.currentVal = value;
 		}
 		
 		public String getFullName(){
@@ -138,6 +165,24 @@ public class GenericInfo implements IGenericInfo{
 		public EntityAttr attribute = null;
 		public String entityname = null;
 		public String attrname = null;
-		public Object value = null;
+		public Object currentVal = null;
+		private Object originVal = null;
+		private boolean changed = false;
+		
+		public void setNewValue(Object newVal){
+			if(!changed){
+				this.originVal = this.currentVal;// save original value
+				changed = true;
+			}
+			this.currentVal = newVal;
+		}
+		
+		public boolean isChanged(){
+			return changed;
+		}
+		
+		public Object getOriginalValue(){
+			return this.originVal;
+		}
 	}
 }
