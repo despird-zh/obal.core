@@ -55,11 +55,5 @@ public interface IBaseAccessor extends AutoCloseable{
 	 * @return flag 
 	 **/
 	public boolean isEmbed();
-	
-	/**
-	 * Set embed flag 
-	 * @param embed the flag
-	 **/
-	public void setEmbed(boolean embed);
-	
+
 }

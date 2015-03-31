@@ -34,7 +34,6 @@ import com.dcube.core.accessor.GenericContext;
 import com.dcube.core.security.Principal;
 import com.dcube.exception.EntityException;
 import com.dcube.exception.MetaException;
-import com.dcube.launcher.ILifecycle.LifeState;
 import com.dcube.launcher.LifecycleHooker;
 import com.dcube.meta.BaseEntity;
 import com.dcube.meta.EntityManager;
@@ -59,17 +58,9 @@ public final class AccessorFactory {
 	/** default builder */
 	private static String defaultBuilder = null;
 	
+	/** LifecycleHooker to interact with CoreFacade and listen the event */
 	private static LifecycleHooker hooker;
-	
-	/**
-	 * Automatically create the factory instance, and load the builder instance.
-	 **/
-//	static{
-//		
-//		instance = new AccessorFactory();
-//		instance.loadAccessorBuilder();
-//	}
-	
+		
 	/**
 	 * Hide from explicit invoke
 	 **/
@@ -80,7 +71,11 @@ public final class AccessorFactory {
 		LOGGER.info("default builder is {}", defaultName);
 
 	}
-
+	
+	/**
+	 * Load the AccessorBuilder and load all the IBaseAccessor classes under specified package.
+	 * 
+	 **/
 	public static void loadAccessorBuilder(){
 		
 		if (instance == null)
@@ -120,8 +115,7 @@ public final class AccessorFactory {
 
 			@Override
 			public void shutdown() {
-				// TODO Auto-generated method stub
-				
+				// ignore				
 			}
 			
 		};
@@ -151,10 +145,10 @@ public final class AccessorFactory {
 	}
 
 	/**
-	 * Add the AccessorBuilder to accessor factory.
+	 * Add the AccessorBuilder to AccessorBuilder factory.
 	 * 
 	 * @param accessorBuilder
-	 *            the accessor builder instance
+	 *            the AccessorBuilder instance
 	 * 
 	 **/
 	public static void addAccessorBuilder(AccessorBuilder accessBuilder) {
@@ -245,7 +239,7 @@ public final class AccessorFactory {
 	 * The principal will be retrieved from mockupAccessor.
 	 * 
 	 * @param mockupAccessor
-	 *            the mock-up accessor instance
+	 *            the mock-up IBaseAccessor instance
 	 * @param entryName
 	 *            the name of entry
 	 **/
@@ -273,10 +267,8 @@ public final class AccessorFactory {
 			
 			throw new EntityException("Error when fetch schema object:entity-{}",e, entityName);
 		}
-		AccessorContext econtext = new AccessorContext(context.getPrincipal(),schema);
-		context.copy(econtext);// copy principal and attached values
-		econtext.setEmbed(true);
-		K accessor = dftBuilder.newBaseAccessor(econtext, schema.getEntityMeta().getAccessorName(), false);
+		AccessorContext newcontext = new AccessorContext(context,schema);
+		K accessor = dftBuilder.newBaseAccessor(newcontext, schema.getEntityMeta().getAccessorName(), false);
 		dftBuilder.assembly(mockupAccessor, (IBaseAccessor) accessor);
 		return accessor;
 	}
@@ -286,7 +278,7 @@ public final class AccessorFactory {
 	 * The principal will be retrieved from mockupAccessor.
 	 * 
 	 * @param mockupAccessor
-	 *            the mock-up accessor instance
+	 *            the mock-up IBaseAccessor instance
 	 * @param entryName
 	 *            the name of entry
 	 **/
@@ -308,10 +300,8 @@ public final class AccessorFactory {
 					defaultBuilder);
 		}
 		// new generic context
-		GenericContext ncontext = new GenericContext(context.getPrincipal());
-		context.copy(ncontext);
-		ncontext.setEmbed(true);
-		K accessor = dftBuilder.newBaseAccessor(ncontext, accessorName, true);
+		GenericContext newcontext = new GenericContext(context);
+		K accessor = dftBuilder.newBaseAccessor(newcontext, accessorName, true);
 		dftBuilder.assembly(mockupAccessor, (IBaseAccessor) accessor);
 		return accessor;
 	}
@@ -400,10 +390,8 @@ public final class AccessorFactory {
 			
 			throw new EntityException("Error when fetch schema object:entity-{}",e, entityName);
 		}
-		AccessorContext econtext = new AccessorContext(context.getPrincipal(),schema);
-		context.copy(econtext);
-		econtext.setEmbed(true);
-		K accessor = accessorbuilder.newBaseAccessor(econtext, schema.getEntityMeta().getAccessorName(), false);
+		AccessorContext newcontext = new AccessorContext(context,schema);
+		K accessor = accessorbuilder.newBaseAccessor(newcontext, schema.getEntityMeta().getAccessorName(), false);
 		accessorbuilder.assembly(mockupAccessor, (IBaseAccessor) accessor);
 		return accessor;
 	}
@@ -415,7 +403,7 @@ public final class AccessorFactory {
 	 * @param builderName
 	 *            the builder name
 	 * @param mockupAccessor
-	 *            the mock-up accessor instance
+	 *            the mock-up IBaseAccessor instance
 	 * @param entryName
 	 *            the name of entry
 	 **/
@@ -437,21 +425,19 @@ public final class AccessorFactory {
 					accessorbuilder.getBuilderName());
 		}
 		// new generic context
-		GenericContext ncontext = new GenericContext(context.getPrincipal());
-		context.copy(ncontext);
-		ncontext.setEmbed(true);
-		K accessor = accessorbuilder.newBaseAccessor(ncontext, accessorName, true);
+		GenericContext newcontext = new GenericContext(context);
+		K accessor = accessorbuilder.newBaseAccessor(newcontext, accessorName, true);
 		accessorbuilder.assembly(mockupAccessor, (IBaseAccessor) accessor);
 		return accessor;
 	}
 	
 	/**
-	 * Register accessor mapping information.
-	 * <p>This method will be used for accessor to register itself. </p> 
+	 * Register IBaseAccessor mapping information.
+	 * <p>This method will be used for IBaseAccessor to register itself. </p> 
 	 * 
 	 * @param builderName the name of builder
-	 * @param accessorName the name of accessor
-	 * @param accessor the instance of accessor
+	 * @param accessorName the name of IBaseAccessor
+	 * @param accessor the instance of IBaseAccessor
 	 * 
 	 **/
 	public static void registerAccessor(String builderName, IBaseAccessor accessor){

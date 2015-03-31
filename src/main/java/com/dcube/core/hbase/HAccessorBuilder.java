@@ -159,8 +159,6 @@ public class HAccessorBuilder extends AccessorBuilder{
 		
 			}
 
-			// Set embed flag
-			accessor.setEmbed(true);
 		}
 	}
 	

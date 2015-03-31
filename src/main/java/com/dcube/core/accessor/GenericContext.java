@@ -17,14 +17,27 @@ import com.dcube.core.security.Principal;
  **/
 public class GenericContext {
 
+	/** the embed flag */
 	private boolean embed = false;
 	
-	// principal
+	/** principal */
 	private Principal principal = null;
 
-	// values of extra setting
-	protected Map<String, Object> values = new HashMap<String, Object>();
+	/** values of extra setting */
+	protected Map<String, Object> values = null;
+	
+	private GenericContext parent = null;
+	
+	/**
+	 * Constructor 
+	 * @param parent the parent context
+	 **/
+	public GenericContext(GenericContext parent){
 		
+		this.parent = parent;
+		this.embed = true;
+	}
+	
 	/**
 	 * Constructor 
 	 * @param principal the principal object
@@ -32,6 +45,7 @@ public class GenericContext {
 	public GenericContext(Principal principal){
 		
 		this.principal = principal;
+		this.values = new HashMap<String, Object>();
 	}
 	
 	/**
@@ -51,7 +65,12 @@ public class GenericContext {
 	 **/
 	public Principal getPrincipal(){
 		
-		return principal;
+		if(embed && parent != null){
+			return parent.getPrincipal();
+			
+		}else{
+			return principal;
+		}
 	}
 		
 	/**
@@ -59,7 +78,12 @@ public class GenericContext {
 	 **/
 	public void putValue(String key, Object value){
 		
-		values.put(key, value);
+		if(embed && parent != null){
+			
+			parent.putValue(key, value);
+		}else{
+			values.put(key, value);
+		}
 	}
 	
 	/**
@@ -69,21 +93,13 @@ public class GenericContext {
 	@SuppressWarnings("unchecked")
 	public <K> K getValue(String key){
 		
-		return (K) values.get(key);
+		if(embed && parent != null){
+			return (K) parent.values.get(key);
+		}else {
+			return (K) values.get(key);
+		}
 	}
-	
-	/**
-	 * Copy the context data(except schema data) to target context.
-	 * 
-	 * @param target the target context
-	 **/
-	public void copy(GenericContext target){
 		
-		target.setPrincipal(this.getPrincipal());
-		target.values.clear();
-		target.values.putAll(this.values);
-	}
-	
 	/**
 	 * clear the resource bound to context
 	 * 
@@ -91,10 +107,12 @@ public class GenericContext {
 	 **/
 	public void clear(){
 		
-		this.principal = null;
-		if(embed)
-			this.values.clear();
-		this.values = null;
+		if(embed){ // embed context, only release the parent reference.
+			parent = null;
+		}else{
+			principal = null;
+			values.clear();
+		}
 	}
 	
 	/**
@@ -104,12 +122,5 @@ public class GenericContext {
 		
 		return embed;
 	}
-	
-	/**
-	 * Set embed flag
-	 **/
-	public void setEmbed(boolean embed){
-		
-		this.embed = embed;
-	}
+
 }

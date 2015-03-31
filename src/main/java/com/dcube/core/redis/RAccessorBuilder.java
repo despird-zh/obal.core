@@ -112,9 +112,7 @@ public class RAccessorBuilder extends AccessorBuilder{
 				jedis = ((RedisAware) mockupAccessor).getJedis();
 				((RedisAware) accessor).setJedis(jedis);		
 			}
-			
-			// Set embed flag
-			accessor.setEmbed(true);
+
 		}
 	}
 	

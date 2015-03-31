@@ -139,11 +139,6 @@ public abstract class EntityAccessor<GB extends EntryInfo> implements IEntityAcc
 		
 		return context.isEmbed();
 	}
-	
-	public void setEmbed(boolean embed){
-		
-		context.setEmbed(embed);
-	}
 
 	/**
 	 * Get the entry converter object.

@@ -16,9 +16,20 @@ import com.dcube.meta.BaseEntity;
  **/
 public class AccessorContext extends GenericContext{
 
-	// entity schema 
+	/** entity schema */
 	private BaseEntity entitySchema = null;
-
+	
+	/**
+	 * Constructor 
+	 * @param parent the parent context object
+	 * @param schema the schema object
+	 **/
+	public AccessorContext(GenericContext parent,BaseEntity schema){
+		
+		super(parent);
+		this.entitySchema = schema;
+	}
+	
 	/**
 	 * Constructor 
 	 * @param principal the principal object

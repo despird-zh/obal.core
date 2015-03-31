@@ -90,8 +90,4 @@ public abstract class GenericAccessor implements IBaseAccessor {
 		return context.isEmbed();
 	}
 	
-	public void setEmbed(boolean embed){
-		Objects.requireNonNull(this.context);
-		context.setEmbed(embed);
-	}
 }
