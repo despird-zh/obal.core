@@ -140,6 +140,16 @@ public class EntryAcl {
 		return gaces;
 	}
 
+	public EntryAce getEntryAce(AceType type, String name){
+		
+		for(EntryAce e:aces){
+			
+			if(type == e.getType() && e.getName().equals(name))
+				return e;
+		}
+		
+		return null;
+	}
 	/**
 	 * CheckObject is readable or not
 	 * 

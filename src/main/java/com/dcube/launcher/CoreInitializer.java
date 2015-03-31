@@ -15,7 +15,7 @@ public abstract class CoreInitializer {
 		
 		LifecycleHooker hooker = setupHooker();
 		this.hookerName = hooker.name();
-		CoreLauncher.regHooker(hooker);
+		CoreFacade.regHooker(hooker);
 	}
 	
 	public abstract LifecycleHooker setupHooker() throws BaseException;

@@ -1,7 +1,7 @@
 package com.dcube.accessor;
 
 import com.dcube.base.BaseTester;
-import com.dcube.launcher.CoreLauncher;
+import com.dcube.launcher.CoreFacade;
 
 public class CoreTest extends BaseTester{
 

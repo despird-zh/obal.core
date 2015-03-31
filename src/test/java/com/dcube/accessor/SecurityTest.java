@@ -18,7 +18,7 @@ import com.dcube.core.accessor.EntryCollection;
 import com.dcube.core.accessor.TraceableEntry;
 import com.dcube.core.security.Principal;
 import com.dcube.exception.BaseException;
-import com.dcube.launcher.CoreLauncher;
+import com.dcube.launcher.CoreFacade;
 import com.dcube.meta.EntityConstants;
 import com.dcube.util.AccessorUtils;
 
@@ -26,8 +26,8 @@ import com.dcube.util.AccessorUtils;
 public class SecurityTest extends BaseTester{
 
 	public void test000Initial() throws Exception{
-		CoreLauncher.initial();
-		CoreLauncher.start();
+		CoreFacade.initial();
+		CoreFacade.start();
 	}
 	
 	public void Dtest001CreatePrincipal(){
@@ -112,7 +112,7 @@ public class SecurityTest extends BaseTester{
 	
 	public void test999End() throws Exception{
 		
-		  CoreLauncher.stop();
+		  CoreFacade.stop();
 	}
 	
 	protected void setUp() throws Exception {  

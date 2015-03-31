@@ -136,6 +136,7 @@ public class GenericInfo implements IGenericInfo{
 		
 		return rtv.size() == 0? null:rtv;
 	}
+	
 	/**
 	 * Inner class to wrap value and attribute 
 	 **/

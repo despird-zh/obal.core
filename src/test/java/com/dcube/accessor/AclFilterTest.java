@@ -8,7 +8,7 @@ import org.apache.hadoop.hbase.exceptions.DeserializationException;
 import com.dcube.base.BaseTester;
 import com.dcube.core.hbase.HAclFilter;
 import com.dcube.core.security.Principal;
-import com.dcube.launcher.CoreLauncher;
+import com.dcube.launcher.CoreFacade;
 
 public class AclFilterTest extends BaseTester{
 	

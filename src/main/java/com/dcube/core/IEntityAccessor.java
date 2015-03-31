@@ -35,7 +35,16 @@ import com.dcube.meta.BaseEntity;
  * @see EntryKey
  **/
 public interface IEntityAccessor <GB extends EntryInfo> extends IBaseAccessor{
-			
+
+	public static final String AUDIT_OPER_NEWKEY = "new.key";
+	public static final String AUDIT_OPER_PUT_ENTRY = "put.entry";
+	public static final String AUDIT_OPER_PUT_ATTR = "put.entry.attr";
+	public static final String AUDIT_OPER_GET_ENTRY = "get.entry";
+	public static final String AUDIT_OPER_GET_ATTR = "get.entry.attr";
+	public static final String AUDIT_OPER_DEL_ENTRY = "del.entry";
+	public static final String AUDIT_OPER_DEL_ATTR = "del.entry.attr";
+	public static final String AUDIT_OPER_SCAN = "scan.entry";
+	
 	/**
 	 * Generate new key for entity 
 	 * @throws AccessorException 

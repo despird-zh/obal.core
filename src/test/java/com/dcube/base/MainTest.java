@@ -9,7 +9,7 @@ import com.dcube.admin.EntityAdmin;
 import com.dcube.admin.EntitySetup;
 import com.dcube.core.AccessorFactory;
 import com.dcube.exception.BaseException;
-import com.dcube.launcher.CoreLauncher;
+import com.dcube.launcher.CoreFacade;
 import com.dcube.util.AccessorDetector;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING) 
@@ -33,8 +33,8 @@ public class MainTest extends BaseTester{
     	debug("---==: Test 000 initial ");
 		
 		try {
-			CoreLauncher.initial();
-			CoreLauncher.start();
+			CoreFacade.initial();
+			CoreFacade.start();
 		} catch (BaseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

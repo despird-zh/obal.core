@@ -25,6 +25,8 @@ public class EntityConstants {
 	// the entity name of group
 	public static final String ENTITY_USER_GROUP = ENTITY_PREFIX + "user.group";
 	
+	public static final String ENTITY_AUDIT = ENTITY_PREFIX + "audit";
+	
 	//the meta general , key of Accessor 
 	public static String ACCESSOR_GENERIC_META = "generic.meta";
 	public static String ACCESSOR_GENERIC_USER = "generic.user";

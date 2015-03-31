@@ -23,6 +23,7 @@ import com.dcube.core.EntryKey;
 import com.dcube.core.security.Principal;
 import com.dcube.exception.MetaException;
 import com.dcube.meta.BaseEntity;
+import com.dcube.meta.EntityConstants;
 import com.dcube.meta.EntityMeta;
 
 public class AuditEntity extends BaseEntity{
@@ -34,7 +35,7 @@ public class AuditEntity extends BaseEntity{
 	@Override
 	public String getSchema(Principal principal, EntryKey key) {
 		
-		return "autit.info";
+		return EntityConstants.ENTITY_AUDIT;
 	}
 
 	@Override

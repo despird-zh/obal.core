@@ -23,19 +23,19 @@ import com.dcube.launcher.ILifecycle.LifeState;
  * @version 0.1 2015-2-1
  * 
  **/
-public class CoreLauncher{
+public class CoreFacade{
 
 	private static CoreDelegator coreDelegator;
 	
 	// auto fire CoreDelegator initialization.
 	static{
-		new CoreLauncher();
+		new CoreFacade();
 	}
 	
 	/**
 	 * Hide the default constructor 
 	 **/
-	private CoreLauncher(){
+	private CoreFacade(){
 		
 		if(coreDelegator == null) 
 			coreDelegator = new CoreDelegator();
@@ -107,7 +107,7 @@ public class CoreLauncher{
 	 **/
 	private static class CoreDelegator implements ILifecycle{
 		
-		static Logger LOGGER = LoggerFactory.getLogger(CoreLauncher.class);
+		static Logger LOGGER = LoggerFactory.getLogger(CoreFacade.class);
 		// current state
 		private LifeState state = LifeState.UNKNOWN;
 		// entrant lock

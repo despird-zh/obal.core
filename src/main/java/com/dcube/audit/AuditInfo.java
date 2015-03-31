@@ -20,13 +20,10 @@ import java.util.Map;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-import com.dcube.core.accessor.EntryInfo;
 import com.dcube.disruptor.EventPayload;
 import com.lmax.disruptor.EventFactory;
 
-public class AuditInfo extends EntryInfo implements EventPayload{
-
-	public static final String ENTRY_TYPE_AUDIT="_ENTRY_AUDIT";
+public class AuditInfo implements EventPayload{
 
 	private Date timestamp;
 	String subject;
@@ -36,14 +33,8 @@ public class AuditInfo extends EntryInfo implements EventPayload{
 	Map<String, String> predicateMap = new HashMap<String, String>();
 
 	AccessPoint accessPoint;
-	
-	public AuditInfo(String entryType, String key) {
-		super(entryType, key);
-		timestamp = new Date(System.currentTimeMillis());
-	}
 
 	public AuditInfo( String key) {
-		super(ENTRY_TYPE_AUDIT, key);
 		timestamp = new Date(System.currentTimeMillis());
 	}
 	
@@ -137,7 +128,7 @@ public class AuditInfo extends EntryInfo implements EventPayload{
 
 		String retValue = "";
 
-		retValue = "AuditEvent(key=" + this.getEntryKey().getKey() + ", timestamp=" + this.timestamp
+		retValue = "AuditEvent( timestamp=" + this.timestamp
 				+ ", subject=" + this.subject + ", verb=" + this.verb
 				+ ", object=" + this.object + ", predicateMap = " + this.predicateMap 
 				+ ")";
@@ -153,7 +144,6 @@ public class AuditInfo extends EntryInfo implements EventPayload{
 	 **/
 	public void copy(AuditInfo fromOne){
 		
-		this.setEntryKey(fromOne.getEntryKey());
 		this.setTimestamp(fromOne.getTimestamp());
 	
 		this.setVerb(fromOne.getVerb());
