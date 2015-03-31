@@ -76,7 +76,7 @@ public class CacheManager{
 	 **/
 	public <K extends EntityEntry> void cachePut(K entry){
 		
-		CacheData data = new CacheData();
+		CacheInfo data = new CacheInfo();
 		data.setPutEntryData(entry);
 		
 		EventDispatcher.getInstance().sendPayload(data,EventType.CACHE);
@@ -93,7 +93,7 @@ public class CacheManager{
 	 **/
 	public void cachePutAttr(EntryKey entryKey, String attrName, Object value){
 		
-		CacheData data = new CacheData();
+		CacheInfo data = new CacheInfo();
 		data.setPutAttrData(entryKey.getKey(), entryKey.getEntityName(), attrName, value);
 		
 		EventDispatcher.getInstance().sendPayload(data,EventType.CACHE);
@@ -178,7 +178,7 @@ public class CacheManager{
 	 **/
 	public void cacheDel(String entityName, String ...keys){
 		
-		CacheData data = new CacheData();
+		CacheInfo data = new CacheInfo();
 		data.setDelData(entityName, keys);
 		
 		EventDispatcher.getInstance().sendPayload(data,EventType.CACHE);

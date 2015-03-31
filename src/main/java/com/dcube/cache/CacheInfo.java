@@ -30,7 +30,7 @@ import com.dcube.disruptor.EventPayload;
  * @version 0.1 2014-3-1
  * @since 0.1
  **/
-public class CacheData implements EventPayload{
+public class CacheInfo implements EventPayload{
 	
 	public static final String OP_PUT = "_PUT_ENTRY";
 	public static final String OP_PUT_ATTR = "_PUT_ATTR";
