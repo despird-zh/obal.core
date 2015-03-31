@@ -20,7 +20,10 @@
 package com.dcube.core;
 
 /**
- * EntryKey wrap the key information 
+ * EntryKey wrap the key information, it holds the entity name and key data.
+ * 
+ * @author despird
+ * @version 0.1 2014-3-4
  **/
 public class EntryKey {
 
@@ -38,34 +41,58 @@ public class EntryKey {
 		this.key = key;
 	}
 	
+	/**
+	 * Get entity name 
+	 **/
 	public String getEntityName() {
 		
 		return entityName;
 	}
 
+	/**
+	 * Set the entity name
+	 **/
 	public void setEntityName(String entityName) {
 		
 		this.entityName = entityName;
 	}
 	
+	/**
+	 * Get the key
+	 **/
 	public String getKey(){
 		
 		return this.key;
 	}
 	
+	/**
+	 * Set the key 
+	 **/
 	public void setKey(String key){
 		
 		this.key = key;
 	}	
 	
+	/**
+	 * Get the key bytes 
+	 **/
 	public byte[] getKeyBytes(){
 		
 		if(this.key == null) return null;
 		return getKey().getBytes();
 	}
 
+	/**
+	 * Set the key bytes 
+	 **/
 	public void setKeyBytes(byte[] key){
 		
 		setKey(new String(key));
+	}
+	
+	@Override
+	public String toString(){
+		
+		return entityName + CoreConstants.VALUE_SEPARATOR + key;
 	}
 }

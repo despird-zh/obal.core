@@ -2,19 +2,13 @@ package com.dcube.core;
 
 public class CoreConstants {
 	
-	/**
-	 * Separator used to combine multiple keys ->":"
-	 **/
+	/** Separator used to combine multiple keys ->":" */
 	public static final String KEYS_SEPARATOR = ":";
 
-	/**
-	 * Separator used to combine value-> "|"
-	 **/
+	/** Separator used to combine value-> "|" */
 	public static final String VALUE_SEPARATOR = "|";
 	
-	/**
-	 * Separator used to combine collection element-> ","
-	 **/
+	/** Separator used to combine collection element-> "," */
 	public static final String COLLECT_ELM_SEPARATOR = ",";
 	
 	/** the builder name : hbase */
@@ -23,6 +17,9 @@ public class CoreConstants {
 	/** the builder name : redis */
 	public static final String BUILDER_REDIS = "redis";
 	
+	/** the configuration key of default builder */
 	public static final String CONFIG_DFT_BUILDER = "builder.default";
+	
+	/** the postfix of IBaseAccessor detect package entry key in configuration file */
 	public static final String CONFIG_ACCESSOR_PACKAGE = ".package";
 }

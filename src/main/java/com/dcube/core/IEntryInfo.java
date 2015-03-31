@@ -4,7 +4,7 @@ import com.dcube.meta.EntityAttr;
 
 /**
  * IEntryInfo provide methods to access value of row data of table.
- * <p>EntryInfo means a row data of table, it not wrap data cross multiple tables.</p>
+ * <p>EntryInfo means a row data of table, usually it not wrap data cross multiple tables.</p>
  **/
 public interface IEntryInfo extends IGenericInfo{
 

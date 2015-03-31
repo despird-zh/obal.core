@@ -7,7 +7,7 @@ import com.dcube.meta.EntityAttr;
 /**
  * IGenericInfo is the basic interface for row level data wrapping.
  * 
- * @author despird-zh
+ * @author despird
  * @version 0.1 2014-3-1
  * 
  **/

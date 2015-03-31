@@ -34,19 +34,19 @@ import com.dcube.exception.AccessorException;
 public interface IBaseAccessor extends AutoCloseable{
 
 	/**
-	 * Get the accessor name 
+	 * Get the IBaseAccessor name 
 	 **/
 	public String getAccessorName();
 	
 	/**
-	 * Set the accessor context
+	 * Set the IBaseAccessor context
 	 * 
 	 * @param context  
 	 **/
 	public void setContext(GenericContext context) throws AccessorException;
 	
 	/**
-	 * Get the accessor context 
+	 * Get the IBaseAccessor context 
 	 **/
 	public  GenericContext getContext();
 	

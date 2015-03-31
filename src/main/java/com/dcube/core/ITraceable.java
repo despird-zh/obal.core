@@ -26,7 +26,6 @@ import com.dcube.core.accessor.EntryInfo;
 /**
  * ITraceable interface indicate the object holds tracing information. 
  * 
- * @see EntryInfo
  * @author despird
  * @version 0.1 2014-3-2
  * @since 0.1
