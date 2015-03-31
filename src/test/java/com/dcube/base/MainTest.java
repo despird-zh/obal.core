@@ -7,10 +7,10 @@ import org.junit.runners.MethodSorters;
 
 import com.dcube.admin.EntityAdmin;
 import com.dcube.admin.EntitySetup;
+import com.dcube.core.AccessorDetector;
 import com.dcube.core.AccessorFactory;
 import com.dcube.exception.BaseException;
 import com.dcube.launcher.CoreFacade;
-import com.dcube.util.AccessorDetector;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING) 
 public class MainTest extends BaseTester{

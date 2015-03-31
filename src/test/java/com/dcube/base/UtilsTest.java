@@ -7,8 +7,8 @@ import org.apache.hadoop.hbase.util.Bytes;
 import org.junit.FixMethodOrder;
 import org.junit.runners.MethodSorters;
 
+import com.dcube.core.AccessorDetector;
 import com.dcube.core.AccessorFactory;
-import com.dcube.util.AccessorDetector;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING) 
 public class UtilsTest extends BaseTester{

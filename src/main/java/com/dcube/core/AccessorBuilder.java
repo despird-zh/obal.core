@@ -37,7 +37,6 @@ import com.dcube.exception.EntityException;
 import com.dcube.exception.MetaException;
 import com.dcube.meta.BaseEntity;
 import com.dcube.meta.EntityManager;
-import com.dcube.util.AccessorDetector;
 
 /**
  * Base class of AccessorBuilder, provides common operation when create accessor instance

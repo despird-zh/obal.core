@@ -1,4 +1,4 @@
-package com.dcube.util;
+package com.dcube.core;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 /**
  * AccessorDetector facilitates detect the classes under certain package.
  * 
- * @author desprid-zh
+ * @author desprid
  * @version 0.1 2014-2-1
  * 
  **/
