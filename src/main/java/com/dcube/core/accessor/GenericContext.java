@@ -117,8 +117,10 @@ public class GenericContext {
 		}else{
 			principal = null;
 			values.clear();
-			if(auditInfo != null)
+			if(auditInfo != null){
 				auditInfo.reset();
+			}
+			auditInfo = null;
 		}
 	}
 	
