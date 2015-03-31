@@ -34,7 +34,9 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  **/
 public class AccessPoint {
 	
+	/** client name */
 	private String name;
+	/** client address */
 	private String ipAddress;
 
 	/**
