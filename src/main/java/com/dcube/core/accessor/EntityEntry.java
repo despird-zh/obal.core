@@ -24,8 +24,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.dcube.core.EntryKey;
-import com.dcube.core.IEntryInfo;
-import com.dcube.core.accessor.GenericInfo.AttributeItem;
+import com.dcube.core.IEntityEntry;
+import com.dcube.core.accessor.GenericEntry.AttributeItem;
 import com.dcube.meta.EntityAttr;
 
 /**
@@ -36,19 +36,19 @@ import com.dcube.meta.EntityAttr;
  * @author despird
  * @version 0.1 2014-2-1 
  * 
- * @see GenericInfo
+ * @see GenericEntry
  * @see AccessControlEntry
  * @see TraceableEntry
  * 
  **/
-public class EntryInfo extends GenericInfo implements IEntryInfo{
+public class EntityEntry extends GenericEntry implements IEntityEntry{
 
 	private EntryKey entryKey = null;
 	
 	/**
 	 * Constructor with entity name and key 
 	 **/
-	public EntryInfo (String entityName,String key){
+	public EntityEntry (String entityName,String key){
 		
 		super();
 		entryKey = new EntryKey(entityName,key);
@@ -57,7 +57,7 @@ public class EntryInfo extends GenericInfo implements IEntryInfo{
 	/**
 	 * Constructor with EntryKey
 	 **/
-	public EntryInfo (EntryKey entryKey){
+	public EntityEntry (EntryKey entryKey){
 		
 		super();
 		this.setEntryKey(entryKey);

@@ -35,11 +35,11 @@ import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
 
 import com.dcube.core.CoreConstants;
-import com.dcube.core.accessor.EntryInfo;
+import com.dcube.core.accessor.EntityEntry;
 import com.dcube.exception.AccessorException;
 import com.dcube.meta.EntityAttr;
 
-public abstract class REntryWrapper<GB extends EntryInfo> {
+public abstract class REntryWrapper<GB extends EntityEntry> {
 
 	public static Logger LOGGER = LoggerFactory.getLogger(REntryWrapper.class);
 	/**

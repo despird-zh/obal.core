@@ -21,7 +21,7 @@ package com.dcube.core;
 
 import java.util.Date;
 
-import com.dcube.core.accessor.EntryInfo;
+import com.dcube.core.accessor.EntityEntry;
 
 /**
  * ITraceable interface indicate the object holds tracing information. 

@@ -40,7 +40,7 @@ import com.dcube.meta.BaseEntity;
  * @version 0.1 2014-3-2
  * 
  **/
-public abstract class EntityAccessor<GB extends EntryInfo> implements IEntityAccessor <GB>{
+public abstract class EntityAccessor<GB extends EntityEntry> implements IEntityAccessor <GB>{
 
 	
 	private AccessorContext context;

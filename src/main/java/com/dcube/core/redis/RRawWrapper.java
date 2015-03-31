@@ -30,7 +30,7 @@ import redis.clients.jedis.Jedis;
 
 import com.dcube.core.CoreConstants;
 import com.dcube.core.EntryKey;
-import com.dcube.core.accessor.EntryInfo;
+import com.dcube.core.accessor.EntityEntry;
 import com.dcube.exception.AccessorException;
 import com.dcube.meta.EntityAttr;
 import com.dcube.meta.EntityConstants;
@@ -44,12 +44,12 @@ import com.dcube.meta.EntityMeta;
  * @version 0.1 2014-3-1
  * 
  **/
-public class RRawWrapper extends REntryWrapper<EntryInfo> {
+public class RRawWrapper extends REntryWrapper<EntityEntry> {
 
 	public static Logger LOGGER = LoggerFactory.getLogger(RRawWrapper.class);
 
 	@Override
-	public EntryInfo wrap(String entityName, String key, Jedis rawEntry) throws AccessorException{
+	public EntityEntry wrap(String entityName, String key, Jedis rawEntry) throws AccessorException{
 		String redisKey = entityName + CoreConstants.KEYS_SEPARATOR + key;
 		Jedis entry = rawEntry;
 		// not exist return null;
@@ -63,7 +63,7 @@ public class RRawWrapper extends REntryWrapper<EntryInfo> {
 			throw new AccessorException("The meta data:{} not exists in EntityManager.",entityName);
 		
 		List<EntityAttr> attrs = meta.getAllAttrs();
-		EntryInfo gei = new EntryInfo(entityName, key);
+		EntityEntry gei = new EntityEntry(entityName, key);
 		
 		for (EntityAttr attr : attrs) {
 			if (LOGGER.isDebugEnabled()) {
@@ -111,7 +111,7 @@ public class RRawWrapper extends REntryWrapper<EntryInfo> {
 	}
 
 	@Override
-	public EntryInfo wrap(List<EntityAttr> attrs, String key, Jedis rawEntry) throws AccessorException{
+	public EntityEntry wrap(List<EntityAttr> attrs, String key, Jedis rawEntry) throws AccessorException{
 		
 		Jedis entry = rawEntry;
 
@@ -127,7 +127,7 @@ public class RRawWrapper extends REntryWrapper<EntryInfo> {
 		if (entityName == null || entityName.length() == 0) {
 			entityName = EntityConstants.ENTITY_BLIND;
 		}
-		EntryInfo gei = new EntryInfo(entityName, key);
+		EntityEntry gei = new EntityEntry(entityName, key);
 		String redisKey = entityName + CoreConstants.KEYS_SEPARATOR + key;
 		// not exist return null;
 		if(!entry.exists(redisKey)){
@@ -176,7 +176,7 @@ public class RRawWrapper extends REntryWrapper<EntryInfo> {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void parse(List<EntityAttr> attrs,Jedis jedis, EntryInfo entryInfo)  throws AccessorException{
+	public void parse(List<EntityAttr> attrs,Jedis jedis, EntityEntry entryInfo)  throws AccessorException{
 
 		if(entryInfo == null) 
 			throw new AccessorException("entryInfo can not be null.");	

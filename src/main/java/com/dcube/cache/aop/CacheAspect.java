@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
 
 import com.dcube.cache.CacheManager;
 import com.dcube.core.EntryKey;
-import com.dcube.core.accessor.EntryInfo;
+import com.dcube.core.accessor.EntityEntry;
 import com.dcube.meta.EntityAttr;
 
 /**
@@ -98,7 +98,7 @@ public abstract class CacheAspect {
     		
     		putValue = values[index];
     		if(putValue instanceof EntryKey){
-    			CacheManager.getInstance().cachePut((EntryInfo)putValue);
+    			CacheManager.getInstance().cachePut((EntityEntry)putValue);
     			return;
 	    	}
     	}else{
@@ -270,7 +270,7 @@ public abstract class CacheAspect {
     		if(returnVal == null){
     			
     			returnVal = jp.proceed();
-    			CacheManager.getInstance().cachePut((EntryInfo)returnVal);
+    			CacheManager.getInstance().cachePut((EntityEntry)returnVal);
     		}
     	}
 

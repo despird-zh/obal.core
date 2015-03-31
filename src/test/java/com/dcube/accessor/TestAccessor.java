@@ -1,13 +1,13 @@
 package com.dcube.accessor;
 
 import com.dcube.core.accessor.AccessorContext;
-import com.dcube.core.accessor.EntryInfo;
+import com.dcube.core.accessor.EntityEntry;
 import com.dcube.core.hbase.HEntityAccessor;
 import com.dcube.core.hbase.HEntryWrapper;
 import com.dcube.core.hbase.HRawWrapper;
 import com.dcube.meta.BaseEntity;
 
-public class TestAccessor extends HEntityAccessor<EntryInfo>{
+public class TestAccessor extends HEntityAccessor<EntityEntry>{
 
 
 	public TestAccessor(AccessorContext context) {
@@ -16,7 +16,7 @@ public class TestAccessor extends HEntityAccessor<EntryInfo>{
 	}
 
 	@Override
-	public HEntryWrapper<EntryInfo> getEntryWrapper() {
+	public HEntryWrapper<EntityEntry> getEntryWrapper() {
 		HRawWrapper wrapper = new HRawWrapper();
 
 		return wrapper;

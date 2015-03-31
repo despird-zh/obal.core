@@ -11,7 +11,7 @@ import com.dcube.exception.SecurityException;
 import com.dcube.meta.EntityConstants.TraceableEnum;
 
 
-public class AccessControlEntry extends EntryInfo implements ITraceable ,IAccessControl{
+public class AccessControlEntry extends EntityEntry implements ITraceable ,IAccessControl{
 
 	private EntryAcl acl = null;
 	

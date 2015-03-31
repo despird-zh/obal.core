@@ -22,13 +22,13 @@ package com.dcube.accessor.hbase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.dcube.core.accessor.EntryInfo;
+import com.dcube.core.accessor.EntityEntry;
 import com.dcube.core.hbase.HEntityAccessor;
 import com.dcube.core.hbase.HEntryWrapper;
 import com.dcube.core.hbase.HRawWrapper;
 import com.dcube.meta.EntityConstants;
 
-public class MetaInfoEAccessor extends HEntityAccessor<EntryInfo>{
+public class MetaInfoEAccessor extends HEntityAccessor<EntityEntry>{
 
 	public MetaInfoEAccessor() {
 		
@@ -38,7 +38,7 @@ public class MetaInfoEAccessor extends HEntityAccessor<EntryInfo>{
 	public static Logger LOGGER = LoggerFactory.getLogger(MetaInfoEAccessor.class);
 
 	@Override
-	public HEntryWrapper<EntryInfo> getEntryWrapper() {
+	public HEntryWrapper<EntityEntry> getEntryWrapper() {
 		
 		HRawWrapper wrapper = new HRawWrapper();		
 

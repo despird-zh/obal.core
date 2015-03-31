@@ -20,20 +20,20 @@
 package com.dcube.accessor.hbase;
 
 import com.dcube.audit.AuditInfo;
-import com.dcube.core.accessor.EntryInfo;
+import com.dcube.core.accessor.EntityEntry;
 import com.dcube.core.hbase.HEntityAccessor;
 import com.dcube.core.hbase.HEntryWrapper;
 import com.dcube.meta.BaseEntity;
 import com.dcube.meta.EntityConstants;
 
-public class AuditEAccessor extends HEntityAccessor<EntryInfo>{
+public class AuditEAccessor extends HEntityAccessor<EntityEntry>{
 
 	public AuditEAccessor() {
 		super(EntityConstants.ACCESSOR_ENTITY_AUDIT);		
 	}
 
 	@Override
-	public HEntryWrapper<EntryInfo> getEntryWrapper() {
+	public HEntryWrapper<EntityEntry> getEntryWrapper() {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -23,7 +23,7 @@ import com.dcube.core.AccessorFactory;
 import com.dcube.core.CoreConstants;
 import com.dcube.core.EntryKey;
 import com.dcube.core.IEntityAccessor;
-import com.dcube.core.accessor.EntryInfo;
+import com.dcube.core.accessor.EntityEntry;
 import com.dcube.core.security.Principal;
 import com.dcube.disruptor.EventDispatcher;
 import com.dcube.disruptor.EventType;
@@ -74,7 +74,7 @@ public class CacheManager{
 	 * @param entry the entry object to be cached.
 	 *  
 	 **/
-	public <K extends EntryInfo> void cachePut(K entry){
+	public <K extends EntityEntry> void cachePut(K entry){
 		
 		CacheInfo data = new CacheInfo();
 		data.setPutEntryData(entry);
@@ -106,7 +106,7 @@ public class CacheManager{
 	 * @param entityName the entity name
 	 * @param key the key of entry data 
 	 **/
-	public <K extends EntryInfo> K cacheGet(String entityName, String key){
+	public <K extends EntityEntry> K cacheGet(String entityName, String key){
 		
 		Principal principal = null;		
 		K cacheData = null;

@@ -36,7 +36,7 @@ import com.dcube.core.AccessorFactory;
 import com.dcube.core.EntryFilter;
 import com.dcube.core.EntryKey;
 import com.dcube.core.accessor.EntryCollection;
-import com.dcube.core.accessor.EntryInfo;
+import com.dcube.core.accessor.EntityEntry;
 import com.dcube.core.hbase.HGenericAccessor;
 import com.dcube.exception.AccessorException;
 import com.dcube.exception.BaseException;
@@ -76,7 +76,7 @@ public class MetaGAccessor extends HGenericAccessor implements IMetaGAccessor{
 		try{
 			attraccessor = AccessorFactory.buildEntityAccessor(this, EntityConstants.ENTITY_META_ATTR);
 
-			EntryInfo minfo = attraccessor.doGetEntry(attrKey);
+			EntityEntry minfo = attraccessor.doGetEntry(attrKey);
 		
 			String attrName = minfo.getAttrValue(AttrEnum.AttrName.attribute,String.class);
 			String column = minfo.getAttrValue(AttrEnum.Column.attribute,String.class);
@@ -112,7 +112,7 @@ public class MetaGAccessor extends HGenericAccessor implements IMetaGAccessor{
 		Filter filter1 = new RowFilter(CompareFilter.CompareOp.EQUAL,
 				new BinaryComparator(entityName.getBytes()));
 		AttrInfoEAccessor attraccessor = null;
-		EntryCollection<EntryInfo> attrs = null;
+		EntryCollection<EntityEntry> attrs = null;
 		List<EntityAttr> rtv = null;
 		try{
 			attraccessor = AccessorFactory.buildEntityAccessor(this, EntityConstants.ENTITY_META_ATTR);
@@ -120,7 +120,7 @@ public class MetaGAccessor extends HGenericAccessor implements IMetaGAccessor{
 			attrs = attraccessor.doScanEntry(new EntryFilter<Filter>(filter1));
 			
 			rtv = new ArrayList<EntityAttr>();
-			for(EntryInfo minfo:attrs){
+			for(EntityEntry minfo:attrs){
 	
 				String attrName = minfo.getAttrValue(AttrEnum.AttrName.attribute,String.class);
 				String column = minfo.getAttrValue(AttrEnum.Column.attribute,String.class);
@@ -156,7 +156,7 @@ public class MetaGAccessor extends HGenericAccessor implements IMetaGAccessor{
 		try {
 			attraccessor = AccessorFactory.buildEntityAccessor(this, EntityConstants.ENTITY_META_ATTR);
 			EntryKey key = attraccessor.getEntitySchema().newKey(getContext().getPrincipal());
-			EntryInfo minfo = new EntryInfo(key);
+			EntityEntry minfo = new EntityEntry(key);
 			EntityMeta meta = attraccessor.getEntitySchema().getEntityMeta();
 			minfo.setAttrValue(meta.getAttr(AttrEnum.AttrName.attribute), attr.getAttrName());
 			minfo.setAttrValue(meta.getAttr(AttrEnum.Description.attribute), attr.getDescription());
@@ -194,7 +194,7 @@ public class MetaGAccessor extends HGenericAccessor implements IMetaGAccessor{
 		try{
 			metaAccr = AccessorFactory.buildEntityAccessor(this, EntityConstants.ENTITY_META_INFO);
 		
-			EntryInfo minfo = metaAccr.doGetEntry(entityName);
+			EntityEntry minfo = metaAccr.doGetEntry(entityName);
 			meta = new EntityMeta(entityName);
 			meta.setEntityClass(minfo.getAttrValue(MetaEnum.EntityClass.attribute,String.class));
 			meta.setAccessorName(minfo.getAttrValue(MetaEnum.AccessorName.attribute,String.class));
@@ -218,7 +218,7 @@ public class MetaGAccessor extends HGenericAccessor implements IMetaGAccessor{
 	@Override
 	public List<EntityMeta> getEntityMetaList() throws AccessorException {
 		MetaInfoEAccessor metaAccr = null;
-		EntryCollection<EntryInfo> rlist = null;
+		EntryCollection<EntityEntry> rlist = null;
 		List<EntityMeta> rtv = null;
 		try{
 			
@@ -226,7 +226,7 @@ public class MetaGAccessor extends HGenericAccessor implements IMetaGAccessor{
 			rlist = metaAccr.doScanEntry(null);
 			rtv = new ArrayList<EntityMeta>();
 		
-			for(EntryInfo ri:rlist){
+			for(EntityEntry ri:rlist){
 				
 				EntityMeta meta = new EntityMeta(metaAccr.getEntitySchema().getEntityName());
 				meta.setEntryKey(ri.getEntryKey());
@@ -265,7 +265,7 @@ public class MetaGAccessor extends HGenericAccessor implements IMetaGAccessor{
 		try {
 			metaAccr = AccessorFactory.buildEntityAccessor(this, EntityConstants.ENTITY_META_INFO);
 			EntryKey key = metaAccr.newKey();
-			EntryInfo minfo = new EntryInfo(key);
+			EntityEntry minfo = new EntityEntry(key);
 			EntityMeta emeta = metaAccr.getEntitySchema().getEntityMeta();
 			minfo.setAttrValue(emeta.getAttr(MetaEnum.EntityName.attribute), meta.getEntityName());
 			minfo.setAttrValue(emeta.getAttr(MetaEnum.EntityClass.attribute), meta.getEntityClass());

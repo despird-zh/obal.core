@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 
-import com.dcube.core.accessor.EntryInfo;
+import com.dcube.core.accessor.EntityEntry;
 import com.dcube.meta.EntityAttr;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
@@ -14,7 +14,7 @@ import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryo.serializers.CollectionSerializer;
 import com.esotericsoftware.kryo.serializers.MapSerializer;
 
-public class EntryInfoSerializer extends Serializer<EntryInfo>{
+public class EntryInfoSerializer extends Serializer<EntityEntry>{
 	
 	private MapSerializer mapserializer = new MapSerializer();
 	private CollectionSerializer listserializer = new CollectionSerializer();
@@ -23,9 +23,9 @@ public class EntryInfoSerializer extends Serializer<EntryInfo>{
 		
 	}
 	@Override
-	public EntryInfo read(Kryo kryo, Input input, Class<EntryInfo> clazz) {
+	public EntityEntry read(Kryo kryo, Input input, Class<EntityEntry> clazz) {
 		// TODO Auto-generated method stub
-		EntryInfo tile = new EntryInfo("","");
+		EntityEntry tile = new EntityEntry("","");
 	        kryo.reference(tile); // Only necessary if Kryo#setReferences is true AND Tile#something could reference this tile.
 
 	        //tile.something = kryo.readClassAndObject(input);
@@ -34,7 +34,7 @@ public class EntryInfoSerializer extends Serializer<EntryInfo>{
 	}
 
 	@Override
-	public void write(Kryo kryo, Output output, EntryInfo object) {
+	public void write(Kryo kryo, Output output, EntityEntry object) {
 		Collection<EntityAttr> attrs = object.getAttrs();
 		ArrayList<EntityAttr> attrList = new ArrayList<EntityAttr>(attrs);
 		Collections.sort(attrList,AttrComparator);

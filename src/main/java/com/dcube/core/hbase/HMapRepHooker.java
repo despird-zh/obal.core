@@ -11,7 +11,7 @@ import org.apache.hadoop.io.DataOutputBuffer;
 import org.apache.hadoop.io.serializer.Deserializer;
 
 import com.dcube.core.EntryKey;
-import com.dcube.core.accessor.EntryInfo;
+import com.dcube.core.accessor.EntityEntry;
 import com.dcube.disruptor.EventPayload;
 import com.dcube.disruptor.EventType;
 import com.dcube.disruptor.GenericHooker;
@@ -20,7 +20,7 @@ import com.dcube.exception.RingEventException;
 import com.dcube.exception.WrapperException;
 import com.dcube.meta.EntityAttr;
 
-public class HMapRepHooker<K extends EntryInfo> extends GenericHooker<DataOutputBuffer>{
+public class HMapRepHooker<K extends EntityEntry> extends GenericHooker<DataOutputBuffer>{
 
 	
 	List<K> resultList = new ArrayList<K>();

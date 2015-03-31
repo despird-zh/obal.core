@@ -28,7 +28,7 @@ import org.apache.hadoop.hbase.client.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.dcube.core.accessor.EntryInfo;
+import com.dcube.core.accessor.EntityEntry;
 import com.dcube.exception.WrapperException;
 import com.dcube.meta.EntityAttr;
 import com.dcube.meta.EntityConstants;
@@ -42,12 +42,12 @@ import com.dcube.meta.EntityMeta;
  * @version 0.1 2014-3-1
  * 
  **/
-public class HRawWrapper extends HEntryWrapper<EntryInfo>{
+public class HRawWrapper extends HEntryWrapper<EntityEntry>{
 
 	public static Logger LOGGER = LoggerFactory.getLogger(HRawWrapper.class);
 	
 	@Override
-	public EntryInfo wrap(List<EntityAttr> attrs,Result rawEntry) throws WrapperException{
+	public EntityEntry wrap(List<EntityAttr> attrs,Result rawEntry) throws WrapperException{
 						
 		Result entry = (Result)rawEntry;
 		String entityName = attrs.size()>0? (attrs.get(0).getEntityName()):EntityConstants.ENTITY_BLIND;
@@ -55,7 +55,7 @@ public class HRawWrapper extends HEntryWrapper<EntryInfo>{
 			
 			entityName = EntityConstants.ENTITY_BLIND;
 		}
-		EntryInfo gei = new EntryInfo(entityName,new String(entry.getRow()));
+		EntityEntry gei = new EntityEntry(entityName,new String(entry.getRow()));
 		
 		for(EntityAttr attr: attrs){
 			byte[] column = attr.getColumn().getBytes();
@@ -99,7 +99,7 @@ public class HRawWrapper extends HEntryWrapper<EntryInfo>{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Put parse(List<EntityAttr> attrs,EntryInfo entryInfo) throws WrapperException{
+	public Put parse(List<EntityAttr> attrs,EntityEntry entryInfo) throws WrapperException{
 		Put put = new Put(entryInfo.getEntryKey().getKey().getBytes());
 
         for(EntityAttr attr:attrs){

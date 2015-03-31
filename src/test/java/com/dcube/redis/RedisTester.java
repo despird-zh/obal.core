@@ -12,7 +12,7 @@ import com.dcube.accessor.TestAccessor;
 import com.dcube.admin.EntityAdmin;
 import com.dcube.base.BaseTester;
 import com.dcube.core.EntryKey;
-import com.dcube.core.accessor.EntryInfo;
+import com.dcube.core.accessor.EntityEntry;
 import com.dcube.core.security.Principal;
 import com.dcube.exception.AccessorException;
 import com.dcube.exception.EntityException;
@@ -40,10 +40,10 @@ public class RedisTester extends BaseTester{
 	}
 	
 
-	private EntryInfo doGet(EntryKey key){
+	private EntityEntry doGet(EntryKey key){
 		
 		TestAccessor ta = null;
-		EntryInfo rentry = null;
+		EntityEntry rentry = null;
 		Principal princ = new Principal("useracc","demouser","pwd");
 		try{
 			ta = AccessorUtils.getEntityAccessor("redis",princ, "obal.test");
@@ -157,7 +157,7 @@ public class RedisTester extends BaseTester{
 		try {
 			ta = AccessorUtils.getEntityAccessor("redis",princ, "obal.test");
 			EntryKey key = ta.newKey();
-			EntryInfo re = new EntryInfo(key);
+			EntityEntry re = new EntityEntry(key);
 			re.setAttrValue("i_int", 1211);
 			re.setAttrValue("i_double", 13.111);
 			re.setAttrValue("i_long", 123456788888L);

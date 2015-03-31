@@ -48,7 +48,7 @@ import com.dcube.core.IEntryConverter;
 import com.dcube.core.accessor.AccessorContext;
 import com.dcube.core.accessor.EntityAccessor;
 import com.dcube.core.accessor.EntryCollection;
-import com.dcube.core.accessor.EntryInfo;
+import com.dcube.core.accessor.EntityEntry;
 import com.dcube.exception.AccessorException;
 import com.dcube.exception.MetaException;
 import com.dcube.exception.WrapperException;
@@ -82,7 +82,7 @@ import com.dcube.meta.EntityAttr;
  * 
  * @see EntityAccessor
  **/
-public abstract class HEntityAccessor<GB extends EntryInfo> extends EntityAccessor<GB> implements HConnAware {
+public abstract class HEntityAccessor<GB extends EntityEntry> extends EntityAccessor<GB> implements HConnAware {
 
 	Logger LOGGER = LoggerFactory.getLogger(HEntityAccessor.class);
 	private HConnection connection;

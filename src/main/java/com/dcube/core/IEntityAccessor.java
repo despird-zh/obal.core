@@ -20,7 +20,7 @@
 package com.dcube.core;
 
 import com.dcube.core.accessor.EntryCollection;
-import com.dcube.core.accessor.EntryInfo;
+import com.dcube.core.accessor.EntityEntry;
 import com.dcube.exception.AccessorException;
 import com.dcube.meta.BaseEntity;
 /**
@@ -34,7 +34,7 @@ import com.dcube.meta.BaseEntity;
  * @see EntryWrapper
  * @see EntryKey
  **/
-public interface IEntityAccessor <GB extends EntryInfo> extends IBaseAccessor{
+public interface IEntityAccessor <GB extends EntityEntry> extends IBaseAccessor{
 
 	public static final String AUDIT_OPER_NEWKEY = "new.key";
 	public static final String AUDIT_OPER_PUT_ENTRY = "put.entry";

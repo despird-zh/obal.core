@@ -36,7 +36,7 @@ import org.codehaus.jackson.type.TypeReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.dcube.core.IEntryInfo;
+import com.dcube.core.IEntityEntry;
 import com.dcube.exception.WrapperException;
 import com.dcube.meta.EntityAttr;
 
@@ -47,7 +47,7 @@ import com.dcube.meta.EntityAttr;
  * @author despird-zh
  * @version 0.1 2014-3-2
  **/
-public abstract class HEntryWrapper<GB extends IEntryInfo> {
+public abstract class HEntryWrapper<GB extends IEntityEntry> {
 
 	/**
 	 * Wrap the rawentry into bean object

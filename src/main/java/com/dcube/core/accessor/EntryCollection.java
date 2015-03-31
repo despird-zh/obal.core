@@ -13,9 +13,9 @@ import com.dcube.meta.EntityAttr;
  * @author despird-zh
  * @version 0.1 2015-3-1
  * 
- * @see GenericInfo
+ * @see GenericEntry
  **/
-public class EntryCollection<GB extends GenericInfo> implements Iterable<GB> {
+public class EntryCollection<GB extends GenericEntry> implements Iterable<GB> {
 
 	private List<EntityAttr> attrlist = null;
 	

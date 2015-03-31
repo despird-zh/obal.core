@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import com.dcube.audit.AuditHooker;
 import com.dcube.cache.CacheHooker;
-import com.dcube.core.accessor.EntryInfo;
+import com.dcube.core.accessor.EntityEntry;
 import com.dcube.disruptor.EventDispatcher;
 import com.dcube.exception.BaseException;
 import com.dcube.launcher.ILifecycle.LifeState;
@@ -143,7 +143,7 @@ public class CoreFacade{
 			EventDispatcher.getInstance().regEventHooker(auditHooker);
 			
 			// register cache event hooker
-			CacheHooker<?> cacheHooker = new CacheHooker<EntryInfo>();
+			CacheHooker<?> cacheHooker = new CacheHooker<EntityEntry>();
 			EventDispatcher.getInstance().regEventHooker(cacheHooker);
 			
 			this.state = LifeState.INITIAL;

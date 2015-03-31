@@ -9,7 +9,7 @@ import com.dcube.meta.EntityConstants.TraceableEnum;
 /**
  * TraceableEntry 
  **/
-public class TraceableEntry extends EntryInfo implements ITraceable{
+public class TraceableEntry extends EntityEntry implements ITraceable{
 
 	public TraceableEntry (String entityName,String key){
 		

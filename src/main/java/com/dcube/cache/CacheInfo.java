@@ -19,7 +19,7 @@
  */
 package com.dcube.cache;
 
-import com.dcube.core.accessor.EntryInfo;
+import com.dcube.core.accessor.EntityEntry;
 import com.dcube.disruptor.EventPayload;
 
 /**
@@ -70,7 +70,7 @@ public class CacheInfo implements EventPayload{
 	 * Set the setting of entry attribute put operation.
 	 *  
 	 **/
-	public void setPutEntryData(EntryInfo entryInfo){
+	public void setPutEntryData(EntityEntry entryInfo){
 		
 		PutEntryData ped = new PutEntryData();
 		ped.entryInfo = entryInfo;
@@ -107,7 +107,7 @@ public class CacheInfo implements EventPayload{
     
     public static class PutEntryData{
     	
-    	public EntryInfo entryInfo = null;
+    	public EntityEntry entryInfo = null;
     }
     
     public String operation(String operation){

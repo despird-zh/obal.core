@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.dcube.core.IGenericInfo;
+import com.dcube.core.IGenericEntry;
 import com.dcube.meta.EntityAttr;
 import com.dcube.meta.EntityConstants;
 
@@ -41,11 +41,11 @@ import com.dcube.meta.EntityConstants;
  * @see RawTraceableEntry
  * 
  **/
-public class GenericInfo implements IGenericInfo{
+public class GenericEntry implements IGenericEntry{
 
 	private Map<String, AttributeItem> itemMap = null;
 	
-	public GenericInfo (){
+	public GenericEntry (){
 		itemMap = new HashMap<String,AttributeItem> ();
 	}
 	

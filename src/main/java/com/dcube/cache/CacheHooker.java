@@ -3,7 +3,7 @@ package com.dcube.cache;
 import com.dcube.core.AccessorFactory;
 import com.dcube.core.CoreConstants;
 import com.dcube.core.IEntityAccessor;
-import com.dcube.core.accessor.EntryInfo;
+import com.dcube.core.accessor.EntityEntry;
 import com.dcube.core.security.Principal;
 import com.dcube.disruptor.EventHooker;
 import com.dcube.disruptor.EventPayload;
@@ -13,7 +13,7 @@ import com.dcube.exception.EntityException;
 import com.dcube.exception.RingEventException;
 import com.dcube.util.AccessorUtils;
 
-public class CacheHooker<K extends EntryInfo>  extends EventHooker<CacheInfo>{
+public class CacheHooker<K extends EntityEntry>  extends EventHooker<CacheInfo>{
 
 	public CacheHooker() {
 		super(EventType.CACHE);
