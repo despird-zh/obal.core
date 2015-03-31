@@ -5,7 +5,7 @@ import com.dcube.meta.BaseEntity;
 
 /**
  * AccessorContext holds information required during interaction with back-end data storage.
- * <p>When AccessorBuilder build new Accessor instance, it create new context object and hand over it.</p>
+ * <p>When AccessorBuilder build new IBaseAccessor instance, it create new context object and hand over it.</p>
  * 
  * @author despird
  * @version 0.1 2014-3-1

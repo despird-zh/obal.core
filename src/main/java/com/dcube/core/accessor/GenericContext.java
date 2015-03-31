@@ -3,6 +3,7 @@ package com.dcube.core.accessor;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.dcube.audit.AuditInfo;
 import com.dcube.core.security.Principal;
 
 /**
@@ -26,7 +27,11 @@ public class GenericContext {
 	/** values of extra setting */
 	protected Map<String, Object> values = null;
 	
+	/** the context parent */
 	private GenericContext parent = null;
+	
+	/** the audit information */
+	private AuditInfo auditInfo = null;
 	
 	/**
 	 * Constructor 
@@ -112,6 +117,8 @@ public class GenericContext {
 		}else{
 			principal = null;
 			values.clear();
+			if(auditInfo != null)
+				auditInfo.reset();
 		}
 	}
 	
@@ -123,4 +130,33 @@ public class GenericContext {
 		return embed;
 	}
 
+	/**
+	 * Audit on with specified operation
+	 **/
+	public void auditOn(String operation){
+		
+		if(embed){
+			// embed context hand over to parent context.
+			parent.auditOn(operation);
+			return;
+		}else if(auditInfo == null){
+			auditInfo = new AuditInfo(operation);
+		}else{
+			auditInfo.reset();
+			auditInfo.setOperation(operation);
+		}
+		// set audit subject
+		auditInfo.setSubject(principal.getAccount());
+	}
+	
+	/**
+	 * Get AuditInfo object 
+	 **/
+	public AuditInfo getAuditInfo(){
+		if(embed){
+			return parent.getAuditInfo();
+		}else{
+			return this.auditInfo;
+		}
+	}
 }

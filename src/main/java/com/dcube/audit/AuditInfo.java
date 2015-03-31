@@ -35,17 +35,21 @@ import com.lmax.disruptor.EventFactory;
  **/
 public class AuditInfo implements EventPayload{
 
-	public static final String DUMMY_OPERATION = "_dummy";
 	/** the time stamp */
 	private Date timestamp;
+	
 	/** the subject - principal or user account */
 	String subject;
+	
 	/** the business object - business trigger data */
 	String object;
+	
 	/** the business operation */
 	String operation;
+	
 	/** access point */
 	AccessPoint accessPoint;
+	
 	/** verb map key : verb name, value : verb object */
 	Map<String, AuditVerb> verbMap = new HashMap<String, AuditVerb>();
 
@@ -215,7 +219,21 @@ public class AuditInfo implements EventPayload{
 		return eb.isEquals();
 		
 	}
-
+	
+	/**
+	 * Reset the audit into initial state.
+	 **/
+	public void reset(){
+		
+		this.timestamp = new Date(System.currentTimeMillis());
+		this.object = null;
+		this.subject = null;
+		this.accessPoint = null;
+		this.operation = null;
+		this.verbMap.clear();
+		this.verbMap = null;
+	}
+	
 	@Override
 	public String toString() {
 
@@ -229,25 +247,4 @@ public class AuditInfo implements EventPayload{
 		return retValue;
 	}
 	
-	/**
-	 * Copy information from the parameter event
-	 * 
-	 * @param fromOne the source object.
-	 * 
-	 **/
-	public void copy(AuditInfo fromOne){
-		
-		this.setTimestamp(fromOne.getTimestamp());
-		this.setOperation(fromOne.getOperation());
-		this.setSubject(fromOne.getSubject());
-		this.setObject(fromOne.getObject());
-		this.setAccessPoint(fromOne.getAccessPoint());
-		
-		Collection<AuditVerb> avcoll = fromOne.getVerbs();
-		for(AuditVerb av : avcoll){
-			
-			this.putVerb(av);
-		}
-	}
-
 }
