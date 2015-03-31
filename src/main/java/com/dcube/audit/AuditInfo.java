@@ -13,6 +13,7 @@
  */
 package com.dcube.audit;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,73 +24,155 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import com.dcube.disruptor.EventPayload;
 import com.lmax.disruptor.EventFactory;
 
+/**
+ * AuditInfo hold the audit data 
+ * One object is the operation data. operation is business level definition
+ * it holds many verbs.
+ * A verb is action on table, eg. CRUD etc.
+ * 
+ * @author despird
+ * @version 0.1 2014-3-2
+ **/
 public class AuditInfo implements EventPayload{
 
+	public static final String DUMMY_OPERATION = "_dummy";
+	/** the time stamp */
 	private Date timestamp;
+	/** the subject - principal or user account */
 	String subject;
-	String verb;
+	/** the business object - business trigger data */
 	String object;
-
-	Map<String, String> predicateMap = new HashMap<String, String>();
-
+	/** the business operation */
+	String operation;
+	/** access point */
 	AccessPoint accessPoint;
+	/** verb map key : verb name, value : verb object */
+	Map<String, AuditVerb> verbMap = new HashMap<String, AuditVerb>();
 
-	public AuditInfo( String key) {
+	/**
+	 * Constructor with operation 
+	 **/
+	public AuditInfo( String operation) {
+		this.operation = operation;
 		timestamp = new Date(System.currentTimeMillis());
 	}
 	
+	/**
+	 * Get audit time stamp 
+	 **/
 	public Date getTimestamp() {
 		return timestamp;
 	}
 
+	/**
+	 * Set audit time stamp
+	 **/
 	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
 	}
 
+	/**
+	 * Get business object 
+	 **/
 	public String getObject() {
 		return object;
 	}
 
+	/**
+	 * Set business object 
+	 **/
 	public void setObject(String object) {
 		this.object = object;
 	}
 
+	/**
+	 * Get subject 
+	 **/
 	public String getSubject() {
 		return subject;
 	}
 
+	/**
+	 * Set subject - principal 
+	 **/
 	public void setSubject(String subject) {
 		this.subject = subject;
 	}
 
-	public String getVerb() {
-		return verb;
+	/**
+	 * Get verb object via verb name 
+	 **/
+	public AuditVerb getVerb(String name) {
+		return verbMap.get(name);
 	}
 
-	public void setVerb(String verb) {
-		this.verb = verb;
+	/**
+	 * Get all verb objects 
+	 **/
+	public Collection<AuditVerb> getVerbs(){
+		
+		return verbMap.values();
+	}
+	
+	/**
+	 * Pub verb object 
+	 **/
+	public void putVerb(String verb, String target) {
+		AuditVerb averb = new AuditVerb(verb, target);
+		verbMap.put(verb,averb);
 	}
 
-	public void addPredicate(Predicate predicate) {
-		predicateMap.put(predicate.getName(), predicate.getValue());
+	/**
+	 * Pub verb object 
+	 **/
+	public void putVerb(AuditVerb verb) {
+
+		verbMap.put(verb.getVerb(),verb);
+	}
+	
+	/**
+	 * Add verb predicate 
+	 **/
+	public void addPredicate(String verb, Predicate predicate) {
+		AuditVerb averb = verbMap.get(verb);
+		averb.addPredicate(predicate);
 	}
 
-	public void setPredicateMap(Map<String, String> predicateMap) {
-		this.predicateMap = predicateMap;
+	/**
+	 * Get predicate map
+	 **/
+	public Map<String, String> getPredicateMap(String verb) {
+		return verbMap.get(verb).getPredicateMap();
 	}
 
-	public Map<String, String> getPredicateMap() {
-		return predicateMap;
-	}
-
+	/**
+	 * Get Access Point 
+	 **/
 	public AccessPoint getAccessPoint() {
 		return accessPoint;
 	}
 
+	/**
+	 * Set Access Point 
+	 **/
 	public void setAccessPoint(AccessPoint accessPoint) {
 		this.accessPoint = accessPoint;
 	}
+	
+	/**
+	 * Get business operation 
+	 **/
+	public String getOperation() {
+		return operation;
+	}
 
+	/**
+	 * Set business operation 
+	 **/
+	public void setOperation(String operation) {
+		this.operation = operation;
+	}
+	
 	@Override
 	public int hashCode() {
 		
@@ -97,7 +180,7 @@ public class AuditInfo implements EventPayload{
 		
 		return hashcb.append(timestamp)
 		.append(subject)
-		.append(verb)
+		.append(operation)
 		.append(accessPoint).hashCode();
 		
 	}
@@ -115,9 +198,8 @@ public class AuditInfo implements EventPayload{
 		EqualsBuilder eb = new EqualsBuilder();
 		eb.append(this.timestamp, other.timestamp)
 		.append(this.subject, other.subject)
-		.append(this.verb, other.verb)
-		.append(this.accessPoint, other.accessPoint)
-		.append(this.predicateMap, other.predicateMap);
+		.append(this.operation, other.operation)
+		.append(this.accessPoint, other.accessPoint);
 		
 		return eb.isEquals();
 		
@@ -129,8 +211,8 @@ public class AuditInfo implements EventPayload{
 		String retValue = "";
 
 		retValue = "AuditEvent( timestamp=" + this.timestamp
-				+ ", subject=" + this.subject + ", verb=" + this.verb
-				+ ", object=" + this.object + ", predicateMap = " + this.predicateMap 
+				+ ", subject=" + this.subject + ", operation=" + this.operation
+				+ ", object=" + this.object 
 				+ ")";
 
 		return retValue;
@@ -139,26 +221,22 @@ public class AuditInfo implements EventPayload{
 	/**
 	 * Copy information from the parameter event
 	 * 
-	 * @param fromOne the event object.
+	 * @param fromOne the source object.
 	 * 
 	 **/
 	public void copy(AuditInfo fromOne){
 		
 		this.setTimestamp(fromOne.getTimestamp());
-	
-		this.setVerb(fromOne.getVerb());
+		this.setOperation(fromOne.getOperation());
 		this.setSubject(fromOne.getSubject());
 		this.setObject(fromOne.getObject());
 		this.setAccessPoint(fromOne.getAccessPoint());
-		this.setPredicateMap(fromOne.getPredicateMap());
+		
+		Collection<AuditVerb> avcoll = fromOne.getVerbs();
+		for(AuditVerb av : avcoll){
+			
+			this.putVerb(av);
+		}
 	}
 
-	public final static EventFactory<AuditInfo> EVENT_FACTORY = new EventFactory<AuditInfo> (){
-		
-		@Override
-		public AuditInfo newInstance() {
-
-			return new AuditInfo("k-001010");
-		}
-	};
 }
