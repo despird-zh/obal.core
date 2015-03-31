@@ -13,7 +13,7 @@ import com.dcube.exception.EntityException;
 import com.dcube.exception.RingEventException;
 import com.dcube.util.AccessorUtils;
 
-public class CacheHooker<K extends EntityEntry>  extends EventHooker<CacheInfo>{
+public class CacheHooker<K extends EntityEntry>  extends EventHooker<CacheData>{
 
 	public CacheHooker() {
 		super(EventType.CACHE);
@@ -23,21 +23,21 @@ public class CacheHooker<K extends EntityEntry>  extends EventHooker<CacheInfo>{
 	@Override
 	public void processPayload(EventPayload payload) throws RingEventException {
 		
-		CacheInfo operData = (CacheInfo)payload;
+		CacheData operData = (CacheData)payload;
 		 
-		if(CacheInfo.OP_PUT.equals(operData.operation(null))){
+		if(CacheData.OP_PUT.equals(operData.operation(null))){
 			
-			CacheInfo.PutEntryData data = operData.value();
+			CacheData.PutEntryData data = operData.value();
 			doCachePut((K)data.entryInfo);
 		}
-		else if(CacheInfo.OP_PUT_ATTR.equals(operData.operation(null))){
+		else if(CacheData.OP_PUT_ATTR.equals(operData.operation(null))){
 			
-			CacheInfo.PutAttrData data = operData.value();
+			CacheData.PutAttrData data = operData.value();
 			doCachePutAttr(data.key,data.entity,data.attr,data.value);
 		}
-		else if(CacheInfo.OP_DEL.equals(operData.operation(null))){
+		else if(CacheData.OP_DEL.equals(operData.operation(null))){
 			
-			CacheInfo.DelEntryData data = operData.value();
+			CacheData.DelEntryData data = operData.value();
 			doCacheDel(data.entity,data.keys);
 		}
 		

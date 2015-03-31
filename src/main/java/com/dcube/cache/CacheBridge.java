@@ -34,7 +34,7 @@ public interface CacheBridge<K> {
 	/**
 	 * Get the event handler instance to swallow the disruptor ringbuffer event. 
 	 **/
-	public EventHandler<CacheInfo> getEventHandler();
+	public EventHandler<CacheData> getEventHandler();
 	
 	/**
 	 * Put the entry data into cache
