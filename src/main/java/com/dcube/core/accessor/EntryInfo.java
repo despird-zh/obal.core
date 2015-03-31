@@ -19,8 +19,13 @@
  */
 package com.dcube.core.accessor;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.dcube.core.EntryKey;
 import com.dcube.core.IEntryInfo;
+import com.dcube.core.accessor.GenericInfo.AttributeItem;
 import com.dcube.meta.EntityAttr;
 
 /**
@@ -31,21 +36,27 @@ import com.dcube.meta.EntityAttr;
  * @author despird
  * @version 0.1 2014-2-1 
  * 
- * @see RawEntry
- * @see RawAccessControlEntry
- * @see RawTraceableEntry
+ * @see GenericInfo
+ * @see AccessControlEntry
+ * @see TraceableEntry
  * 
  **/
 public class EntryInfo extends GenericInfo implements IEntryInfo{
 
 	private EntryKey entryKey = null;
 	
+	/**
+	 * Constructor with entity name and key 
+	 **/
 	public EntryInfo (String entityName,String key){
 		
 		super();
 		entryKey = new EntryKey(entityName,key);
 	}
 	
+	/**
+	 * Constructor with EntryKey
+	 **/
 	public EntryInfo (EntryKey entryKey){
 		
 		super();
@@ -92,4 +103,16 @@ public class EntryInfo extends GenericInfo implements IEntryInfo{
 		
 		super.setAttrValue(entryKey.getEntityName(), attrname, value);
 	}
+
+	@Override
+	public Map<String, String> getAuditPredicates() {
+		
+		List<AttributeItem> changedItems = super.getChangedItems();
+		Map<String, String> predicates = new HashMap<String, String>();
+		for(AttributeItem item : changedItems){
+			predicates.put(item.attrname, item.currentVal.toString());
+		}
+		return predicates;
+	}	
+	
 }

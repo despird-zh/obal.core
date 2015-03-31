@@ -132,12 +132,23 @@ public class AuditInfo implements EventPayload{
 	
 	/**
 	 * Add verb predicate 
+	 * @param verb the audit verb
+	 * @param predicate the predicate
 	 **/
 	public void addPredicate(String verb, Predicate predicate) {
 		AuditVerb averb = verbMap.get(verb);
 		averb.addPredicate(predicate);
 	}
 
+	/**
+	 * Add verb predicate 
+	 **/
+	public void addPredicate(String verb, Map<String,String> predicateMap) {
+		AuditVerb averb = verbMap.get(verb);
+		for(Map.Entry<String, String> entry: predicateMap.entrySet())
+			averb.addPredicate(entry.getKey(),entry.getValue());
+	}
+	
 	/**
 	 * Get predicate map
 	 **/

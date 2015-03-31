@@ -1,5 +1,7 @@
 package com.dcube.core;
 
+import java.util.Map;
+
 import com.dcube.meta.EntityAttr;
 
 /**
@@ -40,4 +42,9 @@ public interface IEntryInfo extends IGenericInfo{
 	 * Get attribute value 
 	 **/
 	public Object getAttrValue(String attrname);
+	
+	/**
+	 * Get the audit verb Predicates 
+	 **/
+	public Map<String, String> getAuditPredicates();
 }
