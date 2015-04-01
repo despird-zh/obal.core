@@ -6,9 +6,9 @@ import java.util.Map;
 import org.apache.hadoop.hbase.exceptions.DeserializationException;
 
 import com.dcube.base.BaseTester;
-import com.dcube.core.hbase.HAclFilter;
 import com.dcube.core.security.Principal;
 import com.dcube.launcher.CoreFacade;
+import com.dcube.reserve.HAclFilter;
 
 public class AclFilterTest extends BaseTester{
 	

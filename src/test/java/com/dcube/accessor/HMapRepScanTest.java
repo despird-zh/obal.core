@@ -6,7 +6,7 @@ import org.apache.hadoop.hbase.client.Scan;
 import org.apache.log4j.PropertyConfigurator;
 
 import com.dcube.base.BaseTester;
-import com.dcube.core.hbase.HMapRedHttpScan;
+import com.dcube.reserve.HMapRedHttpScan;
 
 public class HMapRepScanTest extends BaseTester{
 

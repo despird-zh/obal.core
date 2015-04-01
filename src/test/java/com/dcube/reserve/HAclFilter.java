@@ -1,4 +1,4 @@
-package com.dcube.core.hbase;
+package com.dcube.reserve;
 
 import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.exceptions.DeserializationException;

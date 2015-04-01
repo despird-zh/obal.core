@@ -1,4 +1,4 @@
-package com.dcube.core.hbase;
+package com.dcube.reserve;
 
 import java.io.File;
 import java.io.IOException;

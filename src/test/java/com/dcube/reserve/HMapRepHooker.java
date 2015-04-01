@@ -1,4 +1,4 @@
-package com.dcube.core.hbase;
+package com.dcube.reserve;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,6 +12,7 @@ import org.apache.hadoop.io.serializer.Deserializer;
 
 import com.dcube.core.EntryKey;
 import com.dcube.core.accessor.EntityEntry;
+import com.dcube.core.hbase.HEntryWrapper;
 import com.dcube.disruptor.EventPayload;
 import com.dcube.disruptor.EventType;
 import com.dcube.disruptor.GenericHooker;
