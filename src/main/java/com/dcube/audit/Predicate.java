@@ -15,6 +15,12 @@ package com.dcube.audit;
 
 public class Predicate {
 	
+	/** the key of parameter */
+	public static final String KEY_PARAM = "param";	
+	
+	/** the key of filter */
+	public static final String KEY_FILTER = "filter";	
+	
 	final String name;
 	final String value;
 

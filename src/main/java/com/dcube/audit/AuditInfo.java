@@ -111,10 +111,16 @@ public class AuditInfo implements EventPayload{
 	}
 
 	/**
-	 * Get verb object via verb name 
+	 * Get verb object via verb name, if not exist create new one.
 	 **/
 	public AuditVerb getVerb(String name) {
-		return verbMap.get(name);
+		if(verbMap.containsKey(name))
+			return verbMap.get(name);
+		else{
+			AuditVerb averb = new AuditVerb(name);
+			verbMap.put(name, averb);
+			return averb;
+		}
 	}
 
 	/**
@@ -144,6 +150,18 @@ public class AuditInfo implements EventPayload{
 	/**
 	 * Add verb predicate 
 	 * @param verb the audit verb
+	 * @param pkey 
+	 * @param pvalue
+	 **/
+	public void addPredicate(String verb, String pkey, Object pvalue) {
+		Predicate predicate = new Predicate(pkey, pvalue.toString());
+		AuditVerb averb = verbMap.get(verb);
+		averb.addPredicate(predicate);
+	}
+	
+	/**
+	 * Add verb predicate 
+	 * @param verb the audit verb
 	 * @param predicate the predicate
 	 **/
 	public void addPredicate(String verb, Predicate predicate) {
@@ -154,10 +172,10 @@ public class AuditInfo implements EventPayload{
 	/**
 	 * Add verb predicate 
 	 **/
-	public void addPredicate(String verb, Map<String,String> predicateMap) {
+	public void addPredicates(String verb, Map<String,Object> predicateMap) {
 		AuditVerb averb = verbMap.get(verb);
-		for(Map.Entry<String, String> entry: predicateMap.entrySet())
-			averb.addPredicate(entry.getKey(),entry.getValue());
+		for(Map.Entry<String, Object> entry: predicateMap.entrySet())
+			averb.addPredicate(entry.getKey(),entry.getValue().toString());
 	}
 	
 	/**

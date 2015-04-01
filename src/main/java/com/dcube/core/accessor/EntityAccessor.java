@@ -19,6 +19,8 @@
  */
 package com.dcube.core.accessor;
 
+import com.dcube.audit.AuditInfo;
+import com.dcube.audit.Predicate;
 import com.dcube.core.EntryKey;
 import com.dcube.core.IEntityAccessor;
 import com.dcube.core.IEntryConverter;
@@ -81,14 +83,13 @@ public abstract class EntityAccessor<GB extends EntityEntry> implements IEntityA
 	 **/
 	public AccessorContext getContext(){
 		
-		return this.context;
+		return context;
 	}
 	
-
-
 	@Override
 	public EntryKey newKey(Object ... parameter) throws AccessorException{
 		
+		context.auditBegin(AUDIT_OPER_NEWKEY);
 		EntryKey key = null;
 		try {
 			if(null == getEntitySchema())
@@ -99,7 +100,12 @@ public abstract class EntityAccessor<GB extends EntityEntry> implements IEntityA
 			
 			throw new AccessorException("Error when generating entry key",e);
 		}
-		
+		// collect audit information
+		AuditInfo audit = context.getAuditInfo();
+		audit.getVerb(AUDIT_OPER_NEWKEY)
+			.setTarget(key.toString());
+		audit.addPredicate(AUDIT_OPER_NEWKEY, Predicate.KEY_PARAM, parameter);
+		context.auditEnd();
 		return key;
 	}
 	

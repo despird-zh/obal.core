@@ -69,4 +69,10 @@ public class EntryFilter<F> {
 		
 		return clazz.isInstance(filter);
 	}
+	
+	@Override
+	public String toString(){
+		
+		return this.filter.toString();
+	}
 }

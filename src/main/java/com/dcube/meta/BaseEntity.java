@@ -135,4 +135,11 @@ public abstract class BaseEntity{
 		return meta.getEntityName();
 	}
 
+	/**
+	 * Convert string key to EntryKey 
+	 **/
+	public EntryKey getKey(String entryKey){
+		
+		return new EntryKey(meta.getEntityName(), entryKey);
+	}
 }

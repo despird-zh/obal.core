@@ -42,6 +42,8 @@ import org.apache.hadoop.hbase.filter.QualifierFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.dcube.audit.AuditInfo;
+import com.dcube.audit.Predicate;
 import com.dcube.core.EntryFilter;
 import com.dcube.core.EntryKey;
 import com.dcube.core.IEntryConverter;
@@ -127,11 +129,15 @@ public abstract class HEntityAccessor<GB extends EntityEntry> extends EntityAcce
 	@Override
 	public EntryCollection<GB> doScanEntry(EntryFilter<?> scanfilter) throws AccessorException{
 		
+		AccessorContext context = super.getContext();		
+		context.auditBegin(AUDIT_OPER_SCAN);
+		
 		EntryCollection<GB> entryColl = new EntryCollection<GB>();
 		HEntryWrapper<GB> wrapper = this.getEntryWrapper();
 		HTableInterface table = null;
 		Scan scan=new Scan();
 		ResultScanner scanner = null;
+		BaseEntity schema = context.getEntitySchema();
 		try {
 			
 			if(scanfilter != null && scanfilter != null){
@@ -142,9 +148,9 @@ public abstract class HEntityAccessor<GB extends EntityEntry> extends EntityAcce
 				scan.setFilter(hfilter);
 			}
 			HConnection conn = getConnection();
-			AccessorContext context = super.getContext();
-			table = conn.getTable(context.getEntitySchema().getSchemaBytes(getContext().getPrincipal(),null));
-			BaseEntity schema = context.getEntitySchema();
+			
+			table = conn.getTable(schema.getSchemaBytes(getContext().getPrincipal(),null));
+			
 			List<EntityAttr> attrs = schema.getEntityMeta().getAllAttrs();
 			scanner = table.getScanner(scan);
 			
@@ -170,6 +176,12 @@ public abstract class HEntityAccessor<GB extends EntityEntry> extends EntityAcce
 					
 					e.printStackTrace();
 				}
+			// collect the audit data
+			AuditInfo audit = context.getAuditInfo();
+			audit.getVerb(AUDIT_OPER_SCAN)
+				.setTarget(schema.getEntityName());
+			audit.addPredicate(AUDIT_OPER_SCAN, Predicate.KEY_FILTER, scanfilter.toString());
+			context.auditEnd();
 		}
 		
 		return entryColl;
@@ -177,6 +189,8 @@ public abstract class HEntityAccessor<GB extends EntityEntry> extends EntityAcce
 
 	@Override
 	public EntryCollection<GB> doScanEntry(EntryFilter<?> scanfilter, String... attributes)throws AccessorException{
+		AccessorContext context = super.getContext();		
+		context.auditBegin(AUDIT_OPER_SCAN);
 		
 		EntryCollection<GB> entryColl = new EntryCollection<GB>();
 		HEntryWrapper<GB> wrapper = this.getEntryWrapper();
@@ -194,7 +208,7 @@ public abstract class HEntityAccessor<GB extends EntityEntry> extends EntityAcce
 				scan.setFilter(hfilter);
 			}
 			HConnection conn = getConnection();
-			AccessorContext context = super.getContext();
+			
 			table = conn.getTable(context.getEntitySchema().getSchemaBytes(getContext().getPrincipal(),null));
 			List<EntityAttr> attrs = entitySchema.getEntityMeta().getAttrs(attributes);
         	for(EntityAttr attr: attrs){
@@ -224,6 +238,14 @@ public abstract class HEntityAccessor<GB extends EntityEntry> extends EntityAcce
 					
 					e.printStackTrace();
 				}
+			
+			// collect the audit data
+			AuditInfo audit = context.getAuditInfo();
+			audit.getVerb(AUDIT_OPER_SCAN)
+				.setTarget(entitySchema.getEntityName());
+			audit.addPredicate(AUDIT_OPER_SCAN, Predicate.KEY_FILTER, scanfilter);
+			audit.addPredicate(AUDIT_OPER_SCAN, Predicate.KEY_PARAM, attributes);
+			context.auditEnd();
 		}
 		
 		return entryColl;
@@ -245,6 +267,9 @@ public abstract class HEntityAccessor<GB extends EntityEntry> extends EntityAcce
 	@SuppressWarnings("unchecked")
 	@Override
 	public <K> K doGetEntryAttr(String entryKey ,String attrName ) throws AccessorException{
+		
+		AccessorContext context = super.getContext();		
+		context.auditBegin(AUDIT_OPER_GET_ATTR);
 		
 		HTableInterface table = null;
 		Object rtv = null;
@@ -300,13 +325,21 @@ public abstract class HEntityAccessor<GB extends EntityEntry> extends EntityAcce
 				table.close();
 			} catch (IOException e) {
 				e.printStackTrace();
-			}        	
+			}
+			// collect the audit data
+			AuditInfo audit = context.getAuditInfo();
+			audit.getVerb(AUDIT_OPER_GET_ATTR)
+				.setTarget(entitySchema.getKey(entryKey).toString());
+			audit.addPredicate(AUDIT_OPER_GET_ATTR, Predicate.KEY_PARAM, attr.getAttrName());
+			context.auditEnd();
         }
 		return (K)rtv;
 	}
 	
 	@Override
 	public GB doGetEntry(String entryKey) throws AccessorException {
+		AccessorContext context = super.getContext();		
+		context.auditBegin(AUDIT_OPER_GET_ENTRY);
 		HTableInterface table = null;
 		GB rtv = null;
 		BaseEntity entrySchema = (BaseEntity)getEntitySchema();
@@ -334,13 +367,21 @@ public abstract class HEntityAccessor<GB extends EntityEntry> extends EntityAcce
 				table.close();
 			} catch (IOException e) {
 				e.printStackTrace();
-			}        	
+			}  
+			// collect the audit data
+			AuditInfo audit = context.getAuditInfo();
+			audit.getVerb(AUDIT_OPER_GET_ENTRY)
+				.setTarget(entrySchema.getKey(entryKey).toString());
+			
+			context.auditEnd();
         }
 		return rtv;
 	}
 	
 	@Override
 	public GB doGetEntry(String entryKey, String... attributes)throws AccessorException{
+		AccessorContext context = super.getContext();		
+		context.auditBegin(AUDIT_OPER_GET_ENTRY);
 		
 		HTableInterface table = null;
 		GB rtv = null;
@@ -373,14 +414,22 @@ public abstract class HEntityAccessor<GB extends EntityEntry> extends EntityAcce
 				table.close();
 			} catch (IOException e) {
 				e.printStackTrace();
-			}        	
-        }
+			}     
+			// collect the audit data
+			AuditInfo audit = context.getAuditInfo();
+			audit.getVerb(AUDIT_OPER_GET_ENTRY)
+				.setTarget(entitySchema.getKey(entryKey).toString());
+			audit.addPredicate(AUDIT_OPER_GET_ATTR, Predicate.KEY_PARAM, attributes);
+			context.auditEnd();
+		}
 		return rtv;
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	public EntryKey doPutEntryAttr(String entryKey, String attrName,  Object value) throws AccessorException{
+		AccessorContext context = super.getContext();		
+		context.auditBegin(AUDIT_OPER_PUT_ATTR);
 		
 		HTableInterface table = null;
 		EntryKey rtv = null;
@@ -433,13 +482,22 @@ public abstract class HEntityAccessor<GB extends EntityEntry> extends EntityAcce
 				table.close();
 			} catch (IOException e) {
 				e.printStackTrace();
-			}        	
+			}   
+			// collect the audit data
+			AuditInfo audit = context.getAuditInfo();
+			audit.getVerb(AUDIT_OPER_PUT_ATTR)
+				.setTarget(entitySchema.getKey(entryKey).toString());
+			audit.addPredicate(AUDIT_OPER_PUT_ATTR, attrName, value);
+			context.auditEnd();
         }
 		return rtv;
 	}
 	
 	@Override
 	public EntryKey doPutEntry(GB entryInfo) throws AccessorException {
+		AccessorContext context = super.getContext();		
+		context.auditBegin(AUDIT_OPER_PUT_ENTRY);
+		
 		HTableInterface table = null;
 		EntryKey rtv = null;
 		BaseEntity entrySchema = (BaseEntity)getEntitySchema();
@@ -466,19 +524,28 @@ public abstract class HEntityAccessor<GB extends EntityEntry> extends EntityAcce
 				table.close();
 			} catch (IOException e) {
 				e.printStackTrace();
-			}        	
+			}
+			// collect the audit data
+			AuditInfo audit = context.getAuditInfo();
+			audit.getVerb(AUDIT_OPER_PUT_ENTRY)
+				.setTarget(entryInfo.getEntryKey().toString());
+			Map<String,Object> predicates = entryInfo.getAuditPredicates();
+			audit.addPredicates(AUDIT_OPER_PUT_ENTRY, predicates);
+			context.auditEnd();
         }
 		return rtv;
 	}
 	
 	@Override
-	public void doDelEntry(String... rowkey) throws AccessorException {
-
+	public void doDelEntry(String... rowkeys) throws AccessorException {
+		AccessorContext context = super.getContext();		
+		context.auditBegin(AUDIT_OPER_DEL_ENTRY);
+		
 		BaseEntity entrySchema = (BaseEntity)getEntitySchema();
 		HashMap<String, List<String>> map = new HashMap<String, List<String>>();
 		try {
 
-			for(String key:rowkey){
+			for(String key:rowkeys){
 				String schemaname = entrySchema.getSchema(getContext().getPrincipal(),key);
 				List<String> keys = map.get(schemaname);
 				keys = keys == null? new ArrayList<String>(): keys;
@@ -491,8 +558,18 @@ public abstract class HEntityAccessor<GB extends EntityEntry> extends EntityAcce
 			}
 
 		} catch (MetaException e) {
-			throw new AccessorException("Error delete entry row, key:{}",e,rowkey);
-		}      
+			throw new AccessorException("Error delete entry row, key:{}",e,rowkeys);
+		
+		} finally{
+			
+			// collect the audit data
+			AuditInfo audit = context.getAuditInfo();
+			audit.getVerb(AUDIT_OPER_DEL_ENTRY)
+				.setTarget(entrySchema.getEntityName());
+			
+			audit.addPredicate(AUDIT_OPER_DEL_ENTRY, Predicate.KEY_PARAM, rowkeys);
+			context.auditEnd();
+		}  
 	}
 	
 	/**
@@ -538,6 +615,9 @@ public abstract class HEntityAccessor<GB extends EntityEntry> extends EntityAcce
 	
 	@Override
 	public void doDelEntryAttr(String attribute, String... rowkeys)throws AccessorException{
+		AccessorContext context = super.getContext();		
+		context.auditBegin(AUDIT_OPER_DEL_ATTR);
+		
 		BaseEntity entrySchema = (BaseEntity)getEntitySchema();
 		EntityAttr attr = null;
 		HashMap<String, List<String>> map = new HashMap<String, List<String>>();
@@ -557,7 +637,16 @@ public abstract class HEntityAccessor<GB extends EntityEntry> extends EntityAcce
 
 		} catch (MetaException e) {
 			throw new AccessorException("Error delete entry row, key:{}",e,rowkeys);
-		}        
+		} finally{
+			
+			// collect the audit data
+			AuditInfo audit = context.getAuditInfo();
+			audit.getVerb(AUDIT_OPER_DEL_ATTR)
+				.setTarget(entrySchema.getEntityName());
+			
+			audit.addPredicate(AUDIT_OPER_DEL_ATTR, attribute, rowkeys);
+			context.auditEnd();
+		}       
 	}
 	
 	@Override	
