@@ -99,6 +99,7 @@ public class EntityEntry extends GenericEntry implements IEntityEntry{
 		return getAttrValue(entryKey.getEntityName(), attrname);
 	}
 
+	@Override
 	public void setAttrValue(String attrname, Object value) {
 		
 		super.setAttrValue(entryKey.getEntityName(), attrname, value);

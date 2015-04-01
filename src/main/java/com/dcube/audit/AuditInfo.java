@@ -16,6 +16,7 @@ package com.dcube.audit;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -38,17 +39,23 @@ public class AuditInfo implements EventPayload{
 	/** the time stamp */
 	private Date timestamp;
 	
+	/** operation time consuming */
+	private Long elapse;
+	
 	/** the subject - principal or user account */
-	String subject;
+	private String subject;
 	
 	/** the business object - business trigger data */
-	String object;
+	private String object;
 	
 	/** the business operation */
-	String operation;
+	private String operation;
 	
 	/** access point */
-	AccessPoint accessPoint;
+	private AccessPoint accessPoint;
+	
+	/** start flag */
+	private boolean started = false;
 	
 	/** verb map key : verb name, value : verb object */
 	Map<String, AuditVerb> verbMap = new HashMap<String, AuditVerb>();
@@ -221,6 +228,47 @@ public class AuditInfo implements EventPayload{
 	}
 	
 	/**
+	 * Set state on/off
+	 * @param start true:begin; false:end 
+	 **/
+	public void setState(boolean on){
+		
+		if(on){
+			timestamp = new Date(System.currentTimeMillis());
+		}else{
+			long start = timestamp.getTime();
+			elapse = System.currentTimeMillis() - start;
+		}
+		this.started = on;		
+	}
+	
+	/**
+	 * Get elapse time 
+	 **/
+	public long getElapse(){
+		
+		if(!started){
+			
+			return elapse;
+		}else{
+			
+			long start = timestamp.getTime();
+			long tempelapse = System.currentTimeMillis() - start;
+			return tempelapse;
+		}
+	}
+	
+	
+	/**
+	 * Audit state check
+	 * @return true:audit on; false :audit off 
+	 **/
+	public boolean state(){
+		
+		return this.started;
+	}
+	
+	/**
 	 * Reset the audit into initial state.
 	 **/
 	public void reset(){
@@ -232,6 +280,7 @@ public class AuditInfo implements EventPayload{
 		this.operation = null;
 		this.verbMap.clear();
 		this.verbMap = null;
+		this.started = false;
 	}
 	
 	@Override
@@ -247,4 +296,26 @@ public class AuditInfo implements EventPayload{
 		return retValue;
 	}
 	
+    @SuppressWarnings("rawtypes")
+    public static String toString(Object object) {
+            if (object == null)
+                    return "<null>";
+            else if (object instanceof String) {
+                    if(((String) object).length() > 100)
+                            return ((String) object).substring(0, 100) + "...[more]";
+                    else return (String) object;
+            }
+            else if (object instanceof Long)
+                    return ((Long) object).toString();
+            else if (object instanceof Boolean)
+                    return ((Boolean) object).toString();
+            else if (object instanceof Double)
+                    return ((Double) object).toString();
+            else if (object instanceof Integer)
+                    return ((Integer) object).toString();
+            else if (object instanceof List)
+                    return "items{" + ((List) object).size() + "}";
+            else
+                    return "object";
+    }
 }

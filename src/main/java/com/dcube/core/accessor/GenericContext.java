@@ -10,6 +10,9 @@ import com.dcube.core.security.Principal;
  * GenericContext holds information required during interaction with back-end data storage.
  * <p>When AccessorBuilder build new Accessor instance, it create new context object and hand over it.</p>
  * 
+ * <p>The context could cross multiple IBaseAccessor instance. it could be used to share variable 
+ * among multiple accessor instances.</p>
+ * 
  * @author despird
  * @version 0.1 2014-3-1
  * 
@@ -135,12 +138,15 @@ public class GenericContext {
 	/**
 	 * Audit on with specified operation
 	 **/
-	public void auditOn(String operation){
+	public void auditBegin(String operation){
 		
-		if(embed){
+		if(embed && parent != null){
 			// embed context hand over to parent context.
-			parent.auditOn(operation);
-			return;
+			if(parent.getAuditInfo() == null){
+				parent.auditBegin(operation);
+			}else{
+				// ignore
+			}
 		}else if(auditInfo == null){
 			auditInfo = new AuditInfo(operation);
 		}else{
@@ -149,13 +155,31 @@ public class GenericContext {
 		}
 		// set audit subject
 		auditInfo.setSubject(principal.getAccount());
+		auditInfo.setState(true);// start audit
+	}
+	
+	/**
+	 * Audit end  
+	 **/
+	public void auditEnd(){
+		
+		if(embed && parent != null){
+			// embed context hand over to parent context.
+			if(parent.getAuditInfo() != null){
+				parent.auditEnd();
+			}else{
+				// ignore
+			}
+		}else if(auditInfo != null){
+			auditInfo.setState(false);
+		}
 	}
 	
 	/**
 	 * Get AuditInfo object 
 	 **/
 	public AuditInfo getAuditInfo(){
-		if(embed){
+		if(embed && parent != null){
 			return parent.getAuditInfo();
 		}else{
 			return this.auditInfo;

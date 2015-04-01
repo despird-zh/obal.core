@@ -88,16 +88,16 @@ public abstract class HEntityAccessor<GB extends EntityEntry> extends EntityAcce
 	private HConnection connection;
 	
 	/**
-	 * Constructor with accessor name and context.
-	 * @param accessorName the name of accessor
+	 * Constructor with EntityAccessor name and context.
+	 * @param accessorName the name of EntityAccessor
 	 **/	
 	public HEntityAccessor(String accessorName) {
 		super(accessorName,null);
 	}
 	
 	/**
-	 * Constructor with accessor name and context.
-	 * @param accessorName the name of accessor
+	 * Constructor with EntityAccessor name and context.
+	 * @param accessorName the name of EntityAccessor
 	 * @param context the context during operation  
 	 **/
 	public HEntityAccessor(String accessorName,AccessorContext context) {
@@ -259,7 +259,6 @@ public abstract class HEntityAccessor<GB extends EntityEntry> extends EntityAcce
         	get.setFilter(qfilter);
         	Result entry = null;
         	byte[] cell = null;
-        	HEntryWrapper<GB> wrapper = (HEntryWrapper<GB>)getEntryWrapper();
         	switch(attr.mode){
         	case PRIMITIVE:
 				get.addColumn(column, qualifier);
@@ -389,9 +388,6 @@ public abstract class HEntityAccessor<GB extends EntityEntry> extends EntityAcce
 		EntityAttr attr = entitySchema.getEntityMeta().getAttr(attrName);
         try {  
             table = getConnection().getTable(entitySchema.getSchema(getContext().getPrincipal(),entryKey));
-            // support check.
-            HEntryWrapper<GB> wrapper = (HEntryWrapper<GB>)this.getEntryWrapper();
-
             Put put =  new Put(entryKey.getBytes());
             
             if(LOGGER.isDebugEnabled()){

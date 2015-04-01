@@ -126,15 +126,17 @@ public abstract class EntityAccessor<GB extends EntityEntry> implements IEntityA
 	 * Release the entity schema and clear the principal in it.
 	 **/
 	public void close(){
-		
-	
+			
 		if(context != null){
 			// not embed accessor, purge all resource;embed only release object pointers.
 			context.clear();		
-			
+			context = null;
 		}
 	}
-		
+	
+	/**
+	 * Check if the EntityAccessor is an embedded one. 
+	 **/
 	public boolean isEmbed(){
 		
 		return context.isEmbed();

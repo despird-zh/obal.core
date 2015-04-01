@@ -44,6 +44,11 @@ public interface IEntityEntry extends IGenericEntry{
 	public Object getAttrValue(String attrname);
 	
 	/**
+	 * Set the attribute value 
+	 **/
+	public void setAttrValue(String attrname, Object value);
+	
+	/**
 	 * Get the audit verb Predicates 
 	 **/
 	public Map<String, String> getAuditPredicates();

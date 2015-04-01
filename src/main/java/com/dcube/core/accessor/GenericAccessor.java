@@ -81,7 +81,7 @@ public abstract class GenericAccessor implements IBaseAccessor {
 		if(context != null){
 			// not embed accessor, purge all resource;embed only release object pointers.
 			context.clear();		
-			
+			context = null;
 		}
 	}
 		
