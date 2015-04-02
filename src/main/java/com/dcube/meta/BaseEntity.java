@@ -20,8 +20,6 @@
 
 package com.dcube.meta;
 
-import java.util.List;
-
 import com.dcube.core.EntryKey;
 import com.dcube.core.security.Principal;
 import com.dcube.exception.MetaException;

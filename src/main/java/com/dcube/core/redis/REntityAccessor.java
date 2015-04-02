@@ -39,6 +39,7 @@ import com.dcube.core.accessor.EntityEntry;
 import com.dcube.exception.AccessorException;
 import com.dcube.meta.BaseEntity;
 import com.dcube.meta.EntityAttr;
+import com.dcube.meta.EntityAttr.AttrMode;
 
 public abstract class REntityAccessor <GB extends EntityEntry> extends EntityAccessor<GB> implements RedisAware{
 
@@ -77,9 +78,8 @@ public abstract class REntityAccessor <GB extends EntityEntry> extends EntityAcc
 		EntryKey rtv = null;
 		BaseEntity entitySchema = (BaseEntity)getEntitySchema();
 		EntityAttr attr = entitySchema.getEntityMeta().getAttr(attrName);
-		REntryWrapper<GB> wrapper = this.getEntryWrapper();
 
-        if(LOGGER.isDebugEnabled()){
+		if(LOGGER.isDebugEnabled()){
             LOGGER.debug("--==>>attr:{} - value:{}",attr.getAttrName(),value);
         }
         String redisKey = entitySchema.getEntityName() + CoreConstants.KEYS_SEPARATOR + entryKey;
@@ -125,7 +125,7 @@ public abstract class REntityAccessor <GB extends EntityEntry> extends EntityAcc
 		Object rtv = null;
 		BaseEntity entitySchema = (BaseEntity)getEntitySchema();
 		EntityAttr attr = entitySchema.getEntityMeta().getAttr(attrName);
-    	REntryWrapper<GB> wrapper = (REntryWrapper<GB>)getEntryWrapper();
+
     	String redisKey = entitySchema.getEntityName() + CoreConstants.KEYS_SEPARATOR + entryKey;
     	switch(attr.mode){
 	    	case PRIMITIVE:
@@ -177,39 +177,61 @@ public abstract class REntityAccessor <GB extends EntityEntry> extends EntityAcc
 	 * is ignored. get/put by key operations is enough.
 	 *  
 	 **/
+	@Deprecated
 	@Override
 	public EntryCollection<GB> doScanEntry(EntryFilter<?> scanfilter)
 			throws AccessorException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		throw new UnsupportedOperationException("Jedis Accessor not support Scan Operation.");
 	}
 
 	@Override
 	public boolean isFilterSupported(EntryFilter<?> scanfilter, boolean throwExcep)
 			throws AccessorException {
-		// TODO Auto-generated method stub
+		
 		return false;
 	}
 
 	@Override
 	public GB doGetEntry(String entryKey, String... attributes)
 			throws AccessorException {
-		// TODO Auto-generated method stub
-		return null;
+		GB rtv = null;
+		BaseEntity entitySchema = (BaseEntity)getEntitySchema();
+		List<EntityAttr> attrs = entitySchema.getEntityMeta().getAttrs(attributes);
+		
+		REntryWrapper<GB> wrapper = (REntryWrapper<GB>)getEntryWrapper();
+		
+		rtv = wrapper.wrap(attrs,entryKey, jedis);
+		return rtv;
 	}
 
 	@Override
-	public void doDelEntryAttr(String attribute, String... entryKey)
+	public void doDelEntryAttr(String attribute, String... entryKeys)
 			throws AccessorException {
-		// TODO Auto-generated method stub
+		BaseEntity entitySchema = (BaseEntity)getEntitySchema();
+		// get non-primitive attributes
+		EntityAttr attr = entitySchema.getEntityMeta().getAttr(attribute);
 		
+		for(String entrykey:entryKeys){
+			
+			String redisKey = entitySchema.getEntityName()+ CoreConstants.KEYS_SEPARATOR + entrykey;
+					
+			if(attr.mode != AttrMode.PRIMITIVE){
+				// delete non-primitive data
+				jedis.del(redisKey + CoreConstants.KEYS_SEPARATOR + attr.getAttrName());
+			}else{
+				// delete primitive data	
+				jedis.del(redisKey); 
+			}
+		}
 	}
 
+	@Deprecated
 	@Override
 	public EntryCollection<GB> doScanEntry(EntryFilter<?> scanfilter,
 			String... attributes) throws AccessorException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		throw new UnsupportedOperationException("Jedis Accessor not support Scan Operation.");
 	}
 
 	@Override

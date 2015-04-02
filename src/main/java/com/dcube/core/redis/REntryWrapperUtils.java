@@ -270,7 +270,7 @@ public class REntryWrapperUtils {
 		
     	if(mapVal == null) return;    	
     	
-    	for(Map.Entry<String,Object> pe:mapVal.entrySet()){
+    	for(Map.Entry<String,Object> pe : mapVal.entrySet()){
     		
 	    	switch(attr.type){
 				case INTEGER:

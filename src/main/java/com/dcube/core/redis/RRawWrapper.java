@@ -34,8 +34,6 @@ import com.dcube.core.accessor.EntityEntry;
 import com.dcube.exception.AccessorException;
 import com.dcube.meta.EntityAttr;
 import com.dcube.meta.EntityConstants;
-import com.dcube.meta.EntityManager;
-import com.dcube.meta.EntityMeta;
 
 /**
  * Hbase Raw entry wrapper in charge of hbase Result to object list conversion.
@@ -51,7 +49,7 @@ public class RRawWrapper extends REntryWrapper<EntityEntry> {
 	@Override
 	public EntityEntry wrap(List<EntityAttr> attrs, String key, Jedis rawEntry) throws AccessorException{
 		
-		Jedis entry = rawEntry;
+		Jedis jedis = rawEntry;
 
 		String entityName = null;
 		if(attrs == null || attrs.size()==0){
@@ -68,7 +66,7 @@ public class RRawWrapper extends REntryWrapper<EntityEntry> {
 		EntityEntry gei = new EntityEntry(entityName, key);
 		String redisKey = entityName + CoreConstants.KEYS_SEPARATOR + key;
 		// not exist return null;
-		if(!entry.exists(redisKey)){
+		if(!jedis.exists(redisKey)){
 			LOGGER.debug("The target[key:{}-{}] data not exist in Jedis.",entityName,key);
 			return null;	
 		}		
@@ -79,27 +77,27 @@ public class RRawWrapper extends REntryWrapper<EntityEntry> {
 			switch (attr.mode) {
 
 				case PRIMITIVE:
-					byte[] cell = entry.hget(redisKey.getBytes(), attr.getAttrName().getBytes());
+					byte[] cell = jedis.hget(redisKey.getBytes(), attr.getAttrName().getBytes());
 					Object value = REntryWrapperUtils.getPrimitiveValue(attr, cell);
 					gei.setAttrValue(attr, value);
 					break;
 				case MAP:
 					String mapkey = redisKey + CoreConstants.KEYS_SEPARATOR + attr.getAttrName();
-					cells = entry.hgetAll(mapkey.getBytes());
+					cells = jedis.hgetAll(mapkey.getBytes());
 					Map<String, Object> map = REntryWrapperUtils.getMapValue(attr, cells);
 					gei.setAttrValue(attr, map);
 					break;
 				case LIST:
 					String listkey = redisKey + CoreConstants.KEYS_SEPARATOR + attr.getAttrName();
-					Long llen = entry.llen(listkey.getBytes());
-					List<byte[]> listcells = entry.lrange(listkey.getBytes(), 0,llen);
+					Long llen = jedis.llen(listkey.getBytes());
+					List<byte[]> listcells = jedis.lrange(listkey.getBytes(), 0,llen);
 					List<Object> list = REntryWrapperUtils.getListValue(attr, listcells);
 					gei.setAttrValue(attr, list);
 					break;
 	
 				case SET:
 					String setkey = redisKey + CoreConstants.KEYS_SEPARATOR + attr.getAttrName();
-					Set<byte[]> setcells = entry.smembers(setkey.getBytes());
+					Set<byte[]> setcells = jedis.smembers(setkey.getBytes());
 	
 					Set<Object> set = REntryWrapperUtils.getSetValue(attr, setcells);
 					gei.setAttrValue(attr, set);
