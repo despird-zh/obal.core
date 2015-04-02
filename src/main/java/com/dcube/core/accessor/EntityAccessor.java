@@ -140,6 +140,15 @@ public abstract class EntityAccessor<GB extends EntityEntry> implements IEntityA
 		}
 	}
 	
+	@Deprecated
+	@Override
+	public <K> K doGetEntryAttr(String entryKey ,String attrName ) throws AccessorException{
+		
+		
+		
+		return null;
+	}
+	
 	/**
 	 * Check if the EntityAccessor is an embedded one. 
 	 **/
@@ -150,9 +159,6 @@ public abstract class EntityAccessor<GB extends EntityEntry> implements IEntityA
 
 	/**
 	 * Get the entry converter object.
-	 **/
-	
-	/**
 	 * Here define a blank method  
 	 **/
 	public <To> IEntryConverter<GB, To> getEntryConverter(Class<To> cto){

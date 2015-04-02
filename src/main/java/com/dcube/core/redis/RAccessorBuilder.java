@@ -103,7 +103,6 @@ public class RAccessorBuilder extends AccessorBuilder{
 			IBaseAccessor... accessors) throws EntityException {
 		
 		Jedis jedis = null;		
-		Principal principal = null;
 		for(IBaseAccessor accessor:accessors){
 			
 			if((mockupAccessor instanceof RedisAware) 

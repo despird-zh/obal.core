@@ -8,6 +8,7 @@ import com.dcube.exception.BaseException;
 public abstract class CoreInitializer {
 
 	public String hookerName = null;
+	
 	/**
 	 * Default constructor, here the hooker will be bind to CoreLauncher
 	 **/

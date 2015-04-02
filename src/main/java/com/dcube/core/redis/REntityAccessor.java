@@ -86,22 +86,22 @@ public abstract class REntityAccessor <GB extends EntityEntry> extends EntityAcc
         switch(attr.mode){
         
             case PRIMITIVE:
-            	wrapper.putPrimitiveValue(jedis,redisKey, attr, value);
+            	REntryWrapperUtils.putPrimitiveValue(jedis,redisKey, attr, value);
             	break;
             case JMAP:
             	if(!(value instanceof Map<?,?>))
         			throw new AccessorException("the attr:{} value is not Map object",attrName);        		
-        		wrapper.putMapValue(jedis,redisKey, attr, (Map<String,Object>)value);	
+            	REntryWrapperUtils.putMapValue(jedis,redisKey, attr, (Map<String,Object>)value);	
         		break;
             case JLIST:
             	if(!(value instanceof List<?>))
         			throw new AccessorException("the attr:{} value is not List object",attrName);        		
-        		wrapper.putListValue(jedis,redisKey, attr, (List<Object>)value);	
+            	REntryWrapperUtils.putListValue(jedis,redisKey, attr, (List<Object>)value);	
         		break;
             case JSET:
             	if(!(value instanceof List<?>))
         			throw new AccessorException("the attr:{} value is not List object",attrName);        		
-        		wrapper.putSetValue(jedis, redisKey, attr, (Set<Object>)value);	
+            	REntryWrapperUtils.putSetValue(jedis, redisKey, attr, (Set<Object>)value);	
         		break;
             default:
             	break;      	
@@ -114,7 +114,7 @@ public abstract class REntityAccessor <GB extends EntityEntry> extends EntityAcc
 		GB rtv = null;
 		BaseEntity entrySchema = (BaseEntity)getEntitySchema();
 		REntryWrapper<GB> wrapper = (REntryWrapper<GB>)getEntryWrapper();
-		rtv = wrapper.wrap(entrySchema.getEntityName(),entryKey, jedis);
+		rtv = wrapper.wrap(entrySchema.getEntityMeta().getAllAttrs(),entryKey, jedis);
 		return rtv;
 	}
 
@@ -130,23 +130,23 @@ public abstract class REntityAccessor <GB extends EntityEntry> extends EntityAcc
     	switch(attr.mode){
 	    	case PRIMITIVE:
 	    		byte[] cell = jedis.hget(redisKey.getBytes(), attr.getAttrName().getBytes());
-				rtv = wrapper.getPrimitiveValue(attr, cell);
+				rtv = REntryWrapperUtils.getPrimitiveValue(attr, cell);
 	    		break;
 	    	case JMAP:
 	    		redisKey += CoreConstants.KEYS_SEPARATOR + attr.getAttrName();
 	        	Map<byte[], byte[]> cells = jedis.hgetAll(redisKey.getBytes());
-				rtv = wrapper.getMapValue(attr, cells);		    		
+				rtv = REntryWrapperUtils.getMapValue(attr, cells);		    		
 	    		break;
 	    	case JLIST:
 	    		redisKey += CoreConstants.KEYS_SEPARATOR + attr.getAttrName();
 	    		long len = jedis.llen(redisKey);
 	    		List<byte[]> celllist = jedis.lrange(redisKey.getBytes(), 0, len);
-				rtv = wrapper.getListValue(attr, celllist);		    		
+				rtv = REntryWrapperUtils.getListValue(attr, celllist);		    		
 	    		break;
 	    	case JSET:
 	    		redisKey += CoreConstants.KEYS_SEPARATOR + attr.getAttrName();
 	    		Set<byte[]> cellset = jedis.smembers(redisKey.getBytes());
-				rtv = wrapper.getSetValue(attr, cellset);	
+				rtv = REntryWrapperUtils.getSetValue(attr, cellset);	
 	    		break;
 	    	default:
 	    		break;
@@ -177,7 +177,6 @@ public abstract class REntityAccessor <GB extends EntityEntry> extends EntityAcc
 	 * is ignored. get/put by key operations is enough.
 	 *  
 	 **/
-	@Deprecated
 	@Override
 	public EntryCollection<GB> doScanEntry(EntryFilter<?> scanfilter)
 			throws AccessorException {
@@ -185,14 +184,33 @@ public abstract class REntityAccessor <GB extends EntityEntry> extends EntityAcc
 		return null;
 	}
 
-	/**
-	 * Scan is deprecated, so do this. 
-	 * @see #scanEntry(EntryFilter) 
-	 **/
-	@Deprecated
 	@Override
-	public abstract boolean isFilterSupported(EntryFilter<?> scanfilter,
-			boolean throwExcep) throws AccessorException ;
+	public boolean isFilterSupported(EntryFilter<?> scanfilter, boolean throwExcep)
+			throws AccessorException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public GB doGetEntry(String entryKey, String... attributes)
+			throws AccessorException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void doDelEntryAttr(String attribute, String... entryKey)
+			throws AccessorException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public EntryCollection<GB> doScanEntry(EntryFilter<?> scanfilter,
+			String... attributes) throws AccessorException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	@Override
 	public void setJedis(Jedis jedis) {

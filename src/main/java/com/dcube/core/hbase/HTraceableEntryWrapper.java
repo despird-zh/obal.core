@@ -96,14 +96,14 @@ public class HTraceableEntryWrapper extends HEntryWrapper<TraceableEntry>{
         			HEntryWrapperUtils.putPrimitiveValue(put, attr, value);					
         			break;
         		case JMAP:
-        			HEntryWrapperUtils.putMapValue(put, attr, (Map<String,Object>)value);	
+        			HEntryWrapperUtils.putJMapValue(put, attr, (Map<String,Object>)value);	
         			break;
         		case JLIST:
-        			HEntryWrapperUtils.putListValue(put, attr, (List<Object>)value);	
+        			HEntryWrapperUtils.putJListValue(put, attr, (List<Object>)value);	
         			
         			break;
         		case JSET:
-        			HEntryWrapperUtils.putSetValue(put, attr, (Set<Object>)value);				
+        			HEntryWrapperUtils.putJSetValue(put, attr, (Set<Object>)value);				
         			break;
         		default:
         			break;

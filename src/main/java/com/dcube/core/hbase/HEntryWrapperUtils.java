@@ -267,7 +267,7 @@ public class HEntryWrapperUtils {
 	 * @param rawEntry
 	 * @param attrs
 	 * @return The array of map
-	 **/
+	 *
 	public static Map<String,?>[] getFMapValue(Result rawEntry,EntityAttr ... attrs )throws WrapperException{
 		Map<String,?> map = null;
 		Map<String,?>[] rtv = null;
@@ -370,7 +370,7 @@ public class HEntryWrapperUtils {
 				
 		return rtv;
 		
-	}
+	}*/
 	
 	/**
 	 * Put the Primitive value to target Put operation
@@ -416,7 +416,7 @@ public class HEntryWrapperUtils {
 	 * @param attr the target attribute object
 	 * @param value the value to be put 
 	 **/
-	public static void putMapValue(Put put, EntityAttr attr, Map<String,Object> mapVal)throws WrapperException{
+	public static void putJMapValue(Put put, EntityAttr attr, Map<String,Object> mapVal)throws WrapperException{
 		byte[] bval = null;
     	if(mapVal == null) return;    	
 		String mapJson = null;
@@ -438,7 +438,7 @@ public class HEntryWrapperUtils {
 	 * @param attr the target attribute object
 	 * @param value the value to be put 
 	 **/
-	public static void putListValue(Put put, EntityAttr attr, List<Object> listVal)throws WrapperException{
+	public static void putJListValue(Put put, EntityAttr attr, List<Object> listVal)throws WrapperException{
 		byte[] bval = null;
 		String listJson = null;
 		if(listVal == null) return;
@@ -461,7 +461,7 @@ public class HEntryWrapperUtils {
 	 * @param attr the target attribute object
 	 * @param value the value to be put 
 	 **/
-	public static void putSetValue(Put put, EntityAttr attr, Set<Object> setVal)throws WrapperException{
+	public static void putJSetValue(Put put, EntityAttr attr, Set<Object> setVal)throws WrapperException{
 		byte[] bval = null;
 		String setJson = null;
 		if(setVal == null) return;

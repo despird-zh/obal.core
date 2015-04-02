@@ -58,6 +58,9 @@ public final class AccessorFactory {
 	/** default builder */
 	private static String defaultBuilder = null;
 	
+	/** cache builder */
+	private static String cacheBuilder = null;
+	
 	/** LifecycleHooker to interact with CoreFacade and listen the event */
 	private static LifecycleHooker hooker;
 		
@@ -66,9 +69,9 @@ public final class AccessorFactory {
 	 **/
 	private AccessorFactory() {
 
-		String defaultName = CoreConfigs.getString(CoreConstants.CONFIG_DFT_BUILDER,CoreConstants.BUILDER_HBASE);
-		defaultBuilder = defaultName;
-		LOGGER.info("default builder is {}", defaultName);
+		defaultBuilder = CoreConfigs.getString(CoreConstants.CONFIG_DFT_BUILDER,CoreConstants.BUILDER_HBASE);
+		cacheBuilder = CoreConfigs.getString(CoreConstants.CONFIG_CACHE_BUILDER,CoreConstants.BUILDER_REDIS);
+		LOGGER.info("default builder is {}", defaultBuilder);
 
 	}
 	
@@ -446,5 +449,29 @@ public final class AccessorFactory {
 		String accessorClass = accessor.getClass().getName();
 		AccessorBuilder builder = AccessorFactory.getAccessorBuilder(builderName);
 		builder.appendAccessorMap(accessor.getAccessorName(), accessorClass);
+	}
+	
+	/**
+	 * Build Cache IEntityAccessor with specified context.
+	 * 
+	 * @param context the context object, which provide entity information 
+	 **/
+	public static IEntityAccessor<?> buildCacheAccessor(AccessorContext context)throws EntityException {
+		
+		AccessorBuilder accessorbuilder = builderMap.get(cacheBuilder);
+		if (null == accessorbuilder) {
+
+			throw new EntityException(
+					"The cache AccessorBuilder instance:{} not existed.", cacheBuilder);
+		}
+
+		if(context == null){
+			throw new EntityException(
+					"AccessorContext to build cache accessor is null.");
+		}
+		// new generic context
+		IEntityAccessor<?> accessor = accessorbuilder.newBaseAccessor(context, CoreConstants.CACHE_ACCESSOR, false);
+		accessorbuilder.assembly(context.getPrincipal(), (IBaseAccessor) accessor);
+		return accessor;
 	}
 }

@@ -48,10 +48,10 @@ public class EntityAttr{
 		PRIMITIVE("PRIMITIVE"), // Primitive :int ,long etc single element
 		JMAP("JMAP"), // Map key-value pair
 		JLIST("JLIST"), // List the array of element
-		JSET("JSET"), // Set the array of element
-		FMAP("FMAP"), // Flat-wide map
+		JSET("JSET"); // Set the array of element
+		/*FMAP("FMAP"), // Flat-wide map
 		FLIST("FLIST"), // flat-wide list
-		FSET("FSET");  // flat-wide set
+		FSET("FSET");  // flat-wide set*/
 		
 		private String mode = null;
 		

@@ -96,7 +96,8 @@ public abstract class AccessorBuilder {
 	}
 	
 	/**
-	 * detect the Accessors
+	 * Detect the Accessors under specified package path
+	 * @param packagePath
 	 **/
 	protected void detectAccessors(String packagePath){
 		
