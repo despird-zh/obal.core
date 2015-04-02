@@ -46,9 +46,9 @@ public class EntityAttr{
 	public static enum AttrMode {
 		
 		PRIMITIVE("PRIMITIVE"), // Primitive :int ,long etc single element
-		JMAP("JMAP"), // Map key-value pair
-		JLIST("JLIST"), // List the array of element
-		JSET("JSET"); // Set the array of element
+		MAP("MAP"), // Map key-value pair
+		LIST("LIST"), // List the array of element
+		SET("SET"); // Set the array of element
 		/*FMAP("FMAP"), // Flat-wide map
 		FLIST("FLIST"), // flat-wide list
 		FSET("FSET");  // flat-wide set*/

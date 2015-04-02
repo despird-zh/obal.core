@@ -94,11 +94,11 @@ public class EntitySetup {
 				UserEnum.Salt.colfamily, 
 				UserEnum.Salt.qualifier);
 		meta.addAttr(attr);
-		attr = new EntityAttr(UserEnum.Groups.attribute, EntityAttr.AttrMode.JMAP, EntityAttr.AttrType.STRING, 
+		attr = new EntityAttr(UserEnum.Groups.attribute, EntityAttr.AttrMode.MAP, EntityAttr.AttrType.STRING, 
 				UserEnum.Groups.colfamily, 
 				UserEnum.Groups.qualifier);
 		meta.addAttr(attr);
-		attr = new EntityAttr(UserEnum.Roles.attribute, EntityAttr.AttrMode.JMAP, EntityAttr.AttrType.STRING, 				
+		attr = new EntityAttr(UserEnum.Roles.attribute, EntityAttr.AttrMode.MAP, EntityAttr.AttrType.STRING, 				
 				UserEnum.Roles.colfamily, 
 				UserEnum.Roles.qualifier);
 		meta.addAttr(attr);
@@ -121,12 +121,12 @@ public class EntitySetup {
 				GroupEnum.Name.qualifier);
 		meta.addAttr(attr);
 		
-		attr = new EntityAttr(GroupEnum.Users.attribute, EntityAttr.AttrMode.JMAP, EntityAttr.AttrType.STRING, 
+		attr = new EntityAttr(GroupEnum.Users.attribute, EntityAttr.AttrMode.MAP, EntityAttr.AttrType.STRING, 
 				GroupEnum.Users.colfamily, 
 				GroupEnum.Users.qualifier);
 		meta.addAttr(attr);
 		
-		attr = new EntityAttr(GroupEnum.Groups.attribute, EntityAttr.AttrMode.JMAP, EntityAttr.AttrType.STRING, 
+		attr = new EntityAttr(GroupEnum.Groups.attribute, EntityAttr.AttrMode.MAP, EntityAttr.AttrType.STRING, 
 				GroupEnum.Groups.colfamily, 
 				GroupEnum.Groups.qualifier);
 		meta.addAttr(attr);
@@ -149,7 +149,7 @@ public class EntitySetup {
 				RoleEnum.Name.qualifier);
 		meta.addAttr(attr);
 		
-		attr = new EntityAttr(RoleEnum.Users.attribute, EntityAttr.AttrMode.JMAP, EntityAttr.AttrType.STRING, 
+		attr = new EntityAttr(RoleEnum.Users.attribute, EntityAttr.AttrMode.MAP, EntityAttr.AttrType.STRING, 
 				RoleEnum.Users.colfamily, 
 				RoleEnum.Users.qualifier);
 		meta.addAttr(attr);

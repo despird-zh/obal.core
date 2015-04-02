@@ -88,17 +88,17 @@ public abstract class REntityAccessor <GB extends EntityEntry> extends EntityAcc
             case PRIMITIVE:
             	REntryWrapperUtils.putPrimitiveValue(jedis,redisKey, attr, value);
             	break;
-            case JMAP:
+            case MAP:
             	if(!(value instanceof Map<?,?>))
         			throw new AccessorException("the attr:{} value is not Map object",attrName);        		
             	REntryWrapperUtils.putMapValue(jedis,redisKey, attr, (Map<String,Object>)value);	
         		break;
-            case JLIST:
+            case LIST:
             	if(!(value instanceof List<?>))
         			throw new AccessorException("the attr:{} value is not List object",attrName);        		
             	REntryWrapperUtils.putListValue(jedis,redisKey, attr, (List<Object>)value);	
         		break;
-            case JSET:
+            case SET:
             	if(!(value instanceof List<?>))
         			throw new AccessorException("the attr:{} value is not List object",attrName);        		
             	REntryWrapperUtils.putSetValue(jedis, redisKey, attr, (Set<Object>)value);	
@@ -132,18 +132,18 @@ public abstract class REntityAccessor <GB extends EntityEntry> extends EntityAcc
 	    		byte[] cell = jedis.hget(redisKey.getBytes(), attr.getAttrName().getBytes());
 				rtv = REntryWrapperUtils.getPrimitiveValue(attr, cell);
 	    		break;
-	    	case JMAP:
+	    	case MAP:
 	    		redisKey += CoreConstants.KEYS_SEPARATOR + attr.getAttrName();
 	        	Map<byte[], byte[]> cells = jedis.hgetAll(redisKey.getBytes());
 				rtv = REntryWrapperUtils.getMapValue(attr, cells);		    		
 	    		break;
-	    	case JLIST:
+	    	case LIST:
 	    		redisKey += CoreConstants.KEYS_SEPARATOR + attr.getAttrName();
 	    		long len = jedis.llen(redisKey);
 	    		List<byte[]> celllist = jedis.lrange(redisKey.getBytes(), 0, len);
 				rtv = REntryWrapperUtils.getListValue(attr, celllist);		    		
 	    		break;
-	    	case JSET:
+	    	case SET:
 	    		redisKey += CoreConstants.KEYS_SEPARATOR + attr.getAttrName();
 	    		Set<byte[]> cellset = jedis.smembers(redisKey.getBytes());
 				rtv = REntryWrapperUtils.getSetValue(attr, cellset);	

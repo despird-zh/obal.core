@@ -291,19 +291,19 @@ public abstract class HEntityAccessor<GB extends EntityEntry> extends EntityAcce
 	        	cell = entry.getValue(column, qualifier);
 				rtv = HEntryWrapperUtils.getPrimitiveValue(attr, cell);		
         		break;
-        	case JMAP:
+        	case MAP:
 				get.addFamily(column);
 	        	entry = table.get(get);
 	        	cell = entry.getValue(column, qualifier);
 				rtv = HEntryWrapperUtils.getJMapValue(attr, cell);
 				break;
-        	case JLIST:
+        	case LIST:
 				get.addFamily(column);
 	        	entry = table.get(get);
 	        	cell = entry.getValue(column, qualifier);
 				rtv = HEntryWrapperUtils.getJListValue(attr, cell);
 				break;
-        	case JSET:
+        	case SET:
         		get.addFamily(column);
 	        	entry = table.get(get);
 	        	cell = entry.getValue(column, qualifier);
@@ -447,17 +447,17 @@ public abstract class HEntityAccessor<GB extends EntityEntry> extends EntityAcce
 	            case PRIMITIVE:
 	            	HEntryWrapperUtils.putPrimitiveValue(put, attr, value);
 	            	break;
-	            case JMAP:
+	            case MAP:
 	            	if(!(value instanceof Map<?,?>))
 	        			throw new AccessorException("the attr:{} value is not Map object",attrName);        		
 	            	HEntryWrapperUtils.putJMapValue(put, attr, (Map<String,Object>)value);	
 	        		break;
-	            case JLIST:
+	            case LIST:
 	            	if(!(value instanceof List<?>))
 	        			throw new AccessorException("the attr:{} value is not List object",attrName);        		
 	            	HEntryWrapperUtils.putJListValue(put, attr, (List<Object>)value);	
 	        		break;
-	            case JSET:
+	            case SET:
 	            	if(!(value instanceof List<?>))
 	        			throw new AccessorException("the attr:{} value is not List object",attrName);        		
 	            	HEntryWrapperUtils.putJSetValue(put, attr, (Set<Object>)value);	

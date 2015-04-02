@@ -69,19 +69,19 @@ public class HRawWrapper extends HEntryWrapper<EntityEntry>{
 					gei.setAttrValue(attr, value);	
 					break;
 					
-				case JMAP :
+				case MAP :
 					
 					Map<String, Object> map = (cell== null)? null: HEntryWrapperUtils.getJMapValue(attr, cell);				
 					gei.setAttrValue(attr, map);
 					break;
 					
-				case JLIST :
+				case LIST :
 					
 					List<Object> list = (cell== null)? null: HEntryWrapperUtils.getJListValue(attr, cell);					
 					gei.setAttrValue(attr, list);
 					break;
 					
-				case JSET :
+				case SET :
 					
 					Set<Object> set = (cell== null)? null: HEntryWrapperUtils.getJSetValue(attr, cell);					
 					gei.setAttrValue(attr, set);
@@ -115,14 +115,14 @@ public class HRawWrapper extends HEntryWrapper<EntityEntry>{
         		case PRIMITIVE:
         			HEntryWrapperUtils.putPrimitiveValue(put, attr, value);					
         			break;
-        		case JMAP:
+        		case MAP:
         			HEntryWrapperUtils.putJMapValue(put, attr, (Map<String,Object>)value);	
         			break;
-        		case JLIST:
+        		case LIST:
         			HEntryWrapperUtils.putJListValue(put, attr, (List<Object>)value);	
         			
         			break;
-        		case JSET:
+        		case SET:
         			HEntryWrapperUtils.putJSetValue(put, attr, (Set<Object>)value);				
         			break;
         		default:

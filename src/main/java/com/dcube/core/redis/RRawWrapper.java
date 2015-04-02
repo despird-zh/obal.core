@@ -83,13 +83,13 @@ public class RRawWrapper extends REntryWrapper<EntityEntry> {
 					Object value = REntryWrapperUtils.getPrimitiveValue(attr, cell);
 					gei.setAttrValue(attr, value);
 					break;
-				case JMAP:
+				case MAP:
 					String mapkey = redisKey + CoreConstants.KEYS_SEPARATOR + attr.getAttrName();
 					cells = entry.hgetAll(mapkey.getBytes());
 					Map<String, Object> map = REntryWrapperUtils.getMapValue(attr, cells);
 					gei.setAttrValue(attr, map);
 					break;
-				case JLIST:
+				case LIST:
 					String listkey = redisKey + CoreConstants.KEYS_SEPARATOR + attr.getAttrName();
 					Long llen = entry.llen(listkey.getBytes());
 					List<byte[]> listcells = entry.lrange(listkey.getBytes(), 0,llen);
@@ -97,7 +97,7 @@ public class RRawWrapper extends REntryWrapper<EntityEntry> {
 					gei.setAttrValue(attr, list);
 					break;
 	
-				case JSET:
+				case SET:
 					String setkey = redisKey + CoreConstants.KEYS_SEPARATOR + attr.getAttrName();
 					Set<byte[]> setcells = entry.smembers(setkey.getBytes());
 	
@@ -138,13 +138,13 @@ public class RRawWrapper extends REntryWrapper<EntityEntry> {
 			case PRIMITIVE:
 				REntryWrapperUtils.putPrimitiveValue(jedis,redisKey, attr, value);
 				break;
-			case JMAP:
+			case MAP:
 				REntryWrapperUtils.putMapValue(jedis, redisKey, attr, (Map<String, Object>) value);
 				break;
-			case JLIST:
+			case LIST:
 				REntryWrapperUtils.putListValue(jedis, redisKey, attr, (List<Object>) value);
 				break;
-			case JSET:
+			case SET:
 				REntryWrapperUtils.putSetValue(jedis, redisKey, attr, (Set<Object>) value);
 				break;
 			default:

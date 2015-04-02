@@ -296,7 +296,7 @@ public class EntityManager {
 		meta.addAttr(attr);
 		
 		attr = new EntityAttr(MetaEnum.Attributes.attribute, 
-				EntityAttr.AttrMode.JMAP, 
+				EntityAttr.AttrMode.MAP, 
 				EntityAttr.AttrType.STRING, 
 				MetaEnum.Attributes.colfamily, 
 				MetaEnum.Attributes.qualifier);
