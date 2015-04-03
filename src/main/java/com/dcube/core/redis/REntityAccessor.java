@@ -39,6 +39,7 @@ import com.dcube.core.accessor.EntityEntry;
 import com.dcube.exception.AccessorException;
 import com.dcube.meta.BaseEntity;
 import com.dcube.meta.EntityAttr;
+import com.dcube.meta.EntityConstants;
 import com.dcube.meta.EntityAttr.AttrMode;
 
 public abstract class REntityAccessor <GB extends EntityEntry> extends EntityAccessor<GB> implements RedisAware{
@@ -55,7 +56,7 @@ public abstract class REntityAccessor <GB extends EntityEntry> extends EntityAcc
 	 * get entry wrapper
 	 * @return wrapper object 
 	 **/
-	public abstract REntryWrapper<GB> getEntryWrapper();
+	public abstract GB newEntityEntry();
 	
 	@Override
 	public EntryKey doPutEntry(GB entryInfo) throws AccessorException {
@@ -63,8 +64,7 @@ public abstract class REntityAccessor <GB extends EntityEntry> extends EntityAcc
 		EntryKey rtv = null;
 		BaseEntity entitySchema = (BaseEntity)getEntitySchema();
 
-		REntryWrapper<GB> wrapper = this.getEntryWrapper();
-		wrapper.parse(entitySchema.getEntityMeta().getAllAttrs(), this.jedis,entryInfo);
+		parse(entitySchema.getEntityMeta().getAllAttrs(), this.jedis,entryInfo);
 
 		rtv = entryInfo.getEntryKey();
 
@@ -86,22 +86,22 @@ public abstract class REntityAccessor <GB extends EntityEntry> extends EntityAcc
         switch(attr.mode){
         
             case PRIMITIVE:
-            	REntryWrapperUtils.putPrimitiveValue(jedis,redisKey, attr, value);
+            	RWrapperUtils.putPrimitiveValue(jedis,redisKey, attr, value);
             	break;
             case MAP:
             	if(!(value instanceof Map<?,?>))
         			throw new AccessorException("the attr:{} value is not Map object",attrName);        		
-            	REntryWrapperUtils.putMapValue(jedis,redisKey, attr, (Map<String,Object>)value);	
+            	RWrapperUtils.putMapValue(jedis,redisKey, attr, (Map<String,Object>)value);	
         		break;
             case LIST:
             	if(!(value instanceof List<?>))
         			throw new AccessorException("the attr:{} value is not List object",attrName);        		
-            	REntryWrapperUtils.putListValue(jedis,redisKey, attr, (List<Object>)value);	
+            	RWrapperUtils.putListValue(jedis,redisKey, attr, (List<Object>)value);	
         		break;
             case SET:
             	if(!(value instanceof List<?>))
         			throw new AccessorException("the attr:{} value is not List object",attrName);        		
-            	REntryWrapperUtils.putSetValue(jedis, redisKey, attr, (Set<Object>)value);	
+            	RWrapperUtils.putSetValue(jedis, redisKey, attr, (Set<Object>)value);	
         		break;
             default:
             	break;      	
@@ -111,10 +111,10 @@ public abstract class REntityAccessor <GB extends EntityEntry> extends EntityAcc
 
 	@Override
 	public GB doGetEntry(String entryKey) throws AccessorException {
-		GB rtv = null;
+		GB rtv = newEntityEntry();
 		BaseEntity entrySchema = (BaseEntity)getEntitySchema();
-		REntryWrapper<GB> wrapper = (REntryWrapper<GB>)getEntryWrapper();
-		rtv = wrapper.wrap(entrySchema.getEntityMeta().getAllAttrs(),entryKey, jedis);
+
+		wrap(entrySchema.getEntityMeta().getAllAttrs(),entryKey, jedis, rtv);
 		return rtv;
 	}
 
@@ -130,23 +130,23 @@ public abstract class REntityAccessor <GB extends EntityEntry> extends EntityAcc
     	switch(attr.mode){
 	    	case PRIMITIVE:
 	    		byte[] cell = jedis.hget(redisKey.getBytes(), attr.getAttrName().getBytes());
-				rtv = REntryWrapperUtils.getPrimitiveValue(attr, cell);
+				rtv = RWrapperUtils.getPrimitiveValue(attr, cell);
 	    		break;
 	    	case MAP:
 	    		redisKey += CoreConstants.KEYS_SEPARATOR + attr.getAttrName();
 	        	Map<byte[], byte[]> cells = jedis.hgetAll(redisKey.getBytes());
-				rtv = REntryWrapperUtils.getMapValue(attr, cells);		    		
+				rtv = RWrapperUtils.getMapValue(attr, cells);		    		
 	    		break;
 	    	case LIST:
 	    		redisKey += CoreConstants.KEYS_SEPARATOR + attr.getAttrName();
 	    		long len = jedis.llen(redisKey);
 	    		List<byte[]> celllist = jedis.lrange(redisKey.getBytes(), 0, len);
-				rtv = REntryWrapperUtils.getListValue(attr, celllist);		    		
+				rtv = RWrapperUtils.getListValue(attr, celllist);		    		
 	    		break;
 	    	case SET:
 	    		redisKey += CoreConstants.KEYS_SEPARATOR + attr.getAttrName();
 	    		Set<byte[]> cellset = jedis.smembers(redisKey.getBytes());
-				rtv = REntryWrapperUtils.getSetValue(attr, cellset);	
+				rtv = RWrapperUtils.getSetValue(attr, cellset);	
 	    		break;
 	    	default:
 	    		break;
@@ -195,13 +195,11 @@ public abstract class REntityAccessor <GB extends EntityEntry> extends EntityAcc
 	@Override
 	public GB doGetEntry(String entryKey, String... attributes)
 			throws AccessorException {
-		GB rtv = null;
+		GB rtv = newEntityEntry();
 		BaseEntity entitySchema = (BaseEntity)getEntitySchema();
 		List<EntityAttr> attrs = entitySchema.getEntityMeta().getAttrs(attributes);
 		
-		REntryWrapper<GB> wrapper = (REntryWrapper<GB>)getEntryWrapper();
-		
-		rtv = wrapper.wrap(attrs,entryKey, jedis);
+		wrap(attrs,entryKey, jedis, rtv);
 		return rtv;
 	}
 
@@ -234,6 +232,108 @@ public abstract class REntityAccessor <GB extends EntityEntry> extends EntityAcc
 		throw new UnsupportedOperationException("Jedis Accessor not support Scan Operation.");
 	}
 
+	public void wrap(List<EntityAttr> attrs, String key, Jedis rawEntry, GB entryInfo) throws AccessorException{
+		
+		Jedis jedis = rawEntry;
+
+		String entityName = null;
+		if(attrs == null || attrs.size()==0){
+			
+			throw new AccessorException("The attribute list is empty!");
+		}else{
+			
+			entityName = attrs.get(0).getEntityName();
+		}
+		
+		if (entityName == null || entityName.length() == 0) {
+			entityName = EntityConstants.ENTITY_BLIND;
+		}
+		String redisKey = entityName + CoreConstants.KEYS_SEPARATOR + key;
+		// not exist return null;
+		if(!jedis.exists(redisKey)){
+			LOGGER.debug("The target[key:{}-{}] data not exist in Jedis.",entityName,key);
+			return;
+		}		
+		
+		for (EntityAttr attr : attrs) {
+
+			Map<byte[], byte[]> cells = null;
+			switch (attr.mode) {
+
+				case PRIMITIVE:
+					byte[] cell = jedis.hget(redisKey.getBytes(), attr.getAttrName().getBytes());
+					Object value = RWrapperUtils.getPrimitiveValue(attr, cell);
+					entryInfo.setAttrValue(attr, value);
+					break;
+				case MAP:
+					String mapkey = redisKey + CoreConstants.KEYS_SEPARATOR + attr.getAttrName();
+					cells = jedis.hgetAll(mapkey.getBytes());
+					Map<String, Object> map = RWrapperUtils.getMapValue(attr, cells);
+					entryInfo.setAttrValue(attr, map);
+					break;
+				case LIST:
+					String listkey = redisKey + CoreConstants.KEYS_SEPARATOR + attr.getAttrName();
+					Long llen = jedis.llen(listkey.getBytes());
+					List<byte[]> listcells = jedis.lrange(listkey.getBytes(), 0,llen);
+					List<Object> list = RWrapperUtils.getListValue(attr, listcells);
+					entryInfo.setAttrValue(attr, list);
+					break;
+	
+				case SET:
+					String setkey = redisKey + CoreConstants.KEYS_SEPARATOR + attr.getAttrName();
+					Set<byte[]> setcells = jedis.smembers(setkey.getBytes());
+	
+					Set<Object> set = RWrapperUtils.getSetValue(attr, setcells);
+					entryInfo.setAttrValue(attr, set);
+					break;
+				default:
+					break;
+			}
+		}
+
+	}
+
+	@SuppressWarnings("unchecked")
+	public void parse(List<EntityAttr> attrs,Jedis jedis, GB entryInfo)  throws AccessorException{
+
+		if(entryInfo == null) 
+			throw new AccessorException("entryInfo can not be null.");	
+		
+		if(attrs == null || attrs.size() == 0) 
+			throw new AccessorException("Attributes can not be empty.");	
+		EntryKey key = entryInfo.getEntryKey();
+		String redisKey = key.getEntityName() + CoreConstants.KEYS_SEPARATOR + key.getKey();
+			
+		for (EntityAttr attr : attrs) {
+
+			Object value = entryInfo.getAttrValue(attr.getAttrName());
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("-key:{} =>attr:{} - value:{}",new String[]{redisKey, attr.getAttrName(),String.valueOf(value)});
+			}
+			if (null == value)
+				continue;
+
+			switch (attr.mode) {
+
+			case PRIMITIVE:
+				RWrapperUtils.putPrimitiveValue(jedis,redisKey, attr, value);
+				break;
+			case MAP:
+				RWrapperUtils.putMapValue(jedis, redisKey, attr, (Map<String, Object>) value);
+				break;
+			case LIST:
+				RWrapperUtils.putListValue(jedis, redisKey, attr, (List<Object>) value);
+				break;
+			case SET:
+				RWrapperUtils.putSetValue(jedis, redisKey, attr, (Set<Object>) value);
+				break;
+			default:
+				break;
+
+			}
+		}
+	}
+	
 	@Override
 	public void setJedis(Jedis jedis) {
 

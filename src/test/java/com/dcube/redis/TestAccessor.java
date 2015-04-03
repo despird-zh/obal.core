@@ -6,21 +6,19 @@ import com.dcube.core.accessor.AccessorContext;
 import com.dcube.core.accessor.EntryCollection;
 import com.dcube.core.accessor.EntityEntry;
 import com.dcube.core.redis.REntityAccessor;
-import com.dcube.core.redis.REntryWrapper;
-import com.dcube.core.redis.RRawWrapper;
 import com.dcube.exception.AccessorException;
 import com.dcube.meta.BaseEntity;
 
-public class TestAccessor extends REntityAccessor{
+public class TestAccessor extends REntityAccessor<EntityEntry>{
 
 	public TestAccessor(AccessorContext context) {
 		super("dcube.test",context);
 	}
 
 	@Override
-	public REntryWrapper getEntryWrapper() {
+	public EntityEntry newEntityEntry() {
 		// TODO Auto-generated method stub
-		return new RRawWrapper();
+		return new EntityEntry();
 	}
 
 	@Override

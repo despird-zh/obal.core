@@ -6,8 +6,6 @@ import com.dcube.core.accessor.AccessorContext;
 import com.dcube.core.accessor.EntityEntry;
 import com.dcube.core.redis.RAccessorBuilder;
 import com.dcube.core.redis.REntityAccessor;
-import com.dcube.core.redis.REntryWrapper;
-import com.dcube.core.redis.RRawWrapper;
 
 public class RCacheAccessor<GB extends EntityEntry> extends REntityAccessor<GB>{
 
@@ -36,9 +34,15 @@ public class RCacheAccessor<GB extends EntityEntry> extends REntityAccessor<GB>{
 	}
 	
 	@Override
-	public REntryWrapper<GB> getEntryWrapper() {
-		// TODO Auto-generated method stub
-		return new RRawWrapper<GB>();
+	public GB newEntityEntry() {
+		
+		try {
+			return clazz.newInstance();
+		} catch (InstantiationException | IllegalAccessException e) {
+			
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	/**

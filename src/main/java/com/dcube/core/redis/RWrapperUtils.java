@@ -18,9 +18,9 @@ import redis.clients.jedis.Jedis;
 import com.dcube.core.CoreConstants;
 import com.dcube.meta.EntityAttr;
 
-public class REntryWrapperUtils {
+public class RWrapperUtils {
 
-	public static Logger LOGGER = LoggerFactory.getLogger(REntryWrapper.class);
+	public static Logger LOGGER = LoggerFactory.getLogger(RWrapperUtils.class);
 	/**
 	 * Get primitive value from cell, primitive type include: int,long,double,string,date
 	 * 
