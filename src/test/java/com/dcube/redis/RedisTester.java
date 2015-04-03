@@ -49,11 +49,7 @@ public class RedisTester extends BaseTester{
 			ta = AccessorUtils.getEntityAccessor("redis",princ, "obal.test");
 			rentry = ta.doGetEntry(key.getKey());
 			
-		}catch (EntityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			
-		} catch (AccessorException e) {
+		}catch (AccessorException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally{
@@ -72,11 +68,7 @@ public class RedisTester extends BaseTester{
 			ta = AccessorUtils.getEntityAccessor("redis",princ, "obal.test");
 			ta.doDelEntry(key.getKey());
 			
-		}catch (EntityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			
-		} catch (AccessorException e) {
+		}catch (AccessorException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally{
@@ -136,11 +128,7 @@ public class RedisTester extends BaseTester{
 			dtmap.put("dk3", new Date());
 			ta.doPutEntryAttr(key.getKey(), "i_map_dt", dtmap);
 			
-		}catch (EntityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			
-		} catch (AccessorException e) {
+		}catch (AccessorException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally{
@@ -205,11 +193,7 @@ public class RedisTester extends BaseTester{
 			
 			return ta.doPutEntry(re);
 			
-		} catch (EntityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			
-		} catch (AccessorException e) {
+		}  catch (AccessorException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally{
@@ -272,10 +256,7 @@ public class RedisTester extends BaseTester{
 		} catch (AccessorException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (EntityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}finally{
+		} finally{
 
 			AccessorUtils.closeAccessor(imeta,aa);
 		}

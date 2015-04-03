@@ -19,6 +19,9 @@
  */
 package com.dcube.core.redis;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,9 +32,12 @@ import redis.clients.jedis.JedisPoolConfig;
 import com.dcube.core.AccessorBuilder;
 import com.dcube.core.CoreConstants;
 import com.dcube.core.IBaseAccessor;
+import com.dcube.core.IEntityAccessor;
+import com.dcube.core.IEntityEntry;
+import com.dcube.core.accessor.AccessorContext;
+import com.dcube.core.accessor.GenericAccessor;
 import com.dcube.core.security.Principal;
 import com.dcube.exception.AccessorException;
-import com.dcube.exception.EntityException;
 /**
  * Jedis-wise implementation of AccessorBuilder.
  * All accessors that access the Redis will be created by this class
@@ -80,6 +86,35 @@ public class RAccessorBuilder extends AccessorBuilder{
         } 
 	}
 
+	/**
+	 * Build new cache IEntityAccessor instance to access cache data, default is not supported. 
+	 **/
+	@SuppressWarnings("unchecked")
+	@Override
+	public <K extends IEntityEntry> IEntityAccessor<K> newCacheAccessor(AccessorContext context, Class<K> entryClazz)throws AccessorException{
+		
+		IEntityAccessor<K> result = null;
+		try {
+
+			Class<?> accessorClazz = getAccessorClass(CoreConstants.CACHE_ACCESSOR);
+			
+			if(GenericAccessor.class.isAssignableFrom(accessorClazz))				
+				throw new AccessorException("The cache accessor -{} is a GenericAccessor sub class.", accessorClazz.getName() );
+				
+			Constructor<?> constructor = accessorClazz.getConstructor(AccessorContext.class, entryClazz);
+			
+			result = (IEntityAccessor<K>)constructor.newInstance(context, entryClazz);
+			
+		} catch (IllegalArgumentException | InstantiationException
+					| IllegalAccessException | NoSuchMethodException 
+					| SecurityException | InvocationTargetException e) {
+
+			throw new AccessorException("Fail build Accessor-{}",e, CoreConstants.CACHE_ACCESSOR);
+		} 
+		
+		return result;
+	}
+	
 	@Override
 	public void assembly(Principal principal,IBaseAccessor accessor) {
 		Jedis jedis = null;		
@@ -100,7 +135,7 @@ public class RAccessorBuilder extends AccessorBuilder{
 
 	@Override
 	public void assembly(IBaseAccessor mockupAccessor,
-			IBaseAccessor... accessors) throws EntityException {
+			IBaseAccessor... accessors) throws AccessorException {
 		
 		Jedis jedis = null;		
 		for(IBaseAccessor accessor:accessors){

@@ -9,7 +9,6 @@ import com.dcube.disruptor.EventHooker;
 import com.dcube.disruptor.EventPayload;
 import com.dcube.disruptor.EventType;
 import com.dcube.exception.AccessorException;
-import com.dcube.exception.EntityException;
 import com.dcube.exception.RingEventException;
 import com.dcube.util.AccessorUtils;
 
@@ -64,10 +63,7 @@ public class CacheHooker<K extends EntityEntry>  extends EventHooker<CacheInfo>{
 		} catch (AccessorException e) {
 			
 			e.printStackTrace();
-		} catch (EntityException e) {
-			
-			e.printStackTrace();
-		}finally{
+		} finally{
 			AccessorUtils.closeAccessor(eaccessor);
 		}
 	}
@@ -96,10 +92,7 @@ public class CacheHooker<K extends EntityEntry>  extends EventHooker<CacheInfo>{
 		} catch (AccessorException e) {
 			
 			e.printStackTrace();
-		} catch (EntityException e) {
-			
-			e.printStackTrace();
-		}finally{
+		} finally{
 			
 			AccessorUtils.closeAccessor(eaccessor);
 		}
@@ -125,10 +118,7 @@ public class CacheHooker<K extends EntityEntry>  extends EventHooker<CacheInfo>{
 		} catch (AccessorException e) {
 			
 			e.printStackTrace();
-		} catch (EntityException e) {
-			
-			e.printStackTrace();
-		}finally{
+		} finally{
 			
 			AccessorUtils.closeAccessor(eaccessor);
 		}

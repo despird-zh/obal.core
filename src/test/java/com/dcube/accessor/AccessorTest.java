@@ -46,14 +46,11 @@ public class AccessorTest extends BaseTester{
 			ta = AccessorUtils.getEntityAccessor(princ, "obal.test");
 			rentry = ta.doGetEntry(key.getKey());
 			
-		}catch (EntityException e) {
+		}catch (AccessorException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			
-		} catch (AccessorException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}finally{
+		} finally{
 			System.out.println("----end get entry");
 			AccessorUtils.closeAccessor(ta);
 		}
@@ -69,11 +66,7 @@ public class AccessorTest extends BaseTester{
 			ta = AccessorUtils.getEntityAccessor(princ, "obal.test");
 			ta.doDelEntry(key.getKey());
 			
-		}catch (EntityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			
-		} catch (AccessorException e) {
+		}catch (AccessorException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally{
@@ -133,11 +126,7 @@ public class AccessorTest extends BaseTester{
 			dtmap.put("dk3", new Date());
 			ta.doPutEntryAttr(key.getKey(), "i_map_dt", dtmap);
 			
-		}catch (EntityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			
-		} catch (AccessorException e) {
+		}catch (AccessorException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally{
@@ -202,10 +191,6 @@ public class AccessorTest extends BaseTester{
 			
 			return ta.doPutEntry(re);
 			
-		} catch (EntityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			
 		} catch (AccessorException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -269,10 +254,7 @@ public class AccessorTest extends BaseTester{
 		} catch (AccessorException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (EntityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}finally{
+		} finally{
 
 			AccessorUtils.closeAccessor(imeta,aa);
 		}

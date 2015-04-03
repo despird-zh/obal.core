@@ -29,11 +29,10 @@ import org.slf4j.LoggerFactory;
 
 import com.dcube.core.accessor.AccessorContext;
 import com.dcube.core.accessor.EntityAccessor;
-import com.dcube.core.accessor.EntityEntry;
 import com.dcube.core.accessor.GenericAccessor;
 import com.dcube.core.accessor.GenericContext;
 import com.dcube.core.security.Principal;
-import com.dcube.exception.EntityException;
+import com.dcube.exception.AccessorException;
 import com.dcube.exception.MetaException;
 import com.dcube.launcher.LifecycleHooker;
 import com.dcube.meta.BaseEntity;
@@ -201,12 +200,12 @@ public final class AccessorFactory {
 	 *            the name of entity, eg. the map key of service class
 	 **/
 	public static <K> K buildEntityAccessor(Principal principal, String entityName)
-			throws EntityException {
+			throws AccessorException {
 
 		AccessorBuilder dftBuilder = builderMap.get(defaultBuilder);
 		if (null == defaultBuilder) {
 
-			throw new EntityException(
+			throw new AccessorException(
 					"The Default AccessorBuilder instance:{} not existed.",
 					defaultBuilder);
 		}
@@ -225,11 +224,11 @@ public final class AccessorFactory {
 	 *            the name of entry, eg. the map key of service class
 	 **/
 	public static <K> K buildGenericAccessor(Principal principal, String accessorName)
-			throws EntityException {
+			throws AccessorException {
 		AccessorBuilder dftBuilder = builderMap.get(defaultBuilder);
 		if (null == defaultBuilder) {
 
-			throw new EntityException(
+			throw new AccessorException(
 					"The Default AccessorBuilder instance:{} not existed.",
 					defaultBuilder);
 		}
@@ -248,19 +247,19 @@ public final class AccessorFactory {
 	 *            the name of entry
 	 **/
 	public static <K> K buildEntityAccessor(IBaseAccessor mockupAccessor,
-			String entityName) throws EntityException {
+			String entityName) throws AccessorException {
 
 		AccessorBuilder dftBuilder = builderMap.get(defaultBuilder);
 		if (null == dftBuilder) {
 
-			throw new EntityException(
+			throw new AccessorException(
 					"The Default AccessorBuilder instance:{} not existed.",
 					defaultBuilder);
 		}
 
 		GenericContext context = mockupAccessor.getContext();
 		if(context == null){
-			throw new EntityException(
+			throw new AccessorException(
 					"The Mockup Accessor[from {}]'s AccessorContext not existed.",
 					defaultBuilder);
 		}
@@ -269,7 +268,7 @@ public final class AccessorFactory {
 			schema = EntityManager.getInstance().getEntitySchema(entityName);
 		} catch (MetaException e) {
 			
-			throw new EntityException("Error when fetch schema object:entity-{}",e, entityName);
+			throw new AccessorException("Error when fetch schema object:entity-{}",e, entityName);
 		}
 		AccessorContext newcontext = new AccessorContext(context,schema);
 		K accessor = dftBuilder.newBaseAccessor(newcontext, schema.getEntityMeta().getAccessorName(), false);
@@ -287,19 +286,19 @@ public final class AccessorFactory {
 	 *            the name of entry
 	 **/
 	public static <K> K buildGenericAccessor(IBaseAccessor mockupAccessor,
-			String accessorName) throws EntityException {
+			String accessorName) throws AccessorException {
 
 		AccessorBuilder dftBuilder = builderMap.get(defaultBuilder);
 		if (null == dftBuilder) {
 
-			throw new EntityException(
+			throw new AccessorException(
 					"The Default AccessorBuilder instance:{} not existed.",
 					defaultBuilder);
 		}
 		// retrieve the principal from mock-up accessor
 		GenericContext context = mockupAccessor.getContext();
 		if(context == null){
-			throw new EntityException(
+			throw new AccessorException(
 					"The Mockup Accessor[from {}]'s AccessorContext not existed.",
 					defaultBuilder);
 		}
@@ -321,12 +320,12 @@ public final class AccessorFactory {
 	 *            the name of entity, eg. the map key of service class
 	 **/
 	public static <K> K buildEntityAccessor(String builderName, Principal principal,
-			String entityName) throws EntityException {
+			String entityName) throws AccessorException {
 
 		AccessorBuilder accessorbuilder = builderMap.get(builderName);
 		if (null == accessorbuilder) {
 
-			throw new EntityException(
+			throw new AccessorException(
 					"The AccessorBuilder instance:{} not existed.", builderName);
 		}
 		K accessor = accessorbuilder.newEntityAccessor(principal,entityName);
@@ -345,12 +344,12 @@ public final class AccessorFactory {
 	 *            the name of entry, eg. the map key of service class
 	 **/
 	public static <K> K buildGenericAccessor(String builderName, Principal principal,
-			String accessorName) throws EntityException {
+			String accessorName) throws AccessorException {
 
 		AccessorBuilder accessorbuilder = builderMap.get(builderName);
 		if (null == accessorbuilder) {
 
-			throw new EntityException(
+			throw new AccessorException(
 					"The AccessorBuilder instance:{} not existed.", builderName);
 		}
 		K accessor = accessorbuilder.newGenericAccessor(principal,accessorName);
@@ -372,18 +371,18 @@ public final class AccessorFactory {
 	 **/
 	public static <K> K buildEntityAccessor(String builderName,
 			IBaseAccessor mockupAccessor, String entityName)
-			throws EntityException {
+			throws AccessorException {
 
 		AccessorBuilder accessorbuilder = builderMap.get(builderName);
 		if (null == accessorbuilder) {
 
-			throw new EntityException(
+			throw new AccessorException(
 					"The AccessorBuilder instance:{} not existed.", builderName);
 		}
 
 		GenericContext context = mockupAccessor.getContext();
 		if(context == null){
-			throw new EntityException(
+			throw new AccessorException(
 					"The Mockup Accessor[from {}]'s AccessorContext not existed.",
 					accessorbuilder.getBuilderName());
 		}
@@ -392,7 +391,7 @@ public final class AccessorFactory {
 			schema = EntityManager.getInstance().getEntitySchema(entityName);
 		} catch (MetaException e) {
 			
-			throw new EntityException("Error when fetch schema object:entity-{}",e, entityName);
+			throw new AccessorException("Error when fetch schema object:entity-{}",e, entityName);
 		}
 		AccessorContext newcontext = new AccessorContext(context,schema);
 		K accessor = accessorbuilder.newBaseAccessor(newcontext, schema.getEntityMeta().getAccessorName(), false);
@@ -413,18 +412,18 @@ public final class AccessorFactory {
 	 **/
 	public static <K> K buildGenericAccessor(String builderName,
 			IBaseAccessor mockupAccessor, String accessorName)
-			throws EntityException {
+			throws AccessorException {
 
 		AccessorBuilder accessorbuilder = builderMap.get(builderName);
 		if (null == accessorbuilder) {
 
-			throw new EntityException(
+			throw new AccessorException(
 					"The AccessorBuilder instance:{} not existed.", builderName);
 		}
 		
 		GenericContext context = mockupAccessor.getContext();
 		if(context == null){
-			throw new EntityException(
+			throw new AccessorException(
 					"The Mockup Accessor[from {}]'s AccessorContext not existed.",
 					accessorbuilder.getBuilderName());
 		}
@@ -456,22 +455,24 @@ public final class AccessorFactory {
 	 * Build Cache IEntityAccessor with specified context.
 	 * 
 	 * @param context the context object, which provide entity information 
+	 * @param entryClazz the entry class object
 	 **/
-	public static <K extends IEntityEntry> IEntityAccessor<K> buildCacheAccessor(AccessorContext context)throws EntityException {
+	public static <K extends IEntityEntry> IEntityAccessor<K> buildCacheAccessor(AccessorContext context, Class<K> entryClazz)throws AccessorException {
 		
 		AccessorBuilder accessorbuilder = builderMap.get(cacheBuilder);
 		if (null == accessorbuilder) {
 
-			throw new EntityException(
+			throw new AccessorException(
 					"The cache AccessorBuilder instance:{} not existed.", cacheBuilder);
 		}
 
 		if(context == null){
-			throw new EntityException(
+			throw new AccessorException(
 					"AccessorContext to build cache accessor is null.");
 		}
 		// new generic context
-		IEntityAccessor<K> accessor = accessorbuilder.newBaseAccessor(context, CoreConstants.CACHE_ACCESSOR, false);
+		IEntityAccessor<K> accessor = accessorbuilder.newCacheAccessor(context, entryClazz);
+				
 		accessorbuilder.assembly(context.getPrincipal(), (IBaseAccessor) accessor);
 		return accessor;
 	}

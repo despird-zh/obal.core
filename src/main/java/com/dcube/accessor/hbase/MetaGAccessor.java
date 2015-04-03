@@ -95,7 +95,7 @@ public class MetaGAccessor extends HGenericAccessor implements IMetaGAccessor{
 			attr.setRequired(minfo.getAttrValue(AttrEnum.Required.attribute,Boolean.class));
 			attr.setReadonly(minfo.getAttrValue(AttrEnum.Readonly.attribute,Boolean.class));
 
-		}catch(EntityException ee){
+		}catch(AccessorException ee){
 			
 			throw new AccessorException("Error when build embed accessor:{}",ee,EntityConstants.ENTITY_META_ATTR);
 		}finally{
@@ -140,7 +140,7 @@ public class MetaGAccessor extends HGenericAccessor implements IMetaGAccessor{
 				
 				rtv.add(attr);
 			}
-		}catch(EntityException ee){
+		}catch(AccessorException ee){
 			
 		}finally{
 			
@@ -173,7 +173,7 @@ public class MetaGAccessor extends HGenericAccessor implements IMetaGAccessor{
 						
 			return attraccessor.doPutEntry(minfo);
 			
-		} catch (EntityException e) {
+		} catch (AccessorException e) {
 			
 			throw new AccessorException("Error when put meta attr data.",e);
 		} catch (MetaException e) {
@@ -204,7 +204,7 @@ public class MetaGAccessor extends HGenericAccessor implements IMetaGAccessor{
 			meta.setTraceable(minfo.getAttrValue(MetaEnum.Traceable.attribute,Boolean.class));
 			meta.setCategory(minfo.getAttrValue(MetaEnum.Category.attribute,String.class));
 			
-		}catch (EntityException ee){
+		}catch (AccessorException ee){
 			
 			throw new AccessorException("Error when get meta info data.",ee);
 		}finally{

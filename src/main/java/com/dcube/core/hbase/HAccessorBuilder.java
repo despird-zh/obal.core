@@ -36,7 +36,6 @@ import com.dcube.core.CoreConstants;
 import com.dcube.core.IBaseAccessor;
 import com.dcube.core.security.Principal;
 import com.dcube.exception.AccessorException;
-import com.dcube.exception.EntityException;
 /**
  * Hbase-wise implementation of AccessorBuilder.
  * All accessors access the hbase will be created by this class
@@ -94,7 +93,7 @@ public class HAccessorBuilder extends AccessorBuilder{
 	 * Load Accessor classes 
 	 *  
 	 **/
-	private void loadAccessors(){
+	private void loadAccessors() throws AccessorException{
 		
 		// detect the accessor classes under package
 		String packagename = CoreConfigs.getString(CoreConstants.CONFIG_ACCESSOR_PACKAGE + CoreConstants.BUILDER_HBASE,"com.dcube.accessor.hbase");
@@ -138,7 +137,7 @@ public class HAccessorBuilder extends AccessorBuilder{
 
 	@Override
 	public void assembly(IBaseAccessor mockupAccessor,
-			IBaseAccessor... accessors) throws EntityException {
+			IBaseAccessor... accessors) throws AccessorException {
 		
 		HConnection connection = null;		
 		HBaseAdmin hBaseAdmin = null;

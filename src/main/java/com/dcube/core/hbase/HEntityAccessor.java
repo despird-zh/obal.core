@@ -49,13 +49,12 @@ import com.dcube.audit.Predicate;
 import com.dcube.core.CoreConstants;
 import com.dcube.core.EntryFilter;
 import com.dcube.core.EntryKey;
+import com.dcube.core.IEntityEntry;
 import com.dcube.core.IEntryConverter;
 import com.dcube.core.accessor.AccessControlEntry;
 import com.dcube.core.accessor.AccessorContext;
 import com.dcube.core.accessor.EntityAccessor;
 import com.dcube.core.accessor.EntryCollection;
-import com.dcube.core.accessor.EntityEntry;
-import com.dcube.core.accessor.TraceableEntry;
 import com.dcube.core.security.AclPrivilege;
 import com.dcube.core.security.EntryAce;
 import com.dcube.core.security.EntryAcl;
@@ -94,7 +93,7 @@ import com.dcube.meta.EntityConstants;
  * 
  * @see EntityAccessor
  **/
-public abstract class HEntityAccessor<GB extends EntityEntry> extends EntityAccessor<GB> implements HConnAware {
+public abstract class HEntityAccessor<GB extends IEntityEntry> extends EntityAccessor<GB> implements HConnAware {
 
 	Logger LOGGER = LoggerFactory.getLogger(HEntityAccessor.class);
 	private HConnection connection;

@@ -83,7 +83,7 @@ public class EntityAdmin {
 		IAdminGAccessor aa = null;
 		try {
 			aa = AccessorFactory.buildGenericAccessor(principal, EntityConstants.ACCESSOR_GENERIC_ADMIN);
-		} catch (EntityException e) {
+		} catch (AccessorException e) {
 			
 			LOGGER.error("Error when getting Admin service",e);
 		}
@@ -120,9 +120,6 @@ public class EntityAdmin {
 		} catch (AccessorException e) {
 			
 			LOGGER.debug("Error when loading entity meta information",e);
-		} catch (EntityException e) {
-			
-			LOGGER.debug("Error when loading entity meta information",e);
 		} finally {
 			AccessorUtils.closeAccessor(imeta);
 		}
@@ -151,9 +148,6 @@ public class EntityAdmin {
 			metaAttrAccessor.putEntityMeta(meta);
 
 		} catch (AccessorException e) {
-			
-			LOGGER.debug("Error when loading entity meta information",e);
-		} catch (EntityException e) {
 			
 			LOGGER.debug("Error when loading entity meta information",e);
 		} finally {

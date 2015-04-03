@@ -23,6 +23,7 @@ import com.dcube.audit.AuditInfo;
 import com.dcube.audit.Predicate;
 import com.dcube.core.EntryKey;
 import com.dcube.core.IEntityAccessor;
+import com.dcube.core.IEntityEntry;
 import com.dcube.core.IEntryConverter;
 import com.dcube.core.security.Principal;
 import com.dcube.exception.AccessorException;
@@ -42,7 +43,7 @@ import com.dcube.meta.BaseEntity;
  * @version 0.1 2014-3-2
  * 
  **/
-public abstract class EntityAccessor<GB extends EntityEntry> implements IEntityAccessor <GB>{
+public abstract class EntityAccessor<GB extends IEntityEntry> implements IEntityAccessor <GB>{
 
 	
 	private AccessorContext context;

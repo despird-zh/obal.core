@@ -22,7 +22,7 @@ package com.dcube.util;
 import com.dcube.core.AccessorFactory;
 import com.dcube.core.IBaseAccessor;
 import com.dcube.core.security.Principal;
-import com.dcube.exception.EntityException;
+import com.dcube.exception.AccessorException;
 
 /**
  * Utility tool class for Accessor acquire.
@@ -43,7 +43,7 @@ public class AccessorUtils {
 	 * 
 	 * @return K the instance of accessor 
 	 **/
-	public static <K> K getEntityAccessor(String builderName, Principal principal,String entityName)throws EntityException{
+	public static <K> K getEntityAccessor(String builderName, Principal principal,String entityName)throws AccessorException{
 		
 		return AccessorFactory.buildEntityAccessor(builderName,principal, entityName);
 	}	
@@ -55,7 +55,7 @@ public class AccessorUtils {
 	 * 
 	 * @return K the instance of accessor 
 	 **/
-	public static <K> K getEntityAccessor(Principal principal,String entityName)throws EntityException{
+	public static <K> K getEntityAccessor(Principal principal,String entityName)throws AccessorException{
 		
 		return AccessorFactory.buildEntityAccessor(principal, entityName);
 	}
@@ -69,7 +69,7 @@ public class AccessorUtils {
 	 * 
 	 * @return K the instance of accessor 
 	 **/
-	public static <K> K getGenericAccessor(String builderName, Principal principal,String accessorName)throws EntityException{
+	public static <K> K getGenericAccessor(String builderName, Principal principal,String accessorName)throws AccessorException{
 		
 		return AccessorFactory.buildGenericAccessor(builderName, principal, accessorName);
 	}
@@ -81,7 +81,7 @@ public class AccessorUtils {
 	 * 
 	 * @return K the instance of accessor 
 	 **/
-	public static <K> K getGenericAccessor(Principal principal,String accessorName)throws EntityException{
+	public static <K> K getGenericAccessor(Principal principal,String accessorName)throws AccessorException{
 		
 		return AccessorFactory.buildGenericAccessor(principal, accessorName);
 	}
@@ -95,7 +95,7 @@ public class AccessorUtils {
 	 * 
 	 * @return K the instance of accessor 
 	 **/
-	public static <K> K getGenericAccessor(IBaseAccessor mockupAccessor, String accessorName)throws EntityException{
+	public static <K> K getGenericAccessor(IBaseAccessor mockupAccessor, String accessorName)throws AccessorException{
 		
 		return AccessorFactory.buildGenericAccessor(mockupAccessor, accessorName);
 	}
@@ -108,7 +108,7 @@ public class AccessorUtils {
 	 * 
 	 * @return K the instance of accessor 
 	 **/
-	public static <K> K getEntityAccessor(IBaseAccessor mockupAccessor, String entryName)throws EntityException{
+	public static <K> K getEntityAccessor(IBaseAccessor mockupAccessor, String entryName)throws AccessorException{
 		
 		return AccessorFactory.buildEntityAccessor(mockupAccessor, entryName);
 	}

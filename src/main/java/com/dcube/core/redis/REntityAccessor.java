@@ -32,17 +32,17 @@ import com.dcube.core.AccessorFactory;
 import com.dcube.core.CoreConstants;
 import com.dcube.core.EntryFilter;
 import com.dcube.core.EntryKey;
+import com.dcube.core.IEntityEntry;
 import com.dcube.core.accessor.AccessorContext;
 import com.dcube.core.accessor.EntityAccessor;
 import com.dcube.core.accessor.EntryCollection;
-import com.dcube.core.accessor.EntityEntry;
 import com.dcube.exception.AccessorException;
 import com.dcube.meta.BaseEntity;
 import com.dcube.meta.EntityAttr;
 import com.dcube.meta.EntityConstants;
 import com.dcube.meta.EntityAttr.AttrMode;
 
-public abstract class REntityAccessor <GB extends EntityEntry> extends EntityAccessor<GB> implements RedisAware{
+public abstract class REntityAccessor <GB extends IEntityEntry> extends EntityAccessor<GB> implements RedisAware{
 
 	Logger LOGGER = LoggerFactory.getLogger(REntityAccessor.class);
 	

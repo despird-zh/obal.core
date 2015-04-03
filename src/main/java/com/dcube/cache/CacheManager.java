@@ -28,7 +28,6 @@ import com.dcube.core.security.Principal;
 import com.dcube.disruptor.EventDispatcher;
 import com.dcube.disruptor.EventType;
 import com.dcube.exception.AccessorException;
-import com.dcube.exception.EntityException;
 import com.dcube.util.AccessorUtils;
 
 /**
@@ -122,10 +121,7 @@ public class CacheManager{
 		} catch (AccessorException e) {
 			
 			e.printStackTrace();
-		} catch (EntityException e) {
-			
-			e.printStackTrace();
-		}finally{
+		} finally{
 			
 			AccessorUtils.closeAccessor(eaccessor);
 		}
@@ -157,10 +153,7 @@ public class CacheManager{
 		} catch (AccessorException e) {
 			
 			e.printStackTrace();
-		} catch (EntityException e) {
-			
-			e.printStackTrace();
-		}finally{
+		} finally{
 			
 			AccessorUtils.closeAccessor(eaccessor);
 		}

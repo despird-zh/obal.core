@@ -78,7 +78,7 @@ public abstract class AccessorBuilder {
 	 * @return Class object of accessor
 	 **/
 	@SuppressWarnings("unchecked")
-	protected Class<IBaseAccessor> getAccessorClass(String accessor) throws EntityException{
+	protected Class<IBaseAccessor> getAccessorClass(String accessor) throws AccessorException{
 		
 		String accessorClass = (String) accessorProp.get(accessor);	
 		Class<IBaseAccessor> entryAccessorClazz = null;
@@ -89,7 +89,7 @@ public abstract class AccessorBuilder {
 				
 		} catch (ClassNotFoundException e) {
 			
-			throw new EntityException("Class:{}-{} is not found!",e,accessor,accessorClass);
+			throw new AccessorException("Class:{}-{} is not found!",e,accessor,accessorClass);
 		}
 		
 		return entryAccessorClazz;
@@ -99,7 +99,7 @@ public abstract class AccessorBuilder {
 	 * Detect the Accessors under specified package path
 	 * @param packagePath
 	 **/
-	protected void detectAccessors(String packagePath){
+	protected void detectAccessors(String packagePath) throws AccessorException{
 		
 		Objects.requireNonNull(packagePath);
 		LOGGER.debug("Detecting package - {}",packagePath);
@@ -120,13 +120,12 @@ public abstract class AccessorBuilder {
 				accessorProp.put(accessorName, accessorClass);
 				
 				LOGGER.debug("Found {} - {}", accessorName,accessorClass);
-			} catch (InstantiationException e) {
+			} catch (InstantiationException |IllegalAccessException e) {
 				
 				LOGGER.error("Fail instantiate accessor:{}-{}",new String[]{accessorName,accessorClass},e);
-			} catch (IllegalAccessException e) {
+				throw new AccessorException("Fail instantiate accessor:{}-{}", e, new String[]{accessorName,accessorClass});
 				
-				LOGGER.error("Fail instantiate accessor:{}-{}",new String[]{accessorName,accessorClass},e);
-			}
+			} 
 		}
 	}
 	
@@ -143,7 +142,7 @@ public abstract class AccessorBuilder {
 	 * @param principal the principal object
 	 * @param accessor the IBaseAccessor object to be assembled
 	 **/
-	public abstract void assembly(Principal principal, IBaseAccessor accessor) throws EntityException;
+	public abstract void assembly(Principal principal, IBaseAccessor accessor) throws AccessorException;
 	
 	/**
 	 * Assembly the resource to IBaseAccessor instance, the resources is copied from mockup accessor.
@@ -151,7 +150,7 @@ public abstract class AccessorBuilder {
 	 * @param mockupAccessor the mock-up IBaseAccessor object
 	 * @param accessors the IBaseAccessor objects to be assembled
 	 **/
-	public abstract void assembly(IBaseAccessor mockupAccessor, IBaseAccessor... accessors) throws EntityException;
+	public abstract void assembly(IBaseAccessor mockupAccessor, IBaseAccessor... accessors) throws AccessorException;
 
 	/**
 	 * create new EntityAccessor instance. 
@@ -161,7 +160,7 @@ public abstract class AccessorBuilder {
 	 * 
 	 * @return K the EntityAccessor instance
 	 **/
-	protected <K> K newEntityAccessor(Principal principal,String entityName) throws EntityException{
+	protected <K> K newEntityAccessor(Principal principal,String entityName) throws AccessorException{
 		String accessorName = null;
 		BaseEntity schema;
 		try {
@@ -169,7 +168,7 @@ public abstract class AccessorBuilder {
 			accessorName = schema.getEntityMeta().getAccessorName();
 		} catch (MetaException e) {
 			
-			throw new EntityException("Error when fetching entity[{}] schema.", e, entityName);
+			throw new AccessorException("Error when fetching entity[{}] schema.", e, entityName);
 		}
 		// prepare context object
 		AccessorContext context = new AccessorContext(principal,schema);
@@ -186,7 +185,7 @@ public abstract class AccessorBuilder {
 	 * 
 	 * @return K the GenericAccessor instance
 	 **/
-	protected <K> K newGenericAccessor(Principal principal, String accessorName) throws EntityException{
+	protected <K> K newGenericAccessor(Principal principal, String accessorName) throws AccessorException{
 		
 		GenericContext context = new GenericContext(principal);
 		
@@ -203,7 +202,7 @@ public abstract class AccessorBuilder {
 	 * @throws EntityException
 	 **/
 	@SuppressWarnings("unchecked")
-	protected <K> K newBaseAccessor(GenericContext context, String accessorName, boolean isGeneric) throws EntityException{
+	protected <K> K newBaseAccessor(GenericContext context, String accessorName, boolean isGeneric) throws AccessorException{
 		
 		K result = null;
 		try {
@@ -212,10 +211,10 @@ public abstract class AccessorBuilder {
 			
 			if(!GenericAccessor.class.isAssignableFrom(clazz) && isGeneric)
 				
-				throw new EntityException("The {}-{} is not a GenericAccessor sub class.",accessorName, clazz.getName() );
+				throw new AccessorException("The {}-{} is not a GenericAccessor sub class.",accessorName, clazz.getName() );
 			else if(!EntityAccessor.class.isAssignableFrom(clazz) && !isGeneric){
 				
-				throw new EntityException("The {}-{} is not a EntityAccessor sub class.",accessorName, clazz.getName() );
+				throw new AccessorException("The {}-{} is not a EntityAccessor sub class.",accessorName, clazz.getName() );
 			}
 	
 			result = (K)clazz.newInstance();
@@ -223,18 +222,9 @@ public abstract class AccessorBuilder {
 			IBaseAccessor baseAccessor = (IBaseAccessor)result;
 			baseAccessor.setContext(context);
 
-		} catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException | InstantiationException | IllegalAccessException e) {
 
-			throw new EntityException("Fail build Accessor-{}",e, accessorName);
-		} catch (InstantiationException e) {
-
-			throw new EntityException("Fail build Accessor-{}",e, accessorName);
-		} catch (IllegalAccessException e) {
-
-			throw new EntityException("Fail build Accessor-{}",e, accessorName);
-		}  catch (AccessorException e) {
-			
-			throw new EntityException("Fail build Accessor-{}",e, accessorName);
+			throw new AccessorException("Fail build Accessor-{}",e, accessorName);
 		} 
 		
 		return result;
@@ -252,5 +242,13 @@ public abstract class AccessorBuilder {
 		LOGGER.debug("Append [{}] entity mapping: {} -> {}" , 
 				new String[]{this.builderName, accessorName, accessorClass});
 		accessorProp.put(accessorName, accessorClass);
+	}
+	
+	/**
+	 * Build new cache accessor instance to access cache data, default is not supported. 
+	 **/
+	public <K extends IEntityEntry> IEntityAccessor<K> newCacheAccessor(AccessorContext context, Class<K> entryClazz)throws AccessorException{
+		
+		throw new UnsupportedOperationException("Not support build Cache Accessor");
 	}
 }
