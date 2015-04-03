@@ -21,6 +21,7 @@ package com.dcube.core.accessor;
 
 import com.dcube.audit.AuditInfo;
 import com.dcube.audit.Predicate;
+import com.dcube.core.AccessorFactory;
 import com.dcube.core.EntryKey;
 import com.dcube.core.IEntityAccessor;
 import com.dcube.core.IEntityEntry;
@@ -128,6 +129,112 @@ public abstract class EntityAccessor<GB extends IEntityEntry> implements IEntity
 		
 		return context == null? null:context.getPrincipal();
 	}
+
+	
+	/**
+	 * Create an empty EntityEntry Object, this is used for cache R/W to avoid 
+	 * Generic type GB new operation.
+	 * 
+	 * @return wrapper object 
+	 **/
+	public abstract GB newEntityEntryObject();
+	
+	/**
+	 * For cache access only
+	 **/
+	public <K> K doGetEntryAttr(String entryKey ,String attrName ) throws AccessorException{
+		
+		GB placeholder = newEntityEntryObject();// Only used to retrieve class object.
+		@SuppressWarnings("unchecked")
+		IEntityAccessor<GB> cacheAccessor = (IEntityAccessor<GB>)AccessorFactory.buildCacheAccessor(context, placeholder.getClass());
+		// Read cache data
+		@SuppressWarnings("unchecked")
+		K rtv = (K)cacheAccessor.doGetEntryAttr(entryKey, attrName);
+		
+		return rtv;
+	}
+	
+	/**
+	 * For cache access only 
+	 **/
+	public GB doGetEntry(String entryKey) throws AccessorException{
+		
+		GB placeholder = newEntityEntryObject();// Only used to retrieve class object.
+		@SuppressWarnings("unchecked")
+		IEntityAccessor<GB> cacheAccessor = (IEntityAccessor<GB>)AccessorFactory.buildCacheAccessor(context, placeholder.getClass());
+		// Read cache data
+		placeholder = cacheAccessor.doGetEntry(entryKey);
+		
+		return placeholder;
+	}
+	
+	/**
+	 * For cache access only 
+	 **/
+	public GB doGetEntry(String entryKey, String... attributes)throws AccessorException{
+		
+		GB placeholder = newEntityEntryObject();// Only used to retrieve class object.
+		@SuppressWarnings("unchecked")
+		IEntityAccessor<GB> cacheAccessor = (IEntityAccessor<GB>)AccessorFactory.buildCacheAccessor(context, placeholder.getClass());
+		// Read cache data
+		placeholder = cacheAccessor.doGetEntry(entryKey, attributes);
+		
+		return placeholder;
+	}
+
+	/**
+	 * For cache access only 
+	 **/
+	@Deprecated
+	public EntryKey doPutEntryAttr(String entryKey, String attrName,  Object value) throws AccessorException{
+		
+		GB placeholder = newEntityEntryObject();// Only used to retrieve class object.
+		@SuppressWarnings("unchecked")
+		IEntityAccessor<GB> cacheAccessor = (IEntityAccessor<GB>)AccessorFactory.buildCacheAccessor(context, placeholder.getClass());
+		// Read cache data
+		EntryKey rtv = cacheAccessor.doPutEntryAttr(entryKey, attrName, value);
+		return rtv;
+	}
+	
+	/**
+	 * For cache access only 
+	 **/
+	@Deprecated
+	public EntryKey doPutEntry(GB entryInfo) throws AccessorException {
+		
+		GB placeholder = newEntityEntryObject();// Only used to retrieve class object.
+		@SuppressWarnings("unchecked")
+		IEntityAccessor<GB> cacheAccessor = (IEntityAccessor<GB>)AccessorFactory.buildCacheAccessor(context, placeholder.getClass());
+		// Read cache data
+		EntryKey rtv = cacheAccessor.doPutEntry(entryInfo);
+		
+		return rtv;
+	}
+	
+	/**
+	 * For cache access only 
+	 **/
+	@Deprecated
+	public void doDelEntry(String... rowkeys) throws AccessorException {
+		
+		GB placeholder = newEntityEntryObject();// Only used to retrieve class object.
+		@SuppressWarnings("unchecked")
+		IEntityAccessor<GB> cacheAccessor = (IEntityAccessor<GB>)AccessorFactory.buildCacheAccessor(context, placeholder.getClass());
+		// Read cache data
+		cacheAccessor.doDelEntry(rowkeys);
+	}
+	
+	/**
+	 * For cache access only 
+	 **/
+	@Deprecated
+	public void doDelEntryAttr(String attribute, String... rowkeys)throws AccessorException{
+		GB placeholder = newEntityEntryObject();// Only used to retrieve class object.
+		@SuppressWarnings("unchecked")
+		IEntityAccessor<GB> cacheAccessor = (IEntityAccessor<GB>)AccessorFactory.buildCacheAccessor(context, placeholder.getClass());
+		// Read cache data
+		cacheAccessor.doDelEntryAttr(attribute, rowkeys);
+	}
 	
 	/**
 	 * Release the entity schema and clear the principal in it.
@@ -139,15 +246,6 @@ public abstract class EntityAccessor<GB extends IEntityEntry> implements IEntity
 			context.clear();		
 			context = null;
 		}
-	}
-	
-	@Deprecated
-	@Override
-	public <K> K doGetEntryAttr(String entryKey ,String attrName ) throws AccessorException{
-		
-		
-		
-		return null;
 	}
 	
 	/**

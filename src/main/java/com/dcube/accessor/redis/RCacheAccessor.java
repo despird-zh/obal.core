@@ -34,7 +34,7 @@ public class RCacheAccessor<GB extends EntityEntry> extends REntityAccessor<GB>{
 	}
 	
 	@Override
-	public GB newEntityEntry() {
+	public GB newEntityEntryObject() {
 		
 		try {
 			return clazz.newInstance();

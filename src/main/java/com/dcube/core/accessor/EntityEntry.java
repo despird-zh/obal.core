@@ -25,7 +25,6 @@ import java.util.Map;
 
 import com.dcube.core.EntryKey;
 import com.dcube.core.IEntityEntry;
-import com.dcube.core.accessor.GenericEntry.AttributeItem;
 import com.dcube.meta.EntityAttr;
 
 /**

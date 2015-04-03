@@ -133,7 +133,7 @@ public abstract class HEntityAccessor<GB extends IEntityEntry> extends EntityAcc
 	 * get entry wrapper
 	 * @return wrapper object 
 	 **/
-	public abstract GB newEntityEntry();
+	public abstract GB newEntityEntryObject();
 	
 	@Override
 	public EntryCollection<GB> doScanEntry(EntryFilter<?> scanfilter) throws AccessorException{
@@ -164,7 +164,7 @@ public abstract class HEntityAccessor<GB extends IEntityEntry> extends EntityAcc
 			scanner = table.getScanner(scan);
 			
 			for (Result r : scanner) {  
-				 GB entry = newEntityEntry();
+				 GB entry = newEntityEntryObject();
 			     wrap(attrs,r, entry);
 			     
 			     entryColl.addEntry(entry);
@@ -227,7 +227,7 @@ public abstract class HEntityAccessor<GB extends IEntityEntry> extends EntityAcc
 			scanner = table.getScanner(scan);
 			
 			for (Result r : scanner) {  
-				GB entry = newEntityEntry();
+				GB entry = newEntityEntryObject();
 			     wrap(attrs,r,entry);
 			     
 			     entryColl.addEntry(entry);
@@ -352,7 +352,7 @@ public abstract class HEntityAccessor<GB extends IEntityEntry> extends EntityAcc
 		AccessorContext context = super.getContext();		
 		context.auditBegin(AUDIT_OPER_GET_ENTRY);
 		HTableInterface table = null;
-		GB rtv = newEntityEntry();
+		GB rtv = newEntityEntryObject();
 		BaseEntity entitySchema = (BaseEntity)getEntitySchema();
         try {
         	
@@ -399,7 +399,7 @@ public abstract class HEntityAccessor<GB extends IEntityEntry> extends EntityAcc
 		context.auditBegin(AUDIT_OPER_GET_ENTRY);
 		
 		HTableInterface table = null;
-		GB rtv = newEntityEntry();
+		GB rtv = newEntityEntryObject();
 		BaseEntity entitySchema = (BaseEntity)getEntitySchema();
         try {
 

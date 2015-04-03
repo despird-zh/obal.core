@@ -36,7 +36,7 @@ public class AttrInfoEAccessor extends HEntityAccessor<EntityEntry>{
 	}
 
 	@Override
-	public EntityEntry newEntityEntry() {
+	public EntityEntry newEntityEntryObject() {
 		
 		return new EntityEntry();
 	}

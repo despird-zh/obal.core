@@ -37,7 +37,7 @@ public class MetaInfoEAccessor extends HEntityAccessor<EntityEntry>{
 	public static Logger LOGGER = LoggerFactory.getLogger(MetaInfoEAccessor.class);
 
 	@Override
-	public TraceableEntry newEntityEntry() {
+	public TraceableEntry newEntityEntryObject() {
 		
 		return new TraceableEntry();
 	}

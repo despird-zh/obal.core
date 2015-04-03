@@ -67,6 +67,7 @@ public class GenericEntry implements IGenericEntry{
 		return rtv.size() == 0? null:rtv;
 	}
 
+	@SuppressWarnings("unchecked")
 	public <K> K getAttrValue(String entityname, String attrname, Class<K> targetType) {
 
 		AttributeItem e = itemMap.get(entityname + EntityConstants.NAME_SEPARATOR + attrname);

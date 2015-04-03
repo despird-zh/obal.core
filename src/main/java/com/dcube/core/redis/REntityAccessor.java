@@ -51,12 +51,6 @@ public abstract class REntityAccessor <GB extends IEntityEntry> extends EntityAc
 	public REntityAccessor(String accessorName, AccessorContext context) {
 		super(accessorName, context);
 	}
-
-	/**
-	 * get entry wrapper
-	 * @return wrapper object 
-	 **/
-	public abstract GB newEntityEntry();
 	
 	@Override
 	public EntryKey doPutEntry(GB entryInfo) throws AccessorException {
@@ -111,7 +105,7 @@ public abstract class REntityAccessor <GB extends IEntityEntry> extends EntityAc
 
 	@Override
 	public GB doGetEntry(String entryKey) throws AccessorException {
-		GB rtv = newEntityEntry();
+		GB rtv = newEntityEntryObject();
 		BaseEntity entrySchema = (BaseEntity)getEntitySchema();
 
 		wrap(entrySchema.getEntityMeta().getAllAttrs(),entryKey, jedis, rtv);
@@ -195,7 +189,7 @@ public abstract class REntityAccessor <GB extends IEntityEntry> extends EntityAc
 	@Override
 	public GB doGetEntry(String entryKey, String... attributes)
 			throws AccessorException {
-		GB rtv = newEntityEntry();
+		GB rtv = newEntityEntryObject();
 		BaseEntity entitySchema = (BaseEntity)getEntitySchema();
 		List<EntityAttr> attrs = entitySchema.getEntityMeta().getAttrs(attributes);
 		

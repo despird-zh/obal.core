@@ -33,7 +33,7 @@ public class AuditEAccessor extends HEntityAccessor<EntityEntry>{
 	}
 
 	@Override
-	public EntityEntry newEntityEntry() {
+	public EntityEntry newEntityEntryObject() {
 		
 		return new EntityEntry();
 	}

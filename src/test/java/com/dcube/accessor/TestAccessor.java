@@ -14,7 +14,7 @@ public class TestAccessor extends HEntityAccessor<EntityEntry>{
 	}
 
 	@Override
-	public EntityEntry newEntityEntry() {
+	public EntityEntry newEntityEntryObject() {
 		return new EntityEntry();
 	}
 

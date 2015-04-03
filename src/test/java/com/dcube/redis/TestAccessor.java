@@ -16,7 +16,7 @@ public class TestAccessor extends REntityAccessor<EntityEntry>{
 	}
 
 	@Override
-	public EntityEntry newEntityEntry() {
+	public EntityEntry newEntityEntryObject() {
 		// TODO Auto-generated method stub
 		return new EntityEntry();
 	}
