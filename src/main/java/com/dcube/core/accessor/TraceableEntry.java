@@ -11,6 +11,14 @@ import com.dcube.meta.EntityConstants.TraceableEnum;
  **/
 public class TraceableEntry extends EntityEntry implements ITraceable{
 
+	/**
+	 * Default constructor
+	 **/
+	public TraceableEntry (){
+		
+		super();
+	}
+	
 	public TraceableEntry (String entityName,String key){
 		
 		super(entityName, key);

@@ -12,7 +12,6 @@ import org.apache.hadoop.io.serializer.Deserializer;
 
 import com.dcube.core.EntryKey;
 import com.dcube.core.accessor.EntityEntry;
-import com.dcube.core.hbase.HEntryWrapper;
 import com.dcube.disruptor.EventPayload;
 import com.dcube.disruptor.EventType;
 import com.dcube.disruptor.GenericHooker;
@@ -26,14 +25,13 @@ public class HMapRepHooker<K extends EntityEntry> extends GenericHooker<DataOutp
 	
 	List<K> resultList = new ArrayList<K>();
 	
-	HEntryWrapper<K> wrapper = null;
 	
 	List<EntityAttr> attrs = null;
 	
-	public HMapRepHooker(EventType eventType, HEntryWrapper<K> wrapper) {
+	public HMapRepHooker(EventType eventType) {
 		
 		super(eventType);
-		this.wrapper = wrapper;
+
 	}
 
 	public void setEntryAttrs(List<EntityAttr> attrs){
@@ -53,9 +51,9 @@ public class HMapRepHooker<K extends EntityEntry> extends GenericHooker<DataOutp
 		try {
 			deserializer.open(dibuf);
 			Result result = deserializer.deserialize(new Result());
-			K resultBean = wrapper.wrap(attrs, result);
-			resultList.add(resultBean);
-		} catch (IOException | WrapperException e) {
+	
+			//resultList.add(resultBean);
+		} catch (IOException  e) {
 			throw new RingEventException("Error parsing result({}) stream",e,getEventType().toString());
 		}finally{
 			dobuf.reset();

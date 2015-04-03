@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.dcube.core.IGenericEntry;
 import com.dcube.meta.EntityAttr;
 
 /**
@@ -15,7 +16,7 @@ import com.dcube.meta.EntityAttr;
  * 
  * @see GenericEntry
  **/
-public class EntryCollection<GB extends GenericEntry> implements Iterable<GB> {
+public class EntryCollection<GB extends IGenericEntry> implements Iterable<GB> {
 
 	private List<EntityAttr> attrlist = null;
 	

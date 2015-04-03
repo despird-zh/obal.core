@@ -6,8 +6,6 @@ import com.dcube.core.EntryKey;
 import com.dcube.core.IEntryConverter;
 import com.dcube.core.accessor.TraceableEntry;
 import com.dcube.core.hbase.HEntityAccessor;
-import com.dcube.core.hbase.HEntryWrapper;
-import com.dcube.core.hbase.HTraceableEntryWrapper;
 import com.dcube.core.security.Principal;
 import com.dcube.exception.BaseException;
 import com.dcube.meta.EntityConstants;
@@ -22,11 +20,9 @@ public class UserInfoEAccessor extends HEntityAccessor<TraceableEntry> {
 	}
 
 	@Override
-	public HEntryWrapper<TraceableEntry> getEntryWrapper() {
+	public TraceableEntry newEntityEntry() {
 		
-		HTraceableEntryWrapper wrapper = new HTraceableEntryWrapper();
-		
-		return wrapper;
+		return new TraceableEntry();
 	}
 
 	@SuppressWarnings("unchecked")

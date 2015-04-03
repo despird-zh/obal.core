@@ -15,6 +15,14 @@ public class AccessControlEntry extends EntityEntry implements ITraceable ,IAcce
 
 	private EntryAcl acl = null;
 	
+	/**
+	 * Default constructor
+	 **/
+	public AccessControlEntry (){
+		
+		super();
+	}
+	
 	public AccessControlEntry (String entityName,String key){
 		
 		super(entityName, key);

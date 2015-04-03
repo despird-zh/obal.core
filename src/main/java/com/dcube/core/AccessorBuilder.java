@@ -208,7 +208,7 @@ public abstract class AccessorBuilder {
 		K result = null;
 		try {
 
-			Class<?> clazz = this.getAccessorClass(accessorName);
+			Class<?> clazz = getAccessorClass(accessorName);
 			
 			if(!GenericAccessor.class.isAssignableFrom(clazz) && isGeneric)
 				

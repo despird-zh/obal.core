@@ -42,12 +42,30 @@ import com.dcube.meta.EntityConstants;
  * @version 0.1 2014-3-1
  * 
  **/
-public class RRawWrapper extends REntryWrapper<EntityEntry> {
+public class RRawWrapper<GB extends EntityEntry> extends REntryWrapper<GB> {
 
 	public static Logger LOGGER = LoggerFactory.getLogger(RRawWrapper.class);
 
+	/** the class holder */
+	private Class<GB> clazz = null;
+	
+	/**
+	 * Default constructor 
+	 **/
+	public RRawWrapper(){
+		// nothing
+	}
+	
+	/**
+	 * Constructor with class of entry 
+	 **/
+	public RRawWrapper(Class<GB> clazz){
+		
+		this.clazz = clazz;
+	}
+	
 	@Override
-	public EntityEntry wrap(List<EntityAttr> attrs, String key, Jedis rawEntry) throws AccessorException{
+	public GB wrap(List<EntityAttr> attrs, String key, Jedis rawEntry, GB entryInfo) throws AccessorException{
 		
 		Jedis jedis = rawEntry;
 
@@ -63,7 +81,6 @@ public class RRawWrapper extends REntryWrapper<EntityEntry> {
 		if (entityName == null || entityName.length() == 0) {
 			entityName = EntityConstants.ENTITY_BLIND;
 		}
-		EntityEntry gei = new EntityEntry(entityName, key);
 		String redisKey = entityName + CoreConstants.KEYS_SEPARATOR + key;
 		// not exist return null;
 		if(!jedis.exists(redisKey)){
@@ -112,7 +129,7 @@ public class RRawWrapper extends REntryWrapper<EntityEntry> {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void parse(List<EntityAttr> attrs,Jedis jedis, EntityEntry entryInfo)  throws AccessorException{
+	public void parse(List<EntityAttr> attrs,Jedis jedis, GB entryInfo)  throws AccessorException{
 
 		if(entryInfo == null) 
 			throw new AccessorException("entryInfo can not be null.");	

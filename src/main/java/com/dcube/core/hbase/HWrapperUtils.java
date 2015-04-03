@@ -25,11 +25,11 @@ import com.dcube.meta.EntityAttr;
 import com.dcube.meta.EntityAttr.AttrType;
 import com.dcube.meta.EntityConstants;
 
-public class HEntryWrapperUtils {
+public class HWrapperUtils {
 
 	protected static ObjectMapper objectMapper = new ObjectMapper();
 	
-	public static Logger LOGGER = LoggerFactory.getLogger(HEntryWrapper.class);
+	public static Logger LOGGER = LoggerFactory.getLogger(HWrapperUtils.class);
 
 	/**
 	 * Get primitive value from cell, primitive means int,long,double,string,date

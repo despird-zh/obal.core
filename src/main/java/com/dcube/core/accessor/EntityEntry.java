@@ -46,6 +46,14 @@ public class EntityEntry extends GenericEntry implements IEntityEntry{
 	private EntryKey entryKey = null;
 	
 	/**
+	 * Default constructor
+	 **/
+	public EntityEntry (){
+		
+		super();
+	}
+	
+	/**
 	 * Constructor with entity name and key 
 	 **/
 	public EntityEntry (String entityName,String key){

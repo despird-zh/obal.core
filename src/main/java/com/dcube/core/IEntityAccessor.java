@@ -34,7 +34,7 @@ import com.dcube.meta.BaseEntity;
  * @see EntryWrapper
  * @see EntryKey
  **/
-public interface IEntityAccessor <GB extends EntityEntry> extends IBaseAccessor{
+public interface IEntityAccessor <GB extends IEntityEntry> extends IBaseAccessor{
 
 	public static final String AUDIT_OPER_NEWKEY = "new.key";
 	public static final String AUDIT_OPER_PUT_ENTRY = "put.entry";

@@ -39,7 +39,7 @@ public abstract class REntryWrapper<GB extends EntityEntry> {
 	 * 
 	 * @return GB the bean object. 
 	 **/
-	public abstract GB wrap(List<EntityAttr> attrs, String key, Jedis rawEntry) throws AccessorException;
+	public abstract GB wrap(List<EntityAttr> attrs, String key, Jedis rawEntry,GB entryInfo) throws AccessorException;
 	
 	/**
 	 * Parse bean object into raw Object

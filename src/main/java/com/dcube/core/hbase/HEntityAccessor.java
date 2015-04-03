@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NavigableMap;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
@@ -39,23 +40,32 @@ import org.apache.hadoop.hbase.filter.BinaryPrefixComparator;
 import org.apache.hadoop.hbase.filter.CompareFilter.CompareOp;
 import org.apache.hadoop.hbase.filter.Filter;
 import org.apache.hadoop.hbase.filter.QualifierFilter;
+import org.apache.hadoop.hbase.util.Bytes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.dcube.audit.AuditInfo;
 import com.dcube.audit.Predicate;
+import com.dcube.core.CoreConstants;
 import com.dcube.core.EntryFilter;
 import com.dcube.core.EntryKey;
 import com.dcube.core.IEntryConverter;
+import com.dcube.core.accessor.AccessControlEntry;
 import com.dcube.core.accessor.AccessorContext;
 import com.dcube.core.accessor.EntityAccessor;
 import com.dcube.core.accessor.EntryCollection;
 import com.dcube.core.accessor.EntityEntry;
+import com.dcube.core.accessor.TraceableEntry;
+import com.dcube.core.security.AclPrivilege;
+import com.dcube.core.security.EntryAce;
+import com.dcube.core.security.EntryAcl;
+import com.dcube.core.security.EntryAce.AceType;
 import com.dcube.exception.AccessorException;
 import com.dcube.exception.MetaException;
 import com.dcube.exception.WrapperException;
 import com.dcube.meta.BaseEntity;
 import com.dcube.meta.EntityAttr;
+import com.dcube.meta.EntityConstants;
 
 /**
  * Base class of EntitAccessor, it holds HConnection object to access HBase 
@@ -124,7 +134,7 @@ public abstract class HEntityAccessor<GB extends EntityEntry> extends EntityAcce
 	 * get entry wrapper
 	 * @return wrapper object 
 	 **/
-	public abstract HEntryWrapper<GB> getEntryWrapper();
+	public abstract GB newEntityEntry();
 	
 	@Override
 	public EntryCollection<GB> doScanEntry(EntryFilter<?> scanfilter) throws AccessorException{
@@ -133,7 +143,7 @@ public abstract class HEntityAccessor<GB extends EntityEntry> extends EntityAcce
 		context.auditBegin(AUDIT_OPER_SCAN);
 		
 		EntryCollection<GB> entryColl = new EntryCollection<GB>();
-		HEntryWrapper<GB> wrapper = this.getEntryWrapper();
+
 		HTableInterface table = null;
 		Scan scan=new Scan();
 		ResultScanner scanner = null;
@@ -155,7 +165,8 @@ public abstract class HEntityAccessor<GB extends EntityEntry> extends EntityAcce
 			scanner = table.getScanner(scan);
 			
 			for (Result r : scanner) {  
-			     GB entry = wrapper.wrap(attrs,r);
+				 GB entry = newEntityEntry();
+			     wrap(attrs,r, entry);
 			     
 			     entryColl.addEntry(entry);
 			}
@@ -193,7 +204,7 @@ public abstract class HEntityAccessor<GB extends EntityEntry> extends EntityAcce
 		context.auditBegin(AUDIT_OPER_SCAN);
 		
 		EntryCollection<GB> entryColl = new EntryCollection<GB>();
-		HEntryWrapper<GB> wrapper = this.getEntryWrapper();
+
 		HTableInterface table = null;
 		Scan scan=new Scan();
 		ResultScanner scanner = null;
@@ -217,7 +228,8 @@ public abstract class HEntityAccessor<GB extends EntityEntry> extends EntityAcce
 			scanner = table.getScanner(scan);
 			
 			for (Result r : scanner) {  
-			     GB entry = wrapper.wrap(attrs,r);
+				GB entry = newEntityEntry();
+			     wrap(attrs,r,entry);
 			     
 			     entryColl.addEntry(entry);
 			}
@@ -289,25 +301,25 @@ public abstract class HEntityAccessor<GB extends EntityEntry> extends EntityAcce
 				get.addColumn(column, qualifier);
 	        	entry = table.get(get);
 	        	cell = entry.getValue(column, qualifier);
-				rtv = HEntryWrapperUtils.getPrimitiveValue(attr, cell);		
+				rtv = HWrapperUtils.getPrimitiveValue(attr, cell);		
         		break;
         	case MAP:
 				get.addFamily(column);
 	        	entry = table.get(get);
 	        	cell = entry.getValue(column, qualifier);
-				rtv = HEntryWrapperUtils.getJMapValue(attr, cell);
+				rtv = HWrapperUtils.getJMapValue(attr, cell);
 				break;
         	case LIST:
 				get.addFamily(column);
 	        	entry = table.get(get);
 	        	cell = entry.getValue(column, qualifier);
-				rtv = HEntryWrapperUtils.getJListValue(attr, cell);
+				rtv = HWrapperUtils.getJListValue(attr, cell);
 				break;
         	case SET:
         		get.addFamily(column);
 	        	entry = table.get(get);
 	        	cell = entry.getValue(column, qualifier);
-				rtv = HEntryWrapperUtils.getJSetValue(attr, cell);
+				rtv = HWrapperUtils.getJSetValue(attr, cell);
 				break;
 			default:
 				break;
@@ -341,19 +353,23 @@ public abstract class HEntityAccessor<GB extends EntityEntry> extends EntityAcce
 		AccessorContext context = super.getContext();		
 		context.auditBegin(AUDIT_OPER_GET_ENTRY);
 		HTableInterface table = null;
-		GB rtv = null;
-		BaseEntity entrySchema = (BaseEntity)getEntitySchema();
+		GB rtv = newEntityEntry();
+		BaseEntity entitySchema = (BaseEntity)getEntitySchema();
         try {
         	
-        	table = getConnection().getTable(entrySchema.getSchema(getContext().getPrincipal(),entryKey));
+        	table = getConnection().getTable(entitySchema.getSchema(getContext().getPrincipal(),entryKey));
 
-           Get get = new Get(entryKey.getBytes());
+        	Get get = new Get(entryKey.getBytes());
            
-           Result r = table.get(get);
-           HEntryWrapper<GB> wrapper = (HEntryWrapper<GB>)getEntryWrapper();
-
-           rtv = wrapper.wrap(entrySchema.getEntityMeta().getAllAttrs(),r);
-
+        	Result result = table.get(get);
+           
+        	wrap(entitySchema.getEntityMeta().getAllAttrs(),result, rtv);
+        	// extract the acl information
+        	if(entitySchema.getEntityMeta().getAccessControllable()){
+        		
+        		EntryAcl acl = wrapEntryAcl(result);
+        		((AccessControlEntry)rtv).setEntryAcl(acl);
+        	}
         } catch (IOException e) {  
         	
             throw new AccessorException("Error get entry row,key:{}",e,entryKey);
@@ -371,7 +387,7 @@ public abstract class HEntityAccessor<GB extends EntityEntry> extends EntityAcce
 			// collect the audit data
 			AuditInfo audit = context.getAuditInfo();
 			audit.getVerb(AUDIT_OPER_GET_ENTRY)
-				.setTarget(entrySchema.getKey(entryKey).toString());
+				.setTarget(entitySchema.getKey(entryKey).toString());
 			
 			context.auditEnd();
         }
@@ -384,7 +400,7 @@ public abstract class HEntityAccessor<GB extends EntityEntry> extends EntityAcce
 		context.auditBegin(AUDIT_OPER_GET_ENTRY);
 		
 		HTableInterface table = null;
-		GB rtv = null;
+		GB rtv = newEntityEntry();
 		BaseEntity entitySchema = (BaseEntity)getEntitySchema();
         try {
 
@@ -397,10 +413,13 @@ public abstract class HEntityAccessor<GB extends EntityEntry> extends EntityAcce
         	}
         	Result result = table.get(get);
         	
-        	HEntryWrapper<GB> wrapper = (HEntryWrapper<GB>)getEntryWrapper();
-        	
-        	rtv = wrapper.wrap(attrs, result);
-
+        	wrap(attrs, result, rtv);
+        	// extract the acl information
+        	if(entitySchema.getEntityMeta().getAccessControllable()){
+        		
+        		EntryAcl acl = wrapEntryAcl(result);
+        		((AccessControlEntry)rtv).setEntryAcl(acl);
+        	}
         } catch (IOException e) {  
         	
             throw new AccessorException("Error get entry row,key:{}",e,entryKey);
@@ -445,22 +464,22 @@ public abstract class HEntityAccessor<GB extends EntityEntry> extends EntityAcce
             switch(attr.mode){
             
 	            case PRIMITIVE:
-	            	HEntryWrapperUtils.putPrimitiveValue(put, attr, value);
+	            	HWrapperUtils.putPrimitiveValue(put, attr, value);
 	            	break;
 	            case MAP:
 	            	if(!(value instanceof Map<?,?>))
 	        			throw new AccessorException("the attr:{} value is not Map object",attrName);        		
-	            	HEntryWrapperUtils.putJMapValue(put, attr, (Map<String,Object>)value);	
+	            	HWrapperUtils.putJMapValue(put, attr, (Map<String,Object>)value);	
 	        		break;
 	            case LIST:
 	            	if(!(value instanceof List<?>))
 	        			throw new AccessorException("the attr:{} value is not List object",attrName);        		
-	            	HEntryWrapperUtils.putJListValue(put, attr, (List<Object>)value);	
+	            	HWrapperUtils.putJListValue(put, attr, (List<Object>)value);	
 	        		break;
 	            case SET:
 	            	if(!(value instanceof List<?>))
 	        			throw new AccessorException("the attr:{} value is not List object",attrName);        		
-	            	HEntryWrapperUtils.putJSetValue(put, attr, (Set<Object>)value);	
+	            	HWrapperUtils.putJSetValue(put, attr, (Set<Object>)value);	
 	        		break;
 	            default:
 	            	break;      	
@@ -500,14 +519,19 @@ public abstract class HEntityAccessor<GB extends EntityEntry> extends EntityAcce
 		
 		HTableInterface table = null;
 		EntryKey rtv = null;
-		BaseEntity entrySchema = (BaseEntity)getEntitySchema();
+		BaseEntity entitySchema = (BaseEntity)getEntitySchema();
         try {  
         	EntryKey key = entryInfo.getEntryKey();
-            table = getConnection().getTable(entrySchema.getSchema(getContext().getPrincipal(),key.getKey()));
-            HEntryWrapper<GB> wrapper = this.getEntryWrapper();
- 
-            Put put = (Put)wrapper.parse(entrySchema.getEntityMeta().getAllAttrs(),entryInfo);
+            table = getConnection().getTable(entitySchema.getSchema(getContext().getPrincipal(),key.getKey()));
 
+            Put put = parse(entitySchema.getEntityMeta().getAllAttrs(),entryInfo);
+        	// store the acl information
+        	if(entitySchema.getEntityMeta().getAccessControllable()){
+        		
+        		EntryAcl acl = ((AccessControlEntry)entryInfo).getEntryAcl();
+        		parseEntryAcl(put, acl);
+        		
+        	}
             table.put(put);
         	table.flushCommits();
         	rtv = entryInfo.getEntryKey();
@@ -672,5 +696,172 @@ public abstract class HEntityAccessor<GB extends EntityEntry> extends EntityAcce
 	public <To> IEntryConverter<GB, To> getEntryConverter(Class<To> cto){
 		
 		throw new UnsupportedOperationException("Not define any converter yet.");
+	}
+	
+	/**
+	 * Wrap the rawentry into bean object
+	 * 
+	 * @param attrs the attributes of rawEntry
+	 * @param rawEntry the entry information
+	 * @return GB the bean object. 
+	 **/
+	public void wrap(List<EntityAttr> attrs, final Result rawEntry,final GB entryInfo) throws WrapperException{
+		
+		//Result entry = rawEntry;
+		String entityName = attrs.size()>0? (attrs.get(0).getEntityName()):EntityConstants.ENTITY_BLIND;
+		if(entityName == null || entityName.length()==0){
+			
+			entityName = EntityConstants.ENTITY_BLIND;
+		}
+		
+		entryInfo.setEntryKey(new EntryKey(entityName,new String(rawEntry.getRow())));
+		
+		for(EntityAttr attr: attrs){
+			byte[] column = attr.getColumn().getBytes();
+			byte[] qualifier = attr.getQualifier().getBytes();
+			byte[] cell = rawEntry.getValue(column, qualifier);
+			
+			switch(attr.mode){
+			
+				case PRIMITIVE :
+				
+					Object value =(cell== null)? null: HWrapperUtils.getPrimitiveValue(attr, cell);
+					entryInfo.setAttrValue(attr, value);	
+					break;
+					
+				case MAP :
+					
+					Map<String, Object> map = (cell== null)? null: HWrapperUtils.getJMapValue(attr, cell);				
+					entryInfo.setAttrValue(attr, map);
+					break;
+					
+				case LIST :
+					
+					List<Object> list = (cell== null)? null: HWrapperUtils.getJListValue(attr, cell);					
+					entryInfo.setAttrValue(attr, list);
+					break;
+					
+				case SET :
+					
+					Set<Object> set = (cell== null)? null: HWrapperUtils.getJSetValue(attr, cell);					
+					entryInfo.setAttrValue(attr, set);
+					break;
+					
+				default:
+					break;
+				
+			}			
+		}
+
+	}
+	
+	/**
+	 * Parse bean object into raw Object
+	 * 
+	 * @param attrs the attributes of target entity
+	 * @param entryInfo the entry information bean
+	 * @return Object the raw object. 
+	 **/	
+	public Put parse(List<EntityAttr> attrs, final GB entryInfo)throws WrapperException{
+		byte[] keybytes = entryInfo.getEntryKey().getKeyBytes();
+		if(keybytes == null)
+			throw new WrapperException("The entrykey's cannot be null");
+		
+		Put put = new Put(entryInfo.getEntryKey().getKey().getBytes());
+
+        for(EntityAttr attr:attrs){
+
+        	Object value = entryInfo.getAttrValue(attr.getAttrName());
+        	if(LOGGER.isDebugEnabled()){
+        		LOGGER.debug("Put -> attribute:{} - value:{}",attr.getAttrName(),value);
+        	}
+        	if(null == value) continue;
+        	
+        	switch(attr.mode){
+        	
+        		case PRIMITIVE:
+        			HWrapperUtils.putPrimitiveValue(put, attr, value);					
+        			break;
+        		case MAP:
+        			HWrapperUtils.putJMapValue(put, attr, (Map<String,Object>)value);	
+        			break;
+        		case LIST:
+        			HWrapperUtils.putJListValue(put, attr, (List<Object>)value);	
+        			
+        			break;
+        		case SET:
+        			HWrapperUtils.putJSetValue(put, attr, (Set<Object>)value);				
+        			break;
+        		default:
+        			break;
+        	
+        	}
+        }
+
+        return put;
+	}
+	
+	/**
+	 * Wrap the Acl information from acl column family.
+	 * 
+	 **/
+	public EntryAcl wrapEntryAcl(Result rawEntry){
+		
+		NavigableMap<byte[], byte[]> acemap = rawEntry.getFamilyMap(EntityConstants.ATTR_ACL_COLUMN.getBytes());
+		EntryAcl acl = new EntryAcl();
+		for(Map.Entry<byte[], byte[]> entry: acemap.entrySet()){
+			
+			String[] parts = StringUtils.split( Bytes.toString(entry.getKey()), ":");
+			String value = Bytes.toString(entry.getValue());
+			EntryAce ace = null;
+			if(parts.length == 2){
+				// eg. acl:group:001001 -> WRITE
+				//     CF | TYPE| KEY     Privilege
+				// here group:001001 is the qualifier name
+				AclPrivilege priv = AclPrivilege.valueOf(value);
+				AceType type = AceType.valueOf(parts[0]);
+				ace = new EntryAce(type,parts[1],priv);
+				
+			}else if(parts.length == 3){
+				// eg. acl:group:001001:upgrade -> WRITE
+				//     CF | TYPE| KEY  | ACTION   Privilege
+				// here group:001001:upgrade is the qualifier name
+				AceType type = AceType.valueOf(parts[0]);
+				ace = new EntryAce(type,parts[1],parts[2]);
+				
+			}
+			
+			acl.addEntryAce(ace, true);
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Parse the acl information to Put
+	 *  
+	 **/
+	public void parseEntryAcl(Put put,  EntryAcl acl){
+		
+		List<EntryAce> aces = acl.getAllAces();
+		byte[] cf = null;
+		byte[] enable = "enable".getBytes();
+		for(EntryAce ace: aces){
+			
+			String qualifier = ace.getType().qualifier
+					+ CoreConstants.KEYS_SEPARATOR
+					+ ace.getName();
+			cf = ace.getType().colfamily.getBytes();
+			put.add(cf, qualifier.getBytes(), ace.getPrivilege().toString().getBytes());
+			
+			Set<String> permissionSet = ace.getPermissions();
+			for(String permission : permissionSet){
+				
+				String permQualifier = qualifier 
+						+ CoreConstants.KEYS_SEPARATOR
+						+ permission;
+				put.add(cf, permQualifier.getBytes(), enable);
+			}
+		}
 	}
 }

@@ -23,9 +23,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.dcube.core.accessor.EntityEntry;
+import com.dcube.core.accessor.TraceableEntry;
 import com.dcube.core.hbase.HEntityAccessor;
-import com.dcube.core.hbase.HEntryWrapper;
-import com.dcube.core.hbase.HRawWrapper;
 import com.dcube.meta.EntityConstants;
 
 public class MetaInfoEAccessor extends HEntityAccessor<EntityEntry>{
@@ -38,11 +37,9 @@ public class MetaInfoEAccessor extends HEntityAccessor<EntityEntry>{
 	public static Logger LOGGER = LoggerFactory.getLogger(MetaInfoEAccessor.class);
 
 	@Override
-	public HEntryWrapper<EntityEntry> getEntryWrapper() {
+	public TraceableEntry newEntityEntry() {
 		
-		HRawWrapper wrapper = new HRawWrapper();		
-
-		return wrapper;
+		return new TraceableEntry();
 	}
 	
 }

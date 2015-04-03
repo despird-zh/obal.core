@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import com.dcube.core.accessor.AccessorContext;
 import com.dcube.core.accessor.EntityAccessor;
+import com.dcube.core.accessor.EntityEntry;
 import com.dcube.core.accessor.GenericAccessor;
 import com.dcube.core.accessor.GenericContext;
 import com.dcube.core.security.Principal;
@@ -456,7 +457,7 @@ public final class AccessorFactory {
 	 * 
 	 * @param context the context object, which provide entity information 
 	 **/
-	public static IEntityAccessor<?> buildCacheAccessor(AccessorContext context)throws EntityException {
+	public static <K extends IEntityEntry> IEntityAccessor<K> buildCacheAccessor(AccessorContext context)throws EntityException {
 		
 		AccessorBuilder accessorbuilder = builderMap.get(cacheBuilder);
 		if (null == accessorbuilder) {
@@ -470,7 +471,7 @@ public final class AccessorFactory {
 					"AccessorContext to build cache accessor is null.");
 		}
 		// new generic context
-		IEntityAccessor<?> accessor = accessorbuilder.newBaseAccessor(context, CoreConstants.CACHE_ACCESSOR, false);
+		IEntityAccessor<K> accessor = accessorbuilder.newBaseAccessor(context, CoreConstants.CACHE_ACCESSOR, false);
 		accessorbuilder.assembly(context.getPrincipal(), (IBaseAccessor) accessor);
 		return accessor;
 	}
