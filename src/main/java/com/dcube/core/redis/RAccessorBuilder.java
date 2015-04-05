@@ -35,6 +35,7 @@ import com.dcube.core.IBaseAccessor;
 import com.dcube.core.IEntityAccessor;
 import com.dcube.core.IEntityEntry;
 import com.dcube.core.accessor.AccessorContext;
+import com.dcube.core.accessor.EntityEntry;
 import com.dcube.core.accessor.GenericAccessor;
 import com.dcube.core.security.Principal;
 import com.dcube.exception.AccessorException;
@@ -91,9 +92,9 @@ public class RAccessorBuilder extends AccessorBuilder{
 	 **/
 	@SuppressWarnings("unchecked")
 	@Override
-	public <K extends IEntityEntry> IEntityAccessor<K> newCacheAccessor(AccessorContext context, Class<K> entryClazz)throws AccessorException{
+	public IEntityAccessor<EntityEntry> newCacheAccessor(AccessorContext context)throws AccessorException{
 		
-		IEntityAccessor<K> result = null;
+		IEntityAccessor<EntityEntry> result = null;
 		try {
 
 			Class<?> accessorClazz = getAccessorClass(CoreConstants.CACHE_ACCESSOR);
@@ -101,9 +102,9 @@ public class RAccessorBuilder extends AccessorBuilder{
 			if(GenericAccessor.class.isAssignableFrom(accessorClazz))				
 				throw new AccessorException("The cache accessor -{} is a GenericAccessor sub class.", accessorClazz.getName() );
 				
-			Constructor<?> constructor = accessorClazz.getConstructor(AccessorContext.class, entryClazz);
+			Constructor<?> constructor = accessorClazz.getConstructor(AccessorContext.class);
 			
-			result = (IEntityAccessor<K>)constructor.newInstance(context, entryClazz);
+			result = (IEntityAccessor<EntityEntry>)constructor.newInstance(context);
 			
 		} catch (IllegalArgumentException | InstantiationException
 					| IllegalAccessException | NoSuchMethodException 

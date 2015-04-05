@@ -141,7 +141,7 @@ public class GenericEntry implements IGenericEntry{
 	/**
 	 * Inner class to wrap value and attribute 
 	 **/
-	public static class AttributeItem{
+	public static class AttributeItem implements Cloneable{
 		
 		public AttributeItem(String entityname, String attrname, Object value){
 			
@@ -185,6 +185,36 @@ public class GenericEntry implements IGenericEntry{
 		
 		public Object getOriginalValue(){
 			return this.originVal;
+		}
+		
+		@Override
+	    public Object clone() {
+	       
+			AttributeItem rtv = new AttributeItem(this.entityname,
+					this.attrname,
+					this.currentVal);
+			
+			rtv.attribute = this.attribute;
+			rtv.changed = this.changed;
+			rtv.originVal = this.originVal;
+			
+			return rtv;
+	    }
+	}
+
+	/**
+	 * Copy the original source object to current object.
+	 * 
+	 * @param originSource the source object 
+	 **/
+	public void copy(GenericEntry originSource) {
+		
+		Map<String, AttributeItem> itemMap = originSource.getItemMap();
+		this.itemMap.clear();
+		for(Map.Entry<String, AttributeItem> e: itemMap.entrySet()){
+			
+			AttributeItem newItem = (AttributeItem)e.getValue().clone();
+			this.itemMap.put(e.getKey(), newItem);
 		}
 	}
 }

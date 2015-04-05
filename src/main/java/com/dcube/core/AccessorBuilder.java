@@ -19,10 +19,10 @@
  */
 package com.dcube.core;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +47,7 @@ import com.dcube.meta.EntityManager;
  **/
 public abstract class AccessorBuilder {
 
-	private Properties accessorProp = null;
+	private Map<String, Class<? extends IBaseAccessor>> accessorMap = null;
 	private String builderName = null;
 	Logger LOGGER = LoggerFactory.getLogger(AccessorBuilder.class);
 
@@ -59,7 +59,7 @@ public abstract class AccessorBuilder {
 	protected AccessorBuilder(String builderName){
 		
 		this.builderName = builderName;
-		accessorProp = new Properties();
+		accessorMap = new HashMap<String, Class<? extends IBaseAccessor>>();
 
 	}
 
@@ -80,16 +80,10 @@ public abstract class AccessorBuilder {
 	@SuppressWarnings("unchecked")
 	protected Class<IBaseAccessor> getAccessorClass(String accessor) throws AccessorException{
 		
-		String accessorClass = (String) accessorProp.get(accessor);	
-		Class<IBaseAccessor> entryAccessorClazz = null;
-		try {
-			Class<?> rawClazz = this.getClass().getClassLoader().loadClass(accessorClass);
-			if(IBaseAccessor.class.isAssignableFrom(rawClazz))
-				entryAccessorClazz = (Class<IBaseAccessor>)rawClazz;
-				
-		} catch (ClassNotFoundException e) {
+		Class<IBaseAccessor> entryAccessorClazz = (Class<IBaseAccessor>)accessorMap.get(accessor);
+		if(entryAccessorClazz == null) {
 			
-			throw new AccessorException("Class:{}-{} is not found!",e,accessor,accessorClass);
+			throw new AccessorException("Accessor :{} is not found in Accessor Mapping!", accessor);
 		}
 		
 		return entryAccessorClazz;
@@ -115,9 +109,10 @@ public abstract class AccessorBuilder {
 			}
 			try {	
 				IBaseAccessor instance = (IBaseAccessor) clazz.newInstance();
-				accessorName = instance.getAccessorName();
-				accessorClass = clazz.getCanonicalName();
-				accessorProp.put(accessorName, accessorClass);
+				accessorName = instance.getAccessorName();	
+				@SuppressWarnings("unchecked")
+				Class<? extends IBaseAccessor> clazzTemp = (Class<? extends IBaseAccessor>)clazz;
+				accessorMap.put(accessorName, clazzTemp);
 				
 				LOGGER.debug("Found {} - {}", accessorName,accessorClass);
 			} catch (InstantiationException |IllegalAccessException e) {
@@ -127,14 +122,6 @@ public abstract class AccessorBuilder {
 				
 			} 
 		}
-	}
-	
-	/**
-	 * Append accessor map to builder. 
-	 **/
-	protected void appendAccessorMap(Map<String,String> mapping){
-		
-		accessorProp.putAll(mapping);
 	}
 	
 	/**
@@ -237,17 +224,36 @@ public abstract class AccessorBuilder {
 	 * @param accessorClass the class of accessor
 	 * 
 	 **/
-	public void appendAccessorMap(String accessorName, String accessorClass){
+	@SuppressWarnings("unchecked")
+	public void appendAccessor(String accessorName, String accessorClass) throws AccessorException{
 		
 		LOGGER.debug("Append [{}] entity mapping: {} -> {}" , 
 				new String[]{this.builderName, accessorName, accessorClass});
-		accessorProp.put(accessorName, accessorClass);
+		
+		Class<IBaseAccessor> entryAccessorClazz = null;
+		try {
+			Class<?> rawClazz = this.getClass().getClassLoader().loadClass(accessorClass);
+			if(IBaseAccessor.class.isAssignableFrom(rawClazz))
+				entryAccessorClazz = (Class<IBaseAccessor>)rawClazz;
+				
+		} catch (ClassNotFoundException e) {
+			
+			throw new AccessorException("Class:{}-{} is not found!",e,accessorName,accessorClass);
+		}
+		accessorMap.put(accessorName, entryAccessorClazz);
+	}
+	
+	/**
+	 * Append the Accessor to map 
+	 **/
+	public void appendAccessor(String accessorName, Class<? extends IBaseAccessor> entryAccessorClazz){
+		accessorMap.put(accessorName, entryAccessorClazz);
 	}
 	
 	/**
 	 * Build new cache accessor instance to access cache data, default is not supported. 
 	 **/
-	public <K extends IEntityEntry> IEntityAccessor<K> newCacheAccessor(AccessorContext context, Class<K> entryClazz)throws AccessorException{
+	public <K extends IEntityEntry> IEntityAccessor<K> newCacheAccessor(AccessorContext context)throws AccessorException{
 		
 		throw new UnsupportedOperationException("Not support build Cache Accessor");
 	}

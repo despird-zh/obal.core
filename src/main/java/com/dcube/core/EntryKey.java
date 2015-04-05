@@ -25,7 +25,7 @@ package com.dcube.core;
  * @author despird
  * @version 0.1 2014-3-4
  **/
-public class EntryKey {
+public class EntryKey implements Cloneable{
 
 	private String key = null;
 	private String entityName = null;
@@ -94,5 +94,12 @@ public class EntryKey {
 	public String toString(){
 		
 		return entityName + CoreConstants.VALUE_SEPARATOR + key;
+	}
+	
+	@Override
+    public Object clone() {
+		
+		EntryKey newOne = new EntryKey(entityName,key);
+		return newOne;
 	}
 }

@@ -73,7 +73,7 @@ public class CacheManager{
 	 * @param entry the entry object to be cached.
 	 *  
 	 **/
-	public <K extends EntityEntry> void cachePut(K entry){
+	public void cachePut(EntityEntry entry){
 		
 		CacheInfo data = new CacheInfo();
 		data.setPutEntryData(entry);
@@ -105,18 +105,18 @@ public class CacheManager{
 	 * @param entityName the entity name
 	 * @param key the key of entry data 
 	 **/
-	public <K extends EntityEntry> K cacheGet(String entityName, String key){
+	public EntityEntry cacheGet(EntryKey key){
 		
-		Principal principal = null;		
-		K cacheData = null;
-		IEntityAccessor<K> eaccessor = null;
+		Principal principal = null;
+		EntityEntry cacheData = null;
+		IEntityAccessor<EntityEntry> eaccessor = null;
 		try {
 			eaccessor = 
 				AccessorFactory.buildEntityAccessor(CoreConstants.BUILDER_REDIS, 
 						principal, 
-						entityName);	
+						key.getEntityName());	
 				
-			cacheData = eaccessor.doGetEntry(key);
+			cacheData = eaccessor.doGetEntry(key.getKey());
 			
 		} catch (AccessorException e) {
 			
@@ -130,6 +130,10 @@ public class CacheManager{
 		//return (K)cacheBridge.doCacheGet(entityName, key);
 	}
 
+	public EntityEntry cacheGet(EntryKey key, String... attributes){
+		
+		return null;
+	}
 	/**
 	 * Fetch entry attribute from cache, the returned value wrap the List,SET, Map. 
 	 * 
@@ -138,7 +142,7 @@ public class CacheManager{
 	 * @param attrName the attribute name
 	 * 
 	 **/
-	public <M> M cacheGetAttr(String entityName, String key, String attrName){
+	public <M> M cacheGetAttr(EntryKey key, String attrName){
 		Principal principal = null;		
 		M cacheAttr = null;
 		IEntityAccessor<?> eaccessor = null;
@@ -146,9 +150,9 @@ public class CacheManager{
 			eaccessor = 
 				AccessorFactory.buildEntityAccessor(CoreConstants.BUILDER_REDIS, 
 						principal, 
-						entityName);	
+						key.getEntityName());	
 				
-			cacheAttr = eaccessor.doGetEntryAttr(key, attrName);
+			cacheAttr = eaccessor.doGetEntryAttr(key.getKey(), attrName);
 			
 		} catch (AccessorException e) {
 			
@@ -178,5 +182,7 @@ public class CacheManager{
 	
 	}
 	
-	
+	public void cacheDelAttr(String entityName, String attribute, String... rowkeys){
+		
+	}
 }

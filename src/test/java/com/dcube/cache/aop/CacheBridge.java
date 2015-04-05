@@ -17,8 +17,9 @@
  * under the License.
  * 
  */
-package com.dcube.cache;
+package com.dcube.cache.aop;
 
+import com.dcube.cache.CacheInfo;
 import com.lmax.disruptor.EventHandler;
 
 /**

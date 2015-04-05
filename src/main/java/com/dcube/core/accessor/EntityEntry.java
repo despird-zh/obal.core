@@ -121,6 +121,18 @@ public class EntityEntry extends GenericEntry implements IEntityEntry{
 			predicates.put(item.attrname, item.currentVal);
 		}
 		return predicates;
+	}
+
+	/**
+	 * Copy the original source object to current object.
+	 * 
+	 * @param originSource the source object 
+	 **/
+	public void copy(EntityEntry originSource) {
+		
+		super.copy(originSource);
+		EntryKey tkey = originSource.getEntryKey();
+		this.entryKey = (EntryKey)tkey.clone();
 	}	
-	
+
 }

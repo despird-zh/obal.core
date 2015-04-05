@@ -11,7 +11,7 @@ import com.dcube.meta.EntityAttr;
  * @version 0.1 2014-3-1
  * 
  **/
-public interface IGenericEntry {
+public interface IGenericEntry{
 
 	/**
 	 * Get the attribute of specified attribute
@@ -42,4 +42,5 @@ public interface IGenericEntry {
 	 * Set attribute value
 	 **/
 	public void setAttrValue(EntityAttr attribute, Object value);
+	
 }

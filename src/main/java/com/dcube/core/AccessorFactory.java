@@ -179,19 +179,6 @@ public final class AccessorFactory {
 	}
 
 	/**
-	 * Append service mapping to Factory
-	 * 
-	 * @param builderName
-	 *            the name of builder
-	 * @param mapping
-	 *            the mapping of services
-	 **/
-	public static void appendMapping(String builderName, Map<String, String> mapping) {
-
-		builderMap.get(builderName).appendAccessorMap(mapping);
-	}
-
-	/**
 	 * Build entry service
 	 * 
 	 * @param principal
@@ -446,9 +433,10 @@ public final class AccessorFactory {
 	public static void registerAccessor(String builderName, IBaseAccessor accessor){
 		
 		Objects.requireNonNull(accessor);
-		String accessorClass = accessor.getClass().getName();
+
 		AccessorBuilder builder = AccessorFactory.getAccessorBuilder(builderName);
-		builder.appendAccessorMap(accessor.getAccessorName(), accessorClass);
+		builder.appendAccessor(accessor.getAccessorName(), accessor.getClass());
+
 	}
 	
 	/**
@@ -457,7 +445,7 @@ public final class AccessorFactory {
 	 * @param context the context object, which provide entity information 
 	 * @param entryClazz the entry class object
 	 **/
-	public static <K extends IEntityEntry> IEntityAccessor<K> buildCacheAccessor(AccessorContext context, Class<K> entryClazz)throws AccessorException {
+	public static <K extends IEntityEntry> IEntityAccessor<K> buildCacheAccessor(AccessorContext context)throws AccessorException {
 		
 		AccessorBuilder accessorbuilder = builderMap.get(cacheBuilder);
 		if (null == accessorbuilder) {
@@ -471,7 +459,7 @@ public final class AccessorFactory {
 					"AccessorContext to build cache accessor is null.");
 		}
 		// new generic context
-		IEntityAccessor<K> accessor = accessorbuilder.newCacheAccessor(context, entryClazz);
+		IEntityAccessor<K> accessor = accessorbuilder.newCacheAccessor(context);
 				
 		accessorbuilder.assembly(context.getPrincipal(), (IBaseAccessor) accessor);
 		return accessor;

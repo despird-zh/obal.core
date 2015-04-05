@@ -52,4 +52,5 @@ public interface IEntityEntry extends IGenericEntry{
 	 * Get the audit verb Predicates 
 	 **/
 	public Map<String, Object> getAuditPredicates();
+		
 }

@@ -128,12 +128,6 @@ public abstract class HEntityAccessor<GB extends IEntityEntry> extends EntityAcc
 		
 		return true;
 	}
-
-	/**
-	 * get entry wrapper
-	 * @return wrapper object 
-	 **/
-	public abstract GB newEntityEntryObject();
 	
 	@Override
 	public EntryCollection<GB> doScanEntry(EntryFilter<?> scanfilter) throws AccessorException{

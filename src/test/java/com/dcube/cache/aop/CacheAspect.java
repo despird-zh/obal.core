@@ -256,7 +256,7 @@ public abstract class CacheAspect {
     	
     	if(StringUtils.isNotBlank(key) && StringUtils.isNotBlank(entity)){
     		
-    		returnVal = CacheManager.getInstance().cacheGet(entity, key);
+    		returnVal = CacheManager.getInstance().cacheGet(null);
     		
     		if(returnVal == null){
     			
@@ -266,7 +266,7 @@ public abstract class CacheAspect {
     	}else if(StringUtils.isNotBlank(key) && StringUtils.isNotBlank(entity)
     			&& StringUtils.isNotBlank(attr)){
     		
-    		returnVal = CacheManager.getInstance().cacheGetAttr(entity, key, attr);
+    		returnVal = CacheManager.getInstance().cacheGetAttr(null, attr);
     		if(returnVal == null){
     			
     			returnVal = jp.proceed();

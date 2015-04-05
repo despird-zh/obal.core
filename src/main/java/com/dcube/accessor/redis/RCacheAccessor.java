@@ -7,9 +7,7 @@ import com.dcube.core.accessor.EntityEntry;
 import com.dcube.core.redis.RAccessorBuilder;
 import com.dcube.core.redis.REntityAccessor;
 
-public class RCacheAccessor<GB extends EntityEntry> extends REntityAccessor<GB>{
-
-	private Class<GB> clazz = null;
+public class RCacheAccessor extends REntityAccessor<EntityEntry>{
 	
 	/**
 	 * Default constructor 
@@ -25,26 +23,16 @@ public class RCacheAccessor<GB extends EntityEntry> extends REntityAccessor<GB>{
 		super(CoreConstants.CACHE_ACCESSOR,context);
 	}
 
+
 	/**
-	 * Constructor with context and clazz
+	 * get entry wrapper
+	 * @return wrapper object 
 	 **/
-	public RCacheAccessor(AccessorContext context,Class<GB> clazz){
-		super(CoreConstants.CACHE_ACCESSOR, context);
-		this.clazz = clazz;
+	public EntityEntry newEntityEntryObject(){
+		
+		return new EntityEntry();
 	}
 	
-	@Override
-	public GB newEntityEntryObject() {
-		
-		try {
-			return clazz.newInstance();
-		} catch (InstantiationException | IllegalAccessException e) {
-			
-			e.printStackTrace();
-		}
-		return null;
-	}
-
 	/**
 	 * Not call context.clear, make sure not affect the normal Hbase operation. 
 	 **/
