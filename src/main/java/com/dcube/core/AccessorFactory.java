@@ -230,7 +230,7 @@ public final class AccessorFactory {
 	 * 
 	 * @param mockupAccessor
 	 *            the mock-up IBaseAccessor instance
-	 * @param entryName
+	 * @param entityName
 	 *            the name of entry
 	 **/
 	public static <K> K buildEntityAccessor(IBaseAccessor mockupAccessor,
@@ -442,10 +442,10 @@ public final class AccessorFactory {
 	/**
 	 * Build Cache IEntityAccessor with specified context.
 	 * 
-	 * @param context the context object, which provide entity information 
-	 * @param entryClazz the entry class object
+	 * @param principal the principal object 
+	 * @param entityName the entity name
 	 **/
-	public static <K extends IEntityEntry> IEntityAccessor<K> buildCacheAccessor(AccessorContext context)throws AccessorException {
+	public static <K extends IEntityEntry> IEntityAccessor<K> buildCacheAccessor(Principal principal, String entityName)throws AccessorException {
 		
 		AccessorBuilder accessorbuilder = builderMap.get(cacheBuilder);
 		if (null == accessorbuilder) {
@@ -454,14 +454,20 @@ public final class AccessorFactory {
 					"The cache AccessorBuilder instance:{} not existed.", cacheBuilder);
 		}
 
-		if(context == null){
-			throw new AccessorException(
-					"AccessorContext to build cache accessor is null.");
+		BaseEntity schema;
+		try {
+			schema = EntityManager.getInstance().getEntitySchema(entityName);
+		} catch (MetaException e) {
+			
+			throw new AccessorException("Error when fetching entity[{}] schema.", e, entityName);
 		}
+		// prepare context object
+		AccessorContext context = new AccessorContext(principal,schema);		
 		// new generic context
-		IEntityAccessor<K> accessor = accessorbuilder.newCacheAccessor(context);
-				
-		accessorbuilder.assembly(context.getPrincipal(), (IBaseAccessor) accessor);
+		IEntityAccessor<K> accessor = accessorbuilder.newBaseAccessor(context, CoreConstants.CACHE_ACCESSOR, false);
+		// assembly the accessor
+		accessorbuilder.assembly(principal, (IBaseAccessor) accessor);
+		
 		return accessor;
 	}
 }

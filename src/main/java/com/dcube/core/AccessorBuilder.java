@@ -218,7 +218,7 @@ public abstract class AccessorBuilder {
 	}
 	
 	/**
-	 * Append accessor mapping
+	 * Append IBaseAccessor mapping
 	 * 
 	 * @param accessorName the name of accessor
 	 * @param accessorClass the class of accessor
@@ -244,17 +244,10 @@ public abstract class AccessorBuilder {
 	}
 	
 	/**
-	 * Append the Accessor to map 
+	 * Append the IBaseAccessor to map 
 	 **/
 	public void appendAccessor(String accessorName, Class<? extends IBaseAccessor> entryAccessorClazz){
 		accessorMap.put(accessorName, entryAccessorClazz);
 	}
 	
-	/**
-	 * Build new cache accessor instance to access cache data, default is not supported. 
-	 **/
-	public <K extends IEntityEntry> IEntityAccessor<K> newCacheAccessor(AccessorContext context)throws AccessorException{
-		
-		throw new UnsupportedOperationException("Not support build Cache Accessor");
-	}
 }

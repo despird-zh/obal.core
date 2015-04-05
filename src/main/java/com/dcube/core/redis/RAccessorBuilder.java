@@ -86,35 +86,6 @@ public class RAccessorBuilder extends AccessorBuilder{
         	LOGGER.error("Error when create JedisPool object",e); 
         } 
 	}
-
-	/**
-	 * Build new cache IEntityAccessor instance to access cache data, default is not supported. 
-	 **/
-	@SuppressWarnings("unchecked")
-	@Override
-	public IEntityAccessor<EntityEntry> newCacheAccessor(AccessorContext context)throws AccessorException{
-		
-		IEntityAccessor<EntityEntry> result = null;
-		try {
-
-			Class<?> accessorClazz = getAccessorClass(CoreConstants.CACHE_ACCESSOR);
-			
-			if(GenericAccessor.class.isAssignableFrom(accessorClazz))				
-				throw new AccessorException("The cache accessor -{} is a GenericAccessor sub class.", accessorClazz.getName() );
-				
-			Constructor<?> constructor = accessorClazz.getConstructor(AccessorContext.class);
-			
-			result = (IEntityAccessor<EntityEntry>)constructor.newInstance(context);
-			
-		} catch (IllegalArgumentException | InstantiationException
-					| IllegalAccessException | NoSuchMethodException 
-					| SecurityException | InvocationTargetException e) {
-
-			throw new AccessorException("Fail build Accessor-{}",e, CoreConstants.CACHE_ACCESSOR);
-		} 
-		
-		return result;
-	}
 	
 	@Override
 	public void assembly(Principal principal,IBaseAccessor accessor) {
