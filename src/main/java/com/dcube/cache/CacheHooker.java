@@ -24,17 +24,17 @@ public class CacheHooker<K extends EntityEntry>  extends EventHooker<CacheInfo>{
 		
 		CacheInfo operData = (CacheInfo)payload;
 		 
-		if(CacheInfo.OP_PUT.equals(operData.operation(null))){
+		if(CacheInfo.OperEnum.PutEntry == operData.operation()){
 			
 			CacheInfo.PutEntryData data = operData.value();
 			doCachePut((K)data.entryInfo);
 		}
-		else if(CacheInfo.OP_PUT_ATTR.equals(operData.operation(null))){
+		else if(CacheInfo.OperEnum.PutAttr == operData.operation()){
 			
 			CacheInfo.PutAttrData data = operData.value();
 			doCachePutAttr(data.key,data.entity,data.attr,data.value);
 		}
-		else if(CacheInfo.OP_DEL.equals(operData.operation(null))){
+		else if(CacheInfo.OperEnum.DelEntry == operData.operation()){
 			
 			CacheInfo.DelEntryData data = operData.value();
 			doCacheDel(data.entity,data.keys);

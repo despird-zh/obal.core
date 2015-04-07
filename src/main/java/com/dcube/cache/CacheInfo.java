@@ -19,6 +19,8 @@
  */
 package com.dcube.cache;
 
+import java.util.concurrent.ConcurrentLinkedQueue;
+
 import com.dcube.core.accessor.EntityEntry;
 import com.dcube.disruptor.EventPayload;
 
@@ -32,14 +34,20 @@ import com.dcube.disruptor.EventPayload;
  **/
 public class CacheInfo implements EventPayload{
 	
-	public static final String OP_PUT = "_PUT_ENTRY";
-	public static final String OP_PUT_ATTR = "_PUT_ATTR";
-	public static final String OP_DEL = "_DEL_ENTRY";
-	
-	private String operation = OP_PUT;
+	public enum OperEnum{
+		
+		PutEntry,
+		PutAttr,
+		DelEntry,
+		DelAttr;
+	}
 
+	/** operation type */
+	private OperEnum operation = OperEnum.PutEntry;
+
+	/** the value */
 	private Object value;
-	
+		
 	/**
 	 * Get the value of different events.
 	 *  
@@ -63,7 +71,7 @@ public class CacheInfo implements EventPayload{
 		s.value = value;
 		
 		this.value = s;
-		this.operation = OP_PUT_ATTR;
+		this.operation = OperEnum.PutAttr;
 	}
 
 	/**
@@ -76,7 +84,7 @@ public class CacheInfo implements EventPayload{
 		ped.entryInfo = entryInfo;
 		
 		this.value= ped;
-		this.operation = OP_PUT;
+		this.operation = OperEnum.PutEntry;
 	}
 
 	/**
@@ -88,9 +96,20 @@ public class CacheInfo implements EventPayload{
 		DelEntryData ded = new DelEntryData();
 		ded.entity = entity;
 		ded.keys = keys;
-		this.operation = OP_DEL;
+		this.operation = OperEnum.DelEntry;
 	}
 	
+    /**
+     * The cache info operation 
+     **/
+    public OperEnum operation(){
+
+    	return this.operation;
+    }
+	    
+    /**
+     * Class to wrap entry attribute data 
+     **/
     public static class PutAttrData{
     	
     	public String key = null;
@@ -99,23 +118,21 @@ public class CacheInfo implements EventPayload{
     	public Object value = null;
     }
     
+    /**
+     * Class to wrap delete entry data 
+     **/
     public static class DelEntryData{
     	
     	public String entity = null;
     	public String[] keys = null;
     }
     
+    /**
+     * Class to wrap put entry data 
+     **/
     public static class PutEntryData{
     	
     	public EntityEntry entryInfo = null;
-    }
-    
-    public String operation(String operation){
-    	
-    	if(null != operation)
-    		this.operation = operation;
-    	
-    	return this.operation;
     }
     
 }	

@@ -19,6 +19,11 @@
  */
 package com.dcube.cache;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
 import com.dcube.core.AccessorFactory;
 import com.dcube.core.CoreConstants;
 import com.dcube.core.EntryKey;
@@ -47,9 +52,11 @@ public class CacheManager{
 	/** singleton instance */ 
 	private static CacheManager instance;
 	
+	private static Map<EntryKey, CacheEntryPipe> entryPipeMap = null;
+	
 	/** default constructor */
 	private CacheManager(){
-
+		entryPipeMap = new ConcurrentHashMap<EntryKey, CacheEntryPipe>(20);
 	}
 	
 	/**
@@ -73,12 +80,12 @@ public class CacheManager{
 	 * @param entry the entry object to be cached.
 	 *  
 	 **/
-	public void cachePut(EntityEntry entry){
+	public void cachePut(Principal principal, EntityEntry entry){
 		
 		CacheInfo data = new CacheInfo();
 		data.setPutEntryData(entry);
 		
-		EventDispatcher.getInstance().sendPayload(data,EventType.CACHE);
+		offerCacheQueue(entry.getEntryKey(), data);
  
 	}
 	
@@ -90,12 +97,12 @@ public class CacheManager{
 	 * @param attrName the attribute name
 	 * @param value the attribute value object.
 	 **/
-	public void cachePutAttr(EntryKey entryKey, String attrName, Object value){
+	public void cachePutAttr(Principal principal, EntryKey entryKey, String attrName, Object value){
 		
 		CacheInfo data = new CacheInfo();
 		data.setPutAttrData(entryKey.getKey(), entryKey.getEntityName(), attrName, value);
 		
-		EventDispatcher.getInstance().sendPayload(data,EventType.CACHE);
+		offerCacheQueue(entryKey, data);
  
 	}
 	
@@ -105,9 +112,8 @@ public class CacheManager{
 	 * @param entityName the entity name
 	 * @param key the key of entry data 
 	 **/
-	public EntityEntry cacheGet(EntryKey key){
+	public EntityEntry cacheGet(Principal principal, EntryKey key){
 		
-		Principal principal = null;
 		EntityEntry cacheData = null;
 		IEntityAccessor<EntityEntry> eaccessor = null;
 		try {
@@ -130,7 +136,7 @@ public class CacheManager{
 		//return (K)cacheBridge.doCacheGet(entityName, key);
 	}
 
-	public EntityEntry cacheGet(EntryKey key, String... attributes){
+	public EntityEntry cacheGet(Principal principal, EntryKey key, String... attributes){
 		
 		return null;
 	}
@@ -142,8 +148,8 @@ public class CacheManager{
 	 * @param attrName the attribute name
 	 * 
 	 **/
-	public <M> M cacheGetAttr(EntryKey key, String attrName){
-		Principal principal = null;		
+	public <M> M cacheGetAttr(Principal principal, EntryKey key, String attrName){
+	
 		M cacheAttr = null;
 		IEntityAccessor<?> eaccessor = null;
 		try {
@@ -173,16 +179,76 @@ public class CacheManager{
 	 * @param keys the string array of key
 	 * 
 	 **/
-	public void cacheDel(String entityName, String ...keys){
+	public void cacheDel(Principal principal, String entityName, String ...keys){
 		
+
 		CacheInfo data = new CacheInfo();
 		data.setDelData(entityName, keys);
 		
-		EventDispatcher.getInstance().sendPayload(data,EventType.CACHE);
+		offerCacheQueue(null, data);
 	
 	}
 	
-	public void cacheDelAttr(String entityName, String attribute, String... rowkeys){
+	public void cacheDelAttr(Principal principal, String entityName, String attribute, String... rowkeys){
 		
+	}
+	
+	/**
+	 * Add cacheInfo to queue
+	 * @param entryKey 
+	 * @param cacheInfo 
+	 * 
+	 * @return the queue contains cache info.
+	 **/
+	public void offerCacheQueue(EntryKey entryKey, CacheInfo data){
+		
+		CacheEntryPipe cachePipe = entryPipeMap.get(entryKey);
+		if(cachePipe == null){// create new one
+			
+			cachePipe = new CacheEntryPipe(entryKey);
+			entryPipeMap.put(entryKey, cachePipe);
+			cachePipe.offer(data);
+			
+			EventDispatcher.getInstance().sendPayload(cachePipe,EventType.CACHE);
+			
+		}else if(cachePipe.isEmpty()){// since empty let cache hooker to drop it.
+			
+			cachePipe = new CacheEntryPipe(entryKey);
+			entryPipeMap.put(entryKey, cachePipe);
+			cachePipe.offer(data);
+			
+			EventDispatcher.getInstance().sendPayload(cachePipe,EventType.CACHE);
+			
+		}else{// not empty push data to existed queue, let hook digest it.
+			
+			cachePipe.offer(data);
+		}
+	}
+	
+	/**
+	 * Drop CacheInfo queue from queue map. This to be called in CacheHooker to 
+	 * clear cache queue.
+	 * 
+	 * @param entryKey the Entity Entry key
+	 * @param oldCacheQueue the queue to be removed
+	 * 
+	 * @return true: cache queue not exist in map; false: cache queue exist in map
+	 **/
+	public boolean dropCacheInfoQueue(CacheEntryPipe entryPipe){
+		
+		CacheEntryPipe newEntryPipe = entryPipeMap.get(entryPipe.getEntryKey());
+		
+		if(entryPipe.isEmpty() && entryPipe.equals(newEntryPipe)){
+			
+			entryPipeMap.remove(entryPipe.getEntryKey());
+			return true;
+			
+		}else if(entryPipe.isEmpty() && !entryPipe.equals(newEntryPipe)){
+			
+			return true;
+		}else{
+			// not empty
+			return false;
+		}
 	}
 }

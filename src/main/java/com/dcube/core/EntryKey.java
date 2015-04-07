@@ -19,6 +19,8 @@
  */
 package com.dcube.core;
 
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 /**
  * EntryKey wrap the key information, it holds the entity name and key data.
  * 
@@ -101,5 +103,14 @@ public class EntryKey implements Cloneable{
 		
 		EntryKey newOne = new EntryKey(entityName,key);
 		return newOne;
+	}
+	
+	@Override
+	public int hashCode() {
+		
+		return new HashCodeBuilder(17, 37)
+			.append(this.entityName)
+			.append(this.key).toHashCode();
+			
 	}
 }
