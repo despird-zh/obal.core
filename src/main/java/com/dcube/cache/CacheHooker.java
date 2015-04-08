@@ -1,10 +1,12 @@
 package com.dcube.cache;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.dcube.core.AccessorFactory;
-import com.dcube.core.CoreConstants;
+import com.dcube.core.EntryKey;
 import com.dcube.core.IEntityAccessor;
 import com.dcube.core.accessor.EntityEntry;
-import com.dcube.core.security.Principal;
 import com.dcube.disruptor.EventHooker;
 import com.dcube.disruptor.EventPayload;
 import com.dcube.disruptor.EventType;
@@ -12,8 +14,10 @@ import com.dcube.exception.AccessorException;
 import com.dcube.exception.RingEventException;
 import com.dcube.util.AccessorUtils;
 
-public class CacheHooker<K extends EntityEntry>  extends EventHooker<CacheInfo>{
+public class CacheHooker<K extends EntityEntry>  extends EventHooker<CacheEntryPipe>{
 
+	static Logger LOGGER = LoggerFactory.getLogger(CacheHooker.class);
+	
 	public CacheHooker() {
 		super(EventType.CACHE);
 	}
@@ -22,106 +26,52 @@ public class CacheHooker<K extends EntityEntry>  extends EventHooker<CacheInfo>{
 	@Override
 	public void processPayload(EventPayload payload) throws RingEventException {
 		
-		CacheInfo operData = (CacheInfo)payload;
-		 
-		if(CacheInfo.OperEnum.PutEntry == operData.operation()){
-			
-			CacheInfo.PutEntryData data = operData.value();
-			doCachePut((K)data.entryInfo);
-		}
-		else if(CacheInfo.OperEnum.PutAttr == operData.operation()){
-			
-			CacheInfo.PutAttrData data = operData.value();
-			doCachePutAttr(data.key,data.entity,data.attr,data.value);
-		}
-		else if(CacheInfo.OperEnum.DelEntry == operData.operation()){
-			
-			CacheInfo.DelEntryData data = operData.value();
-			doCacheDel(data.entity,data.keys);
-		}
+		CacheEntryPipe cachePipe = (CacheEntryPipe)payload;
 		
-	}
-
-	/**
-	 * Put the entry data into cache
-	 * 
-	 * @param entry the entry data
-	 **/
-	public void doCachePut(K cacheData){
-		
-		Principal principal = null;		
+		EntryKey key = cachePipe.getEntryKey();
 		IEntityAccessor<K> eaccessor = null;
-		try {
-			eaccessor = 
-				AccessorFactory.buildEntityAccessor(CoreConstants.BUILDER_REDIS, 
-						principal, 
-						cacheData.getEntryKey().getEntityName());	
+		while(!cachePipe.isEmpty()){// start of loop
+			
+			CacheInfo operData = cachePipe.peek();
+			try{
+				eaccessor = AccessorFactory.buildCacheAccessor(operData.getPrincipal(), key.getEntityName());
+			
+				if(CacheInfo.OperEnum.PutEntry == operData.operation()){
 				
-
-			eaccessor.doPutEntry(cacheData);
-			
-		} catch (AccessorException e) {
-			
-			e.printStackTrace();
-		} finally{
-			AccessorUtils.closeAccessor(eaccessor);
-		}
-	}
-
-	/**
-	 * Put the entry attribute data into cache
-	 * 
-	 * @param key the entry key
-	 * @param entity the entity name
-	 * @param attrName the attribute name
-	 * @param value the attribute value
-	 * 
-	 **/
-	public void doCachePutAttr(String key, String entity, String attrName, Object value) {
-		Principal principal = null;		
-		IEntityAccessor<K> eaccessor = null;
-		try {
-			eaccessor = 
-				AccessorFactory.buildEntityAccessor(CoreConstants.BUILDER_REDIS, 
-						principal, 
-						entity);	
+					CacheInfo.PutEntryData data = operData.value();
+					eaccessor.doPutEntry((K)data.entryInfo);
+					
+				}
+				else if(CacheInfo.OperEnum.PutAttr == operData.operation()){
+					
+					CacheInfo.PutAttrData data = operData.value();
+					eaccessor.doPutEntryAttr(data.key,data.attr,data.value);
+					
+				}
+				else if(CacheInfo.OperEnum.DelEntry == operData.operation()){
+					
+					CacheInfo.DelEntryData data = operData.value();
+					eaccessor.doDelEntry(data.key);
+					
+				}
+				else if(CacheInfo.OperEnum.DelAttr == operData.operation()){
+					
+					CacheInfo.DelAttrData data = operData.value();
+					eaccessor.doDelEntryAttr(data.attr, data.key);
+					
+				}
 				
-
-			eaccessor.doPutEntryAttr(key, attrName, value);
-			
-		} catch (AccessorException e) {
-			
-			e.printStackTrace();
-		} finally{
-			
-			AccessorUtils.closeAccessor(eaccessor);
-		}
-	}
-	
-	/**
-	 * Delete the entry from cache
-	 * 
-	 * @param entityName the entity name
-	 * @param keys the array of key
-	 **/
-	public void doCacheDel(String entityName, String... keys) {
-		Principal principal = null;		
-		IEntityAccessor<K> eaccessor = null;
-		try {
-			eaccessor = 
-				AccessorFactory.buildEntityAccessor(CoreConstants.BUILDER_REDIS, 
-						principal, 
-						entityName);	
+				cachePipe.poll();// remove from queue
 				
-			eaccessor.doDelEntry(keys);
-			
-		} catch (AccessorException e) {
-			
-			e.printStackTrace();
-		} finally{
-			
-			AccessorUtils.closeAccessor(eaccessor);
+			}catch (AccessorException e) {
+				
+				LOGGER.error("Error when put data to cache:{}","",e);
+				
+			} finally{
+				AccessorUtils.closeAccessor(eaccessor);
+			}
 		}
-
+		// remove from cache manager
+		CacheManager.getInstance().dropCacheInfoQueue(cachePipe);
 	}
 }

@@ -22,6 +22,7 @@ package com.dcube.cache;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import com.dcube.core.accessor.EntityEntry;
+import com.dcube.core.security.Principal;
 import com.dcube.disruptor.EventPayload;
 
 /**
@@ -32,7 +33,7 @@ import com.dcube.disruptor.EventPayload;
  * @version 0.1 2014-3-1
  * @since 0.1
  **/
-public class CacheInfo implements EventPayload{
+public class CacheInfo{
 	
 	public enum OperEnum{
 		
@@ -42,6 +43,13 @@ public class CacheInfo implements EventPayload{
 		DelAttr;
 	}
 
+	public CacheInfo(Principal principal){
+		this.principal = principal;
+	}
+	
+	/** the principal info */
+	private Principal principal = null;	
+	
 	/** operation type */
 	private OperEnum operation = OperEnum.PutEntry;
 
@@ -62,15 +70,14 @@ public class CacheInfo implements EventPayload{
 	 * Set the setting of entry attribute put operation.
 	 *  
 	 **/
-	public void setPutAttrData(String key,String entity,String attr,Object value){
+	public void setPutAttrData(String key,String attr,Object value){
 		
-		PutAttrData s = new PutAttrData();
-		s.key = key;
-		s.entity = entity;
-		s.attr = attr;
-		s.value = value;
+		PutAttrData putattr = new PutAttrData();
+		putattr.key = key;
+		putattr.attr = attr;
+		putattr.value = value;
 		
-		this.value = s;
+		this.value = putattr;
 		this.operation = OperEnum.PutAttr;
 	}
 
@@ -80,10 +87,10 @@ public class CacheInfo implements EventPayload{
 	 **/
 	public void setPutEntryData(EntityEntry entryInfo){
 		
-		PutEntryData ped = new PutEntryData();
-		ped.entryInfo = entryInfo;
+		PutEntryData putentry = new PutEntryData();
+		putentry.entryInfo = entryInfo;
 		
-		this.value= ped;
+		this.value= putentry;
 		this.operation = OperEnum.PutEntry;
 	}
 
@@ -91,12 +98,24 @@ public class CacheInfo implements EventPayload{
 	 * Set the setting of entry delete operation.
 	 *  
 	 **/
-	public void setDelData(String entity, String ...keys){
+	public void setDelEntryData(String key){
 		
-		DelEntryData ded = new DelEntryData();
-		ded.entity = entity;
-		ded.keys = keys;
+		DelEntryData delentry = new DelEntryData();
+		delentry.key = key;
 		this.operation = OperEnum.DelEntry;
+	}
+	
+	/**
+	 * Set the setting of entry attribute delete operation.
+	 *  
+	 **/
+	public void setDelAttrData(String key, String attribute){
+		
+		DelAttrData delattr = new DelAttrData();
+		delattr.key = key;
+		delattr.attr = attribute;
+		
+		this.operation = OperEnum.DelAttr;
 	}
 	
     /**
@@ -106,14 +125,18 @@ public class CacheInfo implements EventPayload{
 
     	return this.operation;
     }
-	    
+	
+    public Principal getPrincipal(){
+    	
+    	return this.principal;
+    }
+    
     /**
      * Class to wrap entry attribute data 
      **/
     public static class PutAttrData{
     	
     	public String key = null;
-    	public String entity = null;
     	public String attr = null;
     	public Object value = null;
     }
@@ -123,8 +146,16 @@ public class CacheInfo implements EventPayload{
      **/
     public static class DelEntryData{
     	
-    	public String entity = null;
-    	public String[] keys = null;
+    	public String key = null;
+    }
+    
+    /**
+     * Class to wrap delete entry data 
+     **/
+    public static class DelAttrData{
+    	
+    	public String key = null;
+    	public String attr = null;
     }
     
     /**

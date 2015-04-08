@@ -76,20 +76,24 @@ public interface IEntityAccessor <GB extends IEntityEntry> extends IBaseAccessor
 	
 	/**
 	 * get entry object
-	 * @param entrykey the entry key
+	 * @param entryKey the entry key
 	 * @return GB - the entry information
 	 **/
 	public abstract GB doGetEntry(String entryKey)throws AccessorException;
 
 	/**
-	 * get entry object
-	 * @param entrykey the entry key
+	 * Get entry object
+	 * 
+	 * @param entryKey the entry key
+	 * @param attributes the attribute array
+	 * 
 	 * @return GB - the entry information
 	 **/
 	public abstract GB doGetEntry(String entryKey, String... attributes)throws AccessorException;
 	
 	/**
-	 * get entry attribute 
+	 * Get entry attribute 
+	 * 
 	 * @param entryKey the entry key
 	 * @param attrName the attribute name
 	 * 
@@ -98,29 +102,37 @@ public interface IEntityAccessor <GB extends IEntityEntry> extends IBaseAccessor
 	public abstract <K> K doGetEntryAttr(String entryKey,String attrName) throws AccessorException;
 	
 	/**
-	 * delete entry object
-	 * @param entrykey the entry key array
+	 * Delete entry object
+	 * 
+	 * @param entryKey the entry key array
 	 **/
 	public abstract void doDelEntry(String... entryKey)throws AccessorException;
 
 	/**
-	 * delete entry object's specified attribute
-	 * @param entrykey the entry key array
+	 * Delete entry object's specified attribute
+	 * 
+	 * @param attribute the attribute of entity
+	 * @param entryKey the entry key array
 	 **/
 	public abstract void doDelEntryAttr(String attribute, String... entryKey)throws AccessorException;
 	
 	/**
-	 * get entry object list
-	 * @param scan the scan object
-	 * @return List<GB> - the entry information
+	 * Get entry object list
+	 * 
+	 * @param scanfilter the scan filter object
+	 * 
+	 * @return EntryCollection<GB> - the entry collection
 	 **/
 	public abstract EntryCollection<GB> doScanEntry(EntryFilter<?> scanfilter)throws AccessorException;
 
 
 	/**
 	 * get entry object list
-	 * @param scan the scan object
-	 * @return List<GB> - the entry information
+	 * 
+	 * @param scanfilter the scan filter object
+	 * @param attributes the attribute array
+	 * 
+	 * @return EntryCollection<GB> - the entry collection
 	 **/
 	public abstract EntryCollection<GB> doScanEntry(EntryFilter<?> scanfilter, String... attributes)throws AccessorException;
 
@@ -129,6 +141,8 @@ public interface IEntityAccessor <GB extends IEntityEntry> extends IBaseAccessor
 	 * check filter object is supported or not
 	 * @param scanfilter the filter used to scan entries
 	 * @param throwExcep in case not supported, true:throw exception; false:return false;  
+	 * 
+	 * @return true: supported ; false: unsupported
 	 **/
 	public abstract boolean isFilterSupported(EntryFilter<?> scanfilter,boolean throwExcep) throws AccessorException;
 	

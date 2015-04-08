@@ -19,10 +19,11 @@
  */
 package com.dcube.cache;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.dcube.core.AccessorFactory;
 import com.dcube.core.CoreConstants;
@@ -49,6 +50,8 @@ import com.dcube.util.AccessorUtils;
  **/
 public class CacheManager{
 
+	static Logger LOGGER = LoggerFactory.getLogger(CacheManager.class);
+	
 	/** singleton instance */ 
 	private static CacheManager instance;
 	
@@ -77,12 +80,13 @@ public class CacheManager{
 	 * Put entry into cache. Internally entry will be posted to cache asynchronously.
 	 * the cached entry must be EntryKey subclass instance.
 	 * 
+	 * @param principal the principal 
 	 * @param entry the entry object to be cached.
 	 *  
 	 **/
 	public void cachePut(Principal principal, EntityEntry entry){
 		
-		CacheInfo data = new CacheInfo();
+		CacheInfo data = new CacheInfo(principal);
 		data.setPutEntryData(entry);
 		
 		offerCacheQueue(entry.getEntryKey(), data);
@@ -93,14 +97,15 @@ public class CacheManager{
 	 * Put entry attribute data in cache. it need entity and key information, here they 
 	 * are wrapped in entryKey object.
 	 * 
+	 * @param principal the principal 
 	 * @param entryKey the entry key object to hold key and entity information
 	 * @param attrName the attribute name
 	 * @param value the attribute value object.
 	 **/
 	public void cachePutAttr(Principal principal, EntryKey entryKey, String attrName, Object value){
 		
-		CacheInfo data = new CacheInfo();
-		data.setPutAttrData(entryKey.getKey(), entryKey.getEntityName(), attrName, value);
+		CacheInfo data = new CacheInfo(principal);
+		data.setPutAttrData(entryKey.getKey(), attrName, value);
 		
 		offerCacheQueue(entryKey, data);
  
@@ -109,7 +114,7 @@ public class CacheManager{
 	/**
 	 * Fetch entry from cache, the returned value must be the EntryKey subclass instance. 
 	 * 
-	 * @param entityName the entity name
+	 * @param principal the principal 
 	 * @param key the key of entry data 
 	 **/
 	public EntityEntry cacheGet(Principal principal, EntryKey key){
@@ -117,32 +122,52 @@ public class CacheManager{
 		EntityEntry cacheData = null;
 		IEntityAccessor<EntityEntry> eaccessor = null;
 		try {
-			eaccessor = 
-				AccessorFactory.buildEntityAccessor(CoreConstants.BUILDER_REDIS, 
-						principal, 
-						key.getEntityName());	
-				
+			
+			eaccessor = AccessorFactory.buildCacheAccessor(principal, key.getEntityName());				
 			cacheData = eaccessor.doGetEntry(key.getKey());
 			
 		} catch (AccessorException e) {
 			
-			e.printStackTrace();
+			LOGGER.error("Error when get entry data({})", key ,e);
 		} finally{
 			
 			AccessorUtils.closeAccessor(eaccessor);
 		}
 		
 		return cacheData;
-		//return (K)cacheBridge.doCacheGet(entityName, key);
 	}
 
+	/**
+	 * Fetch entry from cache, the returned value must be the EntryKey subclass instance. 
+	 * 
+	 * @param principal the principal 
+	 * @param key the key of entry data 
+	 * @param attributes the attribute array
+	 **/
 	public EntityEntry cacheGet(Principal principal, EntryKey key, String... attributes){
 		
-		return null;
+		EntityEntry cacheData = null;
+		IEntityAccessor<EntityEntry> eaccessor = null;
+		try {
+			
+			eaccessor = AccessorFactory.buildCacheAccessor(principal, key.getEntityName());				
+			cacheData = eaccessor.doGetEntry(key.getKey(), attributes);
+			
+		} catch (AccessorException e) {
+			
+			LOGGER.error("Error when get entry data({})", key.toString() +" -> "+ attributes.toString() ,e);
+		} finally{
+			
+			AccessorUtils.closeAccessor(eaccessor);
+		}
+		
+		return cacheData;
 	}
+	
 	/**
 	 * Fetch entry attribute from cache, the returned value wrap the List,SET, Map. 
 	 * 
+	 * @param principal the principal 
 	 * @param entityName the entity name
 	 * @param key the key of entry data 
 	 * @param attrName the attribute name
@@ -153,50 +178,63 @@ public class CacheManager{
 		M cacheAttr = null;
 		IEntityAccessor<?> eaccessor = null;
 		try {
-			eaccessor = 
-				AccessorFactory.buildEntityAccessor(CoreConstants.BUILDER_REDIS, 
-						principal, 
-						key.getEntityName());	
-				
+			
+			eaccessor = AccessorFactory.buildCacheAccessor(principal, key.getEntityName());				
 			cacheAttr = eaccessor.doGetEntryAttr(key.getKey(), attrName);
 			
 		} catch (AccessorException e) {
 			
-			e.printStackTrace();
+			LOGGER.error("Error when get entry data({})", key.toString() + " -> " + attrName ,e);
 		} finally{
 			
 			AccessorUtils.closeAccessor(eaccessor);
 		}
 		
 		return cacheAttr;
-		//return (M)cacheBridge.doCacheGetAttr(entityName, key, attrName);
 	}
 	
 	/**
 	 * Delete entry from cache
 	 * 
+	 * @param principal the principal 
 	 * @param entityName the entity name
 	 * @param keys the string array of key
 	 * 
 	 **/
 	public void cacheDel(Principal principal, String entityName, String ...keys){
 		
-
-		CacheInfo data = new CacheInfo();
-		data.setDelData(entityName, keys);
-		
-		offerCacheQueue(null, data);
-	
+		for(String key :keys){
+			
+			CacheInfo data = new CacheInfo(principal);			
+			data.setDelEntryData(key);
+			EntryKey entryKey = new EntryKey(entityName, key);
+			offerCacheQueue(entryKey, data);
+		}
 	}
 	
-	public void cacheDelAttr(Principal principal, String entityName, String attribute, String... rowkeys){
-		
+	/**
+	 * Delete entry attribute from cache
+	 * 
+	 * @param principal the principal 
+	 * @param entityName name of entity
+	 * @param attribute the entry attribute
+	 * @param keys the key array
+	 **/
+	public void cacheDelAttr(Principal principal, String entityName, String attribute, String... keys){
+		for(String key :keys){
+			
+			CacheInfo data = new CacheInfo(principal);			
+			data.setDelAttrData(key, attribute);
+			EntryKey entryKey = new EntryKey(entityName, key);
+			offerCacheQueue(entryKey, data);
+		}
 	}
 	
 	/**
 	 * Add cacheInfo to queue
+	 * 
 	 * @param entryKey 
-	 * @param cacheInfo 
+	 * @param data 
 	 * 
 	 * @return the queue contains cache info.
 	 **/
@@ -229,8 +267,7 @@ public class CacheManager{
 	 * Drop CacheInfo queue from queue map. This to be called in CacheHooker to 
 	 * clear cache queue.
 	 * 
-	 * @param entryKey the Entity Entry key
-	 * @param oldCacheQueue the queue to be removed
+	 * @param entryPipe the queue to be removed
 	 * 
 	 * @return true: cache queue not exist in map; false: cache queue exist in map
 	 **/
