@@ -130,7 +130,6 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
         }
 		return rtv;
 	}
-
 	
 	@Override
 	public GB doGetEntry(String entryKey, String... attributes)throws AccessorException{
