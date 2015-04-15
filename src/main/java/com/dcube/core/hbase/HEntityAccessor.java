@@ -357,12 +357,7 @@ public abstract class HEntityAccessor<GB extends IEntityEntry> extends EntityAcc
         	Result result = table.get(get);
            
         	wrap(entitySchema.getEntityMeta().getAllAttrs(),result, rtv);
-        	// extract the acl information
-        	if(entitySchema.getEntityMeta().getAccessControllable()){
-        		
-        		EntryAcl acl = wrapEntryAcl(result);
-        		((AccessControlEntry)rtv).setEntryAcl(acl);
-        	}
+
         } catch (IOException e) {  
         	
             throw new AccessorException("Error get entry row,key:{}",e,entryKey);
@@ -407,12 +402,7 @@ public abstract class HEntityAccessor<GB extends IEntityEntry> extends EntityAcc
         	Result result = table.get(get);
         	
         	wrap(attrs, result, rtv);
-        	// extract the acl information
-        	if(entitySchema.getEntityMeta().getAccessControllable()){
-        		
-        		EntryAcl acl = wrapEntryAcl(result);
-        		((AccessControlEntry)rtv).setEntryAcl(acl);
-        	}
+
         } catch (IOException e) {  
         	
             throw new AccessorException("Error get entry row,key:{}",e,entryKey);
@@ -518,13 +508,7 @@ public abstract class HEntityAccessor<GB extends IEntityEntry> extends EntityAcc
             table = getConnection().getTable(entitySchema.getSchema(getContext().getPrincipal(),key.getKey()));
 
             Put put = parse(entitySchema.getEntityMeta().getAllAttrs(),entryInfo);
-        	// store the acl information
-        	if(entitySchema.getEntityMeta().getAccessControllable()){
-        		
-        		EntryAcl acl = ((AccessControlEntry)entryInfo).getEntryAcl();
-        		parseEntryAcl(put, acl);
-        		
-        	}
+
             table.put(put);
         	table.flushCommits();
         	rtv = entryInfo.getEntryKey();
@@ -794,67 +778,5 @@ public abstract class HEntityAccessor<GB extends IEntityEntry> extends EntityAcc
         return put;
 	}
 	
-	/**
-	 * Wrap the Acl information from acl column family.
-	 * 
-	 **/
-	public EntryAcl wrapEntryAcl(Result rawEntry){
-		
-		NavigableMap<byte[], byte[]> acemap = rawEntry.getFamilyMap(EntityConstants.ATTR_ACL_COLUMN.getBytes());
-		EntryAcl acl = new EntryAcl();
-		for(Map.Entry<byte[], byte[]> entry: acemap.entrySet()){
-			
-			String[] parts = StringUtils.split( Bytes.toString(entry.getKey()), ":");
-			String value = Bytes.toString(entry.getValue());
-			EntryAce ace = null;
-			if(parts.length == 2){
-				// eg. acl:group:001001 -> WRITE
-				//     CF | TYPE| KEY     Privilege
-				// here group:001001 is the qualifier name
-				AclPrivilege priv = AclPrivilege.valueOf(value);
-				AceType type = AceType.valueOf(parts[0]);
-				ace = new EntryAce(type,parts[1],priv);
-				
-			}else if(parts.length == 3){
-				// eg. acl:group:001001:upgrade -> WRITE
-				//     CF | TYPE| KEY  | ACTION   Privilege
-				// here group:001001:upgrade is the qualifier name
-				AceType type = AceType.valueOf(parts[0]);
-				ace = new EntryAce(type,parts[1],parts[2]);
-				
-			}
-			
-			acl.addEntryAce(ace, true);
-		}
-		
-		return null;
-	}
-	
-	/**
-	 * Parse the acl information to Put
-	 *  
-	 **/
-	public void parseEntryAcl(Put put,  EntryAcl acl){
-		
-		List<EntryAce> aces = acl.getAllAces();
-		byte[] cf = null;
-		byte[] enable = "enable".getBytes();
-		for(EntryAce ace: aces){
-			
-			String qualifier = ace.getType().qualifier
-					+ CoreConstants.KEYS_SEPARATOR
-					+ ace.getName();
-			cf = ace.getType().colfamily.getBytes();
-			put.add(cf, qualifier.getBytes(), ace.getPrivilege().toString().getBytes());
-			
-			Set<String> permissionSet = ace.getPermissions();
-			for(String permission : permissionSet){
-				
-				String permQualifier = qualifier 
-						+ CoreConstants.KEYS_SEPARATOR
-						+ permission;
-				put.add(cf, permQualifier.getBytes(), enable);
-			}
-		}
-	}
+
 }
