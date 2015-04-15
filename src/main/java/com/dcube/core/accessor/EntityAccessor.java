@@ -134,7 +134,7 @@ public abstract class EntityAccessor<GB extends IEntityEntry> implements IEntity
 	 * get entry wrapper
 	 * @return wrapper object 
 	 **/
-	public abstract GB newEntityEntryObject();
+	public abstract GB newEntryObject();
 		
 	/**
 	 * Release the entity schema and clear the principal in it.

@@ -10,7 +10,7 @@ public class RoleInfoEAccessor extends HEntityAccessor<TraceableEntry>{
 	}
 
 	@Override
-	public TraceableEntry newEntityEntryObject() {
+	public TraceableEntry newEntryObject() {
 		
 		return new TraceableEntry();
 	}

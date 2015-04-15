@@ -26,7 +26,8 @@ public class RCacheAccessor extends REntityAccessor<EntityEntry>{
 	 * get entry wrapper
 	 * @return wrapper object 
 	 **/
-	public EntityEntry newEntityEntryObject(){
+	@Override
+	public EntityEntry newEntryObject(){
 		
 		return new EntityEntry();
 	}

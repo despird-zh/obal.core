@@ -112,7 +112,7 @@ public abstract class REntityAccessor <GB extends IEntityEntry> extends EntityAc
 
 	@Override
 	public GB doGetEntry(String entryKey) throws AccessorException {
-		GB rtv = newEntityEntryObject();
+		GB rtv = newEntryObject();
 		BaseEntity entrySchema = (BaseEntity)getEntitySchema();
 		Jedis jedis = null;
 		try{
@@ -213,7 +213,7 @@ public abstract class REntityAccessor <GB extends IEntityEntry> extends EntityAc
 	@Override
 	public GB doGetEntry(String entryKey, String... attributes)
 			throws AccessorException {
-		GB rtv = newEntityEntryObject();
+		GB rtv = newEntryObject();
 		BaseEntity entitySchema = (BaseEntity)getEntitySchema();
 		List<EntityAttr> attrs = entitySchema.getEntityMeta().getAttrs(attributes);
 		Jedis jedis = null;
