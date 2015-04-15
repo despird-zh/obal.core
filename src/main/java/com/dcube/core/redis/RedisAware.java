@@ -31,10 +31,10 @@ public interface RedisAware {
 	/**
 	 * set HConnection 
 	 **/
-	public void setJedis(Jedis connection);
+	public void returnJedis(Jedis jedis);
 	
 	/**
 	 * get HConnection 
 	 **/
-	public Jedis getJedis();
+	public Jedis borrowJedis();
 }

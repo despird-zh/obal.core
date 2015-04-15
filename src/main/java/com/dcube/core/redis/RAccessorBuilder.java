@@ -19,9 +19,6 @@
  */
 package com.dcube.core.redis;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,11 +29,6 @@ import redis.clients.jedis.JedisPoolConfig;
 import com.dcube.core.AccessorBuilder;
 import com.dcube.core.CoreConstants;
 import com.dcube.core.IBaseAccessor;
-import com.dcube.core.IEntityAccessor;
-import com.dcube.core.IEntityEntry;
-import com.dcube.core.accessor.AccessorContext;
-import com.dcube.core.accessor.EntityEntry;
-import com.dcube.core.accessor.GenericAccessor;
 import com.dcube.core.security.Principal;
 import com.dcube.exception.AccessorException;
 /**
@@ -53,11 +45,7 @@ import com.dcube.exception.AccessorException;
 public class RAccessorBuilder extends AccessorBuilder{
 
 	static Logger LOGGER = LoggerFactory.getLogger(RAccessorBuilder.class);
-	
-	private JedisPoolConfig  config = null;
-	
-	private JedisPool jedisPool = null;
-	
+		
 	/**
 	 * Default Constructor 
 	 **/
@@ -74,59 +62,18 @@ public class RAccessorBuilder extends AccessorBuilder{
 	 **/
 	public void initial() throws AccessorException{
 		
-		config = new JedisPoolConfig();  
-	    config.setMaxIdle(20000);  
-	    config.setTestOnBorrow(true);  
-	    config.setTestOnReturn(true);
-	    try{    
- 
-	    	jedisPool = new JedisPool(config, "192.168.1.133", 6379 , 12000);  
-        } catch(Exception e) {  
-        	
-        	LOGGER.error("Error when create JedisPool object",e); 
-        } 
+		JedisUtils.initialPool();
 	}
 	
 	@Override
 	public void assembly(Principal principal,IBaseAccessor accessor) {
-		Jedis jedis = null;		
-		if(accessor instanceof RedisAware){
-			
-			try {
-				
-				jedis = jedisPool.getResource();
-				((RedisAware) accessor).setJedis(jedis);
-				
-			} catch (Exception e) {
-				
-				LOGGER.error("Error when assembly Accessor:set Jedis",e);
-			}			
-		}
-				
+		
+		// ignore		
 	}
 
 	@Override
 	public void assembly(IBaseAccessor mockupAccessor,
 			IBaseAccessor... accessors) throws AccessorException {
-		
-		Jedis jedis = null;		
-		for(IBaseAccessor accessor:accessors){
-			
-			if((mockupAccessor instanceof RedisAware) 
-					&& (accessor instanceof RedisAware)){
-				
-				jedis = ((RedisAware) mockupAccessor).getJedis();
-				((RedisAware) accessor).setJedis(jedis);		
-			}
-
-		}
-	}
-	
-	/**
-	 * Return the Jedis object 
-	 **/
-	public void returnJedis(Jedis jedis){
-		
-		jedisPool.returnResource(jedis);
+		// ignore
 	}
 }

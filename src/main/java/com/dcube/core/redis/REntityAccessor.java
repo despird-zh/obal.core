@@ -28,7 +28,6 @@ import org.slf4j.LoggerFactory;
 
 import redis.clients.jedis.Jedis;
 
-import com.dcube.core.AccessorFactory;
 import com.dcube.core.CoreConstants;
 import com.dcube.core.EntryFilter;
 import com.dcube.core.EntryKey;
@@ -45,9 +44,7 @@ import com.dcube.meta.EntityAttr.AttrMode;
 public abstract class REntityAccessor <GB extends IEntityEntry> extends EntityAccessor<GB> implements RedisAware{
 
 	Logger LOGGER = LoggerFactory.getLogger(REntityAccessor.class);
-	
-	private Jedis jedis;
-	
+		
 	public REntityAccessor(String accessorName, AccessorContext context) {
 		super(accessorName, context);
 	}
@@ -57,9 +54,13 @@ public abstract class REntityAccessor <GB extends IEntityEntry> extends EntityAc
 
 		EntryKey rtv = null;
 		BaseEntity entitySchema = (BaseEntity)getEntitySchema();
-
-		parse(entitySchema.getEntityMeta().getAllAttrs(), this.jedis,entryInfo);
-
+		Jedis jedis = null;
+		try{
+			jedis = this.borrowJedis();
+			parse(entitySchema.getEntityMeta().getAllAttrs(), jedis, entryInfo);
+		}finally{
+			this.returnJedis(jedis);
+		}
 		rtv = entryInfo.getEntryKey();
 
 		return rtv;
@@ -77,29 +78,35 @@ public abstract class REntityAccessor <GB extends IEntityEntry> extends EntityAc
             LOGGER.debug("--==>>attr:{} - value:{}",attr.getAttrName(),value);
         }
         String redisKey = entitySchema.getEntityName() + CoreConstants.KEYS_SEPARATOR + entryKey;
-        switch(attr.mode){
-        
-            case PRIMITIVE:
-            	RWrapperUtils.putPrimitiveValue(jedis,redisKey, attr, value);
-            	break;
-            case MAP:
-            	if(!(value instanceof Map<?,?>))
-        			throw new AccessorException("the attr:{} value is not Map object",attrName);        		
-            	RWrapperUtils.putMapValue(jedis,redisKey, attr, (Map<String,Object>)value);	
-        		break;
-            case LIST:
-            	if(!(value instanceof List<?>))
-        			throw new AccessorException("the attr:{} value is not List object",attrName);        		
-            	RWrapperUtils.putListValue(jedis,redisKey, attr, (List<Object>)value);	
-        		break;
-            case SET:
-            	if(!(value instanceof List<?>))
-        			throw new AccessorException("the attr:{} value is not List object",attrName);        		
-            	RWrapperUtils.putSetValue(jedis, redisKey, attr, (Set<Object>)value);	
-        		break;
-            default:
-            	break;      	
-        }
+		Jedis jedis = null;
+		try{
+			jedis = this.borrowJedis();
+	        switch(attr.mode){
+	        
+	            case PRIMITIVE:
+	            	RWrapperUtils.putPrimitiveValue(jedis,redisKey, attr, value);
+	            	break;
+	            case MAP:
+	            	if(!(value instanceof Map<?,?>))
+	        			throw new AccessorException("the attr:{} value is not Map object",attrName);        		
+	            	RWrapperUtils.putMapValue(jedis,redisKey, attr, (Map<String,Object>)value);	
+	        		break;
+	            case LIST:
+	            	if(!(value instanceof List<?>))
+	        			throw new AccessorException("the attr:{} value is not List object",attrName);        		
+	            	RWrapperUtils.putListValue(jedis,redisKey, attr, (List<Object>)value);	
+	        		break;
+	            case SET:
+	            	if(!(value instanceof List<?>))
+	        			throw new AccessorException("the attr:{} value is not List object",attrName);        		
+	            	RWrapperUtils.putSetValue(jedis, redisKey, attr, (Set<Object>)value);	
+	        		break;
+	            default:
+	            	break;      	
+	        }
+		}finally{
+			this.returnJedis(jedis);
+		}
 		return rtv;
 	}
 
@@ -107,8 +114,13 @@ public abstract class REntityAccessor <GB extends IEntityEntry> extends EntityAc
 	public GB doGetEntry(String entryKey) throws AccessorException {
 		GB rtv = newEntityEntryObject();
 		BaseEntity entrySchema = (BaseEntity)getEntitySchema();
-
-		wrap(entrySchema.getEntityMeta().getAllAttrs(),entryKey, jedis, rtv);
+		Jedis jedis = null;
+		try{
+			jedis = this.borrowJedis();
+			wrap(entrySchema.getEntityMeta().getAllAttrs(),entryKey, jedis, rtv);
+		}finally{
+			this.returnJedis(jedis);
+		}
 		return rtv;
 	}
 
@@ -121,30 +133,36 @@ public abstract class REntityAccessor <GB extends IEntityEntry> extends EntityAc
 		EntityAttr attr = entitySchema.getEntityMeta().getAttr(attrName);
 
     	String redisKey = entitySchema.getEntityName() + CoreConstants.KEYS_SEPARATOR + entryKey;
-    	switch(attr.mode){
-	    	case PRIMITIVE:
-	    		byte[] cell = jedis.hget(redisKey.getBytes(), attr.getAttrName().getBytes());
-				rtv = RWrapperUtils.getPrimitiveValue(attr, cell);
-	    		break;
-	    	case MAP:
-	    		redisKey += CoreConstants.KEYS_SEPARATOR + attr.getAttrName();
-	        	Map<byte[], byte[]> cells = jedis.hgetAll(redisKey.getBytes());
-				rtv = RWrapperUtils.getMapValue(attr, cells);		    		
-	    		break;
-	    	case LIST:
-	    		redisKey += CoreConstants.KEYS_SEPARATOR + attr.getAttrName();
-	    		long len = jedis.llen(redisKey);
-	    		List<byte[]> celllist = jedis.lrange(redisKey.getBytes(), 0, len);
-				rtv = RWrapperUtils.getListValue(attr, celllist);		    		
-	    		break;
-	    	case SET:
-	    		redisKey += CoreConstants.KEYS_SEPARATOR + attr.getAttrName();
-	    		Set<byte[]> cellset = jedis.smembers(redisKey.getBytes());
-				rtv = RWrapperUtils.getSetValue(attr, cellset);	
-	    		break;
-	    	default:
-	    		break;
-    	}
+		Jedis jedis = null;
+		try{
+			jedis = this.borrowJedis();
+	    	switch(attr.mode){
+		    	case PRIMITIVE:
+		    		byte[] cell = jedis.hget(redisKey.getBytes(), attr.getAttrName().getBytes());
+					rtv = RWrapperUtils.getPrimitiveValue(attr, cell);
+		    		break;
+		    	case MAP:
+		    		redisKey += CoreConstants.KEYS_SEPARATOR + attr.getAttrName();
+		        	Map<byte[], byte[]> cells = jedis.hgetAll(redisKey.getBytes());
+					rtv = RWrapperUtils.getMapValue(attr, cells);		    		
+		    		break;
+		    	case LIST:
+		    		redisKey += CoreConstants.KEYS_SEPARATOR + attr.getAttrName();
+		    		long len = jedis.llen(redisKey);
+		    		List<byte[]> celllist = jedis.lrange(redisKey.getBytes(), 0, len);
+					rtv = RWrapperUtils.getListValue(attr, celllist);		    		
+		    		break;
+		    	case SET:
+		    		redisKey += CoreConstants.KEYS_SEPARATOR + attr.getAttrName();
+		    		Set<byte[]> cellset = jedis.smembers(redisKey.getBytes());
+					rtv = RWrapperUtils.getSetValue(attr, cellset);	
+		    		break;
+		    	default:
+		    		break;
+	    	}
+		}finally{
+			this.returnJedis(jedis);
+		}
 		return (K)rtv;
 	}
 
@@ -157,11 +175,17 @@ public abstract class REntityAccessor <GB extends IEntityEntry> extends EntityAc
 		for(String entrykey:entryKeys){
 			
 			String redisKey = entitySchema.getEntityName()+ CoreConstants.KEYS_SEPARATOR + entrykey;
-			// delete primitive data
-			jedis.del(redisKey); 
-			for(EntityAttr attr:attrs){
-				// delete non-primitive data
-				jedis.del(redisKey + CoreConstants.KEYS_SEPARATOR + attr.getAttrName());
+			Jedis jedis = null;
+			try{
+				jedis = this.borrowJedis();
+				// delete primitive data
+				jedis.del(redisKey); 
+				for(EntityAttr attr:attrs){
+					// delete non-primitive data
+					jedis.del(redisKey + CoreConstants.KEYS_SEPARATOR + attr.getAttrName());
+				}
+			}finally{
+				this.returnJedis(jedis);
 			}
 		}
 	}
@@ -192,8 +216,13 @@ public abstract class REntityAccessor <GB extends IEntityEntry> extends EntityAc
 		GB rtv = newEntityEntryObject();
 		BaseEntity entitySchema = (BaseEntity)getEntitySchema();
 		List<EntityAttr> attrs = entitySchema.getEntityMeta().getAttrs(attributes);
-		
-		wrap(attrs,entryKey, jedis, rtv);
+		Jedis jedis = null;
+		try{
+			jedis = this.borrowJedis();
+			wrap(attrs,entryKey, jedis, rtv);
+		}finally{
+			this.returnJedis(jedis);
+		}
 		return rtv;
 	}
 
@@ -203,18 +232,23 @@ public abstract class REntityAccessor <GB extends IEntityEntry> extends EntityAc
 		BaseEntity entitySchema = (BaseEntity)getEntitySchema();
 		// get non-primitive attributes
 		EntityAttr attr = entitySchema.getEntityMeta().getAttr(attribute);
-		
-		for(String entrykey:entryKeys){
-			
-			String redisKey = entitySchema.getEntityName()+ CoreConstants.KEYS_SEPARATOR + entrykey;
-					
-			if(attr.mode != AttrMode.PRIMITIVE){
-				// delete non-primitive data
-				jedis.del(redisKey + CoreConstants.KEYS_SEPARATOR + attr.getAttrName());
-			}else{
-				// delete primitive data	
-				jedis.del(redisKey); 
+		Jedis jedis = null;
+		try{
+			jedis = this.borrowJedis();
+			for(String entrykey:entryKeys){
+				
+				String redisKey = entitySchema.getEntityName()+ CoreConstants.KEYS_SEPARATOR + entrykey;
+						
+				if(attr.mode != AttrMode.PRIMITIVE){
+					// delete non-primitive data
+					jedis.del(redisKey + CoreConstants.KEYS_SEPARATOR + attr.getAttrName());
+				}else{
+					// delete primitive data	
+					jedis.del(redisKey); 
+				}
 			}
+		}finally{
+			this.returnJedis(jedis);
 		}
 	}
 
@@ -329,26 +363,31 @@ public abstract class REntityAccessor <GB extends IEntityEntry> extends EntityAc
 	}
 	
 	@Override
-	public void setJedis(Jedis jedis) {
+	public void returnJedis(Jedis jedis){
 
-		this.jedis = jedis;
+		try {
+			JedisUtils.returnJedis(jedis);
+		} catch (AccessorException e) {
+
+			LOGGER.error("Fail return jedis.",e);
+		}
 	}
 
 	@Override
-	public Jedis getJedis() {
-		
-		return this.jedis;
+	public Jedis borrowJedis() {
+		Jedis jedis = null;
+		try {
+			jedis = JedisUtils.borrowJedis();
+		} catch (AccessorException e) {
+
+			LOGGER.error("Fail return jedis.",e);
+		}
+		return jedis;
 	}
 
 	@Override
 	public void close(){
 		try {
-			// embed means share connection, close it directly affect other accessors using this conn.
-			if (jedis != null && !isEmbed()){
-				
-				RAccessorBuilder builder = (RAccessorBuilder)AccessorFactory.getAccessorBuilder(CoreConstants.BUILDER_REDIS);
-				builder.returnJedis(jedis);
-			}
 
 			super.close();
 			
