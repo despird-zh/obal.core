@@ -1,13 +1,11 @@
 package com.dcube.redis;
 
 import com.dcube.core.EntryFilter;
-import com.dcube.core.EntryKey;
 import com.dcube.core.accessor.AccessorContext;
 import com.dcube.core.accessor.EntryCollection;
 import com.dcube.core.accessor.EntityEntry;
 import com.dcube.core.redis.REntityAccessor;
 import com.dcube.exception.AccessorException;
-import com.dcube.meta.BaseEntity;
 
 public class TestAccessor extends REntityAccessor<EntityEntry>{
 
