@@ -68,7 +68,7 @@ public class CoreConfigs{
 		
 		String val = null;
 		if(overrideConfig != null){
-			overrideConfig.getString(key);
+			val = overrideConfig.getString(key);
 		}
 		
 		if(val == null || "".equals(val)){
