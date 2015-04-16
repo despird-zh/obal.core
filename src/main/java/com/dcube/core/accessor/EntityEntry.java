@@ -63,6 +63,8 @@ public class EntityEntry extends GenericEntry implements IEntityEntry{
 	
 	/**
 	 * Constructor with EntryKey
+	 * @param entryKey the entry key
+	 * @return EntityEntry
 	 **/
 	public EntityEntry (EntryKey entryKey){
 		
@@ -70,48 +72,88 @@ public class EntityEntry extends GenericEntry implements IEntityEntry{
 		this.setEntryKey(entryKey);
 	}
 	
+	/**
+	 * Get the entity name
+	 * 
+	 * @return String the entity name 
+	 **/
 	@Override
 	public String getEntityName(){
 		
 		return getEntryKey().getEntityName();
 	}
 	
+	/**
+	 * Get the entry key
+	 * @return EntryKey 
+	 **/
 	@Override
 	public EntryKey getEntryKey() {
 		
 		return this.entryKey;
 	}
 
+	/**
+	 * Set the entry key
+	 * @param entryKey the EntryKey object 
+	 **/
 	@Override
 	public void setEntryKey(EntryKey entryKey) {
 		
 		this.entryKey = entryKey;
 	}
 
+	/**
+	 * Get the entity attribute
+	 * @param attrname the attribute name
+	 * @return EntityAttr 
+	 **/
 	@Override
 	public EntityAttr getAttr(String attrname) {
 		
 		return getAttr(entryKey.getEntityName(), attrname);
 	}
 
+	/**
+	 * Get the attribute value via attribute name
+	 * @param attrname the attribute name
+	 * @param type the class of target type
+	 * @return K value casted with specified type 
+	 **/
 	@Override
 	public <K> K getAttrValue(String attrname, Class<K> type) {
 		
 		return getAttrValue(entryKey.getEntityName(), attrname,type);
 	}
 
+	/**
+	 * Get attribute value
+	 * @param attrname the attribute name
+	 * @return Object the value object 
+	 **/
 	@Override
 	public Object getAttrValue(String attrname) {
 		
 		return getAttrValue(entryKey.getEntityName(), attrname);
 	}
 
+	/**
+	 * Set attribute value
+	 * 
+	 * @param attrname the attribute name
+	 * @param value the value object
+	 *  
+	 **/
 	@Override
 	public void setAttrValue(String attrname, Object value) {
 		
 		super.setAttrValue(entryKey.getEntityName(), attrname, value);
 	}
 
+	/**
+	 * Get the Predicates of audit info
+	 * @return Map<String, Object>
+	 **/
 	@Override
 	public Map<String, Object> getAuditPredicates() {
 		

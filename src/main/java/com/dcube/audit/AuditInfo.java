@@ -296,8 +296,10 @@ public class AuditInfo implements EventPayload{
 		this.subject = null;
 		this.accessPoint = null;
 		this.operation = null;
-		this.verbMap.clear();
-		this.verbMap = null;
+		
+		if(verbMap != null)// clear the verbs map
+			this.verbMap.clear();
+		
 		this.started = false;
 	}
 	

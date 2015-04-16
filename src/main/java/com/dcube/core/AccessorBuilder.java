@@ -108,7 +108,9 @@ public abstract class AccessorBuilder {
 				continue;
 			}
 			try {	
+				accessorClass = clazz.getName();
 				IBaseAccessor instance = (IBaseAccessor) clazz.newInstance();
+				
 				accessorName = instance.getAccessorName();	
 				@SuppressWarnings("unchecked")
 				Class<? extends IBaseAccessor> clazzTemp = (Class<? extends IBaseAccessor>)clazz;

@@ -49,12 +49,24 @@ public class GenericEntry implements IGenericEntry{
 		itemMap = new HashMap<String,AttributeItem> ();
 	}
 	
+	/**
+	 * Get the attribute object via entity name and attribute name
+	 * 
+	 * @param entityname the entity name
+	 * @param attrname the attribute name 
+	 * 
+	 * @return EntityAttr 
+	 **/
 	public EntityAttr getAttr(String entityname, String attrname) {
 		
 		AttributeItem item = itemMap.get(entityname + EntityConstants.NAME_SEPARATOR + attrname);
 		return item == null? null : item.attribute;
 	}
 
+	/**
+	 * Get the attribute list 
+	 * @return List<EntityAttr>
+	 **/
 	public List<EntityAttr> getAttrs() {
 		
 		List<EntityAttr> rtv = new ArrayList<EntityAttr>();
@@ -67,6 +79,15 @@ public class GenericEntry implements IGenericEntry{
 		return rtv.size() == 0? null:rtv;
 	}
 
+	/**
+	 * Get the value of attribute and return with casted object.
+	 * 
+	 * @param entityname the entity name
+	 * @param attrname the attribute name
+	 * @param targetType the type of target
+	 * 
+	 * @return K type to cast the value
+	 **/
 	@SuppressWarnings("unchecked")
 	public <K> K getAttrValue(String entityname, String attrname, Class<K> targetType) {
 
@@ -81,6 +102,13 @@ public class GenericEntry implements IGenericEntry{
 		return null;
 	}
 
+	/**
+	 * Get the value of specified attribute
+	 * @param entityname the entity name
+	 * @param attrname the attribute name
+	 * 
+	 * @return Object the value object
+	 **/
 	public Object getAttrValue(String entityname, String attrname){
 		
 		AttributeItem e = itemMap.get(entityname + EntityConstants.NAME_SEPARATOR + attrname);
@@ -90,6 +118,13 @@ public class GenericEntry implements IGenericEntry{
 		return e.currentVal;
 	}
 	
+	/**
+	 * Set the attribute with value
+	 * 
+	 * @param attribute the attribute object
+	 * @param value the value object
+	 * 
+	 **/
 	public void setAttrValue(EntityAttr attribute, Object value) {
 		
 		AttributeItem item = itemMap.get(attribute.getFullName());
@@ -103,6 +138,14 @@ public class GenericEntry implements IGenericEntry{
 				
 	}
 	
+	/**
+	 * Set the attribute with value
+	 * 
+	 * @param entityname the entity name
+	 * @param attrname the attribute name
+	 * @param value the value object
+	 * 
+	 **/
 	public void setAttrValue(String entityname, String attrname, Object value) {
 		
 		AttributeItem item = itemMap.get(entityname + EntityConstants.NAME_SEPARATOR + attrname);
@@ -116,16 +159,30 @@ public class GenericEntry implements IGenericEntry{
 		
 	}
 	
+	/**
+	 * Get the item map
+	 * @return Map<String, AttributeItem> the map of AttributeItem
+	 **/
 	protected Map<String, AttributeItem> getItemMap(){
 		
 		return this.itemMap;
 	}
 	
+	/**
+	 * Get the AttributeItem object
+	 * @param entityname the entity name
+	 * @param attrname the attribute name
+	 * @return  AttributeItem 
+	 **/
 	protected AttributeItem getAttributeItem(String entityname, String attrname){
 		
 		return itemMap.get(entityname + EntityConstants.NAME_SEPARATOR + attrname);
 	}
 	
+	/**
+	 * Get the changed item list
+	 * @return  List<AttributeItem>
+	 **/
 	public List<AttributeItem> getChangedItems(){
 		
 		List<AttributeItem> rtv = new ArrayList<AttributeItem>();
@@ -135,7 +192,7 @@ public class GenericEntry implements IGenericEntry{
 				rtv.add(e.getValue());
 		}
 		
-		return rtv.size() == 0? null:rtv;
+		return rtv;
 	}
 	
 	/**

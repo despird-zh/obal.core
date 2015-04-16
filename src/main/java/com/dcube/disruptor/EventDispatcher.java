@@ -71,6 +71,7 @@ public class EventDispatcher {
 			@Override
 			public void shutdown() {
 				instance.shutdown();
+				sendFeedback(false, "EventDispatcher shutdown done");
 			}
 
 		};

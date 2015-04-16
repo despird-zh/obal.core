@@ -147,9 +147,12 @@ public class GenericContext {
 			}else{
 				// ignore
 			}
-		}else if(auditInfo == null){
+			return;
+			
+		}else if(!embed && auditInfo == null){
 			auditInfo = new AuditInfo(operation);
-		}else{
+			
+		}else if(!embed && auditInfo != null){
 			auditInfo.reset();
 			auditInfo.setOperation(operation);
 		}

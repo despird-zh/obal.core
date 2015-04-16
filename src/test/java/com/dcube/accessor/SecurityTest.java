@@ -30,7 +30,7 @@ public class SecurityTest extends BaseTester{
 		CoreFacade.start();
 	}
 	
-	public void Dtest001CreatePrincipal(){
+	public void test001CreatePrincipal(){
 		
 		UserInfoEAccessor pa = null;
 		Principal princ = new Principal("demo1","demouser1","demopwd","demosrc");
@@ -68,7 +68,7 @@ public class SecurityTest extends BaseTester{
 		}
 	}
 
-	public void test002UpdateAttr(){
+	public void Dtest002UpdateAttr(){
 		
 		PrincipalGAccessor pa = null;
 		UserInfoEAccessor uea = null;
@@ -94,7 +94,7 @@ public class SecurityTest extends BaseTester{
 		}
 	}
 	
-	public void test003Group(){
+	public void Dtest003Group(){
 		
 		GroupInfoEAccessor pa = null;
 		try {

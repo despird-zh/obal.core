@@ -19,11 +19,8 @@
  */
 package com.dcube.accessor.hbase;
 
-import com.dcube.audit.AuditInfo;
 import com.dcube.core.accessor.EntityEntry;
-import com.dcube.core.accessor.TraceableEntry;
 import com.dcube.core.hbase.HEntityAccessor;
-import com.dcube.meta.BaseEntity;
 import com.dcube.meta.EntityConstants;
 
 public class AuditEAccessor extends HEntityAccessor<EntityEntry>{

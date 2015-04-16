@@ -118,7 +118,7 @@ public final class AccessorFactory {
 
 			@Override
 			public void shutdown() {
-				// ignore				
+				sendFeedback(false, "AccessorFactory shutdown do nothing.");			
 			}
 			
 		};

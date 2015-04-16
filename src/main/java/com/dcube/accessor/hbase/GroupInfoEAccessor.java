@@ -2,11 +2,12 @@ package com.dcube.accessor.hbase;
 
 import com.dcube.core.accessor.TraceableEntry;
 import com.dcube.core.hbase.HEntityAccessor;
+import com.dcube.meta.EntityConstants;
 
 public class GroupInfoEAccessor extends HEntityAccessor<TraceableEntry>{
 
-	public GroupInfoEAccessor(String accessorName) {
-		super(accessorName);
+	public GroupInfoEAccessor() {
+		super(EntityConstants.ACCESSOR_ENTITY_GROUP);
 	}
 
 	@Override

@@ -184,7 +184,7 @@ public abstract class HEntityAccessor<GB extends IEntityEntry> extends EntityAcc
 			AuditInfo audit = context.getAuditInfo();
 			audit.getVerb(AUDIT_OPER_SCAN)
 				.setTarget(schema.getEntityName());
-			audit.addPredicate(AUDIT_OPER_SCAN, Predicate.KEY_FILTER, scanfilter.toString());
+			audit.addPredicate(AUDIT_OPER_SCAN, Predicate.KEY_FILTER, scanfilter == null?"":scanfilter.toString());
 			context.auditEnd();
 		}
 		

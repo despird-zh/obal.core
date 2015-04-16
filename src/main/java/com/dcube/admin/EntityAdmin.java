@@ -39,7 +39,7 @@ public class EntityAdmin {
 
 			@Override
 			public void initial() {
-				sendFeedback(false,"EntityAdmin initial nothing done");
+				sendFeedback(false,"EntityAdmin initial do nothing");
 			}
 
 			@Override
@@ -51,8 +51,8 @@ public class EntityAdmin {
 
 			@Override
 			public void shutdown() {
-				// TODO Auto-generated method stub
 				
+				sendFeedback(false,"EntityAdmin shutdown do nothing");
 			}		
 			
 		};
