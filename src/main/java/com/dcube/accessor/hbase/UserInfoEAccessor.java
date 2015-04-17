@@ -89,6 +89,7 @@ public class UserInfoEAccessor extends HEntityAccessor<TraceableEntry> {
 					
 					entry.setAttrValue(meta.getAttr(UserEnum.Profile.attribute), toObject.getProfileSettings());
 					
+					entry.setTraceInfo(toObject.getTraceInfo());
 					return entry;
 				}
 				

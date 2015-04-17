@@ -85,6 +85,7 @@ public class RoleInfoEAccessor extends HEntityAccessor<TraceableEntry>{
 					}
 					entry.setAttrValue(meta.getAttr(RoleEnum.Groups.attribute), attrMap);
 					
+					entry.setTraceInfo(toObject.getTraceInfo());
 					return entry;
 				}
 				

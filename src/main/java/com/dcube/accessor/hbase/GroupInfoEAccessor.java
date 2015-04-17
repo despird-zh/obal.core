@@ -88,6 +88,7 @@ public class GroupInfoEAccessor extends HEntityAccessor<TraceableEntry>{
 					entry.setAttrValue(meta.getAttr(GroupEnum.Groups.attribute), attrMap);
 					entry.setAttrValue(meta.getAttr(GroupEnum.Parent.attribute), toObject.getParent());
 					
+					entry.setTraceInfo(toObject.getTraceInfo());
 					return entry;
 				}
 				

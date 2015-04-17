@@ -27,6 +27,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import com.dcube.core.EntryKey;
+import com.dcube.core.TraceInfo;
 import com.dcube.meta.EntityConstants;
 
 /**
@@ -43,6 +44,7 @@ public class Principal extends EntryKey{
 		super(EntityConstants.ENTITY_USER,key);
 
 	}
+	
 	/**
 	 * Constructor for new Principal
 	 * 
@@ -74,6 +76,8 @@ public class Principal extends EntryKey{
 		this.source = source;
 	}
 	
+	/** tracing information */
+	private TraceInfo traceInfo = null;
 	/** the account information */
 	private String account = "";
 	/** the name  */
@@ -188,6 +192,16 @@ public class Principal extends EntryKey{
 	public Set<String> getRoles(){
 		
 		return this.roles;
+	}
+	
+	public TraceInfo getTraceInfo(){
+		
+		return this.traceInfo;
+	}
+	
+	public void setTraceInfo(TraceInfo traceInfo){
+		
+		this.traceInfo = traceInfo;
 	}
 	
 	@Override
