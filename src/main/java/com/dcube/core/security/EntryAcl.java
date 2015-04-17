@@ -5,11 +5,7 @@ import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.ObjectMapper;
-
-import com.dcube.core.CoreConstants;
 import com.dcube.core.security.EntryAce.AceType;
-import com.dcube.exception.SecurityException;
 /**
  * EntryAcl is the entry access control list, item of it is access control setting for visitor
  * 

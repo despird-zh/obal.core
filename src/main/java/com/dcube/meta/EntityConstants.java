@@ -130,7 +130,8 @@ public class EntityConstants {
 		Password("i_password","password"),
 		Salt("i_salt","salt"),
 		Groups("i_groups","groups"),
-		Roles("i_roles","roles");
+		Roles("i_roles","roles"),
+		Profile("i_profile","profile");
 		
 		public final String attribute;
 		public final String qualifier;

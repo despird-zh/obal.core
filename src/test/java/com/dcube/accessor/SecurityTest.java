@@ -87,7 +87,7 @@ public class SecurityTest extends BaseTester{
 			Assert.assertEquals(princ2.getName(), "newUserName");
 			
 		} catch (BaseException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}finally{
 			

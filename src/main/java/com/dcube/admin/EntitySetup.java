@@ -102,7 +102,10 @@ public class EntitySetup {
 				UserEnum.Roles.colfamily, 
 				UserEnum.Roles.qualifier);
 		meta.addAttr(attr);
-		
+		attr = new EntityAttr(UserEnum.Profile.attribute, EntityAttr.AttrMode.MAP, EntityAttr.AttrType.STRING, 				
+				UserEnum.Profile.colfamily, 
+				UserEnum.Profile.qualifier);
+		meta.addAttr(attr);
 		eadmin.setupSchema(meta);
 
 	}

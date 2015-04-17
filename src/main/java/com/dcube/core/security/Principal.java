@@ -21,6 +21,7 @@ package com.dcube.core.security;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -85,8 +86,10 @@ public class Principal extends EntryKey{
 	private String salt = "";
 	/** the user profile info holder */
 	private Profile profile = null;
-	private Map<String,Object> groups;
-	private Map<String,Object> roles;
+	
+	private Set<String> groups;
+	
+	private Set<String> roles;
 	
 	/**
 	 * Get Account information 
@@ -168,21 +171,21 @@ public class Principal extends EntryKey{
 		return false;
 	}
 		
-	public void setGroups(Map<String,Object> groups){
+	public void setGroups(Set<String> groups){
 		
 		this.groups = groups;
 	}
 	
-	public Map<String,Object> getGroups(){
+	public Set<String> getGroups(){
 		
 		return this.groups;
 	}
 		
-	public void setRoles(Map<String,Object> roles){
+	public void setRoles(Set<String> roles){
 		this.roles = roles;
 	}
 	
-	public Map<String,Object> getRoles(){
+	public Set<String> getRoles(){
 		
 		return this.roles;
 	}
