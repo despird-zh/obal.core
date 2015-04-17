@@ -53,7 +53,7 @@ public class UserInfoEAccessor extends HEntityAccessor<TraceableEntry> {
 				public TraceableEntry toSource(Principal toObject)
 						throws BaseException {
 					
-					String id = toObject.getId();
+					String id = toObject.getKey();
 					
 					TraceableEntry entry = new TraceableEntry(EntityConstants.ENTITY_USER,id);
 					EntityMeta meta = EntityManager.getInstance().getEntityMeta(EntityConstants.ENTITY_USER);

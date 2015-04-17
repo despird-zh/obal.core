@@ -30,7 +30,7 @@ public class SecurityTest extends BaseTester{
 		CoreFacade.start();
 	}
 	
-	public void test001CreatePrincipal(){
+	public void Dtest001CreatePrincipal(){
 		
 		UserInfoEAccessor pa = null;
 		Principal princ = new Principal("demo1","demouser1","demopwd","demosrc");
@@ -68,18 +68,19 @@ public class SecurityTest extends BaseTester{
 		}
 	}
 
-	public void Dtest002UpdateAttr(){
+	public void test002UpdateAttr(){
 		
 		PrincipalGAccessor pa = null;
 		UserInfoEAccessor uea = null;
 		Principal princ = new Principal("demo1","demouser1","demopwd","demosrc");
 		//princ.setKey("101001");
 		try {
-			pa = AccessorUtils.getEntityAccessor(princ, EntityConstants.ACCESSOR_GENERIC_USER);
+			pa = AccessorUtils.getGenericAccessor(princ, EntityConstants.ACCESSOR_GENERIC_USER);
 			Principal princ2 = pa.getPrincipalByAccount("demo1");
+			
 			uea = AccessorFactory.buildEntityAccessor(princ, EntityConstants.ENTITY_USER);
 
-			uea.doPutEntryAttr(princ2.getId(), "i_name", "newUserName");
+			uea.doPutEntryAttr(princ2.getKey(), "i_name", "newUserName");
 			
 			princ2 = pa.getPrincipalByAccount("demo1");
 			

@@ -85,4 +85,21 @@ public class CoreConfigs{
 		
 		return getString(key,null);
 	}
+	
+	/**
+	 * Get the String Array value of key 
+	 **/
+	public static String[] getStringArray(String key){
+		
+		String[] vals = null;
+		if(overrideConfig != null){
+			vals = overrideConfig.getStringArray(key);
+		}
+		
+		if(vals == null || vals.length == 0){
+			vals = selfConfig.getStringArray(key);
+		}
+		
+		return vals;
+	}
 }

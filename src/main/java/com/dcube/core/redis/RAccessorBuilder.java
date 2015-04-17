@@ -22,11 +22,8 @@ package com.dcube.core.redis;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.JedisPoolConfig;
-
 import com.dcube.core.AccessorBuilder;
+import com.dcube.core.CoreConfigs;
 import com.dcube.core.CoreConstants;
 import com.dcube.core.IBaseAccessor;
 import com.dcube.core.security.Principal;
@@ -53,6 +50,7 @@ public class RAccessorBuilder extends AccessorBuilder{
 		
 		super(CoreConstants.BUILDER_REDIS);
 		initial(); // initialize hbase access 
+		loadAccessors();
 	}
 
 	/**
@@ -63,6 +61,25 @@ public class RAccessorBuilder extends AccessorBuilder{
 	public void initial() throws AccessorException{
 		
 		JedisUtils.initialPool();
+	}
+	
+
+	/**
+	 * Load Accessor classes 
+	 *  
+	 **/
+	private void loadAccessors() throws AccessorException{
+		
+		// detect the accessor classes under package
+		String[] packages = CoreConfigs.getStringArray(CoreConstants.CONFIG_ACCESSOR_PACKAGE + CoreConstants.BUILDER_REDIS);
+		
+		if(packages.length > 0){
+
+			for(String pkg: packages){
+				// detect package accessor classes
+				detectAccessors(pkg);
+			}
+		}
 	}
 	
 	@Override

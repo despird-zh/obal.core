@@ -1,9 +1,12 @@
 package com.dcube.core.security;
 
+import java.util.Set;
+
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import com.dcube.core.EntryKey;
+import com.dcube.core.TraceInfo;
 import com.dcube.meta.EntityConstants;
 
 /**
@@ -20,7 +23,14 @@ public class UserRole extends EntryKey{
 
 	/** role name */
 	private String role = null;
-	
+	/** tracing information */
+	private TraceInfo traceInfo = null;
+	/** the users under this group */
+	private Set<String> users;
+	/** the subgroups */
+	private Set<String> groups;
+	/** description */
+	private String description = null;
 	/**
 	 * Constructor 
 	 **/
@@ -42,11 +52,43 @@ public class UserRole extends EntryKey{
 	 * get the role name
 	 * @return role name 
 	 **/
-	public String roleName(){
+	public String name(){
 		
 		return role;
 	}
 	
+	public TraceInfo getTraceInfo() {
+		return traceInfo;
+	}
+
+	public void setTraceInfo(TraceInfo traceInfo) {
+		this.traceInfo = traceInfo;
+	}
+
+	public Set<String> getUsers() {
+		return users;
+	}
+
+	public void setUsers(Set<String> users) {
+		this.users = users;
+	}
+
+	public Set<String> getGroups() {
+		return groups;
+	}
+
+	public void setGroups(Set<String> groups) {
+		this.groups = groups;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	/**
 	 * check user owns role or not
 	 * @return true: own ;false not own 
@@ -70,7 +112,7 @@ public class UserRole extends EntryKey{
 		UserRole that = (UserRole) other;
 		// step 4
 		return new EqualsBuilder()
-			.append(this.role, that.roleName()).isEquals();
+			.append(this.role, that.name()).isEquals();
 	}
 
 	@Override

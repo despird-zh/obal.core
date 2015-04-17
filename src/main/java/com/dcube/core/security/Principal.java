@@ -24,9 +24,9 @@ import java.util.Map;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.codehaus.jackson.annotate.JsonCreator;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.codehaus.jackson.annotate.JsonProperty;
+
+import com.dcube.core.EntryKey;
+import com.dcube.meta.EntityConstants;
 
 /**
  * Store the pincipal info of user
@@ -35,12 +35,12 @@ import org.codehaus.jackson.annotate.JsonProperty;
  * @version 1.0 2014-01-01
  * @see com.dcube.core.security.Profile
  **/
-@JsonIgnoreProperties({"profile"})
-public class Principal{
+public class Principal extends EntryKey{
 	
-	public Principal(String id){
+	public Principal(String key){
 		
-		this.id = id;
+		super(EntityConstants.ENTITY_USER,key);
+
 	}
 	/**
 	 * Constructor for new Principal
@@ -51,7 +51,7 @@ public class Principal{
 	 * 
 	 **/
 	public Principal(String account, String name, String password) {
-		
+		super(null,null);
 		this.account = account;
 		this.name = name;
 		this.password = password;
@@ -65,16 +65,14 @@ public class Principal{
 	 * @param password the password
 	 * @param source the account source
 	 **/	
-	@JsonCreator
-	public Principal(@JsonProperty("account") String account, @JsonProperty("name") String name, @JsonProperty("password") String password, @JsonProperty("source") String source) {
-		
+	public Principal(String account, String name,  String password,  String source) {
+		super(null,null);
 		this.account = account;
 		this.name = name;
 		this.password = password;
 		this.source = source;
 	}
 	
-	private String id = null;
 	/** the account information */
 	private String account = "";
 	/** the name  */
@@ -89,18 +87,10 @@ public class Principal{
 	private Profile profile = null;
 	private Map<String,Object> groups;
 	private Map<String,Object> roles;
-		
-	public String getId() {
-		return id;
-	}
-	public void setId(String id) {
-		this.id = id;
-	}
 	
 	/**
 	 * Get Account information 
 	 **/
-	@JsonProperty("account")
 	public String getAccount() {
 		return account;
 	}
@@ -120,7 +110,6 @@ public class Principal{
 		this.salt = salt;
 	}
 	
-	@JsonProperty("name")
 	public String getName() {
 		return name;
 	}
@@ -130,7 +119,6 @@ public class Principal{
 		this.name = name;
 	}
 	
-	@JsonProperty("password")
 	public String getPassword() {
 		return password;
 	}
@@ -140,7 +128,6 @@ public class Principal{
 		this.password = password;
 	}
 	
-	@JsonProperty("source")
 	public String getSource() {
 		return source;
 	}
@@ -160,13 +147,11 @@ public class Principal{
 		this.profile = profile;
 	}	
 	
-	@JsonProperty("settings")
 	public Map<String, Object> getProfileSettings(){
 		
 		return this.profile == null? new HashMap<String, Object>():this.profile.getSettings();
 	}
 	
-	@JsonProperty("settings")
 	public void setProfileSettings(Map<String, Object> settings){
 		
 		this.profile = new Profile();
@@ -188,7 +173,6 @@ public class Principal{
 		this.groups = groups;
 	}
 	
-	@JsonProperty("groups")
 	public Map<String,Object> getGroups(){
 		
 		return this.groups;
@@ -198,7 +182,6 @@ public class Principal{
 		this.roles = roles;
 	}
 	
-	@JsonProperty("roles")
 	public Map<String,Object> getRoles(){
 		
 		return this.roles;

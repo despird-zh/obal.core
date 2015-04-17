@@ -21,7 +21,6 @@ package com.dcube.core.accessor;
 
 import com.dcube.audit.AuditInfo;
 import com.dcube.audit.Predicate;
-import com.dcube.core.AccessorFactory;
 import com.dcube.core.EntryKey;
 import com.dcube.core.IEntityAccessor;
 import com.dcube.core.IEntityEntry;

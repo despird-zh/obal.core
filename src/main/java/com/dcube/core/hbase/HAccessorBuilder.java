@@ -96,17 +96,14 @@ public class HAccessorBuilder extends AccessorBuilder{
 	private void loadAccessors() throws AccessorException{
 		
 		// detect the accessor classes under package
-		String packagename = CoreConfigs.getString(CoreConstants.CONFIG_ACCESSOR_PACKAGE + CoreConstants.BUILDER_HBASE,"com.dcube.accessor.hbase");
-		if(packagename.contains(",")){
-			
-			String[] packages = packagename.split(",");
+		String[] packages = CoreConfigs.getStringArray(CoreConstants.CONFIG_ACCESSOR_PACKAGE + CoreConstants.BUILDER_HBASE);
+		
+		if(packages.length > 0){
+
 			for(String pkg: packages){
 				// detect package accessor classes
 				detectAccessors(pkg);
 			}
-		}else{
-			// detect package accessor classes
-			detectAccessors(packagename);
 		}
 	}
 	

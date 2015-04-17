@@ -41,6 +41,10 @@ public class EntityConstants {
 	
 	public static String NAME_SEPARATOR = ".";
 	
+	/** blank key/value of map entry placeholder */
+	public static String BLANK_VALUE = "_BLANK_VAL";
+	public static String BLANK_KEY   = "_BLANK_KEY";
+	
 	/**
 	 * The meta info enumerator 
 	 **/
@@ -154,6 +158,8 @@ public class EntityConstants {
 	public static enum GroupEnum{
 
 		Name("i_group_name","groupname"),
+		Description("i_description","description"),
+		Parent("i_parent","parent"),
 		Users("i_users" , "users"),
 		Groups("i_groups","groups");
 		
@@ -183,6 +189,8 @@ public class EntityConstants {
 	public static enum RoleEnum{
 
 		Name("i_role_name","rolename"),
+		Description("i_description","description"),
+		Groups("i_groups","groups"),
 		Users("i_users" , "users");
 		
 		public final String attribute;

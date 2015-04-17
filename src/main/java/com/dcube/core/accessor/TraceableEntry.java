@@ -4,6 +4,7 @@ import java.util.Date;
 
 import com.dcube.core.EntryKey;
 import com.dcube.core.ITraceable;
+import com.dcube.core.TraceInfo;
 import com.dcube.meta.EntityConstants.TraceableEnum;
 
 /**
@@ -76,5 +77,31 @@ public class TraceableEntry extends EntityEntry implements ITraceable{
 	public void setLastModify(Date lastModify) {
 
 		super.setAttrValue(TraceableEnum.LastModify.attribute, lastModify);
+	}
+	
+	/**
+	 * Get TraceInfo object 
+	 **/
+	public TraceInfo getTraceInfo(){
+		
+		String creator = getAttrValue(TraceableEnum.Creator.attribute, String.class);
+		String modifier = getAttrValue(TraceableEnum.Modifier.attribute, String.class);
+		Date newCreate = getAttrValue(TraceableEnum.NewCreate.attribute, Date.class);
+		Date lastModify = getAttrValue(TraceableEnum.LastModify.attribute, Date.class);
+		
+		return new TraceInfo(creator, newCreate, modifier, lastModify);
+	}
+	
+	/**
+	 * Set TraceInfo object 
+	 **/
+	public void setTraceInfo(TraceInfo traceInfo){
+		
+		if(traceInfo == null) return;
+		
+		super.setAttrValue(TraceableEnum.Creator.attribute, traceInfo.getCreator());
+		super.setAttrValue(TraceableEnum.Modifier.attribute, traceInfo.getModifier());
+		super.setAttrValue(TraceableEnum.NewCreate.attribute, traceInfo.getNewCreate());
+		super.setAttrValue(TraceableEnum.LastModify.attribute, traceInfo.getLastModify());
 	}
 }

@@ -7,7 +7,6 @@ import com.dcube.core.ITraceable;
 import com.dcube.core.security.EntryAce;
 import com.dcube.core.security.EntryAcl;
 import com.dcube.core.security.IAccessControl;
-import com.dcube.exception.SecurityException;
 import com.dcube.meta.EntityConstants.TraceableEnum;
 
 

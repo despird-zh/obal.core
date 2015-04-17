@@ -1,12 +1,12 @@
 package com.dcube.core.security;
 
-import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import com.dcube.core.EntryKey;
+import com.dcube.core.TraceInfo;
 import com.dcube.meta.EntityConstants;
 
 /**
@@ -33,44 +33,51 @@ import com.dcube.meta.EntityConstants;
 public class UserGroup extends EntryKey{
 
 	/** the group */
-	private String group = null;
-	
-	private Set<String> users = null;
-	
+	private String name = null;
+	/** tracing information */
+	private TraceInfo traceInfo = null;
+	/** the users under this group */
+	private Set<String> users;
+	/** the subgroups */
+	private Set<String> groups;
+	/** the parent group */
+	private String parent = null;
+	/** description */
+	private String description = null;
 	/**
 	 * the constructor 
 	 * @param group the group name
 	 * @param key the key  
 	 **/
-	public UserGroup(String group, String key) {
+	public UserGroup(String name, String key) {
 		super(EntityConstants.ENTITY_USER_GROUP, key);
-		this.group = group;
+		this.name = name;
 	}
 
 	/**
 	 * the constructor 
 	 * @param group the group name
 	 **/
-	public UserGroup(String group){
+	public UserGroup(String name){
 		
 		super(EntityConstants.ENTITY_USER_GROUP, null);
-		this.group = group;
+		this.name = name;
 	}
 	
 	/**
 	 * get the group name 
 	 **/
-	public String groupName(){
+	public String name(){
 		
-		return group;
+		return name;
 	}
 	
 	/**
 	 * check user in group or not 
 	 **/
-	public boolean hasUser(String account){
+	public boolean hasUser(String user){
 		
-		return false;
+		return users.contains(user);
 	}
 	
 	/**
@@ -78,27 +85,70 @@ public class UserGroup extends EntryKey{
 	 **/
 	public boolean hasGroup(String group){
 		
-		return false;
+		return groups.contains(group);
 	}
 	
 	/**
 	 * get list of sub groups 
 	 **/
-	public List<UserGroup> getGroups(){
+	public Set<String> getGroups(){
 		
-		return null;
+		return this.groups;
 	}
 	
 	public Set<String> getUsers(){
 		
-		return users;
+		return this.users;
 	}
 	
-	public void getUsers(Set<String> users){
+	public void addUser(String user){
+		
+		this.users.add(user);
+	}
+	
+	public void removeUser(String user){
+		
+		this.users.remove(user);
+	}
+	
+	public void setGroups(Set<String> groups){
+		
+		this.groups = groups;
+		
+	}
+	
+	public void setUsers(Set<String> users){
 		
 		this.users = users;
+		
 	}
 	
+	public TraceInfo getTraceInfo(){
+		
+		return this.traceInfo;
+	}
+	
+	public void setTraceInfo(TraceInfo traceInfo){
+		
+		this.traceInfo = traceInfo;
+	}
+		
+	public String getParent() {
+		return parent;
+	}
+
+	public void setParent(String parent) {
+		this.parent = parent;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	@Override
 	public boolean equals(Object other) {
 		// step 1
@@ -113,12 +163,12 @@ public class UserGroup extends EntryKey{
 		UserGroup that = (UserGroup) other;
 		// step 4
 		return new EqualsBuilder()
-			.append(this.group, that.groupName()).isEquals();
+			.append(this.name, that.name()).isEquals();
 	}
 
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder(17, 37).append(this.group)
+		return new HashCodeBuilder(17, 37).append(this.name)
 				.toHashCode();
 	}
 }
