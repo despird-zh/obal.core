@@ -9,6 +9,7 @@ import org.junit.runners.MethodSorters;
 
 import com.dcube.accessor.hbase.GroupInfoEAccessor;
 import com.dcube.accessor.hbase.PrincipalGAccessor;
+import com.dcube.accessor.hbase.RoleInfoEAccessor;
 import com.dcube.accessor.hbase.UserInfoEAccessor;
 import com.dcube.base.BaseTester;
 import com.dcube.core.AccessorFactory;
@@ -18,6 +19,7 @@ import com.dcube.core.accessor.EntryCollection;
 import com.dcube.core.accessor.TraceableEntry;
 import com.dcube.core.security.Principal;
 import com.dcube.core.security.UserGroup;
+import com.dcube.core.security.UserRole;
 import com.dcube.exception.BaseException;
 import com.dcube.launcher.CoreFacade;
 import com.dcube.meta.EntityConstants;
@@ -32,7 +34,7 @@ public class SecurityTest extends BaseTester{
 	}
 	
 	public static String groupname = "demogroup";
-	public void test001CreateGroup()throws Exception{
+	public void test001GroupCRUD()throws Exception{
 		
 		GroupInfoEAccessor ga = null;
 		Principal princ = new Principal("admin","demouser1","adminpwd","demosrc");
@@ -58,7 +60,33 @@ public class SecurityTest extends BaseTester{
 		
 	}
 	
-	public void Dtest001CreatePrincipal()throws Exception{
+	public static String rolename = "demorole";
+	public void test002RoleCRUD()throws Exception{
+		
+		RoleInfoEAccessor ra = null;
+		Principal princ = new Principal("admin","demouser1","adminpwd","demosrc");
+		try{
+			
+			ra = AccessorUtils.getEntityAccessor(princ, EntityConstants.ENTITY_USER_ROLE);
+			UserRole ur = new UserRole(rolename);
+			IEntryConverter<TraceableEntry,UserRole > converter = ra.getEntryConverter(UserRole.class);
+			TraceableEntry grpentry = converter.toSource(ur);
+			EntryKey key = ra.newKey();
+			grpentry.setEntryKey(key);
+			ra.doPutEntry(grpentry);
+			
+			TraceableEntry grpentry2 = ra.doGetEntry(key.getKey());	
+			UserRole ur2 = converter.toTarget(grpentry2);
+			
+			Assert.assertEquals("New Group success", ur.name(), ur2.name());
+		
+		}finally{
+			
+			AccessorUtils.closeAccessor(ra);
+		}
+		
+	}
+	public void test003CreatePrincipal()throws Exception{
 		
 		UserInfoEAccessor pa = null;
 		Principal princ = new Principal("demo1","demouser1","demopwd","demosrc");
@@ -73,7 +101,7 @@ public class SecurityTest extends BaseTester{
 			roles.add("role1");
 			roles.add("role2");
 			princ.setRoles(roles);
-			pa = AccessorUtils.getEntityAccessor(princ, EntityConstants.ENTITY_USER);
+			pa = AccessorUtils.getEntityAccessor(princ, EntityConstants.ACCESSOR_ENTITY_USER);
 			EntryKey key = pa.newKey();
 			// get converter
 			IEntryConverter<TraceableEntry,Principal > converter = pa.getEntryConverter(Principal.class);

@@ -74,38 +74,47 @@ public class EntitySetup {
 				UserEnum.Account.colfamily, 
 				UserEnum.Account.qualifier);
 		meta.addAttr(attr);
+		
 		attr = new EntityAttr(UserEnum.Domain.attribute, 
 				UserEnum.Domain.colfamily, 
 				UserEnum.Domain.qualifier);
 		meta.addAttr(attr);
+		
 		attr = new EntityAttr(UserEnum.Name.attribute, 
 				UserEnum.Name.colfamily, 
 				UserEnum.Name.qualifier);
 		meta.addAttr(attr);
+		
 		attr = new EntityAttr(UserEnum.Source.attribute, 
 				UserEnum.Source.colfamily, 
 				UserEnum.Source.qualifier);
 		meta.addAttr(attr);
+		
 		attr = new EntityAttr(UserEnum.Password.attribute, 
 				UserEnum.Password.colfamily, 
 				UserEnum.Password.qualifier);
 		meta.addAttr(attr);
+		
 		attr = new EntityAttr(UserEnum.Salt.attribute, 
 				UserEnum.Salt.colfamily, 
 				UserEnum.Salt.qualifier);
 		meta.addAttr(attr);
+		
 		attr = new EntityAttr(UserEnum.Groups.attribute, EntityAttr.AttrMode.MAP, EntityAttr.AttrType.STRING, 
 				UserEnum.Groups.colfamily, 
 				UserEnum.Groups.qualifier);
 		meta.addAttr(attr);
+		
 		attr = new EntityAttr(UserEnum.Roles.attribute, EntityAttr.AttrMode.MAP, EntityAttr.AttrType.STRING, 				
 				UserEnum.Roles.colfamily, 
 				UserEnum.Roles.qualifier);
 		meta.addAttr(attr);
+		
 		attr = new EntityAttr(UserEnum.Profile.attribute, EntityAttr.AttrMode.MAP, EntityAttr.AttrType.STRING, 				
 				UserEnum.Profile.colfamily, 
 				UserEnum.Profile.qualifier);
 		meta.addAttr(attr);
+		
 		eadmin.setupSchema(meta);
 
 	}
@@ -122,6 +131,16 @@ public class EntitySetup {
 		EntityAttr attr = new EntityAttr(GroupEnum.Name.attribute, 
 				GroupEnum.Name.colfamily, 
 				GroupEnum.Name.qualifier);
+		meta.addAttr(attr);
+		
+		attr = new EntityAttr(GroupEnum.Description.attribute,
+				GroupEnum.Description.colfamily, 
+				GroupEnum.Description.qualifier);
+		meta.addAttr(attr);
+		
+		attr = new EntityAttr(GroupEnum.Parent.attribute,
+				GroupEnum.Parent.colfamily, 
+				GroupEnum.Parent.qualifier);
 		meta.addAttr(attr);
 		
 		attr = new EntityAttr(GroupEnum.Users.attribute, EntityAttr.AttrMode.MAP, EntityAttr.AttrType.STRING, 
@@ -152,11 +171,21 @@ public class EntitySetup {
 				RoleEnum.Name.qualifier);
 		meta.addAttr(attr);
 		
+		attr = new EntityAttr(RoleEnum.Description.attribute,
+				RoleEnum.Description.colfamily, 
+				RoleEnum.Description.qualifier);
+		meta.addAttr(attr);
+		
 		attr = new EntityAttr(RoleEnum.Users.attribute, EntityAttr.AttrMode.MAP, EntityAttr.AttrType.STRING, 
 				RoleEnum.Users.colfamily, 
 				RoleEnum.Users.qualifier);
 		meta.addAttr(attr);
 
+		attr = new EntityAttr(RoleEnum.Groups.attribute, EntityAttr.AttrMode.MAP, EntityAttr.AttrType.STRING, 
+				RoleEnum.Groups.colfamily, 
+				RoleEnum.Groups.qualifier);
+		meta.addAttr(attr);
+		
 		eadmin.setupSchema(meta);
 	}
 

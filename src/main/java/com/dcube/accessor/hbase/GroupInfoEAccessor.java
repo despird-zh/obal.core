@@ -49,12 +49,15 @@ public class GroupInfoEAccessor extends HEntityAccessor<TraceableEntry>{
 					group.setDescription(fromObject.getAttrValue(GroupEnum.Description.attribute, String.class));
 					
 					Map<String, String> mapAttr = fromObject.getAttrValue(GroupEnum.Users.attribute, Map.class);
-					Set<String> userset = mapAttr.keySet();
-					group.setUsers(userset);
-					
+					if(mapAttr != null){
+						Set<String> userset = mapAttr.keySet();
+						group.setUsers(userset);
+					}
 					mapAttr = fromObject.getAttrValue(GroupEnum.Groups.attribute, Map.class);
-					Set<String> groupset = mapAttr.keySet();
-					group.setGroups(groupset);
+					if(mapAttr != null){
+						Set<String> groupset = mapAttr.keySet();
+						group.setGroups(groupset);
+					}
 					
 					group.setParent(fromObject.getAttrValue(GroupEnum.Parent.attribute, String.class));
 					
@@ -74,18 +77,25 @@ public class GroupInfoEAccessor extends HEntityAccessor<TraceableEntry>{
 					entry.setAttrValue(meta.getAttr(GroupEnum.Description.attribute), toObject.getDescription());
 					
 					Set<String> uset = toObject.getUsers();
-					Map<String, String> attrMap = new HashMap<String, String>();
-					for(String t:uset){
-						attrMap.put(t, EntityConstants.BLANK_VALUE);
+					if(uset != null){
+						Map<String, String> attrMap = new HashMap<String, String>();
+						for(String t:uset){
+							attrMap.put(t, EntityConstants.BLANK_VALUE);
+						}
+						entry.setAttrValue(meta.getAttr(GroupEnum.Users.attribute), attrMap);
+					}else{
+						entry.setAttrValue(meta.getAttr(GroupEnum.Users.attribute), null);
 					}
-					entry.setAttrValue(meta.getAttr(GroupEnum.Users.attribute), attrMap);
-					
 					Set<String> gset = toObject.getGroups();
-					attrMap = new HashMap<String, String>();
-					for(String t:gset){
-						attrMap.put(t, EntityConstants.BLANK_VALUE);
+					if(gset != null){
+						Map<String, String> attrMap = new HashMap<String, String>();
+						for(String t:gset){
+							attrMap.put(t, EntityConstants.BLANK_VALUE);
+						}
+						entry.setAttrValue(meta.getAttr(GroupEnum.Groups.attribute), attrMap);
+					}else{
+						entry.setAttrValue(meta.getAttr(GroupEnum.Groups.attribute), null);
 					}
-					entry.setAttrValue(meta.getAttr(GroupEnum.Groups.attribute), attrMap);
 					entry.setAttrValue(meta.getAttr(GroupEnum.Parent.attribute), toObject.getParent());
 					
 					entry.setTraceInfo(toObject.getTraceInfo());

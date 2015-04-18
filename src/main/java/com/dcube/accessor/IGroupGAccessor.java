@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.dcube.core.IBaseAccessor;
 import com.dcube.core.security.Principal;
+import com.dcube.core.security.UserGroup;
 import com.dcube.exception.AccessorException;
 
 public interface IGroupGAccessor extends IBaseAccessor{
@@ -19,4 +20,6 @@ public interface IGroupGAccessor extends IBaseAccessor{
 	public List<Principal> getPrincipalsByGroup(String group)throws AccessorException;
 
 	public List<String> getGroupChain(String group)throws AccessorException;
+	
+	public UserGroup getGroupByName(String name) throws AccessorException;
 }

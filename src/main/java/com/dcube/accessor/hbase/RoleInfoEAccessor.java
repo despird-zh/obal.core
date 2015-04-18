@@ -49,13 +49,15 @@ public class RoleInfoEAccessor extends HEntityAccessor<TraceableEntry>{
 					role.setDescription(fromObject.getAttrValue(RoleEnum.Description.attribute, String.class));
 					
 					Map<String, String> mapAttr = fromObject.getAttrValue(RoleEnum.Users.attribute, Map.class);
-					Set<String> userset = mapAttr.keySet();
-					role.setUsers(userset);
-					
+					if(mapAttr!= null){
+						Set<String> userset = mapAttr.keySet();
+						role.setUsers(userset);
+					}
 					mapAttr = fromObject.getAttrValue(RoleEnum.Groups.attribute, Map.class);
-					Set<String> groupset = mapAttr.keySet();
-					role.setGroups(groupset);
-					
+					if(mapAttr!= null){
+						Set<String> groupset = mapAttr.keySet();
+						role.setGroups(groupset);
+					}
 					return role;
 				}
 
@@ -72,19 +74,24 @@ public class RoleInfoEAccessor extends HEntityAccessor<TraceableEntry>{
 					entry.setAttrValue(meta.getAttr(RoleEnum.Description.attribute), toObject.getDescription());
 					
 					Set<String> uset = toObject.getUsers();
-					Map<String, String> attrMap = new HashMap<String, String>();
-					for(String t:uset){
-						attrMap.put(t, EntityConstants.BLANK_VALUE);
-					}
-					entry.setAttrValue(meta.getAttr(RoleEnum.Users.attribute), attrMap);
+					if(uset != null){
+						Map<String, String> attrMap = new HashMap<String, String>();
+						for(String t:uset){
+							attrMap.put(t, EntityConstants.BLANK_VALUE);
+						}
+						entry.setAttrValue(meta.getAttr(RoleEnum.Users.attribute), attrMap);
+					}else
+						entry.setAttrValue(meta.getAttr(RoleEnum.Users.attribute), null);
 					
 					Set<String> gset = toObject.getGroups();
-					attrMap = new HashMap<String, String>();
-					for(String t:gset){
-						attrMap.put(t, EntityConstants.BLANK_VALUE);
-					}
-					entry.setAttrValue(meta.getAttr(RoleEnum.Groups.attribute), attrMap);
-					
+					if(gset != null){
+						Map<String, String> attrMap = new HashMap<String, String>();
+						for(String t:gset){
+							attrMap.put(t, EntityConstants.BLANK_VALUE);
+						}
+						entry.setAttrValue(meta.getAttr(RoleEnum.Groups.attribute), attrMap);
+					}else
+						entry.setAttrValue(meta.getAttr(RoleEnum.Groups.attribute), null);
 					entry.setTraceInfo(toObject.getTraceInfo());
 					return entry;
 				}

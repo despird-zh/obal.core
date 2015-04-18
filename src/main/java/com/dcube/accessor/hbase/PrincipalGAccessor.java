@@ -42,7 +42,7 @@ public class PrincipalGAccessor extends HGenericAccessor implements IPrincipalGA
 			
 			if(ecoll.isEmpty()){
 				
-				throw new BaseException("The result is empty");
+				return null;
 			}			
 			else{
 				
@@ -77,7 +77,7 @@ public class PrincipalGAccessor extends HGenericAccessor implements IPrincipalGA
 			
 			if(ecoll.isEmpty()){
 				
-				throw new BaseException("The result is empty");
+				return null;
 			}			
 			else{
 				
