@@ -1,7 +1,7 @@
 package com.dcube.accessor;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
@@ -17,6 +17,7 @@ import com.dcube.core.IEntryConverter;
 import com.dcube.core.accessor.EntryCollection;
 import com.dcube.core.accessor.TraceableEntry;
 import com.dcube.core.security.Principal;
+import com.dcube.core.security.UserGroup;
 import com.dcube.exception.BaseException;
 import com.dcube.launcher.CoreFacade;
 import com.dcube.meta.EntityConstants;
@@ -30,20 +31,47 @@ public class SecurityTest extends BaseTester{
 		CoreFacade.start();
 	}
 	
-	public void Dtest001CreatePrincipal(){
+	public static String groupname = "demogroup";
+	public void test001CreateGroup()throws Exception{
+		
+		GroupInfoEAccessor ga = null;
+		Principal princ = new Principal("admin","demouser1","adminpwd","demosrc");
+		try{
+			
+			ga = AccessorUtils.getEntityAccessor(princ, EntityConstants.ENTITY_USER_GROUP);
+			UserGroup ug = new UserGroup(groupname);
+			IEntryConverter<TraceableEntry,UserGroup > converter = ga.getEntryConverter(UserGroup.class);
+			TraceableEntry grpentry = converter.toSource(ug);
+			EntryKey key = ga.newKey();
+			grpentry.setEntryKey(key);
+			ga.doPutEntry(grpentry);
+			
+			TraceableEntry grpentry2 = ga.doGetEntry(key.getKey());	
+			UserGroup ug2 = converter.toTarget(grpentry2);
+			
+			Assert.assertEquals("New Group success", ug.name(), ug2.name());
+		
+		}finally{
+			
+			AccessorUtils.closeAccessor(ga);
+		}
+		
+	}
+	
+	public void Dtest001CreatePrincipal()throws Exception{
 		
 		UserInfoEAccessor pa = null;
 		Principal princ = new Principal("demo1","demouser1","demopwd","demosrc");
 		//princ.setKey("101001");
 		try {
-			Map<String,Object> groups = new HashMap<String,Object>();
-			groups.put("gk1","group1");
-			groups.put("gk2","group2");
+			Set<String> groups = new HashSet<String>();
+			groups.add("group1");
+			groups.add("group2");
 			princ.setGroups(groups);
 			
-			Map<String,Object> roles = new HashMap<String,Object>();
-			roles.put("rk1","role1");
-			roles.put("rk2","role2");
+			Set<String> roles = new HashSet<String>();
+			roles.add("role1");
+			roles.add("role2");
 			princ.setRoles(roles);
 			pa = AccessorUtils.getEntityAccessor(princ, EntityConstants.ENTITY_USER);
 			EntryKey key = pa.newKey();
@@ -59,16 +87,13 @@ public class SecurityTest extends BaseTester{
 			TraceableEntry princ2 = pa.doGetEntry(key.getKey());
 			System.out.println("p-name:"+converter.toTarget(princ2).getName());
 			
-		} catch (BaseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}finally{
+		} finally{
 			
 			AccessorUtils.closeAccessor(pa);
 		}
 	}
 
-	public void test002UpdateAttr(){
+	public void Dtest002UpdateAttr(){
 		
 		PrincipalGAccessor pa = null;
 		UserInfoEAccessor uea = null;

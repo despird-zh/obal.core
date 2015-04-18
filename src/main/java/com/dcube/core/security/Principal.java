@@ -31,18 +31,42 @@ import com.dcube.core.TraceInfo;
 import com.dcube.meta.EntityConstants;
 
 /**
- * Store the pincipal info of user
+ * Store the principal info of user
  * 
  * @author despird
  * @version 1.0 2014-01-01
  * @see com.dcube.core.security.Profile
  **/
 public class Principal extends EntryKey{
+		
+	/** tracing information */
+	private TraceInfo traceInfo = null;
+	/** the account information */
+	private String account = "";
+	/** the name  */
+	private String name = "";
+	/** the password */
+	private String password = "";
+	/** the source of principal information */
+	private String source = "";
+	/** the salt to hash password */
+	private String salt = "";
+	/** the user profile info holder */
+	private Profile profile = null;
+	/** the groups */
+	private Set<String> groups;
+	/** the roles */
+	private Set<String> roles;
 	
+	/**
+	 * Constructor for new Principal
+	 * 
+	 * @param key the key information
+	 * 
+	 **/
 	public Principal(String key){
 		
 		super(EntityConstants.ENTITY_USER,key);
-
 	}
 	
 	/**
@@ -75,25 +99,6 @@ public class Principal extends EntryKey{
 		this.password = password;
 		this.source = source;
 	}
-	
-	/** tracing information */
-	private TraceInfo traceInfo = null;
-	/** the account information */
-	private String account = "";
-	/** the name  */
-	private String name = "";
-	/** the password */
-	private String password = "";
-	/** the source of principal information */
-	private String source = "";
-	/** the salt to hash password */
-	private String salt = "";
-	/** the user profile info holder */
-	private Profile profile = null;
-	
-	private Set<String> groups;
-	
-	private Set<String> roles;
 	
 	/**
 	 * Get Account information 

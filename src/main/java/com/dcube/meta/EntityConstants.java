@@ -31,6 +31,8 @@ public class EntityConstants {
 	public static String ACCESSOR_GENERIC_META = "generic.meta";
 	public static String ACCESSOR_GENERIC_USER = "generic.user";
 	public static String ACCESSOR_GENERIC_ADMIN = "generic.admin";
+	public static String ACCESSOR_GENERIC_GROUP = "generic.group";
+	public static String ACCESSOR_GENERIC_ROLE = "generic.role";
 	
 	public static String ACCESSOR_ENTITY_META  = "entity.meta";
 	public static String ACCESSOR_ENTITY_ATTR  = "entity.attr";

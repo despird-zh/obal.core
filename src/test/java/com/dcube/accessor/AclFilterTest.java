@@ -17,14 +17,14 @@ public class AclFilterTest extends BaseTester{
 		//princ.setKey("101001");
 
 		Map<String, Object> groups = new HashMap<String, Object>();
-		groups.put("gk1", "group1");
-		groups.put("gk2", "group2");
-		princ.setGroups(groups);
+//		groups.put("gk1", "group1");
+//		groups.put("gk2", "group2");
+//		princ.setGroups(groups);
 
 		Map<String, Object> roles = new HashMap<String, Object>();
-		roles.put("rk1", "role1");
-		roles.put("rk2", "role2");
-		princ.setRoles(roles);
+//		roles.put("rk1", "role1");
+//		roles.put("rk2", "role2");
+//		princ.setRoles(roles);
 		
 		HAclFilter afilter = new HAclFilter("c0".getBytes(),"acl".getBytes());
 		afilter.setPrincipal(princ);

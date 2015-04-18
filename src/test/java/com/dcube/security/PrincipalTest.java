@@ -27,12 +27,12 @@ public class PrincipalTest extends BaseTester{
 		Map<String,Object> groups = new HashMap<String,Object>();
 		groups.put("gk1","group1");
 		groups.put("gk2","group2");
-		princ.setGroups(groups);
+		//princ.setGroups(groups);
 		
 		Map<String,Object> roles = new HashMap<String,Object>();
 		roles.put("rk1","role1");
 		roles.put("rk2","role2");
-		princ.setRoles(roles);
+		//princ.setRoles(roles);
 		
 		ObjectMapper mapper = new ObjectMapper();
 		
@@ -48,10 +48,10 @@ public class PrincipalTest extends BaseTester{
 			for(Map.Entry<String, Object> ent:settings.entrySet()){
 				System.out.println("key:"+ent.getKey()+"/val:"+ent.getValue());
 			}
-			Map<String,Object> grps = princ2.getGroups();
-			System.out.println("grps:"+grps);
-			Map<String,Object> rls = princ2.getRoles();
-			System.out.println("rls:"+rls);
+			//Map<String,Object> grps = princ2.getGroups();
+			//System.out.println("grps:"+grps);
+			//Map<String,Object> rls = princ2.getRoles();
+			//System.out.println("rls:"+rls);
 			
 		} catch (JsonGenerationException e) {
 			// TODO Auto-generated catch block

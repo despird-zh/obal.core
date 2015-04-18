@@ -1,7 +1,5 @@
 package com.dcube.accessor.hbase;
 
-import java.util.List;
-
 import org.apache.hadoop.hbase.filter.CompareFilter;
 import org.apache.hadoop.hbase.filter.Filter;
 import org.apache.hadoop.hbase.filter.SingleColumnValueFilter;
@@ -95,20 +93,6 @@ public class PrincipalGAccessor extends HGenericAccessor implements IPrincipalGA
 			AccessorUtils.closeAccessor(uea);
 		}
 		return rtv;
-	}
-
-	@Override
-	public List<Principal> getPrincipalsByGroup(String group)
-			throws AccessorException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Principal> getPrincipalsByRole(String role)
-			throws AccessorException {
-		
-		return null;
 	}
 
 }
