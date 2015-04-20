@@ -80,7 +80,7 @@ public class GenericContext {
 			return principal;
 		}
 	}
-		
+	
 	/**
 	 * Put K-V pair to context
 	 **/

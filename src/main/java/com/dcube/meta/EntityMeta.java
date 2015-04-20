@@ -264,7 +264,7 @@ public class EntityMeta{
 	 * 
 	 * @see com.dcube.meta.EntityAttr
 	 **/
-	public List<EntityAttr> getMandatoryAttrs(){
+	public List<EntityAttr> getRequiredAttrs(){
 		
 		ArrayList<EntityAttr> requireds = new ArrayList<EntityAttr>();
 		for(Map.Entry<String, EntityAttr> entry:attrMap.entrySet()){

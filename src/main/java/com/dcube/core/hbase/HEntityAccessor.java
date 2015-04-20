@@ -48,6 +48,7 @@ import com.dcube.core.EntryFilter;
 import com.dcube.core.EntryKey;
 import com.dcube.core.IEntityEntry;
 import com.dcube.core.IEntryConverter;
+import com.dcube.core.IGenericEntry.AttributeItem;
 import com.dcube.core.accessor.AccessorContext;
 import com.dcube.core.accessor.EntityAccessor;
 import com.dcube.core.accessor.EntryCollection;
@@ -57,6 +58,7 @@ import com.dcube.exception.WrapperException;
 import com.dcube.meta.BaseEntity;
 import com.dcube.meta.EntityAttr;
 import com.dcube.meta.EntityConstants;
+import com.dcube.meta.EntityManager;
 
 /**
  * Base class of EntitAccessor, it holds HConnection object to access HBase 
@@ -488,7 +490,7 @@ public abstract class HEntityAccessor<GB extends IEntityEntry> extends EntityAcc
 	}
 	
 	@Override
-	public EntryKey doPutEntry(GB entryInfo) throws AccessorException {
+	public EntryKey doPutEntry(GB entryInfo, boolean changedOnly) throws AccessorException {
 		AccessorContext context = super.getContext();		
 		context.auditBegin(AUDIT_OPER_PUT_ENTRY);
 		
@@ -498,8 +500,17 @@ public abstract class HEntityAccessor<GB extends IEntityEntry> extends EntityAcc
         try {  
         	EntryKey key = entryInfo.getEntryKey();
             table = getConnection().getTable(entitySchema.getSchema(getContext().getPrincipal(),key.getKey()));
-
-            Put put = parse(entitySchema.getEntityMeta().getAllAttrs(),entryInfo);
+            List<EntityAttr> attrs = null;
+            if(changedOnly){
+            	attrs = this.filterChangedAttrList(entryInfo);
+            }else{
+            	attrs = entitySchema.getEntityMeta().getAllAttrs();
+            	if(!validateEntry(entryInfo)){// some attributes missing
+            		String missedAttrs = context.getValue(AccessorContext.KEY_VALID_MSG);
+            		throw new AccessorException("Required attrs missed:{}",missedAttrs);
+            	}
+            }
+            Put put = parse(attrs,entryInfo);
 
             table.put(put);
         	table.flushCommits();
@@ -771,5 +782,25 @@ public abstract class HEntityAccessor<GB extends IEntityEntry> extends EntityAcc
         return put;
 	}
 	
+	/**
+	 * filter out the changed attributes out of EntityEntry
+	 * @param entryInfo
+	 * @return List<EntityAttr> list of changed attributes.
+	 **/
+	protected List<EntityAttr> filterChangedAttrList(GB entryInfo) throws MetaException{
 
+		List<AttributeItem> itemlist = entryInfo.getAttrItemList();
+		List<EntityAttr> rtv = new ArrayList<EntityAttr>();
+		for(AttributeItem item: itemlist){
+			if(!item.isChanged()) // unchanged ignore
+				continue;
+			
+			EntityAttr attr;
+
+			attr = EntityManager.getInstance().getEntityAttr(item.entity(), item.attribute());
+			rtv.add(attr);
+		
+		}
+		return rtv;
+	}
 }

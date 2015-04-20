@@ -173,6 +173,25 @@ public class GenericEntry implements IGenericEntry{
 	}
 	
 	/**
+	 * Check required attribute is null or not.
+	 * 
+	 * @param entityname the entity name
+	 * @param attrname the attribute name
+	 * 
+	 * @return boolean true:ok, false:fail
+	 **/
+	public boolean checkRequired(String entityname, String attrname){
+		
+		AttributeItem item = itemMap.get(entityname + EntityConstants.NAME_SEPARATOR + attrname);
+		if(null == item) 
+			return false;
+		else if(item.value() == null){
+			return false;
+		}
+		return true;
+	}
+	
+	/**
 	 * Change the attribute with new value, the changed flag be true
 	 * 
 	 * @param entityname the entity name

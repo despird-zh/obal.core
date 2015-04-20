@@ -183,7 +183,7 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
 	
 
 	@Override
-	public EntryKey doPutEntry(GB entryInfo) throws AccessorException {
+	public EntryKey doPutEntry(GB entryInfo, boolean changedOnly) throws AccessorException {
 		AccessorContext context = super.getContext();		
 		context.auditBegin(AUDIT_OPER_PUT_ENTRY);
 		

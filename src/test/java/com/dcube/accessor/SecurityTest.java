@@ -46,7 +46,7 @@ public class SecurityTest extends BaseTester{
 			TraceableEntry grpentry = converter.toSource(ug);
 			EntryKey key = ga.newKey();
 			grpentry.setEntryKey(key);
-			ga.doPutEntry(grpentry);
+			ga.doPutEntry(grpentry, false);
 			
 			TraceableEntry grpentry2 = ga.doGetEntry(key.getKey());	
 			UserGroup ug2 = converter.toTarget(grpentry2);
@@ -73,7 +73,7 @@ public class SecurityTest extends BaseTester{
 			TraceableEntry grpentry = converter.toSource(ur);
 			EntryKey key = ra.newKey();
 			grpentry.setEntryKey(key);
-			ra.doPutEntry(grpentry);
+			ra.doPutEntry(grpentry,false);
 			
 			TraceableEntry grpentry2 = ra.doGetEntry(key.getKey());	
 			UserRole ur2 = converter.toTarget(grpentry2);
@@ -107,7 +107,7 @@ public class SecurityTest extends BaseTester{
 			IEntryConverter<TraceableEntry,Principal > converter = pa.getEntryConverter(Principal.class);
 			TraceableEntry princ0 = converter.toSource(princ);
 			princ0.setEntryKey(key);
-			pa.doPutEntry(princ0);
+			pa.doPutEntry(princ0,false);
 			
 			pa.doPutEntryAttr(key.getKey(), "i_name", "newdemoname");			
 			EntryCollection<TraceableEntry> pl = pa.doScanEntry(null);

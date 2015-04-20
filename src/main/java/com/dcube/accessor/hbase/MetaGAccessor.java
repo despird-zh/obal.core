@@ -171,7 +171,7 @@ public class MetaGAccessor extends HGenericAccessor implements IMetaGAccessor{
 			minfo.setAttrValue(meta.getAttr(AttrEnum.Mode.attribute), attr.mode.toString());
 			minfo.setAttrValue(meta.getAttr(AttrEnum.Entity.attribute), attr.getEntityName());
 						
-			return attraccessor.doPutEntry(minfo);
+			return attraccessor.doPutEntry(minfo,false);
 			
 		} catch (AccessorException e) {
 			
@@ -275,7 +275,7 @@ public class MetaGAccessor extends HGenericAccessor implements IMetaGAccessor{
 			minfo.setAttrValue(emeta.getAttr(MetaEnum.Schema.attribute), meta.getSchema());
 			minfo.setAttrValue(emeta.getAttr(MetaEnum.Category.attribute), meta.getCategory());
 			
-			EntryKey mkey = metaAccr.doPutEntry(minfo);
+			EntryKey mkey = metaAccr.doPutEntry(minfo,false);
 			
 			Map<String,String> attrmap = new HashMap<String,String>();
 			

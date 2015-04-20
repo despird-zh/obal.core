@@ -55,6 +55,11 @@ public interface IGenericEntry{
 	public void setAttrValue(String entityname, String attrname, Object value);
 	
 	/**
+	 * Check attribute null or not 
+	 **/
+	public boolean checkRequired(String entityname, String attrname);
+	
+	/**
 	 * Inner class to wrap value and attribute, it record the value once changed or not.
 	 * so as to keep the trace information
 	 **/

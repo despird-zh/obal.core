@@ -50,7 +50,7 @@ public abstract class REntityAccessor <GB extends IEntityEntry> extends EntityAc
 	}
 	
 	@Override
-	public EntryKey doPutEntry(GB entryInfo) throws AccessorException {
+	public EntryKey doPutEntry(GB entryInfo, boolean changedOnly) throws AccessorException {
 
 		EntryKey rtv = null;
 		BaseEntity entitySchema = (BaseEntity)getEntitySchema();

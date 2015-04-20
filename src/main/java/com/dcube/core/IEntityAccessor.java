@@ -60,8 +60,9 @@ public interface IEntityAccessor <GB extends IEntityEntry> extends IBaseAccessor
 	/**
 	 * put entry object
 	 * @param entryInfo the entry information
+	 * @param changedOnly true:only changed be updated; false:update all
 	 **/
-	public abstract EntryKey doPutEntry(GB entryInfo) throws AccessorException;
+	public abstract EntryKey doPutEntry(GB entryInfo, boolean changedOnly) throws AccessorException;
 	
 	/**
 	 * put attribute to entry

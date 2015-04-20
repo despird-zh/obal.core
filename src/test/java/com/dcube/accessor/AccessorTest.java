@@ -189,7 +189,7 @@ public class AccessorTest extends BaseTester{
 			dtmap.put("dk3", new Date());
 			re.setAttrValue("i_map_dt", dtmap);
 			
-			return ta.doPutEntry(re);
+			return ta.doPutEntry(re, false);
 			
 		} catch (AccessorException e) {
 			// TODO Auto-generated catch block

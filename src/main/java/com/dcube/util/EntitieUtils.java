@@ -162,6 +162,6 @@ public class EntitieUtils {
 		if(meta == null)
 			return null;
 		
-		return meta.getMandatoryAttrs();
+		return meta.getRequiredAttrs();
 	}
 }

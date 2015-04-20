@@ -15,7 +15,9 @@ import com.dcube.meta.BaseEntity;
  * 
  **/
 public class AccessorContext extends GenericContext{
-
+	
+	public static final String KEY_VALID_MSG = "_CTX_VALID_MSG";
+	
 	/** entity schema */
 	private BaseEntity entitySchema = null;
 	

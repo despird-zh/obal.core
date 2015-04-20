@@ -19,6 +19,9 @@
  */
 package com.dcube.core.accessor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.dcube.audit.AuditInfo;
 import com.dcube.audit.Predicate;
 import com.dcube.core.EntryKey;
@@ -29,6 +32,7 @@ import com.dcube.core.security.Principal;
 import com.dcube.exception.AccessorException;
 import com.dcube.exception.MetaException;
 import com.dcube.meta.BaseEntity;
+import com.dcube.meta.EntityAttr;
 
 /**
  * Abstract EntryAccessor with EntrySchema information, it provides operation on
@@ -44,7 +48,6 @@ import com.dcube.meta.BaseEntity;
  * 
  **/
 public abstract class EntityAccessor<GB extends IEntityEntry> implements IEntityAccessor <GB>{
-
 	
 	private AccessorContext context;
 	
@@ -162,5 +165,29 @@ public abstract class EntityAccessor<GB extends IEntityEntry> implements IEntity
 	public <To> IEntryConverter<GB, To> getEntryConverter(Class<To> cto){
 		
 		throw new UnsupportedOperationException("Not define any converter yet.");
+	}
+	
+	/**
+	 * Validate if the attribute not missing 
+	 * @param entryInfo 
+	 * @return boolean true: entry's required attributes is present; false not valid.
+	 **/
+	public boolean validateEntry(GB entryInfo){
+		
+		BaseEntity entitySchema = (BaseEntity)getEntitySchema();
+		if(entitySchema == null) return false;
+		List<EntityAttr> requiredAttrs = entitySchema.getEntityMeta().getRequiredAttrs();
+		List<String> missingattrs = new ArrayList<String>();
+		for(EntityAttr attr: requiredAttrs){
+			// 
+			if(!entryInfo.checkRequired(attr.getEntityName(), attr.getAttrName())){
+				
+				missingattrs.add(attr.getAttrName());
+			}
+		}
+		
+		context.putValue(AccessorContext.KEY_VALID_MSG, missingattrs.toString());
+		return missingattrs.size() == 0 ? true:false;
+		
 	}
 }

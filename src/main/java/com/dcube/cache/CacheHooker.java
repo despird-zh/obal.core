@@ -39,7 +39,7 @@ public class CacheHooker<K extends EntityEntry>  extends EventHooker<CacheEntryP
 				if(CacheInfo.OperEnum.PutEntry == operData.operation()){
 				
 					CacheInfo.PutEntryData data = operData.value();
-					eaccessor.doPutEntry((K)data.entryInfo);
+					eaccessor.doPutEntry((K)data.entryInfo,true);
 					
 				}
 				else if(CacheInfo.OperEnum.PutAttr == operData.operation()){
