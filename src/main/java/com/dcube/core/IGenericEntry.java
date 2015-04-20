@@ -55,7 +55,8 @@ public interface IGenericEntry{
 	public void setAttrValue(String entityname, String attrname, Object value);
 	
 	/**
-	 * Inner class to wrap value and attribute 
+	 * Inner class to wrap value and attribute, it record the value once changed or not.
+	 * so as to keep the trace information
 	 **/
 	public static class AttributeItem implements Cloneable{
 		
@@ -95,31 +96,50 @@ public interface IGenericEntry{
 		private Object originVal = null;
 		private boolean changed = false;
 		
+		/**
+		 * Get the entity name 
+		 **/
 		public String entity(){
 			
 			return this.entityname;
 		}
 		
+		/**
+		 * Get the attribute name 
+		 **/
 		public String attribute(){
 			
 			return this.attrname;
 		}
 		
+		/**
+		 * Get the value  
+		 **/
 		public Object value(){
 			
 			return this.currentVal;
 		}
 		
+		/**
+		 * Get the orininal value 
+		 **/
 		public Object originValue(){
 			
 			return this.originVal;
 		}
 		
+		/**
+		 * Set the current value 
+		 **/
 		public void setValue(Object newVal){
 
 			this.currentVal = newVal;
 		}
 		
+		/**
+		 * Set the new value and changed flag 
+		 * 
+		 **/
 		public void setNewValue(Object newVal){
 			if(!changed){
 				this.originVal = this.currentVal;// save original value
@@ -128,12 +148,25 @@ public interface IGenericEntry{
 			this.currentVal = newVal;
 		}
 		
+		/**
+		 * check if the value once changed 
+		 **/
 		public boolean isChanged(){
 			return changed;
 		}
 		
+		/**
+		 * Get original value 
+		 **/
 		public Object getOriginalValue(){
 			return this.originVal;
+		}
+		
+		/**
+		 * Set changed flag 
+		 **/
+		public void setChanged(boolean changed){
+			this.changed = changed;
 		}
 		
 		@Override

@@ -19,11 +19,8 @@
  */
 package com.dcube.cache;
 
-import java.util.concurrent.ConcurrentLinkedQueue;
-
 import com.dcube.core.accessor.EntityEntry;
 import com.dcube.core.security.Principal;
-import com.dcube.disruptor.EventPayload;
 
 /**
  * CacheEvent is the placeholder element in disruptor RingBuffer, it holds the entry information

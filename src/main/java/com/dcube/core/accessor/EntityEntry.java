@@ -150,6 +150,19 @@ public class EntityEntry extends GenericEntry implements IEntityEntry{
 	}
 
 	/**
+	 * Change attribute value
+	 * 
+	 * @param attrname the attribute name
+	 * @param value the value object
+	 *  
+	 **/
+	@Override
+	public void changeAttrValue(String attrname, Object value) {
+		
+		super.changeAttrValue(entryKey.getEntityName(), attrname, value);
+	}
+	
+	/**
 	 * Get the Predicates of audit info
 	 * @return Map<String, Object>
 	 **/

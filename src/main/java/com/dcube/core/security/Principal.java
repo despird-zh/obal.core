@@ -34,7 +34,9 @@ import com.dcube.meta.EntityConstants;
 import com.dcube.meta.EntityConstants.UserEnum;
 
 /**
- * Store the principal info of user
+ * Keep the principal info of user, this class is not defined like normal bean
+ * It uses EntityEntry to R/W the attributes. 
+ * <p>The EntryParser be used to communicate with EntityEntry</p>
  * 
  * @author despird
  * @version 1.0 2014-01-01
@@ -223,7 +225,7 @@ public class Principal extends EntryParser{
 	/** set the attribute value */
 	private void setAttrValue(String attribute, Object value){
 		EntityEntry temp = (EntityEntry)rawEntry;		
-		temp.setAttrValue(attribute, value);
+		temp.changeAttrValue(attribute, value);
 	}
 	
 	/**

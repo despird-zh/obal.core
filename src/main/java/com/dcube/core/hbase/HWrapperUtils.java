@@ -8,10 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.hadoop.hbase.Cell;
-import org.apache.hadoop.hbase.CellScanner;
 import org.apache.hadoop.hbase.client.Put;
-import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.ObjectReader;
@@ -19,11 +16,8 @@ import org.codehaus.jackson.type.TypeReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.dcube.core.CoreConstants;
 import com.dcube.exception.WrapperException;
 import com.dcube.meta.EntityAttr;
-import com.dcube.meta.EntityAttr.AttrType;
-import com.dcube.meta.EntityConstants;
 
 public class HWrapperUtils {
 
@@ -31,6 +25,10 @@ public class HWrapperUtils {
 	
 	public static Logger LOGGER = LoggerFactory.getLogger(HWrapperUtils.class);
 
+	public static final byte[] JMAP_VAL = "{}".getBytes();
+	public static final byte[] JSET_VAL = "[]".getBytes();
+	public static final byte[] JLIST_VAL = "[]".getBytes();
+	public static final byte[] NULL_VAL = new byte[0];
 	/**
 	 * Get primitive value from cell, primitive means int,long,double,string,date
 	 * 
@@ -382,25 +380,25 @@ public class HWrapperUtils {
 	 **/
 	public static void putPrimitiveValue(Put put, EntityAttr attr, Object value){
 		byte[] bval = null;
-    	if(value == null) return;    	
+    	//if(value == null) return;    	
     	switch(attr.type){
 			case INTEGER:
-				bval = Bytes.toBytes((Integer)value);
+				bval = (value == null) ? NULL_VAL:Bytes.toBytes((Integer)value);
 				break;
 			case BOOL:
-				bval = Bytes.toBytes((Boolean)value);
+				bval = (value == null) ? NULL_VAL:Bytes.toBytes((Boolean)value);
 				break;
 			case DOUBLE:
-				bval = Bytes.toBytes((Double)value);
+				bval = (value == null) ? NULL_VAL:Bytes.toBytes((Double)value);
 				break;
 			case LONG:
-				bval = Bytes.toBytes((Long)value);
+				bval = (value == null) ? NULL_VAL:Bytes.toBytes((Long)value);
 				break;							
 			case STRING:
-				bval = Bytes.toBytes((String)value);
+				bval = (value == null) ? NULL_VAL:Bytes.toBytes((String)value);
 				break;
 			case DATE:
-				bval = Bytes.toBytes(((Date)value).getTime());
+				bval = (value == null) ? NULL_VAL:Bytes.toBytes(((Date)value).getTime());
 				break;						
 			default:
 				
@@ -418,11 +416,15 @@ public class HWrapperUtils {
 	 **/
 	public static void putJMapValue(Put put, EntityAttr attr, Map<String,Object> mapVal)throws WrapperException{
 		byte[] bval = null;
-    	if(mapVal == null) return;    	
+    	//if(mapVal == null) return;    	
 		String mapJson = null;
 		try{
-			mapJson = objectMapper.writeValueAsString(mapVal);
-			bval = mapJson.getBytes();
+			if(mapVal != null) {
+				mapJson = objectMapper.writeValueAsString(mapVal);
+				bval = mapJson.getBytes();
+			}else{
+				bval = JMAP_VAL;
+			}
 			put.add(attr.getColumn().getBytes(), attr.getQualifier().getBytes(), bval);
 		}catch(Exception e){
 			
@@ -441,10 +443,14 @@ public class HWrapperUtils {
 	public static void putJListValue(Put put, EntityAttr attr, List<Object> listVal)throws WrapperException{
 		byte[] bval = null;
 		String listJson = null;
-		if(listVal == null) return;
+		//if(listVal == null) return;
 		try{
-			listJson = objectMapper.writeValueAsString(listVal);
-			bval = listJson.getBytes();
+			if(listVal == null){
+				listJson = objectMapper.writeValueAsString(listVal);
+				bval = listJson.getBytes();
+			}else{
+				bval = JLIST_VAL;
+			}
 			put.add(attr.getColumn().getBytes(), attr.getQualifier().getBytes(), bval);
 		}catch(Exception e){
 			
@@ -464,10 +470,14 @@ public class HWrapperUtils {
 	public static void putJSetValue(Put put, EntityAttr attr, Set<Object> setVal)throws WrapperException{
 		byte[] bval = null;
 		String setJson = null;
-		if(setVal == null) return;
+		//if(setVal == null) return;
 		try{
-			setJson = objectMapper.writeValueAsString(setVal);
-			bval = setJson.getBytes();
+			if(setVal == null){
+				setJson = objectMapper.writeValueAsString(setVal);
+				bval = setJson.getBytes();
+			}else{
+				bval = JSET_VAL;
+			}
 			put.add(attr.getColumn().getBytes(), attr.getQualifier().getBytes(), bval);
 		}catch(Exception e){
 			
@@ -475,11 +485,5 @@ public class HWrapperUtils {
 		}    	
     	
 	}
-	
-	private static class VarsHolder<K>{
-		
-		public EntityAttr attr;
-		public K variable ;
 
-	}
 }

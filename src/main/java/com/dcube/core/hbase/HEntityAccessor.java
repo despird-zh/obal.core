@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.NavigableMap;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
@@ -40,25 +39,18 @@ import org.apache.hadoop.hbase.filter.BinaryPrefixComparator;
 import org.apache.hadoop.hbase.filter.CompareFilter.CompareOp;
 import org.apache.hadoop.hbase.filter.Filter;
 import org.apache.hadoop.hbase.filter.QualifierFilter;
-import org.apache.hadoop.hbase.util.Bytes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.dcube.audit.AuditInfo;
 import com.dcube.audit.Predicate;
-import com.dcube.core.CoreConstants;
 import com.dcube.core.EntryFilter;
 import com.dcube.core.EntryKey;
 import com.dcube.core.IEntityEntry;
 import com.dcube.core.IEntryConverter;
-import com.dcube.core.accessor.AccessControlEntry;
 import com.dcube.core.accessor.AccessorContext;
 import com.dcube.core.accessor.EntityAccessor;
 import com.dcube.core.accessor.EntryCollection;
-import com.dcube.core.security.AclPrivilege;
-import com.dcube.core.security.EntryAce;
-import com.dcube.core.security.EntryAcl;
-import com.dcube.core.security.EntryAce.AceType;
 import com.dcube.exception.AccessorException;
 import com.dcube.exception.MetaException;
 import com.dcube.exception.WrapperException;
@@ -739,6 +731,7 @@ public abstract class HEntityAccessor<GB extends IEntityEntry> extends EntityAcc
 	 * @param entryInfo the entry information bean
 	 * @return Object the raw object. 
 	 **/	
+	@SuppressWarnings("unchecked")
 	public Put parse(List<EntityAttr> attrs, final GB entryInfo)throws WrapperException{
 		byte[] keybytes = entryInfo.getEntryKey().getKeyBytes();
 		if(keybytes == null)

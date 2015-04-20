@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.dcube.exception.RingEventException;
-import com.dcube.launcher.ILifecycle.LifeState;
 import com.dcube.launcher.LifecycleHooker;
 import com.lmax.disruptor.EventFactory;
 import com.lmax.disruptor.EventHandler;

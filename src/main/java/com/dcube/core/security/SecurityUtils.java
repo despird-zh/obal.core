@@ -4,7 +4,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.Random;
 
 import org.apache.commons.codec.binary.Base64;

@@ -26,7 +26,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.dcube.core.AccessorFactory;
-import com.dcube.core.CoreConstants;
 import com.dcube.core.EntryKey;
 import com.dcube.core.IEntityAccessor;
 import com.dcube.core.accessor.EntityEntry;

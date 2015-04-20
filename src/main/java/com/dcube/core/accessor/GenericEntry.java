@@ -128,7 +128,8 @@ public class GenericEntry implements IGenericEntry{
 	}
 	
 	/**
-	 * Set the attribute with value
+	 * Set the attribute with value, if attr-value set for first time
+	 * changed flag is false, otherwise changed flag is true
 	 * 
 	 * @param attribute the attribute object
 	 * @param value the value object
@@ -150,7 +151,8 @@ public class GenericEntry implements IGenericEntry{
 	}
 	
 	/**
-	 * Set the attribute with value
+	 * Set the attribute with value, if attr-value set for first time
+	 * changed flag is false, otherwise changed flag is true
 	 * 
 	 * @param entityname the entity name
 	 * @param attrname the attribute name
@@ -163,6 +165,28 @@ public class GenericEntry implements IGenericEntry{
 		
 		if(item == null){
 			item = new AttributeItem(entityname,attrname, value);
+			itemMap.put(item.getFullName(),item);
+		}
+		else
+			item.setNewValue(value);
+		
+	}
+	
+	/**
+	 * Change the attribute with new value, the changed flag be true
+	 * 
+	 * @param entityname the entity name
+	 * @param attrname the attribute name
+	 * @param value the value object
+	 * 
+	 **/
+	public void changeAttrValue(String entityname, String attrname, Object value) {
+		
+		AttributeItem item = itemMap.get(entityname + EntityConstants.NAME_SEPARATOR + attrname);
+		
+		if(item == null){
+			item = new AttributeItem(entityname,attrname, value);
+			item.setChanged(true);
 			itemMap.put(item.getFullName(),item);
 		}
 		else
