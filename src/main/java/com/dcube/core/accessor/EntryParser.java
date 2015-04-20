@@ -22,9 +22,7 @@ public class EntryParser {
 	/**
 	 * Default constructor 
 	 **/
-	public EntryParser(){
-		
-	}
+	public EntryParser(){}
 	
 	/**
 	 * the default constructor, which take entry as data source 
@@ -114,7 +112,7 @@ public class EntryParser {
 	 **/
 	public EntityAttr getAttr(String entityname, String attrname){
 		
-		AttributeItem item = rawEntry.getAttributeItem(entityname ,attrname);
+		AttributeItem item = rawEntry.getAttrItem(entityname ,attrname);
 		EntityAttr attr = null;
 		try {
 			attr = EntityManager.getInstance().getEntityAttr(item.entity(), item.attribute());

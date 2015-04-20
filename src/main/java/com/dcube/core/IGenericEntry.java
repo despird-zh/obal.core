@@ -28,7 +28,7 @@ public interface IGenericEntry{
 	 * Get the changed AttributeItem List,
 	 * changed AttributeItem means be set new value after initial.
 	 **/
-	public List<AttributeItem> getChangedAttrItems();
+	public List<AttributeItem> getChangedAttrItemList();
 	
 	/**
 	 * Get the value of attribute as specified type

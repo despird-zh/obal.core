@@ -10,20 +10,13 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 import com.dcube.base.BaseTester;
 import com.dcube.core.security.Principal;
-import com.dcube.core.security.Profile;
 
 public class PrincipalTest extends BaseTester{
 	
 	public void testPrincipal2Json(){
 		
 		Principal princ = new Principal("acnt1","name1","passwd1","sourc1");
-		//princ.setKey("pid1");
-		Profile pf = new Profile();
-		pf.setSetting("pk1", "v1");
-		pf.setSetting("pk2", "v2");
-		pf.setSetting("pk3", "v3");
-		pf.setSetting("pk4", "v4");
-		princ.setProfile(pf);
+
 		Map<String,Object> groups = new HashMap<String,Object>();
 		groups.put("gk1","group1");
 		groups.put("gk2","group2");
@@ -44,10 +37,8 @@ public class PrincipalTest extends BaseTester{
 			System.out.println(princ2.getAccount());
 			System.out.println(princ2.getSource());
 			System.out.println(princ2.getPassword());
-			Map<String,Object> settings = princ2.getProfileSettings();
-			for(Map.Entry<String, Object> ent:settings.entrySet()){
-				System.out.println("key:"+ent.getKey()+"/val:"+ent.getValue());
-			}
+
+
 			//Map<String,Object> grps = princ2.getGroups();
 			//System.out.println("grps:"+grps);
 			//Map<String,Object> rls = princ2.getRoles();

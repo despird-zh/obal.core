@@ -133,7 +133,7 @@ public class SecurityTest extends BaseTester{
 			
 			uea = AccessorFactory.buildEntityAccessor(princ, EntityConstants.ENTITY_USER);
 
-			uea.doPutEntryAttr(princ2.getKey(), "i_name", "newUserName");
+			uea.doPutEntryAttr(princ2.getEntryKey().getKey(), "i_name", "newUserName");
 			
 			princ2 = pa.getPrincipalByAccount("demo1");
 			

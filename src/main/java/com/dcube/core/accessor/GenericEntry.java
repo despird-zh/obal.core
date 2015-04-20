@@ -77,7 +77,7 @@ public class GenericEntry implements IGenericEntry{
 	/**
 	 * Get the changed AttributeItem list
 	 **/
-	public List<AttributeItem> getChangedAttrItems() {
+	public List<AttributeItem> getChangedAttrItemList() {
 		
 		List<AttributeItem> rtv = new ArrayList<AttributeItem>(itemMap.values());
 		for(int i = rtv.size()-1; i >=0;i--){
@@ -177,33 +177,6 @@ public class GenericEntry implements IGenericEntry{
 	protected Map<String, AttributeItem> getItemMap(){
 		
 		return this.itemMap;
-	}
-	
-	/**
-	 * Get the AttributeItem object
-	 * @param entityname the entity name
-	 * @param attrname the attribute name
-	 * @return  AttributeItem 
-	 **/
-	protected AttributeItem getAttributeItem(String entityname, String attrname){
-		
-		return itemMap.get(entityname + EntityConstants.NAME_SEPARATOR + attrname);
-	}
-	
-	/**
-	 * Get the changed item list
-	 * @return  List<AttributeItem>
-	 **/
-	public List<AttributeItem> getChangedItems(){
-		
-		List<AttributeItem> rtv = new ArrayList<AttributeItem>();
-		
-		for(Map.Entry<String, AttributeItem> e:itemMap.entrySet()){
-			if(e.getValue() != null && e.getValue().isChanged())
-				rtv.add(e.getValue());
-		}
-		
-		return rtv;
 	}
 
 	/**

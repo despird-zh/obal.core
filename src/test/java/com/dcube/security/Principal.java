@@ -51,8 +51,7 @@ public class Principal extends EntryKey{
 	private String source = "";
 	/** the salt to hash password */
 	private String salt = "";
-	/** the user profile info holder */
-	private Profile profile = null;
+
 	/** the groups */
 	private Set<String> groups;
 	/** the roles */
@@ -148,26 +147,16 @@ public class Principal extends EntryKey{
 		
 		this.source = source;
 	}
-	
-	public Profile getProfile() {
-		
-		return profile;
-	}
-	
-	public void setProfile(Profile profile) {
-		
-		this.profile = profile;
-	}	
+
 	
 	public Map<String, Object> getProfileSettings(){
 		
-		return this.profile == null? new HashMap<String, Object>():this.profile.getSettings();
+		return new HashMap<String, Object>();
 	}
 	
 	public void setProfileSettings(Map<String, Object> settings){
 		
-		this.profile = new Profile();
-		this.profile.setSettings(settings);;
+
 	}
 	
 	public boolean inGroup(String group){

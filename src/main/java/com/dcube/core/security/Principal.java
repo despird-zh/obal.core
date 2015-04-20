@@ -38,7 +38,7 @@ import com.dcube.meta.EntityConstants.UserEnum;
  * 
  * @author despird
  * @version 1.0 2014-01-01
- * @see com.dcube.core.security.Profile
+ *
  **/
 public class Principal extends EntryParser{
 
@@ -222,7 +222,7 @@ public class Principal extends EntryParser{
 	
 	/** set the attribute value */
 	private void setAttrValue(String attribute, Object value){
-		EntityEntry temp = (EntityEntry)rawEntry;
+		EntityEntry temp = (EntityEntry)rawEntry;		
 		temp.setAttrValue(attribute, value);
 	}
 	
