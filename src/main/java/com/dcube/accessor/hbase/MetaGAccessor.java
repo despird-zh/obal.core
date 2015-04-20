@@ -24,10 +24,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.hadoop.hbase.filter.BinaryComparator;
 import org.apache.hadoop.hbase.filter.CompareFilter;
 import org.apache.hadoop.hbase.filter.Filter;
-import org.apache.hadoop.hbase.filter.RowFilter;
+import org.apache.hadoop.hbase.filter.SingleColumnValueFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,18 +34,15 @@ import com.dcube.accessor.IMetaGAccessor;
 import com.dcube.core.AccessorFactory;
 import com.dcube.core.EntryFilter;
 import com.dcube.core.EntryKey;
+import com.dcube.core.IEntryConverter;
 import com.dcube.core.accessor.EntryCollection;
 import com.dcube.core.accessor.EntityEntry;
 import com.dcube.core.hbase.HGenericAccessor;
 import com.dcube.exception.AccessorException;
 import com.dcube.exception.BaseException;
-import com.dcube.exception.EntityException;
-import com.dcube.exception.MetaException;
 import com.dcube.meta.EntityAttr;
 import com.dcube.meta.EntityConstants;
 import com.dcube.meta.EntityMeta;
-import com.dcube.meta.EntityAttr.AttrMode;
-import com.dcube.meta.EntityAttr.AttrType;
 import com.dcube.meta.EntityConstants.AttrEnum;
 import com.dcube.meta.EntityConstants.MetaEnum;
 import com.dcube.util.AccessorUtils;
@@ -75,27 +71,12 @@ public class MetaGAccessor extends HGenericAccessor implements IMetaGAccessor{
 		EntityAttr attr = null;
 		try{
 			attraccessor = AccessorFactory.buildEntityAccessor(this, EntityConstants.ENTITY_META_ATTR);
-
+			IEntryConverter<EntityEntry,EntityAttr> converter = attraccessor.getEntryConverter(EntityAttr.class);
 			EntityEntry minfo = attraccessor.doGetEntry(attrKey);
 		
-			String attrName = minfo.getAttrValue(AttrEnum.AttrName.attribute,String.class);
-			String column = minfo.getAttrValue(AttrEnum.Column.attribute,String.class);
-			String qualifier = minfo.getAttrValue(AttrEnum.Qualifier.attribute,String.class);
-			
-			AttrType type = AttrType.valueOf(minfo.getAttrValue(AttrEnum.Type.attribute,String.class));
-			AttrMode mode = AttrMode.valueOf(minfo.getAttrValue(AttrEnum.Mode.attribute,String.class));
-			
-			attr = new EntityAttr(attrName,mode,type,column,qualifier);
-			attr.setEntryKey(minfo.getEntryKey());
-			attr.setEntityName(minfo.getAttrValue(AttrEnum.Entity.attribute,String.class));
-			attr.setDescription(minfo.getAttrValue(AttrEnum.Description.attribute,String.class));
-			attr.setFormat(minfo.getAttrValue(AttrEnum.Format.attribute,String.class));
-			attr.setHidden(minfo.getAttrValue(AttrEnum.Hidden.attribute,Boolean.class));
-			attr.setIndexable(minfo.getAttrValue(AttrEnum.Indexable.attribute,Boolean.class));
-			attr.setRequired(minfo.getAttrValue(AttrEnum.Required.attribute,Boolean.class));
-			attr.setReadonly(minfo.getAttrValue(AttrEnum.Readonly.attribute,Boolean.class));
+			attr = converter.toTarget(minfo);
 
-		}catch(AccessorException ee){
+		}catch(BaseException ee){
 			
 			throw new AccessorException("Error when build embed accessor:{}",ee,EntityConstants.ENTITY_META_ATTR);
 		}finally{
@@ -109,8 +90,10 @@ public class MetaGAccessor extends HGenericAccessor implements IMetaGAccessor{
 	@Override
 	public List<EntityAttr> getAttrList(String entityName) throws AccessorException {
 		
-		Filter filter1 = new RowFilter(CompareFilter.CompareOp.EQUAL,
-				new BinaryComparator(entityName.getBytes()));
+		Filter filter1 = new SingleColumnValueFilter(AttrEnum.Entity.colfamily.getBytes(), 
+				AttrEnum.Entity.qualifier.getBytes(), 
+				CompareFilter.CompareOp.EQUAL, entityName.getBytes());
+		
 		AttrInfoEAccessor attraccessor = null;
 		EntryCollection<EntityEntry> attrs = null;
 		List<EntityAttr> rtv = null;
@@ -118,30 +101,18 @@ public class MetaGAccessor extends HGenericAccessor implements IMetaGAccessor{
 			attraccessor = AccessorFactory.buildEntityAccessor(this, EntityConstants.ENTITY_META_ATTR);
 		
 			attrs = attraccessor.doScanEntry(new EntryFilter<Filter>(filter1));
-			
+			// convert it into EntityAttr
+			IEntryConverter<EntityEntry,EntityAttr> converter = attraccessor.getEntryConverter(EntityAttr.class);
 			rtv = new ArrayList<EntityAttr>();
 			for(EntityEntry minfo:attrs){
 	
-				String attrName = minfo.getAttrValue(AttrEnum.AttrName.attribute,String.class);
-				String column = minfo.getAttrValue(AttrEnum.Column.attribute,String.class);
-				String qualifier = minfo.getAttrValue(AttrEnum.Qualifier.attribute,String.class);
-				
-				AttrType type = AttrType.valueOf(minfo.getAttrValue(AttrEnum.Type.attribute,String.class));
-				AttrMode mode = AttrMode.valueOf(minfo.getAttrValue(AttrEnum.Mode.attribute,String.class));
-				
-				EntityAttr attr = new EntityAttr(attrName,mode,type,column,qualifier);
-				attr.setEntityName(minfo.getAttrValue(AttrEnum.Entity.attribute,String.class));
-				attr.setDescription(minfo.getAttrValue(AttrEnum.Description.attribute,String.class));
-				attr.setFormat(minfo.getAttrValue(AttrEnum.Format.attribute,String.class));
-				attr.setHidden(minfo.getAttrValue(AttrEnum.Hidden.attribute,Boolean.class));
-				attr.setIndexable(minfo.getAttrValue(AttrEnum.Indexable.attribute,Boolean.class));
-				attr.setRequired(minfo.getAttrValue(AttrEnum.Required.attribute,Boolean.class));
-				attr.setReadonly(minfo.getAttrValue(AttrEnum.Readonly.attribute,Boolean.class));
+				EntityAttr attr = converter.toTarget(minfo);
 				
 				rtv.add(attr);
 			}
-		}catch(AccessorException ee){
+		}catch(BaseException ee){
 			
+			throw new AccessorException("Error when read attributes of entity:{}",ee,entityName);
 		}finally{
 			
 			AccessorUtils.closeAccessor(attraccessor);
@@ -155,31 +126,22 @@ public class MetaGAccessor extends HGenericAccessor implements IMetaGAccessor{
 		
 		try {
 			attraccessor = AccessorFactory.buildEntityAccessor(this, EntityConstants.ENTITY_META_ATTR);
-			EntryKey key = attraccessor.getEntitySchema().newKey(getContext().getPrincipal());
-			EntityEntry minfo = new EntityEntry(key);
-			EntityMeta meta = attraccessor.getEntitySchema().getEntityMeta();
-			minfo.setAttrValue(meta.getAttr(AttrEnum.AttrName.attribute), attr.getAttrName());
-			minfo.setAttrValue(meta.getAttr(AttrEnum.Description.attribute), attr.getDescription());
-			minfo.setAttrValue(meta.getAttr(AttrEnum.Format.attribute), attr.getFormat());
-			minfo.setAttrValue(meta.getAttr(AttrEnum.Column.attribute), attr.getColumn());
-			minfo.setAttrValue(meta.getAttr(AttrEnum.Qualifier.attribute), attr.getQualifier());
-			minfo.setAttrValue(meta.getAttr(AttrEnum.Hidden.attribute), attr.isHidden());
-			minfo.setAttrValue(meta.getAttr(AttrEnum.Indexable.attribute), attr.isPrimitive());
-			minfo.setAttrValue(meta.getAttr(AttrEnum.Required.attribute), attr.isRequired());
-			minfo.setAttrValue(meta.getAttr(AttrEnum.Readonly.attribute), attr.isReadonly());
-			minfo.setAttrValue(meta.getAttr(AttrEnum.Type.attribute), attr.type.toString());
-			minfo.setAttrValue(meta.getAttr(AttrEnum.Mode.attribute), attr.mode.toString());
-			minfo.setAttrValue(meta.getAttr(AttrEnum.Entity.attribute), attr.getEntityName());
-						
+			EntryKey key = attr.getEntryKey();
+			if(null == key){
+				// key is null reset it
+				key = attraccessor.getEntitySchema().newKey(getContext().getPrincipal());
+				attr.setEntryKey(key);
+			}
+			// convert it into EntityEntry
+			IEntryConverter<EntityEntry,EntityAttr> converter = attraccessor.getEntryConverter(EntityAttr.class);
+			EntityEntry minfo = converter.toSource(attr);
+			// save it
 			return attraccessor.doPutEntry(minfo,false);
 			
-		} catch (AccessorException e) {
+		} catch (BaseException e) {
 			
 			throw new AccessorException("Error when put meta attr data.",e);
-		} catch (MetaException e) {
-			
-			throw new AccessorException("Error when create meta attr key.",e);
-		}finally{
+		} finally{
 			
 			AccessorUtils.closeAccessor(attraccessor);
 		}
@@ -193,18 +155,19 @@ public class MetaGAccessor extends HGenericAccessor implements IMetaGAccessor{
 		EntityMeta meta = null;
 		try{
 			metaAccr = AccessorFactory.buildEntityAccessor(this, EntityConstants.ENTITY_META_INFO);
-		
+			IEntryConverter<EntityEntry,EntityMeta> converter = metaAccr.getEntryConverter(EntityMeta.class);
 			EntityEntry minfo = metaAccr.doGetEntry(entityName);
-			meta = new EntityMeta(entityName);
-			meta.setEntityClass(minfo.getAttrValue(MetaEnum.EntityClass.attribute,String.class));
-			meta.setAccessorName(minfo.getAttrValue(MetaEnum.AccessorName.attribute,String.class));
-			meta.setDescription(minfo.getAttrValue(MetaEnum.Description.attribute,String.class));
-			meta.setEntityName(minfo.getAttrValue(MetaEnum.EntityName.attribute,String.class));
-			meta.setSchema(minfo.getAttrValue(MetaEnum.Schema.attribute,String.class));	
-			meta.setTraceable(minfo.getAttrValue(MetaEnum.Traceable.attribute,Boolean.class));
-			meta.setCategory(minfo.getAttrValue(MetaEnum.Category.attribute,String.class));
+			meta = converter.toTarget(minfo);
+			Map<String, String> attrMap =(minfo.getAttrValue(MetaEnum.Attributes.attribute,Map.class));
 			
-		}catch (AccessorException ee){
+			for(Map.Entry<String, String> et:attrMap.entrySet()){
+				// map.entry value is key of attribute
+				EntityAttr attr = getEntityAttr(et.getValue());
+				// push to meta
+				meta.addAttr(attr);
+			}
+			
+		}catch (BaseException ee){
 			
 			throw new AccessorException("Error when get meta info data.",ee);
 		}finally{
@@ -225,24 +188,18 @@ public class MetaGAccessor extends HGenericAccessor implements IMetaGAccessor{
 			metaAccr = AccessorFactory.buildEntityAccessor(this, EntityConstants.ENTITY_META_INFO);
 			rlist = metaAccr.doScanEntry(null);
 			rtv = new ArrayList<EntityMeta>();
-		
+			IEntryConverter<EntityEntry,EntityMeta> converter = metaAccr.getEntryConverter(EntityMeta.class);
+			
 			for(EntityEntry ri:rlist){
 				
-				EntityMeta meta = new EntityMeta(metaAccr.getEntitySchema().getEntityName());
-				meta.setEntryKey(ri.getEntryKey());
-				meta.setEntityClass(ri.getAttrValue(MetaEnum.EntityClass.attribute,String.class));
-				meta.setAccessorName(ri.getAttrValue(MetaEnum.AccessorName.attribute,String.class));
-				meta.setEntityName(ri.getAttrValue(MetaEnum.EntityName.attribute,String.class));
-				meta.setDescription(ri.getAttrValue(MetaEnum.Description.attribute,String.class));
-				meta.setSchema(ri.getAttrValue(MetaEnum.Schema.attribute,String.class));	
-				meta.setTraceable(ri.getAttrValue(MetaEnum.Traceable.attribute,Boolean.class));
-				meta.setCategory(ri.getAttrValue(MetaEnum.Category.attribute,String.class));
+				EntityMeta meta = converter.toTarget(ri);
 				
 				Map<String, String> attrMap =(ri.getAttrValue(MetaEnum.Attributes.attribute,Map.class));
 				
 				for(Map.Entry<String, String> et:attrMap.entrySet()){
-					// value is key of attribute
+					// map.entry value is key of attribute
 					EntityAttr attr = getEntityAttr(et.getValue());
+					// push to meta
 					meta.addAttr(attr);
 				}
 				rtv.add(meta);
@@ -264,29 +221,30 @@ public class MetaGAccessor extends HGenericAccessor implements IMetaGAccessor{
 		MetaInfoEAccessor metaAccr = null;
 		try {
 			metaAccr = AccessorFactory.buildEntityAccessor(this, EntityConstants.ENTITY_META_INFO);
-			EntryKey key = metaAccr.newKey();
-			EntityEntry minfo = new EntityEntry(key);
-			EntityMeta emeta = metaAccr.getEntitySchema().getEntityMeta();
-			minfo.setAttrValue(emeta.getAttr(MetaEnum.EntityName.attribute), meta.getEntityName());
-			minfo.setAttrValue(emeta.getAttr(MetaEnum.EntityClass.attribute), meta.getEntityClass());
-			minfo.setAttrValue(emeta.getAttr(MetaEnum.AccessorName.attribute), meta.getAccessorName());
-			minfo.setAttrValue(emeta.getAttr(MetaEnum.Description.attribute), meta.getDescription());
-			minfo.setAttrValue(emeta.getAttr(MetaEnum.Traceable.attribute), meta.getTraceable());
-			minfo.setAttrValue(emeta.getAttr(MetaEnum.Schema.attribute), meta.getSchema());
-			minfo.setAttrValue(emeta.getAttr(MetaEnum.Category.attribute), meta.getCategory());
 			
-			EntryKey mkey = metaAccr.doPutEntry(minfo,false);
-			
+			EntryKey key = meta.getEntryKey();
+			if(key == null){
+				// key not set, generate one			
+				key = metaAccr.newKey();
+				meta.setEntryKey(key);// reset EntryKey
+			}
+			IEntryConverter<EntityEntry,EntityMeta> converter = metaAccr.getEntryConverter(EntityMeta.class);
+			// convert to EntityEntry
+			EntityEntry minfo = converter.toSource(meta);
+			// save EntityEntry
+			EntryKey mkey = metaAccr.doPutEntry(minfo,false);	
+			// Initial attribute map
 			Map<String,String> attrmap = new HashMap<String,String>();
-			
+			// Iterate the attribute and store it
 			for(EntityAttr tattr:meta.getAllAttrs()){
-				
+				// set entity name
 				tattr.setEntityName(meta.getEntityName());
-				
+				// save attribute
 				EntryKey akey = putEntityAttr(tattr);
+				// keep relation data to map
 				attrmap.put(tattr.getAttrName(),akey.getKey());
 			}
-			
+			// save relation data
 			if(!attrmap.isEmpty())
 				metaAccr.doPutEntryAttr(mkey.getKey(), MetaEnum.Attributes.attribute, attrmap);
 
