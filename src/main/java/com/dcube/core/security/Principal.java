@@ -26,9 +26,12 @@ import java.util.Set;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-import com.dcube.core.EntryKey;
-import com.dcube.core.TraceInfo;
+import com.dcube.core.accessor.EntityEntry;
+import com.dcube.core.accessor.EntryParser;
+import com.dcube.core.accessor.GenericEntry;
+import com.dcube.core.accessor.TraceableEntry;
 import com.dcube.meta.EntityConstants;
+import com.dcube.meta.EntityConstants.UserEnum;
 
 /**
  * Store the principal info of user
@@ -37,27 +40,8 @@ import com.dcube.meta.EntityConstants;
  * @version 1.0 2014-01-01
  * @see com.dcube.core.security.Profile
  **/
-public class Principal extends EntryKey{
-		
-	/** tracing information */
-	private TraceInfo traceInfo = null;
-	/** the account information */
-	private String account = "";
-	/** the name  */
-	private String name = "";
-	/** the password */
-	private String password = "";
-	/** the source of principal information */
-	private String source = "";
-	/** the salt to hash password */
-	private String salt = "";
-	/** the user profile info holder */
-	private Profile profile = null;
-	/** the groups */
-	private Set<String> groups;
-	/** the roles */
-	private Set<String> roles;
-	
+public class Principal extends EntryParser{
+
 	/**
 	 * Constructor for new Principal
 	 * 
@@ -65,8 +49,8 @@ public class Principal extends EntryKey{
 	 * 
 	 **/
 	public Principal(String key){
-		
-		super(EntityConstants.ENTITY_USER,key);
+		super();
+		rawEntry = new TraceableEntry(EntityConstants.ENTITY_USER,key);
 	}
 	
 	/**
@@ -78,10 +62,11 @@ public class Principal extends EntryKey{
 	 * 
 	 **/
 	public Principal(String account, String name, String password) {
-		super(null,null);
-		this.account = account;
-		this.name = name;
-		this.password = password;
+		super();
+		rawEntry = new TraceableEntry();
+		this.setAccount(account);
+		this.setName(name);
+		this.setPassword(password);
 	}
 
 	/**
@@ -93,120 +78,168 @@ public class Principal extends EntryKey{
 	 * @param source the account source
 	 **/	
 	public Principal(String account, String name,  String password,  String source) {
-		super(null,null);
-		this.account = account;
-		this.name = name;
-		this.password = password;
-		this.source = source;
+		super();
+		rawEntry = new TraceableEntry();
+		this.setAccount(account);
+		this.setName(name);
+		this.setPassword(password);
+		this.setSource(source);
 	}
 	
 	/**
 	 * Get Account information 
 	 **/
 	public String getAccount() {
-		return account;
+		
+		return getAttrValue(UserEnum.Account.attribute, String.class);
 	}
 	
 	public void setAccount(String account){
 		
-		this.account = account;
+		this.setAttrValue(UserEnum.Account.attribute, account);
 	}
 	
 	public String getSalt(){
 		
-		return this.salt;
+		return getAttrValue(UserEnum.Salt.attribute, String.class);
 	}
 	
 	public void setSalt(String salt){
 		
-		this.salt = salt;
+		this.setAttrValue(UserEnum.Salt.attribute, salt);
 	}
 	
 	public String getName() {
-		return name;
+		return getAttrValue(UserEnum.Name.attribute, String.class);
 	}
 
 	public void setName(String name){
 		
-		this.name = name;
+		this.setAttrValue(UserEnum.Name.attribute, name);
 	}
 	
 	public String getPassword() {
-		return password;
+		return getAttrValue(UserEnum.Password.attribute, String.class);
 	}
 
 	public void setPassword(String password){
 		
-		this.password = password;
+		this.setAttrValue(UserEnum.Password.attribute, password);
 	}
 	
 	public String getSource() {
-		return source;
+		return getAttrValue(UserEnum.Source.attribute, String.class);
 	}
 	
 	public void setSource(String source){
 		
-		this.source = source;
+		this.setAttrValue(UserEnum.Source.attribute, source);
 	}
 	
-	public Profile getProfile() {
-		
-		return profile;
+	public Map<String, String> getProfile(){
+		@SuppressWarnings("unchecked")
+		Map<String, String> psetting = (Map<String, String>)this.getAttrValue(UserEnum.Profile.attribute, Map.class);
+		return psetting;
 	}
 	
-	public void setProfile(Profile profile) {
+	public void setProfile(Map<String, String> settings){
 		
-		this.profile = profile;
-	}	
-	
-	public Map<String, Object> getProfileSettings(){
-		
-		return this.profile == null? new HashMap<String, Object>():this.profile.getSettings();
-	}
-	
-	public void setProfileSettings(Map<String, Object> settings){
-		
-		this.profile = new Profile();
-		this.profile.setSettings(settings);;
+		this.setAttrValue(UserEnum.Profile.attribute, settings);
 	}
 	
 	public boolean inGroup(String group){
 		
-		return false;
+		@SuppressWarnings("unchecked")
+		Map<String, String> groupmap = (Map<String, String>)this.getAttrValue(UserEnum.Groups.attribute, Map.class);
+		if(groupmap == null)
+			return false;
+		else{
+			
+			return groupmap.containsKey(group);
+		}
 	}
 
 	public boolean inRole(String role){
-		
-		return false;
+		@SuppressWarnings("unchecked")
+		Map<String, String> rolemap = (Map<String, String>)this.getAttrValue(UserEnum.Roles.attribute, Map.class);
+		if(rolemap == null)
+			return false;
+		else{
+			
+			return rolemap.containsKey(role);
+		}
 	}
 		
 	public void setGroups(Set<String> groups){
-		
-		this.groups = groups;
+		if(groups != null){
+			@SuppressWarnings("unchecked")
+			Map<String, String> groupmap = (Map<String, String>)this.getAttrValue(UserEnum.Groups.attribute, Map.class);
+			Map<String, String> attrMap = (groupmap == null)? new HashMap<String, String>():groupmap;
+			for(String t:groups){
+				if(!attrMap.containsKey(t))
+					attrMap.put(t, EntityConstants.BLANK_VALUE);
+			}
+			this.setAttrValue(UserEnum.Groups.attribute, attrMap);
+		}else
+			this.setAttrValue(UserEnum.Groups.attribute, null);
 	}
 	
 	public Set<String> getGroups(){
 		
-		return this.groups;
+		@SuppressWarnings("unchecked")
+		Map<String, String> groupmap = (Map<String, String>)this.getAttrValue(UserEnum.Groups.attribute, Map.class);
+		
+		return groupmap == null? null:groupmap.keySet();
 	}
 		
 	public void setRoles(Set<String> roles){
-		this.roles = roles;
+		if(roles != null){
+			@SuppressWarnings("unchecked")
+			Map<String, String> rolemap = (Map<String, String>)this.getAttrValue(UserEnum.Roles.attribute, Map.class);
+			Map<String, String> attrMap = (rolemap == null)? new HashMap<String, String>():rolemap;
+			for(String t:roles){
+				if(!rolemap.containsKey(t))
+					attrMap.put(t, EntityConstants.BLANK_VALUE);
+			}
+			this.setAttrValue(UserEnum.Roles.attribute, attrMap);
+		}else
+			this.setAttrValue(UserEnum.Roles.attribute, null);
 	}
 	
 	public Set<String> getRoles(){
 		
-		return this.roles;
+		@SuppressWarnings("unchecked")
+		Map<String, String> rolemap = (Map<String, String>)this.getAttrValue(UserEnum.Roles.attribute, Map.class);
+		
+		return rolemap == null? null:rolemap.keySet();
+	}
+		
+	/** get the attribute value */
+	private <K> K getAttrValue(String attribute, Class<K> type){
+		EntityEntry temp = (EntityEntry)rawEntry;
+		return temp.getAttrValue(attribute, type);
 	}
 	
-	public TraceInfo getTraceInfo(){
-		
-		return this.traceInfo;
+	/** set the attribute value */
+	private void setAttrValue(String attribute, Object value){
+		EntityEntry temp = (EntityEntry)rawEntry;
+		temp.setAttrValue(attribute, value);
 	}
 	
-	public void setTraceInfo(TraceInfo traceInfo){
-		
-		this.traceInfo = traceInfo;
+	/**
+	 * Set raw generic entry 
+	 **/
+	@Override	
+	public void setGenericEntry(GenericEntry rawEntry){
+		EntityEntry temp = null;
+		if(!(rawEntry instanceof EntityEntry)){
+			throw new UnsupportedOperationException("Only EntityEntry is supported."); 
+		}
+		temp = (EntityEntry)rawEntry;
+		if(!EntityConstants.ENTITY_USER.equals(temp.getEntityName())){
+			throw new UnsupportedOperationException("Only User entiry EntityEntry is accepted."); 
+		}
+		super.setGenericEntry(rawEntry);
 	}
 	
 	@Override
@@ -222,15 +255,21 @@ public class Principal extends EntryKey{
 		// step 3
 		Principal that = (Principal) other;
 		// step 4
+		String source = this.getSource();
+		String account = this.getAccount();
+		String osrc = that.getSource();
+		String oacct = this.getAccount();
 		return new EqualsBuilder()
-			.append(this.source, that.source)
-			.append(this.account, that.account).isEquals();
+			.append(source, osrc)
+			.append(account, oacct).isEquals();
 	}
 
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder(17, 37).append(this.source)
-				.append(this.account).toHashCode();
+		String source = this.getSource();
+		String account = this.getAccount();
+		return new HashCodeBuilder(17, 37).append(source)
+				.append(account).toHashCode();
 	}
 
 }

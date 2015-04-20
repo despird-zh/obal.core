@@ -22,7 +22,7 @@ public interface IGenericEntry{
 	/**
 	 * Get the AttributeItem List
 	 **/
-	public List<AttributeItem> getAttrItems();
+	public List<AttributeItem> getAttrItemList();
 	
 	/**
 	 * Get the changed AttributeItem List,

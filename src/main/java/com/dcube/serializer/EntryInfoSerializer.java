@@ -36,7 +36,7 @@ public class EntryInfoSerializer extends Serializer<EntityEntry>{
 
 	@Override
 	public void write(Kryo kryo, Output output, EntityEntry object) {
-		Collection<AttributeItem> attrs = object.getAttrItems();
+		Collection<AttributeItem> attrs = object.getAttrItemList();
 		ArrayList<AttributeItem> attrList = new ArrayList<AttributeItem>(attrs);
 		Collections.sort(attrList,AttrComparator);
 		

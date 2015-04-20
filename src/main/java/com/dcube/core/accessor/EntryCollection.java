@@ -59,7 +59,7 @@ public class EntryCollection<GB extends IGenericEntry> implements Iterable<GB> {
 				attr = EntityManager.getInstance().getEntityAttr(item.entity(), item.attribute());
 				rtv.add(attr);
 			} catch (MetaException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 		
@@ -73,7 +73,7 @@ public class EntryCollection<GB extends IGenericEntry> implements Iterable<GB> {
 	public void addEntry(GB item){
 		
 		if(this.attritemlist.size() == 0 ){
-			List<AttributeItem> attrs = item.getAttrItems();
+			List<AttributeItem> attrs = item.getAttrItemList();
 			attritemlist.addAll(attrs);
 		}
 		

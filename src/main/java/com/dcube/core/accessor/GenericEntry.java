@@ -25,10 +25,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.dcube.core.IGenericEntry;
-import com.dcube.exception.MetaException;
 import com.dcube.meta.EntityAttr;
 import com.dcube.meta.EntityConstants;
-import com.dcube.meta.EntityManager;
 
 /**
  * EntryInfo is the base class for all classes that be used to wrap the entry row
@@ -69,11 +67,11 @@ public class GenericEntry implements IGenericEntry{
 	 * Get the attribute list 
 	 * @return List<EntityAttr>
 	 **/
-	public List<AttributeItem> getAttrItems() {
+	public List<AttributeItem> getAttrItemList() {
 		
 		List<AttributeItem> rtv = new ArrayList<AttributeItem>(itemMap.values());
 		
-		return rtv.size() == 0? null:rtv;
+		return rtv;
 	}
 
 	/**
