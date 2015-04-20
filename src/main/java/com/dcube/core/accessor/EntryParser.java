@@ -20,7 +20,8 @@ public class EntryParser {
 	protected GenericEntry rawEntry = null;
 	
 	/**
-	 * Default constructor 
+	 * Default constructor, here not initial the rawEntry
+	 * because it could be EntityEntry or AccessControlEntry or TraceableEntry
 	 **/
 	public EntryParser(){}
 	
