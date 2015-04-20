@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 
+import com.dcube.core.IGenericEntry.AttributeItem;
 import com.dcube.core.accessor.EntityEntry;
 import com.dcube.meta.EntityAttr;
 import com.esotericsoftware.kryo.Kryo;
@@ -35,17 +36,17 @@ public class EntryInfoSerializer extends Serializer<EntityEntry>{
 
 	@Override
 	public void write(Kryo kryo, Output output, EntityEntry object) {
-		Collection<EntityAttr> attrs = object.getAttrs();
-		ArrayList<EntityAttr> attrList = new ArrayList<EntityAttr>(attrs);
+		Collection<AttributeItem> attrs = object.getAttrItems();
+		ArrayList<AttributeItem> attrList = new ArrayList<AttributeItem>(attrs);
 		Collections.sort(attrList,AttrComparator);
 		
 		kryo.writeClassAndObject(output, object);
 	}
 
 	// create comparator
-	private static Comparator<EntityAttr> AttrComparator = new Comparator<EntityAttr>(){  
+	private static Comparator<AttributeItem> AttrComparator = new Comparator<AttributeItem>(){  
         @Override  
-        public int compare(EntityAttr b1, EntityAttr b2) {  
+        public int compare(AttributeItem b1, AttributeItem b2) {  
             return b1.getAttrName().compareTo(b2.getAttrName());  
         }  
           

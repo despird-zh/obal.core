@@ -1,7 +1,5 @@
 package com.dcube.serializer;
 
-import java.util.Date;
-
 import com.dcube.meta.EntityAttr;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
@@ -23,8 +21,8 @@ public class EntityAttrSerializer  extends Serializer<EntityAttr>{
 		attr.type = EntityAttr.AttrType.valueOf(input.readString());
 		attr.setDescription(input.readString());
 		
+		attr.setIndexable(input.readBoolean());
 		attr.setHidden(input.readBoolean());
-		attr.setPrimary(input.readBoolean());
 		attr.setReadonly(input.readBoolean());
 		attr.setRequired(input.readBoolean());
 
@@ -43,8 +41,8 @@ public class EntityAttrSerializer  extends Serializer<EntityAttr>{
 		output.writeString(attr.type.toString());
 		output.writeString(attr.getDescription());
 		
+		output.writeBoolean(attr.isIndexable());
 		output.writeBoolean(attr.isHidden());
-		output.writeBoolean(attr.isPrimary());
 		output.writeBoolean(attr.isReadonly());
 		output.writeBoolean(attr.isRequired());
 		

@@ -235,9 +235,9 @@ public class EntityManager {
 				AttrEnum.Required.qualifier);
 		meta.addAttr(attr);
 		
-		attr = new EntityAttr(AttrEnum.Primary.attribute, EntityAttr.AttrType.BOOL, 				
-				AttrEnum.Primary.colfamily, 
-				AttrEnum.Primary.qualifier);
+		attr = new EntityAttr(AttrEnum.Indexable.attribute, EntityAttr.AttrType.BOOL, 				
+				AttrEnum.Indexable.colfamily, 
+				AttrEnum.Indexable.qualifier);
 		meta.addAttr(attr);
 		
 		attr = new EntityAttr(AttrEnum.Entity.attribute, 				

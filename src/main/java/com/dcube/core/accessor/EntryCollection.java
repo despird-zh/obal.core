@@ -5,7 +5,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.dcube.core.IGenericEntry;
+import com.dcube.core.IGenericEntry.AttributeItem;
+import com.dcube.exception.MetaException;
 import com.dcube.meta.EntityAttr;
+import com.dcube.meta.EntityManager;
 
 /**
  * EntryCollection wrap all the entries returned from scan operation.
@@ -18,7 +21,7 @@ import com.dcube.meta.EntityAttr;
  **/
 public class EntryCollection<GB extends IGenericEntry> implements Iterable<GB> {
 
-	private List<EntityAttr> attrlist = null;
+	private List<AttributeItem> attritemlist = null;
 	
 	private List<GB> entrylist = null;
 	
@@ -27,7 +30,7 @@ public class EntryCollection<GB extends IGenericEntry> implements Iterable<GB> {
 	 **/
 	public EntryCollection(){
 		
-		this.attrlist = new ArrayList<EntityAttr>();
+		this.attritemlist = new ArrayList<AttributeItem>();
 		entrylist = new ArrayList<GB>();
 	}
 	
@@ -36,7 +39,11 @@ public class EntryCollection<GB extends IGenericEntry> implements Iterable<GB> {
 	 **/
 	public EntryCollection(List<EntityAttr> attrlist){
 		
-		this.attrlist = attrlist;
+		this.attritemlist = new ArrayList<AttributeItem>();
+		for(EntityAttr attr: attrlist){
+			AttributeItem item = new AttributeItem(attr.getEntityName(),attr.getAttrName());
+			this.attritemlist.add(item);
+		}
 		entrylist = new ArrayList<GB>();
 	}
 	
@@ -45,7 +52,19 @@ public class EntryCollection<GB extends IGenericEntry> implements Iterable<GB> {
 	 **/
 	public List<EntityAttr> getAttrList(){
 		
-		return this.attrlist;
+		List<EntityAttr> rtv = new ArrayList<EntityAttr>();
+		for(AttributeItem item: this.attritemlist){
+			EntityAttr attr;
+			try {
+				attr = EntityManager.getInstance().getEntityAttr(item.entity(), item.attribute());
+				rtv.add(attr);
+			} catch (MetaException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+		}
+		return rtv;
 	}
 	
 	/**
@@ -53,9 +72,9 @@ public class EntryCollection<GB extends IGenericEntry> implements Iterable<GB> {
 	 **/
 	public void addEntry(GB item){
 		
-		if(this.attrlist.size() == 0 ){
-			List<EntityAttr> attrs = item.getAttrs();
-			attrlist.addAll(attrs);
+		if(this.attritemlist.size() == 0 ){
+			List<AttributeItem> attrs = item.getAttrItems();
+			attritemlist.addAll(attrs);
 		}
 		
 		entrylist.add(item);

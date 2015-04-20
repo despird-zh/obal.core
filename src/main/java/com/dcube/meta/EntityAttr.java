@@ -98,7 +98,8 @@ public class EntityAttr{
 	private boolean hidden = false;
 	private boolean readonly = false;
 	private boolean required = false;
-	private boolean primary = false;
+	private boolean indexable = false;
+
 	private String description = null;
 	private EntryKey entryKey = null;
 	
@@ -254,35 +255,58 @@ public class EntityAttr{
 	/**
 	 * is the attribute primitive 
 	 **/
-	public boolean isPrimary() {
-		return primary;
+	public boolean isPrimitive() {
+		return mode == AttrMode.PRIMITIVE;
 	}
 
 	/**
-	 * set the attribute primitive 
+	 * is the attribute indexable 
 	 **/
-	public void setPrimary(boolean primary) {
-		this.primary = primary;
+	public boolean isIndexable() {
+		return indexable;
 	}
 
+	/**
+	 * Set the attribute indexable 
+	 **/
+	public void setIndexable(boolean indexable) {
+		this.indexable = indexable;
+	}
+	
+	/**
+	 * Get the entity name 
+	 **/
 	public String getEntityName() {
 		return entityName;
 	}
 
+	/**
+	 * Set the entity name 
+	 **/
 	public void setEntityName(String entityName) {
 		this.entityName = entityName;
 	}	
 	
+	/**
+	 * get the key of entry 
+	 **/
 	public EntryKey getEntryKey(){
 		
 		return this.entryKey;
 	}
 	
+	/**
+	 * Set the key of entry 
+	 **/
 	public void setEntryKey(EntryKey entryKey){
 		
 		this.entryKey = entryKey;		
 	}
 	
+	/**
+	 * Get the full name of attribute
+	 * "[entity name].[attr name]" 
+	 **/
 	public String getFullName(){
 		
 		return this.entityName + EntityConstants.NAME_SEPARATOR + this.attrName;
@@ -313,8 +337,7 @@ public class EntityAttr{
 		return new HashCodeBuilder(17, 37)
 			.append(this.entityName)
 			.append(this.attrName).toHashCode();
-			//.append(this.privilege)
-			//.append(sumPerms)
 			
 	}
+
 }

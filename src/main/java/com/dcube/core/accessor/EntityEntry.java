@@ -25,7 +25,6 @@ import java.util.Map;
 
 import com.dcube.core.EntryKey;
 import com.dcube.core.IEntityEntry;
-import com.dcube.meta.EntityAttr;
 
 /**
  * EntryInfo is the base class for all classes that be used to wrap the entry row
@@ -109,9 +108,9 @@ public class EntityEntry extends GenericEntry implements IEntityEntry{
 	 * @return EntityAttr 
 	 **/
 	@Override
-	public EntityAttr getAttr(String attrname) {
+	public AttributeItem getAttrItem(String attrname) {
 		
-		return getAttr(entryKey.getEntityName(), attrname);
+		return getAttrItem(entryKey.getEntityName(), attrname);
 	}
 
 	/**
@@ -160,7 +159,7 @@ public class EntityEntry extends GenericEntry implements IEntityEntry{
 		List<AttributeItem> changedItems = super.getChangedItems();
 		Map<String, Object> predicates = new HashMap<String, Object>();
 		for(AttributeItem item : changedItems){
-			predicates.put(item.attrname, item.currentVal);
+			predicates.put(item.attribute(), item.value());
 		}
 		return predicates;
 	}

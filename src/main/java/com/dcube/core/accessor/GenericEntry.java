@@ -25,8 +25,10 @@ import java.util.List;
 import java.util.Map;
 
 import com.dcube.core.IGenericEntry;
+import com.dcube.exception.MetaException;
 import com.dcube.meta.EntityAttr;
 import com.dcube.meta.EntityConstants;
+import com.dcube.meta.EntityManager;
 
 /**
  * EntryInfo is the base class for all classes that be used to wrap the entry row
@@ -36,9 +38,8 @@ import com.dcube.meta.EntityConstants;
  * @author despird
  * @version 0.1 2014-2-1 
  * 
- * @see RawEntry
- * @see RawAccessControlEntry
- * @see RawTraceableEntry
+ * @author despird
+ * @version 0.2 2014-4-3 Remove EntityAttr reference in AttributeItem
  * 
  **/
 public class GenericEntry implements IGenericEntry{
@@ -57,28 +58,38 @@ public class GenericEntry implements IGenericEntry{
 	 * 
 	 * @return EntityAttr 
 	 **/
-	public EntityAttr getAttr(String entityname, String attrname) {
+	public AttributeItem getAttrItem(String entityname, String attrname) {
 		
 		AttributeItem item = itemMap.get(entityname + EntityConstants.NAME_SEPARATOR + attrname);
-		return item == null? null : item.attribute;
+
+		return item;
 	}
 
 	/**
 	 * Get the attribute list 
 	 * @return List<EntityAttr>
 	 **/
-	public List<EntityAttr> getAttrs() {
+	public List<AttributeItem> getAttrItems() {
 		
-		List<EntityAttr> rtv = new ArrayList<EntityAttr>();
-		
-		for(Map.Entry<String, AttributeItem> e:itemMap.entrySet()){
-			if(e.getValue() != null)
-				rtv.add(e.getValue().attribute);
-		}
+		List<AttributeItem> rtv = new ArrayList<AttributeItem>(itemMap.values());
 		
 		return rtv.size() == 0? null:rtv;
 	}
 
+	/**
+	 * Get the changed AttributeItem list
+	 **/
+	public List<AttributeItem> getChangedAttrItems() {
+		
+		List<AttributeItem> rtv = new ArrayList<AttributeItem>(itemMap.values());
+		for(int i = rtv.size()-1; i >=0;i--){
+			if(!rtv.get(i).isChanged())
+				rtv.remove(i);
+		}
+		
+		return rtv.size() == 0? null:rtv;
+	}
+	
 	/**
 	 * Get the value of attribute and return with casted object.
 	 * 
@@ -94,7 +105,7 @@ public class GenericEntry implements IGenericEntry{
 		AttributeItem e = itemMap.get(entityname + EntityConstants.NAME_SEPARATOR + attrname);
 		if(null == e)
 			return null;
-		Object value = e.currentVal;
+		Object value = e.value();
 		if(null!=value && targetType.isAssignableFrom(value.getClass())){
 			
 			return (K) value;
@@ -115,7 +126,7 @@ public class GenericEntry implements IGenericEntry{
 		if(null == e)
 			return null;
 		
-		return e.currentVal;
+		return e.value();
 	}
 	
 	/**
@@ -130,7 +141,9 @@ public class GenericEntry implements IGenericEntry{
 		AttributeItem item = itemMap.get(attribute.getFullName());
 		
 		if(item == null){
-			item = new AttributeItem(attribute, value);
+			item = new AttributeItem(attribute.getEntityName(),
+					attribute.getAttrName(), 
+					value);
 			itemMap.put(item.getFullName(),item);
 		}
 		else
@@ -194,70 +207,6 @@ public class GenericEntry implements IGenericEntry{
 		
 		return rtv;
 	}
-	
-	/**
-	 * Inner class to wrap value and attribute 
-	 **/
-	public static class AttributeItem implements Cloneable{
-		
-		public AttributeItem(String entityname, String attrname, Object value){
-			
-			this.entityname = entityname;
-			this.attrname = attrname;
-			this.currentVal = value;
-			
-		}
-		
-		public AttributeItem(EntityAttr attribute, Object value){
-			
-			this.attribute = attribute;
-			this.entityname = attribute.getEntityName();
-			this.attrname = attribute.getAttrName();
-			this.currentVal = value;
-		}
-		
-		public String getFullName(){
-			
-			return this.entityname + EntityConstants.NAME_SEPARATOR + this.attrname;
-		}
-		
-		public EntityAttr attribute = null;
-		public String entityname = null;
-		public String attrname = null;
-		public Object currentVal = null;
-		private Object originVal = null;
-		private boolean changed = false;
-		
-		public void setNewValue(Object newVal){
-			if(!changed){
-				this.originVal = this.currentVal;// save original value
-				changed = true;
-			}
-			this.currentVal = newVal;
-		}
-		
-		public boolean isChanged(){
-			return changed;
-		}
-		
-		public Object getOriginalValue(){
-			return this.originVal;
-		}
-		
-		@Override
-	    public Object clone() {
-	       
-			AttributeItem rtv = new AttributeItem(this.entityname,
-					this.attrname,
-					this.currentVal);
-			
-			rtv.attribute = this.attribute;
-			rtv.changed = this.changed;
-			rtv.originVal = this.originVal;
-			
-			return rtv;
-	    }
-	}
 
 	/**
 	 * Copy the original source object to current object.
@@ -274,4 +223,5 @@ public class GenericEntry implements IGenericEntry{
 			this.itemMap.put(e.getKey(), newItem);
 		}
 	}
+
 }

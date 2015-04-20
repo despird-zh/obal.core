@@ -91,7 +91,7 @@ public class MetaGAccessor extends HGenericAccessor implements IMetaGAccessor{
 			attr.setDescription(minfo.getAttrValue(AttrEnum.Description.attribute,String.class));
 			attr.setFormat(minfo.getAttrValue(AttrEnum.Format.attribute,String.class));
 			attr.setHidden(minfo.getAttrValue(AttrEnum.Hidden.attribute,Boolean.class));
-			attr.setPrimary(minfo.getAttrValue(AttrEnum.Primary.attribute,Boolean.class));
+			attr.setIndexable(minfo.getAttrValue(AttrEnum.Indexable.attribute,Boolean.class));
 			attr.setRequired(minfo.getAttrValue(AttrEnum.Required.attribute,Boolean.class));
 			attr.setReadonly(minfo.getAttrValue(AttrEnum.Readonly.attribute,Boolean.class));
 
@@ -134,7 +134,7 @@ public class MetaGAccessor extends HGenericAccessor implements IMetaGAccessor{
 				attr.setDescription(minfo.getAttrValue(AttrEnum.Description.attribute,String.class));
 				attr.setFormat(minfo.getAttrValue(AttrEnum.Format.attribute,String.class));
 				attr.setHidden(minfo.getAttrValue(AttrEnum.Hidden.attribute,Boolean.class));
-				attr.setPrimary(minfo.getAttrValue(AttrEnum.Primary.attribute,Boolean.class));
+				attr.setIndexable(minfo.getAttrValue(AttrEnum.Indexable.attribute,Boolean.class));
 				attr.setRequired(minfo.getAttrValue(AttrEnum.Required.attribute,Boolean.class));
 				attr.setReadonly(minfo.getAttrValue(AttrEnum.Readonly.attribute,Boolean.class));
 				
@@ -164,7 +164,7 @@ public class MetaGAccessor extends HGenericAccessor implements IMetaGAccessor{
 			minfo.setAttrValue(meta.getAttr(AttrEnum.Column.attribute), attr.getColumn());
 			minfo.setAttrValue(meta.getAttr(AttrEnum.Qualifier.attribute), attr.getQualifier());
 			minfo.setAttrValue(meta.getAttr(AttrEnum.Hidden.attribute), attr.isHidden());
-			minfo.setAttrValue(meta.getAttr(AttrEnum.Primary.attribute), attr.isPrimary());
+			minfo.setAttrValue(meta.getAttr(AttrEnum.Indexable.attribute), attr.isPrimitive());
 			minfo.setAttrValue(meta.getAttr(AttrEnum.Required.attribute), attr.isRequired());
 			minfo.setAttrValue(meta.getAttr(AttrEnum.Readonly.attribute), attr.isReadonly());
 			minfo.setAttrValue(meta.getAttr(AttrEnum.Type.attribute), attr.type.toString());

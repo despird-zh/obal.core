@@ -31,7 +31,7 @@ public interface IEntityEntry extends IGenericEntry{
 	/**
 	 * Get attribute 
 	 **/
-	public EntityAttr getAttr(String attrname);
+	public AttributeItem getAttrItem(String attrname);
 	
 	/**
 	 * Get attribute value 

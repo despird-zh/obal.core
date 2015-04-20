@@ -93,7 +93,7 @@ public class EntityConstants {
 		Hidden("i_hidden","hidden"),
 		Readonly("i_readonly","readonly"),
 		Required("i_required","required"),
-		Primary("i_primary","primary"),
+		Indexable("i_indexable","indexable"),
 		Entity("i_entity","entity"),
 		Type("i_type","type"),
 		Mode("i_mode","mode"),
