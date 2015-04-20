@@ -47,7 +47,7 @@ public class EntryInfoSerializer extends Serializer<EntityEntry>{
 	private static Comparator<AttributeItem> AttrComparator = new Comparator<AttributeItem>(){  
         @Override  
         public int compare(AttributeItem b1, AttributeItem b2) {  
-            return b1.getAttrName().compareTo(b2.getAttrName());  
+            return b1.attribute().compareTo(b2.attribute());  
         }  
           
     };
