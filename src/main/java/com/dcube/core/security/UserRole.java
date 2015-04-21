@@ -26,6 +26,10 @@ import com.dcube.meta.EntityConstants.UserEnum;
  **/
 public class UserRole extends EntryParser{
 
+	public UserRole(){
+		super();
+	}
+	
 	/**
 	 * Constructor 
 	 **/

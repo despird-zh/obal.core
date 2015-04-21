@@ -155,7 +155,7 @@ public abstract class EntityAccessor<GB extends IEntityEntry> implements IEntity
 	 **/
 	public boolean isEmbed(){
 		
-		return context.isEmbed();
+		return context == null? false:context.isEmbed();
 	}
 
 	/**

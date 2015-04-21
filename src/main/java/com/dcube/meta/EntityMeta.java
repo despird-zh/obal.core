@@ -37,10 +37,13 @@ import com.dcube.core.EntryKey;
  * 
  * <p>It holds the entry schema class and key class, both of them is used to build EntryAccessor</p>
  * <p>It holds the entry attributes, these attributes be reserved in a Map. it provide methods to 
- * get the <b>Required,Readonly,Visual</b> attributes
+ * get the <b>Required,Readonly,Visual,Indexable</b> attributes
  * </p>
  * The schema name (table name) will be same as entity name by default.
  * 
+ * @author despird-zh
+ * @version 0.1 2014-2-5 Initial
+ * @version 0.1 2014-4-2 Add Indexable Attribute support
  * @since 0.1
  * @see com.dcube.meta.BaseEntity
  * @see com.dcube.core.EntryKey
@@ -477,12 +480,58 @@ public class EntityMeta{
 		return this.accessControllable;
 	}
 
+	/**
+	 * Get the category of entity 
+	 **/
 	public String getCategory() {
 		return category;
 	}
 
+	/**
+	 * Set the category of entity 
+	 **/
 	public void setCategory(String category) {
 		this.category = category;
 	}
 	
+	/**
+	 * Check exist indexable attribute or not. 
+	 **/
+	public boolean hasIndexableAttr(){
+		
+		for(Map.Entry<String, EntityAttr> entry:attrMap.entrySet()){
+			
+			EntityAttr attr = entry.getValue();
+			if(null == attr) 
+				continue;
+			else {
+				
+				if(attr.isIndexable()){			
+				
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Get all the indexable attributes 
+	 **/
+	public List<EntityAttr> getIndexableAttrs(){
+		ArrayList<EntityAttr> attrs = new ArrayList<EntityAttr>();
+		for(Map.Entry<String, EntityAttr> entry:attrMap.entrySet()){
+			
+			EntityAttr attr = entry.getValue();
+			if(null == attr) 
+				continue;
+			else if(attr.isIndexable()){
+				
+				attrs.add(attr);
+			}
+		}
+		
+		return attrs;
+	}
 }

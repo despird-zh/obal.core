@@ -1,20 +1,11 @@
 package com.dcube.accessor.hbase;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
-import com.dcube.core.EntryKey;
 import com.dcube.core.IEntryConverter;
-import com.dcube.core.TraceInfo;
 import com.dcube.core.accessor.TraceableEntry;
 import com.dcube.core.hbase.HEntityAccessor;
 import com.dcube.core.security.UserRole;
 import com.dcube.exception.BaseException;
 import com.dcube.meta.EntityConstants;
-import com.dcube.meta.EntityConstants.RoleEnum;
-import com.dcube.meta.EntityManager;
-import com.dcube.meta.EntityMeta;
 
 public class RoleInfoEAccessor extends HEntityAccessor<TraceableEntry>{
 
@@ -40,24 +31,8 @@ public class RoleInfoEAccessor extends HEntityAccessor<TraceableEntry>{
 				public UserRole toTarget(TraceableEntry fromObject)
 						throws BaseException {
 					
-					String name = fromObject.getAttrValue(RoleEnum.Name.attribute, String.class);
-					EntryKey key = fromObject.getEntryKey();
-					UserRole role = new UserRole(name,key.getKey());
-					
-					TraceInfo tinfo = fromObject.getTraceInfo();
-					role.setTraceInfo(tinfo);
-					role.setDescription(fromObject.getAttrValue(RoleEnum.Description.attribute, String.class));
-					
-					Map<String, String> mapAttr = fromObject.getAttrValue(RoleEnum.Users.attribute, Map.class);
-					if(mapAttr!= null){
-						Set<String> userset = mapAttr.keySet();
-						role.setUsers(userset);
-					}
-					mapAttr = fromObject.getAttrValue(RoleEnum.Groups.attribute, Map.class);
-					if(mapAttr!= null){
-						Set<String> groupset = mapAttr.keySet();
-						role.setGroups(groupset);
-					}
+					UserRole role = new UserRole();
+					role.setGenericEntry(fromObject);
 					return role;
 				}
 
@@ -65,34 +40,7 @@ public class RoleInfoEAccessor extends HEntityAccessor<TraceableEntry>{
 				public TraceableEntry toSource(UserRole toObject)
 						throws BaseException {
 					
-					String id = toObject.getKey();
-					
-					TraceableEntry entry = new TraceableEntry(EntityConstants.ENTITY_USER_ROLE,id);
-					
-					EntityMeta meta = EntityManager.getInstance().getEntityMeta(EntityConstants.ENTITY_USER_ROLE);
-					entry.setAttrValue(meta.getAttr(RoleEnum.Name.attribute), toObject.name());
-					entry.setAttrValue(meta.getAttr(RoleEnum.Description.attribute), toObject.getDescription());
-					
-					Set<String> uset = toObject.getUsers();
-					if(uset != null){
-						Map<String, String> attrMap = new HashMap<String, String>();
-						for(String t:uset){
-							attrMap.put(t, EntityConstants.BLANK_VALUE);
-						}
-						entry.setAttrValue(meta.getAttr(RoleEnum.Users.attribute), attrMap);
-					}else
-						entry.setAttrValue(meta.getAttr(RoleEnum.Users.attribute), null);
-					
-					Set<String> gset = toObject.getGroups();
-					if(gset != null){
-						Map<String, String> attrMap = new HashMap<String, String>();
-						for(String t:gset){
-							attrMap.put(t, EntityConstants.BLANK_VALUE);
-						}
-						entry.setAttrValue(meta.getAttr(RoleEnum.Groups.attribute), attrMap);
-					}else
-						entry.setAttrValue(meta.getAttr(RoleEnum.Groups.attribute), null);
-					entry.setTraceInfo(toObject.getTraceInfo());
+					TraceableEntry entry = (TraceableEntry)toObject.getGenericEntry();
 					return entry;
 				}
 				

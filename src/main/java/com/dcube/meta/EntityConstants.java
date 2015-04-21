@@ -41,6 +41,8 @@ public class EntityConstants {
 	public static String ACCESSOR_ENTITY_GROUP = "entity.group";
 	public static String ACCESSOR_ENTITY_AUDIT = "entity.audit";
 	
+	public static String ACCESSOR_ENTITY_INDEX = "entity.index";
+	
 	public static String NAME_SEPARATOR = ".";
 	
 	/** blank key/value of map entry placeholder */
