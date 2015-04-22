@@ -98,12 +98,25 @@ public abstract class BaseEntity{
 	
 	/**
 	 * Get the schema name in byte[]
+	 * @param principal the principal
+	 * @param entryKey the key of entry 
+	 * 
 	 * @see getSchema 
 	 **/
 	public byte[] getSchemaBytes(Principal principal,EntryKey entryKey)throws MetaException{
 		
 		String schema = getSchema(principal,entryKey);
 		return schema == null? null: schema.getBytes();
+	}
+	
+	/**
+	 * Get Index schema name 
+	 * @param principal the principal
+	 * @param entryKey the key of entry 
+	 **/
+	public String getIndexSchema(Principal principal,EntryKey entryKey)throws MetaException{
+		String schema = getSchema(principal,entryKey);
+		return schema + EntityConstants.ENTITY_INDEX_POSTFIX;
 	}
 	
 	/**

@@ -46,12 +46,17 @@ public abstract class IndexAccessor implements IBaseAccessor{
 	 * Delete the index of attribute with specified key,
 	 * If key not specified means delete all keys
 	 **/
-	public abstract void doDelEntryKey(String attribute, Object value, String ... key)throws AccessorException;
+	public abstract void doDelEntryKey(String attribute, Object value, String ... keys)throws AccessorException;
 	
 	/**
 	 * Put entry attribute and keys as index pair 
 	 **/
 	public abstract void doPutEntryKey(String attribute, Object value, String ... keys)throws AccessorException;
+	
+	/**
+	 * Change indexable attribute value 
+	 **/
+	public abstract void doChangeEntryKey(String attribute, Object oldValue, Object newValue, String key)throws AccessorException;
 	
 	@Override
 	public void close() {

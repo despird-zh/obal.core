@@ -4,30 +4,37 @@ package com.dcube.meta;
  * Define necessary entity names
  * dcube.meta.info table store normal entity and repository entity.
  * the two parts entities is identified by the category field
+ * 
+ * @author despird
+ * @version 0.1 2015-4-21
+ * 
  **/
 public class EntityConstants {
 
+	/** ACL column family */
 	public static final String ATTR_ACL_COLUMN = "acl";
-	
+	/** default column family */
 	public static final String ATTR_DFT_COLUMN = "c0";
-	
+	/** entity name prefix */
 	public static final String ENTITY_PREFIX = "dcube.";
-	// the blind entity 
+	/** postfix of entity */
+	public static final String ENTITY_INDEX_POSTFIX = ".idx";
+	/** the blind entity */
 	public static final String ENTITY_BLIND = ENTITY_PREFIX + "blind";
-	// the meta info 
+	/** the meta info */
 	public static final String ENTITY_META_INFO = ENTITY_PREFIX + "meta.info";
-	// the meta attr
+	/** the meta attr */
 	public static final String ENTITY_META_ATTR = ENTITY_PREFIX + "meta.attr";
-	//the entity name of principal
+	/** the entity name of principal*/
 	public static final String ENTITY_USER = ENTITY_PREFIX + "user";	
-	// the entity name of role
+	/** the entity name of role */
 	public static final String ENTITY_USER_ROLE = ENTITY_PREFIX + "user.role";	
-	// the entity name of group
+	/** the entity name of group*/
 	public static final String ENTITY_USER_GROUP = ENTITY_PREFIX + "user.group";
-	
+	/** the audit entity name */
 	public static final String ENTITY_AUDIT = ENTITY_PREFIX + "audit";
 	
-	//the meta general , key of Accessor 
+	/** the meta general , key of IBaseAccessor */
 	public static String ACCESSOR_GENERIC_META = "generic.meta";
 	public static String ACCESSOR_GENERIC_USER = "generic.user";
 	public static String ACCESSOR_GENERIC_ADMIN = "generic.admin";
@@ -40,7 +47,7 @@ public class EntityConstants {
 	public static String ACCESSOR_ENTITY_ROLE  = "entity.role";
 	public static String ACCESSOR_ENTITY_GROUP = "entity.group";
 	public static String ACCESSOR_ENTITY_AUDIT = "entity.audit";
-	
+	/** entity index accessor name */
 	public static String ACCESSOR_ENTITY_INDEX = "entity.index";
 	
 	public static String NAME_SEPARATOR = ".";
