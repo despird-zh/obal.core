@@ -54,7 +54,7 @@ public abstract class IndexAccessor implements IBaseAccessor{
 	public abstract void doPutEntryKey(String attribute, Object value, String ... keys)throws AccessorException;
 	
 	@Override
-	public void close() throws Exception {
+	public void close() {
 		if(context != null){
 			// not embed accessor, purge all resource;embed only release object pointers.
 			context.clear();		

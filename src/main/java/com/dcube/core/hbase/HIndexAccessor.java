@@ -150,4 +150,19 @@ public class HIndexAccessor extends IndexAccessor implements HConnAware {
 		return connection;
 	}
 	
+	@Override	
+	public void close(){
+		try {
+			HConnection conn = getConnection();
+			// embed means share connection, close it directly affect other accessors using this conn.
+			if (conn != null && !isEmbed()){
+				conn.close();				
+			}
+			
+			super.close();
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }
