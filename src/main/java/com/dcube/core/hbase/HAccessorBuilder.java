@@ -34,8 +34,11 @@ import com.dcube.core.AccessorBuilder;
 import com.dcube.core.CoreConfigs;
 import com.dcube.core.CoreConstants;
 import com.dcube.core.IBaseAccessor;
+import com.dcube.core.accessor.AccessorContext;
+import com.dcube.core.accessor.IndexAccessor;
 import com.dcube.core.security.Principal;
 import com.dcube.exception.AccessorException;
+import com.dcube.meta.EntityConstants;
 /**
  * Hbase-wise implementation of AccessorBuilder.
  * All accessors access the hbase will be created by this class
@@ -166,5 +169,14 @@ public class HAccessorBuilder extends AccessorBuilder{
 	public Configuration getConfiguration(){
 		
 		return this.config;
+	}
+	
+	/**
+	 * try to new IndexAccessor instance, default it's not supported.
+	 **/
+	@Override
+	protected IndexAccessor newIndexAccessor(AccessorContext context)throws AccessorException{
+		
+		return new HIndexAccessor(context);
 	}
 }

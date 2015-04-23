@@ -31,6 +31,7 @@ import com.dcube.core.accessor.AccessorContext;
 import com.dcube.core.accessor.EntityAccessor;
 import com.dcube.core.accessor.GenericAccessor;
 import com.dcube.core.accessor.GenericContext;
+import com.dcube.core.accessor.IndexAccessor;
 import com.dcube.core.security.Principal;
 import com.dcube.exception.AccessorException;
 import com.dcube.exception.EntityException;
@@ -246,10 +247,20 @@ public abstract class AccessorBuilder {
 	}
 	
 	/**
-	 * Append the IBaseAccessor to map 
+	 * Append the IBaseAccessor to accessor map 
+	 * 
+	 * @param accessorName name of accessor
+	 * @param entityAccessorClazz class of accessor
 	 **/
-	public void appendAccessor(String accessorName, Class<? extends IBaseAccessor> entryAccessorClazz){
-		accessorMap.put(accessorName, entryAccessorClazz);
+	public void appendAccessor(String accessorName, Class<? extends IBaseAccessor> entityAccessorClazz){
+		accessorMap.put(accessorName, entityAccessorClazz);
 	}
 	
+	/**
+	 * try to new IndexAccessor instance, default it's not supported.
+	 **/
+	protected IndexAccessor newIndexAccessor(AccessorContext context)throws AccessorException{
+		
+		throw new AccessorException("Unsupported operation.");
+	}
 }

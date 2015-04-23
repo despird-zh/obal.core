@@ -31,6 +31,7 @@ import com.dcube.core.accessor.AccessorContext;
 import com.dcube.core.accessor.EntityAccessor;
 import com.dcube.core.accessor.GenericAccessor;
 import com.dcube.core.accessor.GenericContext;
+import com.dcube.core.accessor.IndexAccessor;
 import com.dcube.core.security.Principal;
 import com.dcube.exception.AccessorException;
 import com.dcube.exception.MetaException;
@@ -43,7 +44,9 @@ import com.dcube.meta.EntityManager;
  * class etc.
  * 
  * @author despird
- * @version 0.1 2014-3-1
+ * @version 0.1 2014-3-1 initial
+ * @version 0.2 2014-4-2 add index accessor support.
+ * 
  * @see AccessorBuilder
  **/
 public final class AccessorFactory {
@@ -469,5 +472,60 @@ public final class AccessorFactory {
 		accessorbuilder.assembly(principal, (IBaseAccessor) accessor);
 		
 		return accessor;
+	}
+	
+	/**
+	 * Build IndexAccessor 
+	 * @param principal
+	 * @param entityName
+	 **/
+	public static IndexAccessor buildIndexAccessor(Principal principal, String entityName)throws AccessorException {
+		
+		AccessorBuilder accessorbuilder = builderMap.get(cacheBuilder);
+		if (null == accessorbuilder) {
+
+			throw new AccessorException(
+					"The cache AccessorBuilder instance:{} not existed.", cacheBuilder);
+		}
+		BaseEntity schema = null;
+		try {
+			schema = EntityManager.getInstance().getEntitySchema(entityName);
+		} catch (MetaException e) {
+			
+			throw new AccessorException("Error when fetching entity[{}] schema.", e, entityName);
+		}
+		// prepare context object
+		AccessorContext context = new AccessorContext(principal,schema);		
+		// new generic context
+		IndexAccessor accessor = accessorbuilder.newIndexAccessor(context);
+		// assembly the accessor
+		accessorbuilder.assembly(principal, (IBaseAccessor) accessor);
+		
+		return accessor;
+		
+	}
+	
+	/**
+	 * Build IndexAccessor 
+	 * @param mockupAccessor
+	 **/
+	public static IndexAccessor buildIndexAccessor(IEntityAccessor<?> mockupAccessor)throws AccessorException {
+		
+		AccessorBuilder accessorbuilder = builderMap.get(cacheBuilder);
+		if (null == accessorbuilder) {
+
+			throw new AccessorException(
+					"The cache AccessorBuilder instance:{} not existed.", cacheBuilder);
+		}
+		BaseEntity schema = mockupAccessor.getEntitySchema();		
+		// prepare context object
+		AccessorContext context = new AccessorContext(mockupAccessor.getContext(),schema);		
+		// new generic context
+		IndexAccessor accessor = accessorbuilder.newIndexAccessor(context);
+		// assembly the accessor
+		accessorbuilder.assembly(mockupAccessor, (IBaseAccessor) accessor);
+		
+		return accessor;
+		
 	}
 }

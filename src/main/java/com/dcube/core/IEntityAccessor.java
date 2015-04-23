@@ -147,7 +147,6 @@ public interface IEntityAccessor <GB extends IEntityEntry> extends IBaseAccessor
 	 **/
 	public abstract boolean isFilterSupported(EntryFilter<?> scanfilter,boolean throwExcep) throws AccessorException;
 	
-	
 	/**
 	 * Here define a blank method  
 	 **/
