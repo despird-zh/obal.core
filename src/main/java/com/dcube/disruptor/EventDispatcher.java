@@ -123,15 +123,7 @@ public class EventDispatcher {
 		disruptor = new Disruptor<RingEvent>(eventbuilder, bufferSize, executor);
 		// Connect the handler
 		disruptor.handleEventsWith(handler);
-		// Initial Index EventHooker
-		IndexHooker indexHooker = new IndexHooker();
-		this.regEventHooker(indexHooker);
-		// Initial cache EventHooker
-		CacheHooker<? extends EntityEntry> cacheHooker = new CacheHooker<>();
-		this.regEventHooker(cacheHooker);
-		// Initial audit EventHooker
-		AuditHooker auditHooker = new AuditHooker();
-		this.regEventHooker(auditHooker);
+
 	}
 
 	public EventHooker<?> getEventHooker(EventType eventType){

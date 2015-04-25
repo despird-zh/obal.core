@@ -23,7 +23,7 @@ import com.dcube.core.accessor.EntryCollection;
 import com.dcube.exception.AccessorException;
 import com.dcube.meta.BaseEntity;
 /**
- * Base interface of Entry Accessor intance
+ * Base interface of EntryAccessor
  * 
  * @author despird
  * @version 0.1 2014-3-1

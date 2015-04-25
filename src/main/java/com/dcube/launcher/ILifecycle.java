@@ -26,17 +26,17 @@ public interface ILifecycle {
 	/**
 	 * Register the life cycle listener  
 	 **/
-	public void regHooker(LifecycleHooker hooker);
+	public void regLifecycleHooker(LifecycleHooker hooker);
 	
 	/**
 	 * Unregister the life cycle listener 
 	 **/
-	public void unregHooker(LifecycleHooker hooker);
+	public void unregLifecycleHooker(LifecycleHooker hooker);
 	
 	/**
 	 * Clear the listener 
 	 **/
-	public void clearHooker();
+	public void clearLifecycleHooker();
 	
 	/**
 	 * Initial processing 

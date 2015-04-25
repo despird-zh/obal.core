@@ -14,11 +14,11 @@ public abstract class LifecycleHooker {
 		this.name = name;
 		this.priority = priority;
 	}
-	
+	/** The lifecycle launcher */
 	private ILifecycle launcher;
-	
+	/** default name */
 	private String name = "listener";
-	
+	/** the priority of hooker */
 	private int priority = 0;
 	
 	/**
@@ -38,7 +38,8 @@ public abstract class LifecycleHooker {
 	}
 	
 	/**
-	 * Disgest event  
+	 * Dispatch event to LifecycleHooker 
+	 * @param event the event of life
 	 **/
 	public void onEvent(LifeState event){
 		switch(event){
@@ -56,14 +57,24 @@ public abstract class LifecycleHooker {
 		}
 	}
 	
+	/**
+	 * The operation on initial event 
+	 **/
 	public abstract void initial();
 	
+	/**
+	 * The operation on startup event 
+	 **/
 	public abstract void startup();
 	
+	/**
+	 * The operation on shutdown event 
+	 **/
 	public abstract void shutdown();
 	
 	/**
 	 * Set the ILifecycle launcher
+	 * @param launcher the launcher of application
 	 **/
 	public void setLauncher(ILifecycle launcher){
 		
@@ -72,6 +83,8 @@ public abstract class LifecycleHooker {
 	
 	/**
 	 * Send feedback to launcher 
+	 * @param errorFlag imply the message is error or normal
+	 * @param message the message content.
 	 **/
 	public void sendFeedback(boolean errorFlag, String message){
 		

@@ -14,6 +14,7 @@ import com.dcube.cache.CacheHooker;
 import com.dcube.core.accessor.EntityEntry;
 import com.dcube.disruptor.EventDispatcher;
 import com.dcube.exception.BaseException;
+import com.dcube.index.IndexHooker;
 import com.dcube.launcher.ILifecycle.LifeState;
 
 /**
@@ -82,7 +83,7 @@ public class CoreFacade{
 	 **/
 	public static void regLifecycleHooker(LifecycleHooker hooker) {
 		
-		coreDelegator.regHooker(hooker);
+		coreDelegator.regLifecycleHooker(hooker);
 	}
 	
 	/**
@@ -91,7 +92,7 @@ public class CoreFacade{
 	 **/
 	public static void unregLifecycleHooker(LifecycleHooker hooker) {
 
-		coreDelegator.unregHooker(hooker);
+		coreDelegator.unregLifecycleHooker(hooker);
 	}
 
 	/**
@@ -99,7 +100,7 @@ public class CoreFacade{
 	 **/
 	public static void clearListener() {
 
-		coreDelegator.clearHooker();
+		coreDelegator.clearLifecycleHooker();
 	}
 	
 	/**
@@ -108,15 +109,18 @@ public class CoreFacade{
 	private static class CoreDelegator implements ILifecycle{
 		
 		static Logger LOGGER = LoggerFactory.getLogger(CoreFacade.class);
-		// current state
+		/** current state */
 		private LifeState state = LifeState.UNKNOWN;
-		// entrant lock
+		/** entrant lock */
 		private ReentrantLock lock = new ReentrantLock(); // lock
-		// hooker list
+		/** hooker list*/
 		private ArrayList<LifecycleHooker> hookers = new ArrayList<LifecycleHooker>();
-		// message list
+		/** message list */
 		private List<LifeCycleMessage> messageList = new ArrayList<LifeCycleMessage>();
 		
+		/**
+		 * Default constructor 
+		 **/
 		public CoreDelegator(){	}
 		
 		/**
@@ -143,9 +147,12 @@ public class CoreFacade{
 			EventDispatcher.getInstance().regEventHooker(auditHooker);
 			
 			// register cache event hooker
-			CacheHooker<?> cacheHooker = new CacheHooker<EntityEntry>();
+			CacheHooker<? extends EntityEntry> cacheHooker = new CacheHooker<>();
 			EventDispatcher.getInstance().regEventHooker(cacheHooker);
 			
+			// register index event hooker
+			IndexHooker indexHooker = new IndexHooker();
+			EventDispatcher.getInstance().regEventHooker(indexHooker);
 			this.state = LifeState.INITIAL;
 		}
 		
@@ -171,7 +178,7 @@ public class CoreFacade{
 		}
 
 		@Override
-		public void regHooker(LifecycleHooker hooker) {
+		public void regLifecycleHooker(LifecycleHooker hooker) {
 			
 			lock.lock();
 			int count = hookers.size()-1;
@@ -202,14 +209,14 @@ public class CoreFacade{
 		}
 
 		@Override
-		public void unregHooker(LifecycleHooker listener) {
+		public void unregLifecycleHooker(LifecycleHooker listener) {
 			lock.lock();
 			hookers.remove(listener);
 			lock.unlock();
 		}
 
 		@Override
-		public void clearHooker() {
+		public void clearLifecycleHooker() {
 			lock.lock();
 			hookers.clear();
 			lock.unlock();
@@ -235,18 +242,19 @@ public class CoreFacade{
 			LOGGER.debug("Feedback -> {} - {} - {}", new Object[]{time,errorFlag?"ERROR":"NORMAL",message});
 			messageList.add(msg);
 		}
-		
-		//////====== Inner Message class ====/////
-		protected class LifeCycleMessage{
-			Date time = null;
-			String message = null;
-			boolean errorFlag = false;
-			public LifeCycleMessage(Date time,boolean errorFlag, String message){
-				this.time = time;
-				this.errorFlag = errorFlag;
-				this.message = message;
-			}
-		}
+	
 	}
 	
+	/** Inner Message class */
+	protected static class LifeCycleMessage {
+		Date time = null;
+		String message = null;
+		boolean errorFlag = false;
+
+		public LifeCycleMessage(Date time, boolean errorFlag, String message) {
+			this.time = time;
+			this.errorFlag = errorFlag;
+			this.message = message;
+		}
+	}
 }
