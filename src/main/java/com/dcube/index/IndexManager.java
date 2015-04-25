@@ -6,9 +6,6 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.dcube.cache.CacheEntryPipe;
-import com.dcube.cache.CacheInfo;
-import com.dcube.core.EntryKey;
 import com.dcube.disruptor.EventDispatcher;
 import com.dcube.disruptor.EventType;
 import com.dcube.meta.EntityAttr;
