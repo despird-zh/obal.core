@@ -810,10 +810,4 @@ public abstract class HEntityAccessor<GB extends IEntityEntry> extends EntityAcc
 		}
 		return rtv;
 	}
-	
-	@Override
-	public IndexAccessor getIndexAccessor() throws AccessorException{
-		
-		return AccessorFactory.buildIndexAccessor(this);
-	}
 }

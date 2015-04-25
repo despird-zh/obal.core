@@ -190,11 +190,5 @@ public abstract class EntityAccessor<GB extends IEntityEntry> implements IEntity
 		return missingattrs.size() == 0 ? true:false;
 		
 	}
-	
-	/**
-	 * Default not supported, it's necessary to define it in implementation as need.
-	 **/
-	public IndexAccessor getIndexAccessor() throws AccessorException{
-		throw new UnsupportedOperationException("Not define any converter yet.");
-	}
+
 }
