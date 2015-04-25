@@ -44,6 +44,7 @@ import org.slf4j.LoggerFactory;
 
 import com.dcube.audit.AuditInfo;
 import com.dcube.audit.Predicate;
+import com.dcube.core.AccessorFactory;
 import com.dcube.core.EntryFilter;
 import com.dcube.core.EntryKey;
 import com.dcube.core.IEntityEntry;
@@ -52,6 +53,7 @@ import com.dcube.core.IGenericEntry.AttributeItem;
 import com.dcube.core.accessor.AccessorContext;
 import com.dcube.core.accessor.EntityAccessor;
 import com.dcube.core.accessor.EntryCollection;
+import com.dcube.core.accessor.IndexAccessor;
 import com.dcube.exception.AccessorException;
 import com.dcube.exception.MetaException;
 import com.dcube.exception.WrapperException;
@@ -464,6 +466,10 @@ public abstract class HEntityAccessor<GB extends IEntityEntry> extends EntityAcc
         	
         	table.put(put);
         	table.flushCommits();
+        	
+        	// Now try to update the index data
+        	
+        	
         	rtv = new EntryKey(entitySchema.getEntityName(),entryKey);
         	
         } catch (IOException e) {  
@@ -502,6 +508,7 @@ public abstract class HEntityAccessor<GB extends IEntityEntry> extends EntityAcc
             table = getConnection().getTable(entitySchema.getSchema(getContext().getPrincipal(),key.getKey()));
             List<EntityAttr> attrs = null;
             if(changedOnly){
+            	// only put those changed attributes
             	attrs = this.filterChangedAttrList(entryInfo);
             }else{
             	attrs = entitySchema.getEntityMeta().getAllAttrs();
@@ -802,5 +809,11 @@ public abstract class HEntityAccessor<GB extends IEntityEntry> extends EntityAcc
 		
 		}
 		return rtv;
+	}
+	
+	@Override
+	public IndexAccessor getIndexAccessor() throws AccessorException{
+		
+		return AccessorFactory.buildIndexAccessor(this);
 	}
 }

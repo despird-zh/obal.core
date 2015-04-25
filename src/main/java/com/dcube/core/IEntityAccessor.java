@@ -20,6 +20,7 @@
 package com.dcube.core;
 
 import com.dcube.core.accessor.EntryCollection;
+import com.dcube.core.accessor.IndexAccessor;
 import com.dcube.exception.AccessorException;
 import com.dcube.meta.BaseEntity;
 /**
@@ -149,6 +150,13 @@ public interface IEntityAccessor <GB extends IEntityEntry> extends IBaseAccessor
 	
 	/**
 	 * Here define a blank method  
+	 * 
+	 * @param cto the class object of expected target data
 	 **/
 	public <To> IEntryConverter<GB, To> getEntryConverter(Class<To> cto);
+	
+	/**
+	 * Get IndexAccessor of IEntityAccessor
+	 **/	
+	public IndexAccessor getIndexAccessor() throws AccessorException;
 }

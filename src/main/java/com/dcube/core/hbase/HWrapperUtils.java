@@ -17,8 +17,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.dcube.core.CoreConstants;
+import com.dcube.core.EntryKey;
 import com.dcube.exception.WrapperException;
 import com.dcube.meta.EntityAttr;
+import com.dcube.meta.EntityConstants;
 
 public class HWrapperUtils {
 
@@ -527,4 +529,44 @@ public class HWrapperUtils {
     	return rtv;
 	}
 
+	/**
+	 * Convert the attribute value into index entry key. 
+	 **/
+	public static EntryKey toIndexEntryKey(EntityAttr attr, Object value){
+		
+		byte[] bval = null;
+    	//if(value == null) return;    	
+    	switch(attr.type){
+			case INTEGER:
+				bval = (value == null) ? NULL_VAL:Bytes.toBytes((Integer)value);
+				break;
+			case BOOL:
+				bval = (value == null) ? NULL_VAL:Bytes.toBytes((Boolean)value);
+				break;
+			case DOUBLE:
+				bval = (value == null) ? NULL_VAL:Bytes.toBytes((Double)value);
+				break;
+			case LONG:
+				bval = (value == null) ? NULL_VAL:Bytes.toBytes((Long)value);
+				break;							
+			case STRING:
+				bval = (value == null) ? NULL_VAL:Bytes.toBytes((String)value);
+				break;
+			case DATE:
+				bval = (value == null) ? NULL_VAL:Bytes.toBytes(((Date)value).getTime());
+				break;						
+			default:
+				bval = new byte[0];
+				break;					
+		}
+    	
+    	String entityName = attr.getEntityName()+EntityConstants.ENTITY_INDEX_POSTFIX;
+    	byte[] prefix = Bytes.toBytes(attr.getQualifier() + CoreConstants.KEYS_SEPARATOR);
+    	byte[] rtv = new byte[prefix.length + bval.length];
+    	System.arraycopy(prefix, 0, rtv, 0, prefix.length);
+    	if(bval.length > 0)
+    		System.arraycopy(bval, 0, rtv, prefix.length, bval.length);
+    	
+    	return new EntryKey(entityName, Bytes.toString(rtv));
+	}
 }
