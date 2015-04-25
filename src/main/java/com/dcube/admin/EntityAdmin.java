@@ -91,7 +91,10 @@ public class EntityAdmin {
 		return aa;
 	}
 
-	public LifecycleHooker getHooker(){
+	/**
+	 * Get the lifecycle hooker, keep step with core lifecycle event 
+	 **/
+	public LifecycleHooker getLifecycleHooker(){
 		
 		return hooker;
 	}

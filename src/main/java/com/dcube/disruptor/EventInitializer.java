@@ -22,7 +22,7 @@ public class EventInitializer extends CoreInitializer{
 	@Override
 	public LifecycleHooker setupLifecycleHooker() throws BaseException {
 		EventDispatcher instance = EventDispatcher.getInstance();
-		return instance.getHooker();
+		return instance.getLifecycleHooker();
 	}
 
 }

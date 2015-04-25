@@ -9,7 +9,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.dcube.audit.AuditHooker;
+import com.dcube.cache.CacheHooker;
+import com.dcube.core.accessor.EntityEntry;
 import com.dcube.exception.RingEventException;
+import com.dcube.index.IndexHooker;
 import com.dcube.launcher.LifecycleHooker;
 import com.lmax.disruptor.EventFactory;
 import com.lmax.disruptor.EventHandler;
@@ -28,23 +32,18 @@ public class EventDispatcher {
 
 	static Logger LOGGER = LoggerFactory.getLogger(EventDispatcher.class);
 
-	private AtomicInteger hookerIdGenerator = new AtomicInteger(100); 
-	
+	private AtomicInteger hookerIdGenerator = new AtomicInteger(100); 	
 	/** the executor pool */
 	private ExecutorService executor = null;
-
 	/** the disruptor instance */
 	private Disruptor<RingEvent> disruptor = null;
-
 	/** the event handler */
 	private RingEventHandler handler = new RingEventHandler();
-
 	/** the event hooker list */
 	private Map<EventType, EventHooker<?>> hookers = new HashMap<EventType, EventHooker<?>>();
-
 	/** single instance */
 	private static EventDispatcher instance;
-
+	/** the lifecycle hooker */
 	private LifecycleHooker hooker = null;
 	
 	/**
@@ -106,7 +105,7 @@ public class EventDispatcher {
 		executor.shutdown();
 	}
 	
-	public LifecycleHooker getHooker(){
+	public LifecycleHooker getLifecycleHooker(){
 		return this.hooker;
 	}
 	
@@ -120,11 +119,19 @@ public class EventDispatcher {
 		// Specify the size of the ring buffer, must be power of 2.
 		int bufferSize = 1024;
 		EventFactory<RingEvent> eventbuilder = RingEvent.EVENT_FACTORY;
-		// Construct the Disruptor
+		// create new Disruptor instance
 		disruptor = new Disruptor<RingEvent>(eventbuilder, bufferSize, executor);
-
 		// Connect the handler
 		disruptor.handleEventsWith(handler);
+		// Initial Index EventHooker
+		IndexHooker indexHooker = new IndexHooker();
+		this.regEventHooker(indexHooker);
+		// Initial cache EventHooker
+		CacheHooker<? extends EntityEntry> cacheHooker = new CacheHooker<>();
+		this.regEventHooker(cacheHooker);
+		// Initial audit EventHooker
+		AuditHooker auditHooker = new AuditHooker();
+		this.regEventHooker(auditHooker);
 	}
 
 	public EventHooker<?> getEventHooker(EventType eventType){
@@ -161,7 +168,9 @@ public class EventDispatcher {
 	}
 
 	/**
-	 * publish event payload
+	 * Publish event EventPayload to specified EventType
+	 * @param payload the payload of specified event
+	 * @param eventType the type of specified event
 	 **/
 	public void sendPayload(EventPayload payload,EventType eventType){
 		

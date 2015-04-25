@@ -13,7 +13,7 @@ public class AccessorInitializer extends CoreInitializer {
 	@Override
 	public LifecycleHooker setupLifecycleHooker() throws BaseException {
 		
-		return AccessorFactory.getHooker();
+		return AccessorFactory.getLifecycleHooker();
 	}
 
 }
