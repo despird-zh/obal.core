@@ -9,11 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.dcube.audit.AuditHooker;
-import com.dcube.cache.CacheHooker;
-import com.dcube.core.accessor.EntityEntry;
 import com.dcube.exception.RingEventException;
-import com.dcube.index.IndexHooker;
 import com.dcube.launcher.LifecycleHooker;
 import com.lmax.disruptor.EventFactory;
 import com.lmax.disruptor.EventHandler;
@@ -105,6 +101,12 @@ public class EventDispatcher {
 		executor.shutdown();
 	}
 	
+	/**
+	 * Get the LifecycleHooker instance, it make EventDispatcher to 
+	 * act according to LifecycleEvent.
+	 * 
+	 *  @return LifecycleHooker
+	 **/
 	public LifecycleHooker getLifecycleHooker(){
 		return this.hooker;
 	}
@@ -126,6 +128,12 @@ public class EventDispatcher {
 
 	}
 
+	/**
+	 * Get EventHooker instance according to EnentType object. this event hooker
+	 * provides the event producer to send payload data.
+	 * 
+	 * @return EventHooker 
+	 **/
 	public EventHooker<?> getEventHooker(EventType eventType){
 		
 		return hookers.get(eventType);
@@ -133,6 +141,9 @@ public class EventDispatcher {
 	
 	/**
 	 * dispatch event payload to respective hooker
+	 * @param ringevent the event
+	 * @param sequece
+	 * @param endofBatch
 	 **/
 	private void onRingEvent(RingEvent ringevent, long sequence, boolean endOfBatch) {
 		
@@ -161,6 +172,7 @@ public class EventDispatcher {
 
 	/**
 	 * Publish event EventPayload to specified EventType
+	 * 
 	 * @param payload the payload of specified event
 	 * @param eventType the type of specified event
 	 **/
@@ -198,6 +210,8 @@ public class EventDispatcher {
 	
 	/**
 	 * Unregister the specified type of event hooker 
+	 * 
+	 * @param eventType
 	 **/
 	public void unRegEventHooker(EventType eventType){
 		

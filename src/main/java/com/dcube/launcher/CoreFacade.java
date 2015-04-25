@@ -20,8 +20,8 @@ import com.dcube.launcher.ILifecycle.LifeState;
 /**
  * CoreLauncher is the core start entrance.
  * 
- * @author despird-zh
- * @version 0.1 2015-2-1
+ * @author despird
+ * @version 0.1 2014-12-1
  * 
  **/
 public class CoreFacade{
