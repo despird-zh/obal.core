@@ -34,7 +34,7 @@ public class RingEventUtils {
 		EventHooker<?> hooker = EventDispatcher.getInstance().getEventHooker(eventType);
 		try{
 		if(null != hooker)
-			return hooker.getProducer();
+			return hooker.getEventProducer();
 		else
 			return null;
 		}catch(RingEventException ree){

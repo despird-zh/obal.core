@@ -14,11 +14,14 @@ public abstract class CoreInitializer {
 	 **/
 	public CoreInitializer() throws BaseException{
 		
-		LifecycleHooker hooker = setupHooker();
+		LifecycleHooker hooker = setupLifecycleHooker();
 		this.hookerName = hooker.name();
-		CoreFacade.regHooker(hooker);
+		CoreFacade.regLifecycleHooker(hooker);
 	}
 	
-	public abstract LifecycleHooker setupHooker() throws BaseException;
+	/**
+	 * Get the lifecycle event hooker for lifecycle operation 
+	 **/
+	public abstract LifecycleHooker setupLifecycleHooker() throws BaseException;
 	
 }

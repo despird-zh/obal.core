@@ -80,7 +80,7 @@ public class CoreFacade{
 	 * Register the life cycle listener
 	 * @param listener  
 	 **/
-	public static void regHooker(LifecycleHooker hooker) {
+	public static void regLifecycleHooker(LifecycleHooker hooker) {
 		
 		coreDelegator.regHooker(hooker);
 	}
@@ -89,7 +89,7 @@ public class CoreFacade{
 	 * Unregister the life cycle listener
 	 * @param listener  
 	 **/
-	public static void unregHooker(LifecycleHooker hooker) {
+	public static void unregLifecycleHooker(LifecycleHooker hooker) {
 
 		coreDelegator.unregHooker(hooker);
 	}

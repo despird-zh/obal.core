@@ -6,12 +6,17 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import com.dcube.exception.RingEventException;
 import com.lmax.disruptor.RingBuffer;
 
+/**
+ * Basic class for certain type event handler, it holds RingBuffer to
+ * provide event producer that to be used for event publishing. 
+ *  
+ **/
 public abstract class EventHooker<T extends EventPayload> {
-
+	/** the event blocked or not */
 	private boolean blocked = false; 
-	
+	/** the event type */
 	private EventType eventType;
-	
+	/** the ring buffer */
 	private RingBuffer<RingEvent> ringBuffer = null;
 	
 	/**
@@ -48,17 +53,29 @@ public abstract class EventHooker<T extends EventPayload> {
 		return eventType;
 	}
 	
+	/**
+	 * Set event type
+	 * @param eventType 
+	 **/
 	public void setEventType(EventType eventType){
 		
 		this.eventType = eventType;
 	}
 	
+	/**
+	 * Set the RingBuffer 
+	 * @param ringBuffer 
+	 **/
 	protected void setRingBuffer(RingBuffer<RingEvent> ringBuffer){
 		
 		this.ringBuffer = ringBuffer;		
 	}
 	
-	public EventProducer<T> getProducer() throws RingEventException{
+	/**
+	 * Get the event producer
+	 * @return EventProducer<T> 
+	 **/
+	public EventProducer<T> getEventProducer() throws RingEventException{
 		
 		if(null == ringBuffer)
 			throw new RingEventException("The RingBuffer not initialized yet.");

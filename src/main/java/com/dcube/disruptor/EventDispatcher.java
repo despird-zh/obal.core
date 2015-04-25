@@ -180,7 +180,7 @@ public class EventDispatcher {
 	}
 	
 	/**
-	 * Register a eventhooker
+	 * Register an event hooker
 	 * 
 	 * @param eventHooker the hooker of event 
 	 **/
@@ -196,7 +196,7 @@ public class EventDispatcher {
 	}
 	
 	/**
-	 * Unregister the specified type of hooker 
+	 * Unregister the specified type of event hooker 
 	 **/
 	public void unRegEventHooker(EventType eventType){
 		

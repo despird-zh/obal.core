@@ -4,9 +4,18 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 /**
- * The event type enum 
+ * The event type to identify payload and hooker
  **/
 public class EventType {
+	
+	/** audit event type  */
+	public static EventType AUDIT   = new EventType(10); 
+	/** cache event type  */
+	public static EventType CACHE   = new EventType(11); 
+	/** index event type */
+	public static EventType INDEX   = new EventType(12); 
+	/** unknown event type */
+	public static EventType UNKNOWN = new EventType(13); 
 	
 	private int type = -1;
 	
@@ -42,7 +51,5 @@ public class EventType {
 		
 		return "type:"+String.valueOf(type);
 	}
-	public static EventType AUDIT   = new EventType(10); // audit event
-	public static EventType CACHE   = new EventType(11); // cache event
-	public static EventType UNKNOWN = new EventType(12); // unknow event
+
 }

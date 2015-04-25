@@ -11,7 +11,7 @@ public class AccessorInitializer extends CoreInitializer {
 	}
 
 	@Override
-	public LifecycleHooker setupHooker() throws BaseException {
+	public LifecycleHooker setupLifecycleHooker() throws BaseException {
 		
 		return AccessorFactory.getHooker();
 	}
