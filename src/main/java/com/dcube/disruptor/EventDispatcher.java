@@ -35,7 +35,7 @@ public class EventDispatcher {
 	private AtomicInteger hookerIdGenerator = new AtomicInteger(100); 	
 	/** the executor pool */
 	private ExecutorService executor = null;
-	/** the disruptor instance */
+	/** the Disruptor instance */
 	private Disruptor<RingEvent> disruptor = null;
 	/** the event handler */
 	private RingEventHandler handler = new RingEventHandler();

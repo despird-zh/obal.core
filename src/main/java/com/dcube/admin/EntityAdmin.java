@@ -10,8 +10,6 @@ import com.dcube.accessor.IMetaGAccessor;
 import com.dcube.core.AccessorFactory;
 import com.dcube.core.security.Principal;
 import com.dcube.exception.AccessorException;
-import com.dcube.exception.EntityException;
-import com.dcube.launcher.ILifecycle.LifeState;
 import com.dcube.launcher.LifecycleHooker;
 import com.dcube.meta.EntityAttr;
 import com.dcube.meta.EntityConstants;
