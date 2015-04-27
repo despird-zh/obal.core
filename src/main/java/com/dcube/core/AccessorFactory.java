@@ -481,7 +481,7 @@ public final class AccessorFactory {
 	 **/
 	public static IndexAccessor buildIndexAccessor(Principal principal, String entityName)throws AccessorException {
 		
-		AccessorBuilder accessorbuilder = builderMap.get(cacheBuilder);
+		AccessorBuilder accessorbuilder = builderMap.get(defaultBuilder);
 		if (null == accessorbuilder) {
 
 			throw new AccessorException(
@@ -511,7 +511,7 @@ public final class AccessorFactory {
 	 **/
 	public static IndexAccessor buildIndexAccessor(IEntityAccessor<?> mockupAccessor)throws AccessorException {
 		
-		AccessorBuilder accessorbuilder = builderMap.get(cacheBuilder);
+		AccessorBuilder accessorbuilder = builderMap.get(defaultBuilder);
 		if (null == accessorbuilder) {
 
 			throw new AccessorException(

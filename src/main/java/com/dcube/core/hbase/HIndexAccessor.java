@@ -271,7 +271,7 @@ public class HIndexAccessor extends IndexAccessor implements HConnAware {
 			put.add(EntityConstants.ATTR_DFT_COLUMN.getBytes(), 
 					key.getBytes(),
 					EntityConstants.BLANK_VALUE.getBytes());
-			
+			table.put(put);
 	        table.flushCommits();
 	        
 		} catch (Exception e) {

@@ -353,10 +353,9 @@ public abstract class HEntityAccessor<GB extends IEntityEntry> extends EntityAcc
         	
         	table = getConnection().getTable(entitySchema.getSchema(getContext().getPrincipal(),entryKey));
 
-        	Get get = new Get(entryKey.getBytes());
-           
+        	Get get = new Get(entryKey.getBytes());           
         	Result result = table.get(get);
-           
+        	
         	wrap(entitySchema.getEntityMeta().getAllAttrs(),result, rtv);
 
         } catch (IOException e) {  

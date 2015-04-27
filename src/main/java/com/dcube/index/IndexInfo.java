@@ -109,5 +109,11 @@ public class IndexInfo {
 		return this.newValue;
 	}
 	
-	
+	/**
+	 * Get the name of entity 
+	 **/
+	public String getEntityName(){
+		
+		return this.entryKey.getEntityName();
+	}
 }
