@@ -116,4 +116,15 @@ public class IndexInfo {
 		
 		return this.entryKey.getEntityName();
 	}
+	
+	@Override
+	public String toString(){
+		StringBuffer buf = new StringBuffer();
+		buf.append(entryKey)
+		.append("|").append(attr.getAttrName())
+		.append("|oldv:").append(oldValue)
+		.append("|newv:").append(newValue);
+		
+		return buf.toString();
+	}
 }
