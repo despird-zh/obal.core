@@ -190,5 +190,25 @@ public abstract class EntityAccessor<GB extends IEntityEntry> implements IEntity
 		return missingattrs.size() == 0 ? true:false;
 		
 	}
+	
+	/**
+	 * Check if the attribute value is valid or not
+	 * @param attribute
+	 * @param value 
+	 * @return boolean true: entry's required attributes is present; false not valid.
+	 **/
+	public boolean validateAttrValue(String attribute, Object value){
+		
+		BaseEntity entitySchema = (BaseEntity)getEntitySchema();
+		if(entitySchema == null) return false;
+		
+		EntityAttr attr = entitySchema.getEntityMeta().getAttr(attribute);
+		if(attr.isRequired() && null == value){
+			context.putValue(AccessorContext.KEY_VALID_MSG, attribute);
+			return false;
+		}
+		return true;
+		
+	}
 
 }

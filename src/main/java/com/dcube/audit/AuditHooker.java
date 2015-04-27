@@ -34,7 +34,7 @@ public class AuditHooker extends EventHooker<AuditInfo>{
 	public void processPayload(EventPayload payload) throws RingEventException {
 		AuditInfo ai = (AuditInfo)payload;
 		
-		System.out.println("---:");
+		System.out.println("audit info---:" + ai.getSubject());
 	}
 
 

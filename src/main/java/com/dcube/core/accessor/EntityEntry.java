@@ -169,9 +169,13 @@ public class EntityEntry extends GenericEntry implements IEntityEntry{
 	@Override
 	public Map<String, Object> getAuditPredicates() {
 		
-		List<AttributeItem> changedItems = super.getChangedAttrItemList();
+		List<AttributeItem> items = super.getChangedAttrItemList();
+		items = items == null? super.getAttrItemList():items;
 		Map<String, Object> predicates = new HashMap<String, Object>();
-		for(AttributeItem item : changedItems){
+		if(items == null)
+			 return predicates;
+		
+		for(AttributeItem item : items){
 			predicates.put(item.attribute(), item.value());
 		}
 		return predicates;

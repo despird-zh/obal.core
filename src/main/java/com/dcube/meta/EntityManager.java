@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.dcube.exception.MetaException;
+import com.dcube.meta.EntityConstants.IndexableEnum;
 import com.dcube.meta.EntityConstants.TraceableEnum;
 import com.dcube.meta.EntityConstants.AttrEnum;
 import com.dcube.meta.EntityConstants.MetaEnum;
@@ -349,4 +350,18 @@ public class EntityManager {
 		return attrs;
 	}
 	
+	/**
+	 * Get the Index table attributes, this is only used for create index table
+	 * 
+	 **/
+	public List<EntityAttr> getIndexAttributes(String entityname){
+		
+		List<EntityAttr> attrs = new ArrayList<EntityAttr>();
+		EntityAttr attr = new EntityAttr(IndexableEnum.Default.attribute, 
+				IndexableEnum.Default.colfamily, 
+				IndexableEnum.Default.qualifier);
+		attr.setEntityName(entityname);
+		attrs.add(attr);
+		return attrs;
+	}
 }

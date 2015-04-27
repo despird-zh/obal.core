@@ -73,6 +73,7 @@ public class EntitySetup {
 		EntityAttr attr = new EntityAttr(UserEnum.Account.attribute, 
 				UserEnum.Account.colfamily, 
 				UserEnum.Account.qualifier);
+		attr.setIndexable(true); // account be indexable
 		meta.addAttr(attr);
 		
 		attr = new EntityAttr(UserEnum.Domain.attribute, 
@@ -83,6 +84,7 @@ public class EntitySetup {
 		attr = new EntityAttr(UserEnum.Name.attribute, 
 				UserEnum.Name.colfamily, 
 				UserEnum.Name.qualifier);
+		attr.setIndexable(true); // name be indexable
 		meta.addAttr(attr);
 		
 		attr = new EntityAttr(UserEnum.Source.attribute, 

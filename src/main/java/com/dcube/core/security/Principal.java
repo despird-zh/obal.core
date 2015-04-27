@@ -65,7 +65,7 @@ public class Principal extends EntryParser{
 	 **/
 	public Principal(String account, String name, String password) {
 		super();
-		rawEntry = new TraceableEntry();
+		rawEntry = new TraceableEntry(EntityConstants.ENTITY_USER,null);
 		this.setAccount(account);
 		this.setName(name);
 		this.setPassword(password);
@@ -81,7 +81,7 @@ public class Principal extends EntryParser{
 	 **/	
 	public Principal(String account, String name,  String password,  String source) {
 		super();
-		rawEntry = new TraceableEntry();
+		rawEntry = new TraceableEntry(EntityConstants.ENTITY_USER,null);
 		this.setAccount(account);
 		this.setName(name);
 		this.setPassword(password);

@@ -138,7 +138,7 @@ public class EntityAdmin {
 		IAdminGAccessor adminAccessor = getAdminAccessor(princ);
 		IMetaGAccessor metaAttrAccessor = null;
 		List<EntityAttr> attrs = meta.getAllAttrs();
-
+		List<EntityAttr> indexableattrs = meta.getIndexableAttrs();
 		try {
 			// create the schema table and columnfamily
 			adminAccessor.createSchema(meta.getSchema(),attrs);
@@ -147,7 +147,14 @@ public class EntityAdmin {
 					EntityConstants.ACCESSOR_GENERIC_META);
 			// save the entity info and entity attributes data.
 			metaAttrAccessor.putEntityMeta(meta);
-
+			
+			if(indexableattrs.size()>0){
+				LOGGER.debug("Exist indexable attribute in table:{}, create index table",meta.getEntityName());
+				String indexschema = meta.getSchema() + EntityConstants.ENTITY_INDEX_POSTFIX;
+				attrs = EntityManager.getInstance().getIndexAttributes(indexschema);
+				adminAccessor.createIndexSchema(indexschema, attrs);
+			}
+			
 		} catch (AccessorException e) {
 			
 			LOGGER.debug("Error when loading entity meta information",e);

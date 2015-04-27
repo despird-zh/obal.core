@@ -42,6 +42,11 @@ public interface IAdminGAccessor extends IBaseAccessor{
 	public void createSchema(String schemaName, List<EntityAttr> attrs) throws AccessorException;
 
 	/**
+	 * Create the index schema for specified schema 
+	 **/
+	public void createIndexSchema(String schemaName,List<EntityAttr> attrs) throws AccessorException;
+	
+	/**
 	 * create schema 
 	 * @param schemaName the schema name
 	 * @param attrs the list of entry attribute objects

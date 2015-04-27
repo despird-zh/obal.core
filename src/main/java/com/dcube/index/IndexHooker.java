@@ -14,7 +14,8 @@ public class IndexHooker extends EventHooker<CacheEntryPipe>{
 
 	@Override
 	public void processPayload(EventPayload payload) throws RingEventException {
-		
+		IndexInfo indexdata = (IndexInfo)payload;
+		System.out.println("index --:"+indexdata.getEntryKey());
 	}
 
 }

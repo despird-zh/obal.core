@@ -69,6 +69,16 @@ public class AuditVerb {
 	}
 	
 	/**
+	 * Add predicate to map 
+	 **/
+	public void addPredicate(String predicateName, Object predicateValue) {
+		if(predicateValue == null)
+			predicateMap.put(predicateName, null);
+		else
+			predicateMap.put(predicateName, predicateValue.toString());
+	}
+	
+	/**
 	 * Remove predicate via verb name
 	 **/
 	public void removePredicate(String verbname) {

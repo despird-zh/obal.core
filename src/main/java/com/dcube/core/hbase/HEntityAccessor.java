@@ -433,8 +433,15 @@ public abstract class HEntityAccessor<GB extends IEntityEntry> extends EntityAcc
 		EntryKey rtv = null;
 		BaseEntity entitySchema = (BaseEntity)getEntitySchema();
 		EntityAttr attr = entitySchema.getEntityMeta().getAttr(attrName);
+		
+		if(!validateAttrValue(attrName, value)){
+			
+			throw new AccessorException("The {} is required, but value is null.",attrName);
+		}
+		
         try {  
             table = getConnection().getTable(entitySchema.getSchema(getContext().getPrincipal(),entryKey));
+            
             Put put =  new Put(entryKey.getBytes());
             
             if(LOGGER.isDebugEnabled()){
@@ -538,8 +545,7 @@ public abstract class HEntityAccessor<GB extends IEntityEntry> extends EntityAcc
 			}
 			// collect the audit data
 			AuditInfo audit = context.getAuditInfo();
-			audit.getVerb(AUDIT_OPER_PUT_ENTRY)
-				.setTarget(entryInfo.getEntryKey().toString());
+			audit.getVerb(AUDIT_OPER_PUT_ENTRY).setTarget(entryInfo.getEntryKey().toString());
 			Map<String,Object> predicates = entryInfo.getAuditPredicates();
 			audit.addPredicates(AUDIT_OPER_PUT_ENTRY, predicates);
 			context.auditEnd();

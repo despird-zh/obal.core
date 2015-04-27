@@ -14,7 +14,7 @@ public abstract class LifecycleHooker {
 		this.name = name;
 		this.priority = priority;
 	}
-	/** The lifecycle launcher */
+	/** The ILifecycle launcher */
 	private ILifecycle launcher;
 	/** default name */
 	private String name = "listener";

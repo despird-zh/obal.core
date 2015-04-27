@@ -86,6 +86,37 @@ public class AdminGAccessor extends HGenericAccessor implements IAdminGAccessor,
 		
 	}
 
+
+	@Override
+	public void createIndexSchema(String schemaName, List<EntityAttr> attrs) throws AccessorException {
+		HBaseAdmin hadmin = this.getAdmin();
+		try{
+			if(hadmin.tableExists(schemaName)){
+				LOGGER.error("Schema[{}] already existed, ignore further operation.",schemaName);
+				return;
+			}
+			ArrayList<String> temp = new ArrayList<String>();
+			@SuppressWarnings("deprecation")
+			HTableDescriptor tableDescriptor = new HTableDescriptor(schemaName);  
+	       
+			for(EntityAttr attr:attrs){
+				
+				if (!temp.contains(attr.getColumn())) {
+
+					tableDescriptor.addFamily(new HColumnDescriptor(attr.getColumn()));
+					temp.add(attr.getColumn());
+				}
+				
+			}
+	
+			hadmin.createTable(tableDescriptor);  
+			
+		}catch(IOException ioe){
+			LOGGER.error("Error create schema:{}",ioe, schemaName);
+			throw new AccessorException("Error create schema:{}", ioe, schemaName);
+		}
+	}
+	
 	@Override
 	public void updateSchema(String schemaName, List<EntityAttr> attrs) throws AccessorException {
 		HBaseAdmin hadmin = this.getAdmin();
@@ -177,5 +208,6 @@ public class AdminGAccessor extends HGenericAccessor implements IAdminGAccessor,
 			}
 		}
 	}
+
 
 }

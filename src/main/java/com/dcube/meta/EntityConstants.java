@@ -15,6 +15,10 @@ public class EntityConstants {
 	public static final String ATTR_ACL_COLUMN = "acl";
 	/** default column family */
 	public static final String ATTR_DFT_COLUMN = "c0";
+	/** blind cell qualifier */
+	public static final String ATTR_BLIND_QUALIFIER = "blind_qualifier";
+	/** blind cell attribute */
+	public static final String ATTR_BLIND_ATTRIBUTE = "blind_attr";
 	/** entity name prefix */
 	public static final String ENTITY_PREFIX = "dcube.";
 	/** postfix of entity */
@@ -226,7 +230,7 @@ public class EntityConstants {
 	}
 	
 	/**
-	 * The meta info enumerator 
+	 * The Traceable info enumerator 
 	 **/
 	public static enum TraceableEnum{
 
@@ -254,5 +258,25 @@ public class EntityConstants {
 			this.colfamily = colfamily;
 	    }
 	}
+
+	/**
+	 * The Traceable info enumerator 
+	 **/
+	public static enum IndexableEnum{
+
+		Default(  ATTR_BLIND_ATTRIBUTE,    ATTR_BLIND_QUALIFIER);
+
+		public final String attribute;
+		public final String qualifier;
+		public final String colfamily;
 		
+		/**
+		 * Hide default constructor 
+		 **/
+		private IndexableEnum(String attribute, String qualifier){  
+			this.attribute = attribute;
+			this.qualifier = qualifier;
+			this.colfamily = ATTR_DFT_COLUMN;
+	    }
+	}
 }
