@@ -28,6 +28,7 @@ public class UserRole extends EntryParser{
 
 	public UserRole(){
 		super();
+		rawEntry = new TraceableEntry(EntityConstants.ENTITY_USER_ROLE,null);
 	}
 	
 	/**
@@ -35,7 +36,7 @@ public class UserRole extends EntryParser{
 	 **/
 	public UserRole(String role) {
 		super();
-		rawEntry = new TraceableEntry();
+		rawEntry = new TraceableEntry(EntityConstants.ENTITY_USER_ROLE,null);
 		setAttrValue(RoleEnum.Name.attribute, role);
 	}
 

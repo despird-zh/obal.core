@@ -19,6 +19,8 @@
  */
 package com.dcube.core;
 
+import java.io.InputStream;
+
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.slf4j.Logger;
@@ -39,6 +41,11 @@ import org.slf4j.LoggerFactory;
  **/
 public class CoreConfigs{
 
+	/** override configuration file*/
+	public static final String DEFAULT_OVERRIDE_CONFIG = "dcube-config.properties";
+	/** default configuration path */
+	public static final String DEFAULT_CONFIG = "META-INF/dcube-config.properties";
+	
 	private static Logger LOGGER = LoggerFactory.getLogger(CoreConfigs.class);
 	
 	private static PropertiesConfiguration selfConfig = null;
@@ -46,8 +53,10 @@ public class CoreConfigs{
 	
 	static{
 		try {
-			selfConfig = new PropertiesConfiguration("META-INF/dcube-config.properties");
-			overrideConfig = new PropertiesConfiguration("dcube-config.properties");
+			selfConfig = new PropertiesConfiguration(DEFAULT_CONFIG);
+			InputStream is = CoreConfigs.class.getClassLoader().getResourceAsStream(DEFAULT_OVERRIDE_CONFIG);
+			if(is != null)
+				overrideConfig = new PropertiesConfiguration(DEFAULT_OVERRIDE_CONFIG);
 		} catch (ConfigurationException e) {
 			if(LOGGER.isDebugEnabled())
 				LOGGER.debug("Fail to load configuration properties file",e);

@@ -34,7 +34,7 @@ public class SecurityTest extends BaseTester{
 	}
 	
 	public static String groupname = "demogroup";
-	public void test001GroupCRUD()throws Exception{
+	public void Dtest001GroupCRUD()throws Exception{
 		
 		GroupInfoEAccessor ga = null;
 		Principal princ = new Principal("admin","demouser1","adminpwd","demosrc");
@@ -86,7 +86,7 @@ public class SecurityTest extends BaseTester{
 		}
 		
 	}
-	public void test003CreatePrincipal()throws Exception{
+	public void Dtest003CreatePrincipal()throws Exception{
 		
 		UserInfoEAccessor pa = null;
 		Principal princ = new Principal("demo1","demouser1","demopwd","demosrc");

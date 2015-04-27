@@ -165,7 +165,7 @@ public class EntitySetup {
 		EntityMeta meta = new EntityMeta(EntityConstants.ENTITY_USER_ROLE);
 		meta.setEntityClass(GenericEntity.class.getName());
 		meta.setAccessorName(EntityConstants.ACCESSOR_ENTITY_ROLE);
-		meta.setDescription("user Group schema ");
+		meta.setDescription("user Role schema ");
 		meta.setTraceable(true);
 		
 		EntityAttr attr = new EntityAttr(RoleEnum.Name.attribute, 

@@ -445,7 +445,7 @@ public abstract class HEntityAccessor<GB extends IEntityEntry> extends EntityAcc
             Put put =  new Put(entryKey.getBytes());
             
             if(LOGGER.isDebugEnabled()){
-                LOGGER.debug("Put{} => attribute:{} - value:{}",new Object[]{entryKey,attr.getAttrName(),value});
+                LOGGER.debug("Put:{} => attribute:{} - value:{}",new Object[]{entryKey,attr.getAttrName(),value});
             }
             switch(attr.mode){
             
