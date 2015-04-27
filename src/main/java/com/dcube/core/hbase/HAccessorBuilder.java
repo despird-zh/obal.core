@@ -38,7 +38,6 @@ import com.dcube.core.accessor.AccessorContext;
 import com.dcube.core.accessor.IndexAccessor;
 import com.dcube.core.security.Principal;
 import com.dcube.exception.AccessorException;
-import com.dcube.meta.EntityConstants;
 /**
  * Hbase-wise implementation of AccessorBuilder.
  * All accessors access the hbase will be created by this class

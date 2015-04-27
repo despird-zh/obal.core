@@ -23,7 +23,6 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import com.dcube.disruptor.EventPayload;
-import com.lmax.disruptor.EventFactory;
 
 /**
  * AuditInfo hold the audit data 

@@ -46,6 +46,7 @@ public class IndexHooker extends EventHooker<CacheEntryPipe>{
 		}finally{
 			
 			AccessorUtils.closeAccessor(iaccr);
+			iaccr = null;
 		}
 	}
 

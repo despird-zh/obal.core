@@ -44,7 +44,6 @@ import org.slf4j.LoggerFactory;
 
 import com.dcube.audit.AuditInfo;
 import com.dcube.audit.Predicate;
-import com.dcube.core.AccessorFactory;
 import com.dcube.core.EntryFilter;
 import com.dcube.core.EntryKey;
 import com.dcube.core.IEntityEntry;
@@ -53,9 +52,6 @@ import com.dcube.core.IGenericEntry.AttributeItem;
 import com.dcube.core.accessor.AccessorContext;
 import com.dcube.core.accessor.EntityAccessor;
 import com.dcube.core.accessor.EntryCollection;
-import com.dcube.core.accessor.IndexAccessor;
-import com.dcube.disruptor.EventProducer;
-import com.dcube.disruptor.EventType;
 import com.dcube.exception.AccessorException;
 import com.dcube.exception.MetaException;
 import com.dcube.exception.WrapperException;
@@ -65,7 +61,6 @@ import com.dcube.meta.BaseEntity;
 import com.dcube.meta.EntityAttr;
 import com.dcube.meta.EntityConstants;
 import com.dcube.meta.EntityManager;
-import com.dcube.util.RingEventUtils;
 
 /**
  * Base class of EntitAccessor, it holds HConnection object to access HBase 
@@ -533,10 +528,32 @@ public abstract class HEntityAccessor<GB extends IEntityEntry> extends EntityAcc
             		throw new AccessorException("Required attrs missed:{}",missedAttrs);
             	}
             }
+            // Try to get original value
+            Get get = new Get(key.getKey().getBytes());
+            for(EntityAttr attr:attrs){
+            	if(attr.isIndexable())
+            		get.addColumn(attr.getColumn().getBytes(), attr.getQualifier().getBytes());
+            }
+            Result oriResult = table.get(get);
+            
             Put put = parse(attrs,entryInfo);
 
             table.put(put);
         	table.flushCommits();
+        	// Prepare the index data        	
+        	for(EntityAttr attr:attrs){
+                if(attr.isIndexable() && oriResult.isEmpty()){
+                	// create new mode
+                	sendIndexInfo(key.getKey(), attr, null, entryInfo.getAttrValue(attr.getAttrName()));
+                }
+                else if(attr.isIndexable() && !oriResult.isEmpty()){
+                	// update mode
+                	byte[] cell = oriResult.getValue(attr.getColumn().getBytes(), attr.getQualifier().getBytes());
+                    Object originVal = HWrapperUtils.getPrimitiveValue(attr, cell);	
+                	sendIndexInfo(key.getKey(), attr, originVal, entryInfo.getAttrValue(attr.getAttrName()));
+                }
+            }
+        	
         	rtv = entryInfo.getEntryKey();
         	
         } catch (IOException e) {  
