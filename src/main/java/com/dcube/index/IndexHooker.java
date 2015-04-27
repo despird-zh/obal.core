@@ -14,8 +14,9 @@ public class IndexHooker extends EventHooker<CacheEntryPipe>{
 
 	@Override
 	public void processPayload(EventPayload payload) throws RingEventException {
-		IndexInfo indexdata = (IndexInfo)payload;
-		System.out.println("index --:"+indexdata.getEntryKey());
+		IndexPipe indexqueue = (IndexPipe)payload;
+		IndexInfo ii = indexqueue.poll();
+		System.out.println("index processing --:"+ii.getEntryKey());
 	}
 
 }

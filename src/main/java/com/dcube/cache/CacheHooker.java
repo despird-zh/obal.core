@@ -72,6 +72,6 @@ public class CacheHooker<K extends EntityEntry>  extends EventHooker<CacheEntryP
 			}
 		}
 		// remove from cache manager
-		CacheManager.getInstance().dropCacheInfoQueue(cachePipe);
+		CacheManager.getInstance().dropCacheQueue(cachePipe);
 	}
 }

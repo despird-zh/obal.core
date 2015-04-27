@@ -23,7 +23,13 @@ public class IndexManager {
 		indexPipeMap = new HashMap<EntityAttr, IndexPipe>();
 	}
 	
+	/**
+	 * Get the IndexManager singleton instance 
+	 **/
 	public static IndexManager getInstance(){
+		if(instance == null)
+			instance = new IndexManager();
+		
 		return instance;
 	}
 	
@@ -35,7 +41,7 @@ public class IndexManager {
 	 * 
 	 * @return the queue contains cache info.
 	 **/
-	public void offerIndexInfoQueue(IndexInfo indexInfo){
+	public void offerIndexQueue(IndexInfo indexInfo){
 		
 		IndexPipe indexPipe = indexPipeMap.get(indexInfo.getEntityAttr());
 		if(indexPipe == null){// create new one
@@ -44,7 +50,7 @@ public class IndexManager {
 			indexPipeMap.put(indexInfo.getEntityAttr(), indexPipe);
 			indexPipe.offer(indexInfo);
 			
-			EventDispatcher.getInstance().sendPayload(indexPipe,EventType.CACHE);
+			EventDispatcher.getInstance().sendPayload(indexPipe,EventType.INDEX);
 			
 		}else if(indexPipe.isEmpty()){// since empty let cache hooker to drop it.
 			
@@ -52,7 +58,7 @@ public class IndexManager {
 			indexPipeMap.put(indexInfo.getEntityAttr(), indexPipe);
 			indexPipe.offer(indexInfo);
 			
-			EventDispatcher.getInstance().sendPayload(indexPipe,EventType.CACHE);
+			EventDispatcher.getInstance().sendPayload(indexPipe,EventType.INDEX);
 			
 		}else{// not empty push data to existed queue, let hook digest it.
 			
@@ -68,7 +74,7 @@ public class IndexManager {
 	 * 
 	 * @return true: cache queue not exist in map; false: cache queue exist in map
 	 **/
-	public boolean dropIndexInfoQueue(IndexPipe indexPipe){
+	public boolean dropIndexQueue(IndexPipe indexPipe){
 		
 		IndexPipe newIndexPipe = indexPipeMap.get(indexPipe.getEntityAttr());
 		
@@ -85,4 +91,5 @@ public class IndexManager {
 			return false;
 		}
 	}
+
 }

@@ -200,7 +200,7 @@ public class Principal extends EntryParser{
 			Map<String, String> rolemap = (Map<String, String>)this.getAttrValue(UserEnum.Roles.attribute, Map.class);
 			Map<String, String> attrMap = (rolemap == null)? new HashMap<String, String>():rolemap;
 			for(String t:roles){
-				if(!rolemap.containsKey(t))
+				if(!attrMap.containsKey(t))
 					attrMap.put(t, EntityConstants.BLANK_VALUE);
 			}
 			this.setAttrValue(UserEnum.Roles.attribute, attrMap);

@@ -61,7 +61,7 @@ public class SecurityTest extends BaseTester{
 	}
 	
 	public static String rolename = "demorole";
-	public void test002RoleCRUD()throws Exception{
+	public void Dtest002RoleCRUD()throws Exception{
 		
 		RoleInfoEAccessor ra = null;
 		Principal princ = new Principal("admin","demouser1","adminpwd","demosrc");
@@ -86,7 +86,7 @@ public class SecurityTest extends BaseTester{
 		}
 		
 	}
-	public void Dtest003CreatePrincipal()throws Exception{
+	public void test003CreatePrincipal()throws Exception{
 		
 		UserInfoEAccessor pa = null;
 		Principal princ = new Principal("demo1","demouser1","demopwd","demosrc");
@@ -101,7 +101,7 @@ public class SecurityTest extends BaseTester{
 			roles.add("role1");
 			roles.add("role2");
 			princ.setRoles(roles);
-			pa = AccessorUtils.getEntityAccessor(princ, EntityConstants.ACCESSOR_ENTITY_USER);
+			pa = AccessorUtils.getEntityAccessor(princ, EntityConstants.ENTITY_USER);
 			EntryKey key = pa.newKey();
 			// get converter
 			IEntryConverter<TraceableEntry,Principal > converter = pa.getEntryConverter(Principal.class);

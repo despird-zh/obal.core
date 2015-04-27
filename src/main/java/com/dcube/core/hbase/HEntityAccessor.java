@@ -54,13 +54,18 @@ import com.dcube.core.accessor.AccessorContext;
 import com.dcube.core.accessor.EntityAccessor;
 import com.dcube.core.accessor.EntryCollection;
 import com.dcube.core.accessor.IndexAccessor;
+import com.dcube.disruptor.EventProducer;
+import com.dcube.disruptor.EventType;
 import com.dcube.exception.AccessorException;
 import com.dcube.exception.MetaException;
 import com.dcube.exception.WrapperException;
+import com.dcube.index.IndexInfo;
+import com.dcube.index.IndexManager;
 import com.dcube.meta.BaseEntity;
 import com.dcube.meta.EntityAttr;
 import com.dcube.meta.EntityConstants;
 import com.dcube.meta.EntityManager;
+import com.dcube.util.RingEventUtils;
 
 /**
  * Base class of EntitAccessor, it holds HConnection object to access HBase 
@@ -441,6 +446,12 @@ public abstract class HEntityAccessor<GB extends IEntityEntry> extends EntityAcc
 		
         try {  
             table = getConnection().getTable(entitySchema.getSchema(getContext().getPrincipal(),entryKey));
+            // try to get the origin value before put
+            Get get = new Get(entryKey.getBytes());
+            get.addColumn(attr.getColumn().getBytes(), attr.getQualifier().getBytes());
+            Result entry = table.get(get);
+            byte[] cell = entry.getValue(attr.getColumn().getBytes(), attr.getQualifier().getBytes());
+            Object originVal = HWrapperUtils.getPrimitiveValue(attr, cell);	
             
             Put put =  new Put(entryKey.getBytes());
             
@@ -472,10 +483,9 @@ public abstract class HEntityAccessor<GB extends IEntityEntry> extends EntityAcc
             }
         	
         	table.put(put);
-        	table.flushCommits();
-        	
+        	table.flushCommits();        	
         	// Now try to update the index data
-        	
+        	sendIndexInfo(entryKey, attr, originVal, value);
         	
         	rtv = new EntryKey(entitySchema.getEntityName(),entryKey);
         	
@@ -815,5 +825,16 @@ public abstract class HEntityAccessor<GB extends IEntityEntry> extends EntityAcc
 		
 		}
 		return rtv;
+	}
+	
+	/**
+	 * Send IndexInfo object to disruptor Index info queue. 
+	 **/
+	private void sendIndexInfo(String key, EntityAttr attr, Object oldValue, Object newValue){
+		
+		IndexInfo indexinfo = new IndexInfo(key, attr, oldValue, newValue);
+		
+		IndexManager.getInstance().offerIndexQueue(indexinfo);
+		
 	}
 }

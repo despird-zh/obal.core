@@ -54,7 +54,7 @@ public class IndexInfo {
 	 * @param oldValue 
 	 * @param newValue
 	 **/
-	public IndexInfo(String key, EntityAttr attr, String oldValue, Object newValue){
+	public IndexInfo(String key, EntityAttr attr, Object oldValue, Object newValue){
 		this.attr = attr;
 		this.entryKey = new EntryKey(attr.getEntityName(),key);
 		this.oldValue = oldValue;
@@ -108,4 +108,6 @@ public class IndexInfo {
 		
 		return this.newValue;
 	}
+	
+	
 }

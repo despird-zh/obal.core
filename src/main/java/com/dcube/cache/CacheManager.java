@@ -270,7 +270,7 @@ public class CacheManager{
 	 * 
 	 * @return true: cache queue not exist in map; false: cache queue exist in map
 	 **/
-	public boolean dropCacheInfoQueue(CacheEntryPipe entryPipe){
+	public boolean dropCacheQueue(CacheEntryPipe entryPipe){
 		
 		CacheEntryPipe newEntryPipe = entryPipeMap.get(entryPipe.getEntryKey());
 		
