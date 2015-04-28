@@ -39,20 +39,34 @@ public class GenericEntity extends BaseEntity{
 		super(meta);
 	}
 
+	/**
+	 * Get the schema name 
+	 * @param principal the schema calculation input
+	 * @param key the schema calculation input 
+	 **/
 	@Override
 	public String getSchema(Principal principal, EntryKey key) throws MetaException{
 		
 		return super.getSchema();
 	}
 
+	/**
+	 * We new entry key by default, some the key calculation need principal
+	 * @param principal the calculation input
+	 * @param parameter the calculation input, used for override method.
+	 **/
 	@Override
-	public EntryKey newKey(Principal principal, Object... parameter) throws MetaException {
+	public EntryKey newEntryKey(Principal principal, Object... parameter) throws MetaException {
 		
-		return newKey(principal);
+		return newEntryKey(principal);
 	}
 
+	/**
+	 * We new entry key by default, some the key calculation need principal
+	 * @param principal the calculation input
+	 **/
 	@Override
-	public EntryKey newKey(Principal principal) throws MetaException {
+	public EntryKey newEntryKey(Principal principal) throws MetaException {
 		
 		String key = String.valueOf(System.currentTimeMillis());		
 		return new EntryKey(getEntityMeta().getEntityName(),key);

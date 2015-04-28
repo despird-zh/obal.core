@@ -39,13 +39,13 @@ public class AuditEntity extends BaseEntity{
 	}
 
 	@Override
-	public EntryKey newKey(Principal principal, Object... parameter) {
+	public EntryKey newEntryKey(Principal principal, Object... parameter) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public EntryKey newKey(Principal principal) throws MetaException {
+	public EntryKey newEntryKey(Principal principal) throws MetaException {
 		// TODO Auto-generated method stub
 		return null;
 	}

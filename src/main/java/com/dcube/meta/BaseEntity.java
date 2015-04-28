@@ -26,7 +26,8 @@ import com.dcube.exception.MetaException;
 
 /**
  * BaseEntity is responsible for generate Entry Key and decide the actual schema name before persistence or scan
- * <p>BaseEntity is managed by EntrySchemaManager</p>
+ * <p>BaseEntity is managed by EntityManager</p>
+ * 
  * 
  * @author despird-zh
  * @since 0.1
@@ -88,13 +89,13 @@ public abstract class BaseEntity{
 	 * Generate new key with parameters
 	 * @return EntryKey the schema name
 	 **/
-	public abstract EntryKey newKey(Principal principal,Object... parameter)throws MetaException;
+	public abstract EntryKey newEntryKey(Principal principal,Object... parameter)throws MetaException;
 	
 	/**
 	 * Generate new key
 	 * @return EntryKey the schema name
 	 **/
-	public abstract EntryKey newKey(Principal principal)throws MetaException;
+	public abstract EntryKey newEntryKey(Principal principal)throws MetaException;
 	
 	/**
 	 * Get the schema name in byte[]
@@ -113,6 +114,7 @@ public abstract class BaseEntity{
 	 * Get Index schema name 
 	 * @param principal the principal
 	 * @param entryKey the key of entry 
+	 * @param String the coupled index schema name
 	 **/
 	public String getIndexSchema(Principal principal,EntryKey entryKey)throws MetaException{
 		String schema = getSchema(principal,entryKey);
@@ -148,9 +150,20 @@ public abstract class BaseEntity{
 
 	/**
 	 * Convert string key to EntryKey 
+	 * @param entryKey key string value
+	 * @return EntryKey
 	 **/
-	public EntryKey getKey(String entryKey){
+	public EntryKey getEntryKey(String entryKey){
 		
 		return new EntryKey(meta.getEntityName(), entryKey);
+	}
+	
+	/**
+	 * Get the index key prefix 
+	 * @param entrykey the calculation parameter
+	 * @param attr the calculation parameter 
+	 **/
+	public String getIndexKeyPrefix(EntryKey entrykey, EntityAttr attr){
+		return "";
 	}
 }

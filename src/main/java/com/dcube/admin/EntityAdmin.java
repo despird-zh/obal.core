@@ -140,7 +140,7 @@ public class EntityAdmin {
 		List<EntityAttr> attrs = meta.getAllAttrs();
 		List<EntityAttr> indexableattrs = meta.getIndexableAttrs();
 		try {
-			// create the schema table and columnfamily
+			// create the schema table and column family
 			adminAccessor.createSchema(meta.getSchema(),attrs);
 
 			metaAttrAccessor = AccessorUtils.getGenericAccessor(princ,

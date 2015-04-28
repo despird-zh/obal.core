@@ -41,7 +41,8 @@ public class EventDispatcher {
 	private static EventDispatcher instance;
 	/** the lifecycle hooker */
 	private LifecycleHooker hooker = null;
-	
+	/** running flag */
+	private boolean running = false;
 	/**
 	 * default event disptacher
 	 **/
@@ -85,11 +86,20 @@ public class EventDispatcher {
 	}
 
 	/**
+	 * Check if the disruptor is running 
+	 **/
+	public boolean isRunning(){
+		
+		return this.running;
+	}
+	
+	/**
 	 * Start the disruptor
 	 **/
 	public void startup() {
 		
 		disruptor.start();
+		this.running = true;
 	}
 
 	/**
@@ -99,6 +109,7 @@ public class EventDispatcher {
 		
 		disruptor.shutdown();
 		executor.shutdown();
+		this.running = false;
 	}
 	
 	/**

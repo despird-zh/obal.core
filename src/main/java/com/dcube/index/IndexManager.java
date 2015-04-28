@@ -10,6 +10,13 @@ import com.dcube.disruptor.EventDispatcher;
 import com.dcube.disruptor.EventType;
 import com.dcube.meta.EntityAttr;
 
+/**
+ * IndexManager is a singleton pattern instance, it provides methods to build the index data for 
+ * All indexable entity attributes.
+ * 
+ * @author desprid
+ * @version 0.1 2014-3-2
+ **/
 public class IndexManager {
 
 	static Logger LOGGER = LoggerFactory.getLogger(IndexManager.class);
@@ -42,6 +49,11 @@ public class IndexManager {
 	 * @return the queue contains cache info.
 	 **/
 	public void offerIndexQueue(IndexInfo indexInfo){
+		
+		if(!EventDispatcher.getInstance().isRunning()){
+			persistIndexInfo(indexInfo);
+			return;
+		}
 		
 		IndexPipe indexPipe = indexPipeMap.get(indexInfo.getEntityAttr());
 		if(indexPipe == null){// create new one
@@ -92,4 +104,11 @@ public class IndexManager {
 		}
 	}
 
+	public void persistIndexInfo(IndexInfo indexinfo){
+		System.out.println("====Persist=====");
+	}
+	
+	public void loadIndexInfo(){
+		
+	}
 }

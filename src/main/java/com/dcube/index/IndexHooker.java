@@ -32,6 +32,7 @@ public class IndexHooker extends EventHooker<CacheEntryPipe>{
 		try{
 			while(!indexqueue.isEmpty()){
 				IndexInfo indexinfo = indexqueue.poll();
+				LOGGER.debug("processing index:{}",indexinfo );
 				if(iaccr == null)
 					iaccr = (IndexAccessor)AccessorFactory.buildIndexAccessor(princ, indexinfo.getEntityName());
 				

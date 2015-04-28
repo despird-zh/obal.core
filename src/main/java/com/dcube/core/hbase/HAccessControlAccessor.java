@@ -124,7 +124,7 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
 			// collect the audit data
 			AuditInfo audit = context.getAuditInfo();
 			audit.getVerb(AUDIT_OPER_GET_ENTRY)
-				.setTarget(entitySchema.getKey(entryKey).toString());
+				.setTarget(entitySchema.getEntryKey(entryKey).toString());
 			
 			context.auditEnd();
         }
@@ -174,7 +174,7 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
 			// collect the audit data
 			AuditInfo audit = context.getAuditInfo();
 			audit.getVerb(AUDIT_OPER_GET_ENTRY)
-				.setTarget(entitySchema.getKey(entryKey).toString());
+				.setTarget(entitySchema.getEntryKey(entryKey).toString());
 			audit.addPredicate(AUDIT_OPER_GET_ATTR, Predicate.KEY_PARAM, attributes);
 			context.auditEnd();
 		}

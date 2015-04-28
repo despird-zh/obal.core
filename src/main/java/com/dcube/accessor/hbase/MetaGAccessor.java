@@ -129,7 +129,7 @@ public class MetaGAccessor extends HGenericAccessor implements IMetaGAccessor{
 			EntryKey key = attr.getEntryKey();
 			if(null == key){
 				// key is null reset it
-				key = attraccessor.getEntitySchema().newKey(getContext().getPrincipal());
+				key = attraccessor.getEntitySchema().newEntryKey(getContext().getPrincipal());
 				attr.setEntryKey(key);
 			}
 			// convert it into EntityEntry

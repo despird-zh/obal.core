@@ -94,7 +94,7 @@ public class AttrInfoEAccessor extends HEntityAccessor<EntityEntry>{
 					minfo.setAttrValue(meta.getAttr(AttrEnum.Column.attribute), toObject.getColumn());
 					minfo.setAttrValue(meta.getAttr(AttrEnum.Qualifier.attribute), toObject.getQualifier());
 					minfo.setAttrValue(meta.getAttr(AttrEnum.Hidden.attribute), toObject.isHidden());
-					minfo.setAttrValue(meta.getAttr(AttrEnum.Indexable.attribute), toObject.isPrimitive());
+					minfo.setAttrValue(meta.getAttr(AttrEnum.Indexable.attribute), toObject.isIndexable());
 					minfo.setAttrValue(meta.getAttr(AttrEnum.Required.attribute), toObject.isRequired());
 					minfo.setAttrValue(meta.getAttr(AttrEnum.Readonly.attribute), toObject.isReadonly());
 					minfo.setAttrValue(meta.getAttr(AttrEnum.Type.attribute), toObject.type.toString());

@@ -330,7 +330,7 @@ public abstract class HEntityAccessor<GB extends IEntityEntry> extends EntityAcc
 			// collect the audit data
 			AuditInfo audit = context.getAuditInfo();
 			audit.getVerb(AUDIT_OPER_GET_ATTR)
-				.setTarget(entitySchema.getKey(entryKey).toString());
+				.setTarget(entitySchema.getEntryKey(entryKey).toString());
 			audit.addPredicate(AUDIT_OPER_GET_ATTR, Predicate.KEY_PARAM, attr.getAttrName());
 			context.auditEnd();
         }
@@ -370,7 +370,7 @@ public abstract class HEntityAccessor<GB extends IEntityEntry> extends EntityAcc
 			// collect the audit data
 			AuditInfo audit = context.getAuditInfo();
 			audit.getVerb(AUDIT_OPER_GET_ENTRY)
-				.setTarget(entitySchema.getKey(entryKey).toString());
+				.setTarget(entitySchema.getEntryKey(entryKey).toString());
 			
 			context.auditEnd();
         }
@@ -415,7 +415,7 @@ public abstract class HEntityAccessor<GB extends IEntityEntry> extends EntityAcc
 			// collect the audit data
 			AuditInfo audit = context.getAuditInfo();
 			audit.getVerb(AUDIT_OPER_GET_ENTRY)
-				.setTarget(entitySchema.getKey(entryKey).toString());
+				.setTarget(entitySchema.getEntryKey(entryKey).toString());
 			audit.addPredicate(AUDIT_OPER_GET_ATTR, Predicate.KEY_PARAM, attributes);
 			context.auditEnd();
 		}
@@ -499,7 +499,7 @@ public abstract class HEntityAccessor<GB extends IEntityEntry> extends EntityAcc
 			// collect the audit data
 			AuditInfo audit = context.getAuditInfo();
 			audit.getVerb(AUDIT_OPER_PUT_ATTR)
-				.setTarget(entitySchema.getKey(entryKey).toString());
+				.setTarget(entitySchema.getEntryKey(entryKey).toString());
 			audit.addPredicate(AUDIT_OPER_PUT_ATTR, attrName, value);
 			context.auditEnd();
         }

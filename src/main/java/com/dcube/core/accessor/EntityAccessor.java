@@ -99,7 +99,7 @@ public abstract class EntityAccessor<GB extends IEntityEntry> implements IEntity
 			if(null == getEntitySchema())
 				throw new AccessorException("The entity schema not set yet");
 			
-			key = getEntitySchema().newKey(getContext().getPrincipal(),parameter);
+			key = getEntitySchema().newEntryKey(getContext().getPrincipal(),parameter);
 		} catch (MetaException e) {
 			
 			throw new AccessorException("Error when generating entry key",e);

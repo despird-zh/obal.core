@@ -133,6 +133,7 @@ public class EntitySetup {
 		EntityAttr attr = new EntityAttr(GroupEnum.Name.attribute, 
 				GroupEnum.Name.colfamily, 
 				GroupEnum.Name.qualifier);
+		attr.setIndexable(true);
 		meta.addAttr(attr);
 		
 		attr = new EntityAttr(GroupEnum.Description.attribute,
@@ -171,6 +172,7 @@ public class EntitySetup {
 		EntityAttr attr = new EntityAttr(RoleEnum.Name.attribute, 
 				RoleEnum.Name.colfamily, 
 				RoleEnum.Name.qualifier);
+		attr.setIndexable(true);
 		meta.addAttr(attr);
 		
 		attr = new EntityAttr(RoleEnum.Description.attribute,
