@@ -24,7 +24,7 @@ public interface ISecurityGAccessor extends IBaseAccessor{
 	/**
 	 * Get Group by name
 	 * @param name
-	 * @return UserGroup the group account 
+	 * @return UserGroup the group object 
 	 **/
 	public UserGroup getGroupByName(String name) throws AccessorException;
 }
