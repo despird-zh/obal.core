@@ -66,7 +66,7 @@ public class RedisTester extends BaseTester{
 		Principal princ = new Principal("useracc","demouser","pwd");
 		try{
 			ta = AccessorUtils.getEntityAccessor("redis",princ, "obal.test");
-			ta.doDelEntry(key.getKey());
+			ta.doRemoveEntry(key.getKey());
 			
 		}catch (AccessorException e) {
 			// TODO Auto-generated catch block

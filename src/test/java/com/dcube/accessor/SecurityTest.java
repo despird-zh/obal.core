@@ -86,7 +86,8 @@ public class SecurityTest extends BaseTester{
 		}
 		
 	}
-	public void test003CreatePrincipal()throws Exception{
+	
+	public void Dtest003CreatePrincipal()throws Exception{
 		
 		UserInfoEAccessor pa = null;
 		Principal princ = new Principal("demo1","demouser1","demopwd","demosrc");
@@ -121,6 +122,22 @@ public class SecurityTest extends BaseTester{
 		}
 	}
 
+	public void test004GetPrincipal()throws Exception{
+		
+		ISecurityGAccessor pa = null;
+		Principal princ = new Principal("demo1","demouser1","demopwd","demosrc");
+		//princ.setKey("101001");
+		try {
+			
+			pa = (ISecurityGAccessor)AccessorUtils.getGenericAccessor(princ, EntityConstants.ACCESSOR_GENERIC_SECURITY);
+			Principal p1 = pa.getPrincipalByAccount("demo1");
+			System.out.println(p1.getName());
+		} finally{
+			
+			AccessorUtils.closeAccessor(pa);
+		}
+	}
+	
 	public void Dtest002UpdateAttr(){
 		
 		PrincipalGAccessor pa = null;

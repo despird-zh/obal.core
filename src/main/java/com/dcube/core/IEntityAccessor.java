@@ -107,7 +107,7 @@ public interface IEntityAccessor <GB extends IEntityEntry> extends IBaseAccessor
 	 * 
 	 * @param entryKey the entry key array
 	 **/
-	public abstract void doDelEntry(String... entryKey)throws AccessorException;
+	public abstract void doRemoveEntry(String... entryKey)throws AccessorException;
 
 	/**
 	 * Delete entry object's specified attribute
@@ -115,7 +115,7 @@ public interface IEntityAccessor <GB extends IEntityEntry> extends IBaseAccessor
 	 * @param attribute the attribute of entity
 	 * @param entryKey the entry key array
 	 **/
-	public abstract void doDelEntryAttr(String attribute, String... entryKey)throws AccessorException;
+	public abstract void doRemoveEntryAttr(String attribute, String... entryKey)throws AccessorException;
 	
 	/**
 	 * Get entry object list

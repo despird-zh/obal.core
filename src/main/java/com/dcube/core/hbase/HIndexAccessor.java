@@ -3,9 +3,11 @@ package com.dcube.core.hbase;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.CellScanner;
+import org.apache.hadoop.hbase.CellUtil;
 import org.apache.hadoop.hbase.client.Delete;
 import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.HConnection;
@@ -67,7 +69,7 @@ public class HIndexAccessor extends IndexAccessor implements HConnAware {
 			CellScanner scanner = result.cellScanner();
 			while (scanner.advance()) {
 				Cell cell = scanner.current();
-				String key = Bytes.toString(cell.getQualifierArray());
+				String key = Bytes.toString(CellUtil.cloneQualifier(cell));
 				return new EntryKey(attr.getEntityName(),key);
 			}
 			return null;
@@ -113,7 +115,7 @@ public class HIndexAccessor extends IndexAccessor implements HConnAware {
 			while (scanner.advance()) {
 				Cell cell = scanner.current();
 				// qualifier is the expected row key
-				String key = Bytes.toString(cell.getQualifierArray());
+				String key = Bytes.toString(CellUtil.cloneQualifier(cell));
 				rtv.add(new EntryKey(attr.getEntityName(),key));				
 			}
 			return rtv;

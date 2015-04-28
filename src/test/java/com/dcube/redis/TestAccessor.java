@@ -34,7 +34,7 @@ public class TestAccessor extends REntityAccessor<EntityEntry>{
 	}
 
 	@Override
-	public void doDelEntryAttr(String attribute, String... entryKey)
+	public void doRemoveEntryAttr(String attribute, String... entryKey)
 			throws AccessorException {
 		// TODO Auto-generated method stub
 		

@@ -167,7 +167,7 @@ public abstract class REntityAccessor <GB extends IEntityEntry> extends EntityAc
 	}
 
 	@Override
-	public void doDelEntry(String... entryKeys) throws AccessorException {
+	public void doRemoveEntry(String... entryKeys) throws AccessorException {
 		BaseEntity entitySchema = (BaseEntity)getEntitySchema();
 		// get non-primitive attributes
 		List<EntityAttr> attrs = entitySchema.getEntityMeta().getAttrs(false);
@@ -227,7 +227,7 @@ public abstract class REntityAccessor <GB extends IEntityEntry> extends EntityAc
 	}
 
 	@Override
-	public void doDelEntryAttr(String attribute, String... entryKeys)
+	public void doRemoveEntryAttr(String attribute, String... entryKeys)
 			throws AccessorException {
 		BaseEntity entitySchema = (BaseEntity)getEntitySchema();
 		// get non-primitive attributes

@@ -580,14 +580,18 @@ public abstract class HEntityAccessor<GB extends IEntityEntry> extends EntityAcc
 	}
 	
 	@Override
-	public void doDelEntry(String... rowkeys) throws AccessorException {
+	public void doRemoveEntry(String... rowkeys) throws AccessorException {
 		AccessorContext context = super.getContext();		
 		context.auditBegin(AUDIT_OPER_DEL_ENTRY);
 		
 		BaseEntity entrySchema = (BaseEntity)getEntitySchema();
 		HashMap<String, List<String>> map = new HashMap<String, List<String>>();
 		try {
-
+			//-- comment @ 2014-3-2 by desprid
+			// It's possible the schema depends on key to calculate. 
+			// that means same entity include multiple schemas(tables)
+			// In such case, necessary to group keys by schema
+			// then perform delete on schema respectively.
 			for(String key:rowkeys){
 				String schemaname = entrySchema.getSchema(getContext().getPrincipal(),key);
 				List<String> keys = map.get(schemaname);
@@ -597,9 +601,10 @@ public abstract class HEntityAccessor<GB extends IEntityEntry> extends EntityAcc
 			}
 			
 			for(Map.Entry<String, List<String>> e:map.entrySet()){
-				doDelEntry(e.getKey(), e.getValue(), null);
+				removeEntry(e.getKey(), e.getValue(), null);
+				
 			}
-
+			
 		} catch (MetaException e) {
 			throw new AccessorException("Error delete entry row, key:{}",e,rowkeys);
 		
@@ -617,8 +622,12 @@ public abstract class HEntityAccessor<GB extends IEntityEntry> extends EntityAcc
 	
 	/**
 	 * Delete specified table entries with keys 
+	 * 
+	 * @param schemaname the name of schema
+	 * @param keys the key list
+	 * @param attr the entity attribute object
 	 **/
-	private void doDelEntry(String schemaname, List<String> keys, EntityAttr attr) throws AccessorException{
+	private void removeEntry(String schemaname, List<String> keys, EntityAttr attr) throws AccessorException{
 		HTableInterface table = null;
 		String akey = null;
 		
@@ -657,7 +666,7 @@ public abstract class HEntityAccessor<GB extends IEntityEntry> extends EntityAcc
 	}
 	
 	@Override
-	public void doDelEntryAttr(String attribute, String... rowkeys)throws AccessorException{
+	public void doRemoveEntryAttr(String attribute, String... rowkeys)throws AccessorException{
 		AccessorContext context = super.getContext();		
 		context.auditBegin(AUDIT_OPER_DEL_ATTR);
 		
@@ -675,7 +684,7 @@ public abstract class HEntityAccessor<GB extends IEntityEntry> extends EntityAcc
 			}
 			
 			for(Map.Entry<String, List<String>> e:map.entrySet()){
-				doDelEntry(e.getKey(), e.getValue(), attr);
+				removeEntry(e.getKey(), e.getValue(), attr);
 			}
 
 		} catch (MetaException e) {
@@ -848,9 +857,7 @@ public abstract class HEntityAccessor<GB extends IEntityEntry> extends EntityAcc
 	 **/
 	private void sendIndexInfo(String key, EntityAttr attr, Object oldValue, Object newValue){
 		
-		IndexInfo indexinfo = new IndexInfo(key, attr, oldValue, newValue);
-		
-		IndexManager.getInstance().offerIndexQueue(indexinfo);
-		
+		IndexInfo indexinfo = new IndexInfo(key, attr, oldValue, newValue);		
+		IndexManager.getInstance().offerIndexQueue(indexinfo);		
 	}
 }

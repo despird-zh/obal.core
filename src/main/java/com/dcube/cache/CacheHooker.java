@@ -51,13 +51,13 @@ public class CacheHooker<K extends EntityEntry>  extends EventHooker<CacheEntryP
 				else if(CacheInfo.OperEnum.DelEntry == operData.operation()){
 					
 					CacheInfo.DelEntryData data = operData.value();
-					eaccessor.doDelEntry(data.key);
+					eaccessor.doRemoveEntry(data.key);
 					
 				}
 				else if(CacheInfo.OperEnum.DelAttr == operData.operation()){
 					
 					CacheInfo.DelAttrData data = operData.value();
-					eaccessor.doDelEntryAttr(data.attr, data.key);
+					eaccessor.doRemoveEntryAttr(data.attr, data.key);
 					
 				}
 				

@@ -12,13 +12,22 @@ import com.dcube.meta.EntityAttr;
  **/
 public class IndexInfo {
 
+	/**
+	 * Operation Mode 
+	 **/
+	public static enum IndexMode{
+		Update, // update
+		Remove; // remove
+	}
+	
 	EntryKey entryKey ;
 	EntityAttr attr;
 	Object oldValue;
 	Object newValue;
+	IndexMode mode = IndexMode.Update;
 	
 	/**
-	 * Build with key, attribute and old value
+	 * Build with key, attribute and old value, default for update mode.
 	 * @param key 
 	 * @param attr
 	 * @param oldValue 
@@ -30,7 +39,20 @@ public class IndexInfo {
 	}
 	
 	/**
-	 * Build with key, attribute, value and value flag
+	 * Build with key, attribute and old value
+	 * @param key 
+	 * @param attr
+	 * @param oldValue 
+	 **/
+	public IndexInfo(IndexMode mode, String key, EntityAttr attr, Object oldValue){
+		this.attr = attr;
+		this.entryKey = new EntryKey(attr.getEntityName(),key);
+		this.oldValue = oldValue;
+		this.mode = mode;
+	}
+	
+	/**
+	 * Build with key, attribute, value and value flag,default for update mode.
 	 * @param key 
 	 * @param attr
 	 * @param value 
@@ -48,7 +70,7 @@ public class IndexInfo {
 	}
 	
 	/**
-	 * Build with key, attribute and old value , new value
+	 * Build with key, attribute and old value , new value,default for update mode.
 	 * @param key 
 	 * @param attr
 	 * @param oldValue 
@@ -115,6 +137,13 @@ public class IndexInfo {
 	public String getEntityName(){
 		
 		return this.entryKey.getEntityName();
+	}
+	
+	/**
+	 * The index mode  
+	 **/
+	public IndexMode mode(){
+		return this.mode;
 	}
 	
 	@Override
