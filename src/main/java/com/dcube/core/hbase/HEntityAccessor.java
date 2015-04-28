@@ -603,7 +603,8 @@ public abstract class HEntityAccessor<GB extends IEntityEntry> extends EntityAcc
 			
 			for(Map.Entry<String, List<String>> e:map.entrySet()){
 				List<EntityAttr> attrs = entrySchema.getEntityMeta().getAllAttrs();
-				removeEntry(e.getKey(), e.getValue(), (EntityAttr[])attrs.toArray());				
+				EntityAttr[] attrarray = attrs.toArray(new EntityAttr[0]);
+				removeEntry(e.getKey(), e.getValue(), attrarray);				
 			}
 			
 		} catch (MetaException e) {

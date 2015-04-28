@@ -12,6 +12,7 @@ import com.dcube.disruptor.EventPayload;
 import com.dcube.disruptor.EventType;
 import com.dcube.exception.BaseException;
 import com.dcube.exception.RingEventException;
+import com.dcube.index.IndexInfo.IndexMode;
 import com.dcube.util.AccessorUtils;
 
 /**
@@ -36,11 +37,19 @@ public class IndexHooker extends EventHooker<CacheEntryPipe>{
 				if(iaccr == null)
 					iaccr = (IndexAccessor)AccessorFactory.buildIndexAccessor(princ, indexinfo.getEntityName());
 				
-				iaccr.doChangeEntryKey(indexinfo.getEntityAttr().getAttrName(), 
+				if(indexinfo.mode == IndexMode.Update){
+					// update operation
+					iaccr.doChangeEntryKey(indexinfo.getEntityAttr().getAttrName(), 
 						indexinfo.oldValue, 
 						indexinfo.newValue, 
 						indexinfo.getEntryKey().getKey());
-				
+					
+				}else if(indexinfo.mode == IndexMode.Remove){
+					// remove operation
+					iaccr.doRemoveEntryKey(indexinfo.getEntityAttr().getAttrName(), 
+							indexinfo.oldValue, 
+							indexinfo.getEntryKey().getKey());
+				}
 			}
 		}catch(BaseException be){
 			LOGGER.error("Fail to create index");

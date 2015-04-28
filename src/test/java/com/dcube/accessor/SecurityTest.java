@@ -8,7 +8,6 @@ import org.junit.FixMethodOrder;
 import org.junit.runners.MethodSorters;
 
 import com.dcube.accessor.hbase.GroupInfoEAccessor;
-import com.dcube.accessor.hbase.PrincipalGAccessor;
 import com.dcube.accessor.hbase.RoleInfoEAccessor;
 import com.dcube.accessor.hbase.UserInfoEAccessor;
 import com.dcube.base.BaseTester;
@@ -125,44 +124,28 @@ public class SecurityTest extends BaseTester{
 	public void test004GetPrincipal()throws Exception{
 		
 		ISecurityGAccessor pa = null;
+		UserInfoEAccessor uiea = null;
 		Principal princ = new Principal("demo1","demouser1","demopwd","demosrc");
 		//princ.setKey("101001");
 		try {
 			
-			pa = (ISecurityGAccessor)AccessorUtils.getGenericAccessor(princ, EntityConstants.ACCESSOR_GENERIC_SECURITY);
+			pa = (ISecurityGAccessor)AccessorUtils.getGenericAccessor(princ, EntityConstants.ACCESSOR_GENERIC_SECURITY);			
 			Principal p1 = pa.getPrincipalByAccount("demo1");
+			
+			uiea = AccessorUtils.getEntityAccessor(princ, EntityConstants.ENTITY_USER);
 			System.out.println(p1.getName());
+			uiea.doRemoveEntry(p1.getEntryKey().getKey());
+			
 		} finally{
 			
 			AccessorUtils.closeAccessor(pa);
 		}
 	}
 	
+	
+	
 	public void Dtest002UpdateAttr(){
 		
-		PrincipalGAccessor pa = null;
-		UserInfoEAccessor uea = null;
-		Principal princ = new Principal("demo1","demouser1","demopwd","demosrc");
-		//princ.setKey("101001");
-		try {
-			pa = AccessorUtils.getGenericAccessor(princ, EntityConstants.ACCESSOR_GENERIC_USER);
-			Principal princ2 = pa.getPrincipalByAccount("demo1");
-			
-			uea = AccessorFactory.buildEntityAccessor(princ, EntityConstants.ENTITY_USER);
-
-			uea.doPutEntryAttr(princ2.getEntryKey().getKey(), "i_name", "newUserName");
-			
-			princ2 = pa.getPrincipalByAccount("demo1");
-			
-			Assert.assertEquals(princ2.getName(), "newUserName");
-			
-		} catch (BaseException e) {
-			
-			e.printStackTrace();
-		}finally{
-			
-			AccessorUtils.closeAccessor(pa,uea);
-		}
 	}
 	
 	public void Dtest003Group(){

@@ -137,7 +137,7 @@ public class HIndexAccessor extends IndexAccessor implements HConnAware {
 	}
 
 	@Override
-	public void doDelEntryKey(String attribute, Object value, String... keys)
+	public void doRemoveEntryKey(String attribute, Object value, String... keys)
 			throws AccessorException {
 		AccessorContext context = super.getContext();	
 		HTableInterface table = null;
@@ -151,7 +151,7 @@ public class HIndexAccessor extends IndexAccessor implements HConnAware {
 			// Get index schema name
 			indexschema = schema.getIndexSchema(getContext().getPrincipal(),null);
 			table = getConnection().getTable(indexschema.getBytes());
-			// Get index key
+			// Get index row key
 			byte[] indexKey = HWrapperUtils.toIndexKey(attr, value);
 			for(String key:keys){
 				akey = key;
@@ -255,8 +255,7 @@ public class HIndexAccessor extends IndexAccessor implements HConnAware {
 			Delete del = new Delete(indexKey);
 			if(attr != null){
 				// delete qualifier all version.
-				del.deleteColumns(EntityConstants.ATTR_DFT_COLUMN.getBytes(), key.getBytes());
-				
+				del.deleteColumns(EntityConstants.ATTR_DFT_COLUMN.getBytes(), key.getBytes());				
 			}
 			
 	        table.delete(del);
@@ -267,7 +266,7 @@ public class HIndexAccessor extends IndexAccessor implements HConnAware {
 				Delete delrow = new Delete(indexKey);
 				table.delete(delrow);
 			}
-			// put key to changed new value index
+			// put key of newvalue index row
 			indexKey = HWrapperUtils.toIndexKey(attr, newValue);
 			Put put = new Put(indexKey);
 			put.add(EntityConstants.ATTR_DFT_COLUMN.getBytes(), 

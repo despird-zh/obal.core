@@ -15,9 +15,11 @@ import com.dcube.core.accessor.IndexAccessor;
 import com.dcube.core.accessor.TraceableEntry;
 import com.dcube.core.hbase.HGenericAccessor;
 import com.dcube.core.security.Principal;
+import com.dcube.core.security.UserGroup;
 import com.dcube.exception.AccessorException;
 import com.dcube.exception.BaseException;
 import com.dcube.meta.EntityConstants;
+import com.dcube.meta.EntityConstants.GroupEnum;
 import com.dcube.meta.EntityConstants.UserEnum;
 import com.dcube.util.AccessorUtils;
 
@@ -70,7 +72,7 @@ public class SecurityGAccessor extends HGenericAccessor implements ISecurityGAcc
 		UserInfoEAccessor ueaccr = null;
 		Principal principal = CoreConfigs.getAdminPrincipal();
 		try{
-			idxaccr = (IndexAccessor)AccessorFactory.buildIndexAccessor(principal, EntityConstants.ACCESSOR_ENTITY_USER);
+			idxaccr = (IndexAccessor)AccessorFactory.buildIndexAccessor(principal, EntityConstants.ENTITY_USER);
 			
 			EntryKey entryKey = idxaccr.doGetEntryKey(UserEnum.Name.attribute, name);
 			
@@ -92,6 +94,40 @@ public class SecurityGAccessor extends HGenericAccessor implements ISecurityGAcc
 		}finally{
 			
 			AccessorUtils.closeAccessor(ueaccr, idxaccr);
+		}
+		return rtv;
+	}
+
+	@Override
+	public UserGroup getGroupByName(String name) throws AccessorException {
+		
+		UserGroup rtv = null;
+		IndexAccessor idxaccr = null;
+		GroupInfoEAccessor geaccr = null;
+		Principal principal = CoreConfigs.getAdminPrincipal();
+		try{
+			idxaccr = (IndexAccessor)AccessorFactory.buildIndexAccessor(principal, EntityConstants.ENTITY_USER_GROUP);
+			
+			EntryKey entryKey = idxaccr.doGetEntryKey(GroupEnum.Name.attribute, name);
+			
+			geaccr = (GroupInfoEAccessor)AccessorFactory.buildEntityAccessor(this, EntityConstants.ENTITY_USER_GROUP);
+	
+			TraceableEntry traceentry = geaccr.doGetEntry(entryKey.getKey());
+			if(traceentry == null){
+				
+				return null;
+			}			
+			else{
+				
+				IEntryConverter<TraceableEntry, UserGroup> cvt = geaccr.getEntryConverter(UserGroup.class);
+				rtv = cvt.toTarget(traceentry);
+			}
+		}catch(BaseException e){
+			
+			throw new AccessorException("Error when scan the data",e);
+		}finally{
+			
+			AccessorUtils.closeAccessor(geaccr, idxaccr);
 		}
 		return rtv;
 	}
