@@ -16,16 +16,25 @@ public class CoreConstants {
 	
 	/** the builder name : redis */
 	public static final String BUILDER_REDIS = "redis";
-	
-	/** the configuration key of default builder */
-	public static final String CONFIG_DFT_BUILDER = "builder.default";
-
-	/** the configuration key of default builder */
-	public static final String CONFIG_CACHE_BUILDER = "builder.cache";
-	
+		
 	/** the postfix of IBaseAccessor detect package entry key in configuration file */
 	public static final String CONFIG_ACCESSOR_PACKAGE = "package.";
 	
-	/** the cache accessor name*/
-	public static final String CACHE_ACCESSOR = "cache.accessor";
+	/** The config key enumerator */
+	public static enum ConfigEnum{
+		
+		DefaultBuilder("builder.default", BUILDER_HBASE),
+		CacheBuilder("builder.cache",BUILDER_REDIS),
+		CacheAccessor("cache.accessor","cache.accessor"),
+		AdminAccount("admin.account", null),
+		AdminPassword("admin.password", null);
+		
+		public String key; // config key
+		public String value; // config value
+		
+		private ConfigEnum(String key, String value){
+			this.key = key;
+			this.value = value;
+		}
+	}
 }

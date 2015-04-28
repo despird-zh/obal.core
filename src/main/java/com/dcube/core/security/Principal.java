@@ -58,6 +58,17 @@ public class Principal extends EntryParser{
 	/**
 	 * Constructor for new Principal
 	 * 
+	 * @param account the account information
+	 * @param password the account password
+	 **/
+	public Principal(String account, String password){
+		super();
+		rawEntry = new TraceableEntry(EntityConstants.ENTITY_USER,null);
+	}
+	
+	/**
+	 * Constructor for new Principal
+	 * 
 	 * @param account the logon account 
 	 * @param name the user name
 	 * @param password the password

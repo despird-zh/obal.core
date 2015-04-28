@@ -26,6 +26,9 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.dcube.core.CoreConstants.ConfigEnum;
+import com.dcube.core.security.Principal;
+
 /**
  * Retrieve the configuration variables from environment configuration properties
  * file. 
@@ -110,5 +113,20 @@ public class CoreConfigs{
 		}
 		
 		return vals;
+	}
+	
+	/**
+	 * Get default administrator principal from configuration file. 
+	 * @return Principal the admin principal
+	 **/
+	public static Principal getAdminPrincipal(){
+		
+		String account = getString(ConfigEnum.AdminAccount.key, 
+				ConfigEnum.AdminAccount.value);
+		
+		String password = getString(ConfigEnum.AdminPassword.key, 
+				ConfigEnum.AdminPassword.value);
+		
+		return new Principal(account, password);
 	}
 }

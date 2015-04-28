@@ -157,13 +157,4 @@ public abstract class BaseEntity{
 		
 		return new EntryKey(meta.getEntityName(), entryKey);
 	}
-	
-	/**
-	 * Get the index key prefix 
-	 * @param entrykey the calculation parameter
-	 * @param attr the calculation parameter 
-	 **/
-	public String getIndexKeyPrefix(EntryKey entrykey, EntityAttr attr){
-		return "";
-	}
 }

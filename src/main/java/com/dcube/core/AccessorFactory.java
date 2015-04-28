@@ -27,6 +27,7 @@ import java.util.ServiceLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.dcube.core.CoreConstants.ConfigEnum;
 import com.dcube.core.accessor.AccessorContext;
 import com.dcube.core.accessor.EntityAccessor;
 import com.dcube.core.accessor.GenericAccessor;
@@ -72,8 +73,10 @@ public final class AccessorFactory {
 	 **/
 	private AccessorFactory() {
 
-		defaultBuilder = CoreConfigs.getString(CoreConstants.CONFIG_DFT_BUILDER,CoreConstants.BUILDER_HBASE);
-		cacheBuilder = CoreConfigs.getString(CoreConstants.CONFIG_CACHE_BUILDER,CoreConstants.BUILDER_REDIS);
+		defaultBuilder = CoreConfigs.getString(ConfigEnum.DefaultBuilder.key,
+				ConfigEnum.DefaultBuilder.value);
+		cacheBuilder = CoreConfigs.getString(ConfigEnum.CacheBuilder.key,
+				ConfigEnum.CacheBuilder.value);
 		LOGGER.info("default builder is {}", defaultBuilder);
 
 	}
@@ -467,7 +470,7 @@ public final class AccessorFactory {
 		// prepare context object
 		AccessorContext context = new AccessorContext(principal,schema);		
 		// new generic context
-		IEntityAccessor<K> accessor = accessorbuilder.newBaseAccessor(context, CoreConstants.CACHE_ACCESSOR, false);
+		IEntityAccessor<K> accessor = accessorbuilder.newBaseAccessor(context, ConfigEnum.CacheAccessor.value, false);
 		// assembly the accessor
 		accessorbuilder.assembly(principal, (IBaseAccessor) accessor);
 		
