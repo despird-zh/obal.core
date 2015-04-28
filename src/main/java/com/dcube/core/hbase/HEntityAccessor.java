@@ -57,6 +57,7 @@ import com.dcube.exception.MetaException;
 import com.dcube.exception.WrapperException;
 import com.dcube.index.IndexInfo;
 import com.dcube.index.IndexManager;
+import com.dcube.index.IndexInfo.IndexMode;
 import com.dcube.meta.BaseEntity;
 import com.dcube.meta.EntityAttr;
 import com.dcube.meta.EntityConstants;
@@ -479,7 +480,7 @@ public abstract class HEntityAccessor<GB extends IEntityEntry> extends EntityAcc
         	table.put(put);
         	table.flushCommits();        	
         	// Now try to update the index data
-        	sendIndexInfo(entryKey, attr, originVal, value);
+        	sendUpdateIndexInfo(entryKey, attr, originVal, value);
         	
         	rtv = new EntryKey(entitySchema.getEntityName(),entryKey);
         	
@@ -544,13 +545,13 @@ public abstract class HEntityAccessor<GB extends IEntityEntry> extends EntityAcc
         	for(EntityAttr attr:attrs){
                 if(attr.isIndexable() && oriResult.isEmpty()){
                 	// create new mode
-                	sendIndexInfo(key.getKey(), attr, null, entryInfo.getAttrValue(attr.getAttrName()));
+                	sendUpdateIndexInfo(key.getKey(), attr, null, entryInfo.getAttrValue(attr.getAttrName()));
                 }
                 else if(attr.isIndexable() && !oriResult.isEmpty()){
                 	// update mode
                 	byte[] cell = oriResult.getValue(attr.getColumn().getBytes(), attr.getQualifier().getBytes());
                     Object originVal = HWrapperUtils.getPrimitiveValue(attr, cell);	
-                	sendIndexInfo(key.getKey(), attr, originVal, entryInfo.getAttrValue(attr.getAttrName()));
+                	sendUpdateIndexInfo(key.getKey(), attr, originVal, entryInfo.getAttrValue(attr.getAttrName()));
                 }
             }
         	
@@ -601,8 +602,8 @@ public abstract class HEntityAccessor<GB extends IEntityEntry> extends EntityAcc
 			}
 			
 			for(Map.Entry<String, List<String>> e:map.entrySet()){
-				removeEntry(e.getKey(), e.getValue(), null);
-				
+				List<EntityAttr> attrs = entrySchema.getEntityMeta().getAllAttrs();
+				removeEntry(e.getKey(), e.getValue(), (EntityAttr[])attrs.toArray());				
 			}
 			
 		} catch (MetaException e) {
@@ -627,31 +628,47 @@ public abstract class HEntityAccessor<GB extends IEntityEntry> extends EntityAcc
 	 * @param keys the key list
 	 * @param attr the entity attribute object
 	 **/
-	private void removeEntry(String schemaname, List<String> keys, EntityAttr attr) throws AccessorException{
+	private void removeEntry(String schemaname, List<String> keys, EntityAttr ... attrs) throws AccessorException{
 		HTableInterface table = null;
 		String akey = null;
 		
 		try {
-			
-			List<Delete> list = new ArrayList<Delete>();
+
+			Get get = null;
 			table = getConnection().getTable(schemaname);
+			HashMap<EntityAttr, Object> tempMap = new HashMap<EntityAttr, Object>();
 			for(String key:keys){
 				akey = key;
 				if(StringUtils.isBlank(key)) continue;
-				
-				Delete del = new Delete(key.getBytes());
-				if(attr != null){
-					
-					del.deleteColumns(attr.getColumn().getBytes(), attr.getQualifier().getBytes());
-				
+				tempMap.clear();
+				for(EntityAttr attr :attrs){
+					// not indexable continue
+					if(!attr.isIndexable()) continue;
+					// try to get current value
+					get = new Get(key.getBytes());
+					get.addColumn(attr.getColumn().getBytes(), attr.getQualifier().getBytes());
+					Result result = table.get(get);
+					byte[] cell = result.getValue(attr.getColumn().getBytes(), attr.getQualifier().getBytes());
+                    Object oldValue = HWrapperUtils.getPrimitiveValue(attr, cell);					
+                    // keep in temporary map
+                    tempMap.put(attr, oldValue);
 				}
-				list.add(del); 
-			}
-			
-	        table.delete(list);
-	        table.flushCommits();
+				Delete del = new Delete(key.getBytes());
+				for(EntityAttr attr :attrs){
+
+					// perform delete column
+                    del.deleteColumns(attr.getColumn().getBytes(), attr.getQualifier().getBytes());
+					
+				}
+				table.delete(del);
+				table.flushCommits();
+								
+                // send remove index info
+				for(Map.Entry<EntityAttr, Object> mapitem: tempMap.entrySet())
+					sendRemoveIndexInfo(key, mapitem.getKey(), mapitem.getValue());
+			}	       
 	        
-		} catch (IOException e) {
+		} catch (IOException | WrapperException e) {
 			
 			throw new AccessorException("Error delete entry row, key:{}-{}",e,schemaname,akey);
 
@@ -855,9 +872,18 @@ public abstract class HEntityAccessor<GB extends IEntityEntry> extends EntityAcc
 	/**
 	 * Send IndexInfo object to disruptor Index info queue. 
 	 **/
-	private void sendIndexInfo(String key, EntityAttr attr, Object oldValue, Object newValue){
+	private void sendUpdateIndexInfo(String key, EntityAttr attr, Object oldValue, Object newValue){
 		
 		IndexInfo indexinfo = new IndexInfo(key, attr, oldValue, newValue);		
+		IndexManager.getInstance().offerIndexQueue(indexinfo);		
+	}
+	
+	/**
+	 * Send IndexInfo object to disruptor Index info queue. 
+	 **/
+	private void sendRemoveIndexInfo(String key, EntityAttr attr, Object oldValue){
+		
+		IndexInfo indexinfo = new IndexInfo(IndexMode.Remove, key, attr, oldValue);		
 		IndexManager.getInstance().offerIndexQueue(indexinfo);		
 	}
 }
