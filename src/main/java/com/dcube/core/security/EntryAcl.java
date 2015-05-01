@@ -5,7 +5,9 @@ import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
-import com.dcube.core.security.EntryAce.AceType;
+
+import com.dcube.core.security.EntryAce.PrivilegeEnum;
+import com.dcube.core.security.EntryAce.TypeEnum;
 /**
  * EntryAcl is the entry access control list, item of it is access control setting for visitor
  * 
@@ -16,9 +18,6 @@ import com.dcube.core.security.EntryAce.AceType;
  * @see EntryAce
  **/
 public class EntryAcl {
-
-	public static int PERFER_PRIVILEGE = 11;
-	public static int PERFER_GRANULAR = 12;
 	
 	private List<EntryAce> aces = null;
 	
@@ -63,7 +62,7 @@ public class EntryAcl {
 			// exist
 			EntryAce e = this.aces.get(i);
 			if(merge){// merge over original
-				if(e.getPrivilege().priority() < ace.getPrivilege().priority())
+				if(e.getPrivilege().priority < ace.getPrivilege().priority)
 					e.setPrivilege(ace.getPrivilege());
 				
 				e.grant((String[])ace.getPermissions().toArray());
@@ -95,30 +94,13 @@ public class EntryAcl {
 		
 		for(EntryAce e:aces){
 			
-			if(AceType.User == e.getType())
+			if(TypeEnum.User == e.getType())
 				uaces.add(e);
 		}
 		
 		return uaces;
 	}
-	
-	/**
-	 * Get the role aces
-	 * @return the entry ace list 
-	 **/
-	public List<EntryAce> getRoleAces(){
 		
-		List<EntryAce> races = new ArrayList<EntryAce>();
-		
-		for(EntryAce e:aces){
-			
-			if(AceType.Role == e.getType())
-				races.add(e);
-		}
-		
-		return races;
-	}
-	
 	/**
 	 * Get the group aces
 	 * @return the entry ace list 
@@ -129,14 +111,14 @@ public class EntryAcl {
 		
 		for(EntryAce e:aces){
 			
-			if(AceType.Group == e.getType())
+			if(TypeEnum.Group == e.getType())
 				gaces.add(e);
 		}
 		
 		return gaces;
 	}
 
-	public EntryAce getEntryAce(AceType type, String name){
+	public EntryAce getEntryAce(TypeEnum type, String name){
 		
 		for(EntryAce e:aces){
 			
@@ -154,25 +136,21 @@ public class EntryAcl {
 	 **/
 	public boolean checkReadable(Principal principal){
 		
-		AclPrivilege readPriv = AclPrivilege.NONE;
+		PrivilegeEnum readPriv = PrivilegeEnum.NONE;
 		
 		for(EntryAce ace:aces){
 			
-			if(AceType.User == ace.getType() && ace.getName().equals(principal.getAccount())){
+			if(TypeEnum.User == ace.getType() && ace.getName().equals(principal.getAccount())){
 				
-				readPriv = readPriv.priority() < ace.getPrivilege().priority() ? ace.getPrivilege():readPriv;
+				readPriv = readPriv.priority < ace.getPrivilege().priority ? ace.getPrivilege():readPriv;
 				
-			}else if(AceType.Group == ace.getType() && principal.inGroup(ace.getName())){
+			}else if(TypeEnum.Group == ace.getType() && principal.inGroup(ace.getName())){
 				
-				readPriv = readPriv.priority() < ace.getPrivilege().priority() ? ace.getPrivilege():readPriv;
-					
-			}else if(AceType.Role == ace.getType() && principal.inRole(ace.getName())){
-				
-				readPriv = readPriv.priority() < ace.getPrivilege().priority() ? ace.getPrivilege():readPriv;
+				readPriv = readPriv.priority < ace.getPrivilege().priority ? ace.getPrivilege():readPriv;
 					
 			}
 			
-			if(readPriv != AclPrivilege.NONE)
+			if(readPriv != PrivilegeEnum.NONE)
 				return true;
 		}
 		

@@ -45,11 +45,11 @@ import com.dcube.core.EntryKey;
 import com.dcube.core.accessor.AccessControlEntry;
 import com.dcube.core.accessor.AccessorContext;
 import com.dcube.core.accessor.EntityAccessor;
-import com.dcube.core.security.AclPrivilege;
+import com.dcube.core.security.EntryAce.PrivilegeEnum;
+import com.dcube.core.security.EntryAce.TypeEnum;
 import com.dcube.core.security.EntryAce;
 import com.dcube.core.security.EntryAcl;
 import com.dcube.core.security.IAccessControlAccessor;
-import com.dcube.core.security.EntryAce.AceType;
 import com.dcube.exception.AccessorException;
 import com.dcube.exception.MetaException;
 import com.dcube.exception.WrapperException;
@@ -231,7 +231,7 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
 	}
 	
 	@Override
-	public EntryAce getEntryAce(String entryKey, EntryAce.AceType type, String name)throws AccessorException{
+	public EntryAce getEntryAce(String entryKey, TypeEnum type, String name)throws AccessorException{
 
 		HTableInterface table = null;
 		EntryAce rtv = new EntryAce(type, name);
@@ -249,12 +249,12 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
     			String[] parts = StringUtils.split( Bytes.toString(entry.getKey()), ":");
     			String value = Bytes.toString(entry.getValue());
     			
-    			AceType typeTemp = AceType.valueOf(parts[0]);
+    			TypeEnum typeTemp = TypeEnum.valueOf(parts[0]);
     			if(parts.length == 2 && type == typeTemp && parts[1].equals(name)){
     				// eg. acl:group:001001 -> WRITE
     				//     CF | TYPE| KEY     Privilege
     				// here group:001001 is the qualifier name
-    				AclPrivilege priv = AclPrivilege.valueOf(value);
+    				PrivilegeEnum priv = PrivilegeEnum.valueOf(value);
     				rtv.setPrivilege(priv);
     				
     			}else if(parts.length == 3 && type == typeTemp && parts[1].equals(name)){
@@ -314,7 +314,7 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
 		return rtv;
 	}
 	
-	public void grantPermissions(String entryKey, EntryAce.AceType type, String name, String ... permissions)throws AccessorException{
+	public void grantPermission(String entryKey, TypeEnum type, String name, String ... permissions)throws AccessorException{
 
 		HTableInterface table = null;
 		BaseEntity entitySchema = (BaseEntity)getEntitySchema();
@@ -323,18 +323,17 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
 
             Put put = new Put(entryKey.getBytes());
     		byte[] cf = null;
-    		byte[] enable = "enable".getBytes();
     		for(String perm: permissions){
     			
-    			String qualifier = type.qualifier
+    			String qualifier = type.abbr
     					+ CoreConstants.KEYS_SEPARATOR
     					+ name;
-    			cf = type.colfamily.getBytes();
+    			cf = EntityConstants.ATTR_ACL_COLUMN.getBytes();
 
     			String permQualifier = qualifier 
     					+ CoreConstants.KEYS_SEPARATOR
     					+ perm;
-    			put.add(cf, permQualifier.getBytes(), enable);
+    			put.add(cf, permQualifier.getBytes(), EntityConstants.BLANK_VALUE.getBytes());
     			
     		}
             table.put(put);
@@ -356,7 +355,7 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
 
 	}
 	
-	public void revokePermissions(String entryKey, EntryAce.AceType type, String name, String ... permissions)throws AccessorException{
+	public void revokePermissions(String entryKey, TypeEnum type, String name, String ... permissions)throws AccessorException{
 		HTableInterface table = null;
 		BaseEntity entitySchema = (BaseEntity)getEntitySchema();
         try {  
@@ -366,10 +365,10 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
     		byte[] cf = null;
     		for(String perm: permissions){
     			
-    			String qualifier = type.qualifier
+    			String qualifier = type.abbr
     					+ CoreConstants.KEYS_SEPARATOR
     					+ name;
-    			cf = type.colfamily.getBytes();
+    			cf = EntityConstants.ATTR_ACL_COLUMN.getBytes();
 
     			String permQualifier = qualifier 
     					+ CoreConstants.KEYS_SEPARATOR
@@ -395,7 +394,7 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
         }
 	}
 		
-	public Set<String> getPermissions(String entryKey, EntryAce.AceType type, String name)throws AccessorException{
+	public Set<String> getPermissions(String entryKey, TypeEnum type, String name)throws AccessorException{
 
 		HTableInterface table = null;
 		Set<String> rtv = new HashSet<String>();
@@ -412,7 +411,7 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
     			
     			String[] parts = StringUtils.split( Bytes.toString(entry.getKey()), ":");
 
-    			AceType typeTemp = AceType.valueOf(parts[0]);
+    			TypeEnum typeTemp = TypeEnum.valueOf(parts[0]);
     			if(parts.length == 2 && type == typeTemp && parts[1].equals(name)){
     				// eg. acl:group:001001 -> WRITE
     				//     CF | TYPE| KEY     Privilege
@@ -446,7 +445,7 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
 
 	}
 	
-	public boolean promote(String entryKey, EntryAce.AceType type, String name, AclPrivilege privilege)throws AccessorException{
+	public boolean promote(String entryKey, TypeEnum type, String name, PrivilegeEnum privilege)throws AccessorException{
 		HTableInterface table = null;
 		BaseEntity entitySchema = (BaseEntity)getEntitySchema();
         try {  
@@ -454,16 +453,16 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
             Get get = new Get(entryKey.getBytes());
         	get.addFamily(EntityConstants.ATTR_ACL_COLUMN.getBytes());
         	Result result = table.get(get);
-        	String qualifier = type.qualifier
+        	String qualifier = type.abbr
     					+ CoreConstants.KEYS_SEPARATOR
     					+ name;
         	byte[] cf = EntityConstants.ATTR_ACL_COLUMN.getBytes();
         	Cell cell = result.getColumnLatestCell(cf, qualifier.getBytes());
         	String val = Bytes.toString(cell.getValueArray());
         	
-        	AclPrivilege current = AclPrivilege.valueOf(val);
+        	PrivilegeEnum current = PrivilegeEnum.valueOf(val);
         	
-        	if(current.priority() > privilege.priority())// 
+        	if(current.priority > privilege.priority)// 
         		return false;
         	
             Put put = new Put(entryKey.getBytes());
@@ -487,7 +486,7 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
         }	
 	}
 	
-	public boolean demote(String entryKey, EntryAce.AceType type, String name, AclPrivilege privilege)throws AccessorException{
+	public boolean demote(String entryKey, TypeEnum type, String name, PrivilegeEnum privilege)throws AccessorException{
 		HTableInterface table = null;
 		BaseEntity entitySchema = (BaseEntity)getEntitySchema();
         try {  
@@ -495,16 +494,16 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
             Get get = new Get(entryKey.getBytes());
         	get.addFamily(EntityConstants.ATTR_ACL_COLUMN.getBytes());
         	Result result = table.get(get);
-        	String qualifier = type.qualifier
+        	String qualifier = type.abbr
     					+ CoreConstants.KEYS_SEPARATOR
     					+ name;
         	byte[] cf = EntityConstants.ATTR_ACL_COLUMN.getBytes();
         	Cell cell = result.getColumnLatestCell(cf, qualifier.getBytes());
         	String val = Bytes.toString(cell.getValueArray());
         	
-        	AclPrivilege current = AclPrivilege.valueOf(val);
+        	PrivilegeEnum current = PrivilegeEnum.valueOf(val);
         	
-        	if(current.priority() < privilege.priority())// 
+        	if(current.priority < privilege.priority)// 
         		return false;
         	
             Put put = new Put(entryKey.getBytes());
@@ -528,7 +527,7 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
         }
 	}
 	
-	public void setPrivilege(String entryKey, EntryAce.AceType type, String name, AclPrivilege privilege)throws AccessorException{
+	public void setPrivilege(String entryKey, TypeEnum type, String name, PrivilegeEnum privilege)throws AccessorException{
 		HTableInterface table = null;
 		BaseEntity entitySchema = (BaseEntity)getEntitySchema();
         try {  
@@ -537,10 +536,10 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
             Put put = new Put(entryKey.getBytes());
     		byte[] cf = null;
 
-    		String qualifier = type.qualifier
+    		String qualifier = type.abbr
     					+ CoreConstants.KEYS_SEPARATOR
     					+ name;
-    		cf = type.colfamily.getBytes();
+    		cf = EntityConstants.ATTR_ACL_COLUMN.getBytes();
 
     		put.add(cf, qualifier.getBytes(), privilege.toString().getBytes());
             table.put(put);
@@ -561,7 +560,7 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
         }
 	}
 	
-	public AclPrivilege getPrivilege(String entryKey, EntryAce.AceType type, String name)throws AccessorException{
+	public PrivilegeEnum getPrivilege(String entryKey, TypeEnum type, String name)throws AccessorException{
 		
 		HTableInterface table = null;
 
@@ -579,12 +578,12 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
     			
     			String[] parts = StringUtils.split( Bytes.toString(entry.getKey()), ":");
 
-    			AceType typeTemp = AceType.valueOf(parts[0]);
+    			TypeEnum typeTemp = TypeEnum.valueOf(parts[0]);
     			if(parts.length == 3 && type == typeTemp && parts[1].equals(name)){
     				// eg. acl:group:001001:upgrade -> WRITE
     				//     CF | TYPE| KEY  | ACTION   Privilege
     				// here group:001001:upgrade is the qualifier name
-    				AclPrivilege priv = AclPrivilege.valueOf(parts[2]);
+    				PrivilegeEnum priv = PrivilegeEnum.valueOf(parts[2]);
     				return priv;
     			}
 
@@ -624,15 +623,15 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
 				// eg. acl:group:001001 -> WRITE
 				//     CF | TYPE| KEY     Privilege
 				// here group:001001 is the qualifier name
-				AclPrivilege priv = AclPrivilege.valueOf(value);
-				AceType type = AceType.valueOf(parts[0]);
+				PrivilegeEnum priv = PrivilegeEnum.valueOf(value);
+				TypeEnum type = TypeEnum.valueOf(parts[0]);
 				ace = new EntryAce(type,parts[1],priv);
 				
 			}else if(parts.length == 3){
 				// eg. acl:group:001001:upgrade -> WRITE
 				//     CF | TYPE| KEY  | ACTION   Privilege
 				// here group:001001:upgrade is the qualifier name
-				AceType type = AceType.valueOf(parts[0]);
+				TypeEnum type = TypeEnum.valueOf(parts[0]);
 				ace = new EntryAce(type,parts[1],parts[2]);
 				
 			}
@@ -654,10 +653,10 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
 		byte[] enable = "enable".getBytes();
 		for(EntryAce ace: aces){
 			
-			String qualifier = ace.getType().qualifier
+			String qualifier = ace.getType().abbr
 					+ CoreConstants.KEYS_SEPARATOR
 					+ ace.getName();
-			cf = ace.getType().colfamily.getBytes();
+			cf = EntityConstants.ATTR_ACL_COLUMN.getBytes();
 			put.add(cf, qualifier.getBytes(), ace.getPrivilege().toString().getBytes());
 			
 			Set<String> permissionSet = ace.getPermissions();

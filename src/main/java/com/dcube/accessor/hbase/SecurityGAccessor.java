@@ -1,16 +1,10 @@
 package com.dcube.accessor.hbase;
 
-import org.apache.hadoop.hbase.filter.CompareFilter;
-import org.apache.hadoop.hbase.filter.Filter;
-import org.apache.hadoop.hbase.filter.SingleColumnValueFilter;
-
 import com.dcube.accessor.ISecurityGAccessor;
 import com.dcube.core.AccessorFactory;
 import com.dcube.core.CoreConfigs;
-import com.dcube.core.EntryFilter;
 import com.dcube.core.EntryKey;
 import com.dcube.core.IEntryConverter;
-import com.dcube.core.accessor.EntryCollection;
 import com.dcube.core.accessor.IndexAccessor;
 import com.dcube.core.accessor.TraceableEntry;
 import com.dcube.core.hbase.HGenericAccessor;

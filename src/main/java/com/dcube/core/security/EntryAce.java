@@ -31,24 +31,47 @@ import com.dcube.meta.EntityConstants;
  **/
 public class EntryAce implements Comparable<EntryAce> {
 	
+	public static enum PrivilegeEnum {
+
+		NONE("n",0),
+		BROWSE("b",1),
+		READ("r",2),
+		WRITE("w",3),
+		DELETE("d",4);
+		
+		public final String abbr;
+		public final int priority;
+		
+		/**
+		 * Hide Rtype default constructor 
+		 **/
+		private PrivilegeEnum(String abbr,int priority){  
+			this.abbr = abbr;
+			this.priority = priority;
+	    }
+				
+		@Override
+		public String toString(){
+			return this.abbr;
+		}
+		
+	}
+	
 	/**
 	 * The Acl info enumerator 
 	 **/
-	public static enum AceType{
+	public static enum TypeEnum{
 
-		User( "user",3),
-		Group( "group",1),
-		Role( "role",2);
+		User( "u",3),
+		Group( "g",1);
 
-		public final String qualifier;
-		public final String colfamily;
+		public final String abbr;
 		public final int priority;
 		/**
 		 * Hide default constructor 
 		 **/
-		private AceType( String qualifier, int priority){  
-			this.qualifier = qualifier;
-			this.colfamily = EntityConstants.ATTR_ACL_COLUMN;
+		private TypeEnum( String abbr, int priority){  
+			this.abbr = abbr;
 			this.priority = priority;
 	    }
 		
@@ -58,10 +81,10 @@ public class EntryAce implements Comparable<EntryAce> {
 	private String name;
 	
 	/** the privilege of role*/
-	private AclPrivilege privilege;
+	private PrivilegeEnum privilege;
 	
 	/** the entry type */
-	private AceType type;
+	private TypeEnum type;
 	
 	/** the permission set */
 	private Set<String> permissionSet;
@@ -72,11 +95,11 @@ public class EntryAce implements Comparable<EntryAce> {
 	 * @param combinedValue
 	 *  
 	 **/
-	public EntryAce(AceType aceType, String name){
+	public EntryAce(TypeEnum TypeEnum, String name){
 		
-		this.type = aceType;
+		this.type = TypeEnum;
 		this.name = name;
-		this.privilege = AclPrivilege.NONE;
+		this.privilege = PrivilegeEnum.NONE;
 
 	}
 	
@@ -87,9 +110,9 @@ public class EntryAce implements Comparable<EntryAce> {
 	 * @param privilege the access control privilege
 	 *  
 	 **/
-	public EntryAce(String name, AclPrivilege privilege){
+	public EntryAce(String name, PrivilegeEnum privilege){
 		
-		this.type = AceType.User;
+		this.type = TypeEnum.User;
 		this.name = name;
 		this.privilege = privilege;
 
@@ -98,14 +121,14 @@ public class EntryAce implements Comparable<EntryAce> {
 	/**
 	 * Constructor 
 	 * 
-	 * @param aceType the ace type
+	 * @param TypeEnum the ace type
 	 * @param role the role name
 	 * @param privilege the access control privilege
 	 *  
 	 **/
-	public EntryAce(AceType aceType, String name, AclPrivilege privilege){
+	public EntryAce(TypeEnum TypeEnum, String name, PrivilegeEnum privilege){
 		
-		this.type = aceType;
+		this.type = TypeEnum;
 		this.name = name;
 		this.privilege = privilege;
 
@@ -114,15 +137,15 @@ public class EntryAce implements Comparable<EntryAce> {
 	/**
 	 * Constructor 
 	 * 
-	 * @param aceType the ace type
+	 * @param TypeEnum the ace type
 	 * @param role the role name
 	 * @param privilege the access control privilege
 	 *  
 	 **/
 
-	public EntryAce(AceType aceType,  String name, AclPrivilege privilege, String ... permissions){
+	public EntryAce(TypeEnum TypeEnum,  String name, PrivilegeEnum privilege, String ... permissions){
 		
-		this.type = aceType;
+		this.type = TypeEnum;
 		this.name = name;
 		this.privilege = privilege;
 		
@@ -137,9 +160,9 @@ public class EntryAce implements Comparable<EntryAce> {
 		}
 	}
 	
-	public EntryAce(AceType aceType,  String name, String ... permissions){
+	public EntryAce(TypeEnum TypeEnum,  String name, String ... permissions){
 		
-		this.type = aceType;
+		this.type = TypeEnum;
 		this.name = name;
 		
 		if(permissions == null || permissions.length ==0)
@@ -158,17 +181,17 @@ public class EntryAce implements Comparable<EntryAce> {
 		return this.name;
 	}
 	
-	public AceType getType(){
+	public TypeEnum getType(){
 		
 		return this.type;
 	}
 	
-	public AclPrivilege getPrivilege(){
+	public PrivilegeEnum getPrivilege(){
 		
 		return this.privilege;
 	}
 	
-	public void setPrivilege(AclPrivilege privilege){
+	public void setPrivilege(PrivilegeEnum privilege){
 		
 		this.privilege = privilege;
 	}

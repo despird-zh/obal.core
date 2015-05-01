@@ -21,7 +21,7 @@
 	<property name="obal.core.jar" value="obal.core-${obal.core.version}.jar"/>
 	<target name="build_core_jar" description="Build Obal Core jar">
 
-		<echo message="---[ Building Hbase Side Core jar ]---"/>
+		<echo message="---[ Building Core jar ]---"/>
         <jar jarfile="${dir.java.ext}/${obal.core.jar}" >
 			<fileset dir="${dir.java.class}">
 				<include name="**/doccube/**/*.*"/>
@@ -39,6 +39,29 @@
         </jar>
     </target>
 	<!-- ============ Core.jar Processing end -->
+	<!-- ============ hbase side ext.jar Processing start -->
+	<property name="obal.ext.jar" value="obal.ext-${obal.core.version}.jar"/>
+	<target name="build_ext_jar" description="Build Obal extend jar">
+
+		<echo message="---[ Building Hbase Side Core jar ]---"/>
+        <jar jarfile="${dir.java.ext}/${obal.ext.jar}" >
+			<fileset dir="${dir.java.class}">
+				<include name="**/doccube/core/hbase/HAclBrowseFilter.class"/>
+				<include name="**/doccube/common/SimpleConverter.class"/>
+			</fileset>
+			<manifest>
+				<attribute name="Application-Name" value="obal.core.library"/>
+				<attribute name="Build-By" value="despird-zh"/>
+				<attribute name="Implementation-Vendor" value="despird-zh"/>
+				<attribute name="Implementation-Title" value="obal.core"/>
+				<attribute name="Implementation-Version" value="${obal.core.version}"/>
+				<attribute name="Caller-Allowable-Codebase" value="*"/>
+				<attribute name="Permissions" value="all-permissions"/>
+				<attribute name="Trusted-Library" value="true"/>
+			</manifest>
+        </jar>
+    </target>
+	<!-- ============ hbase side ext.jar Processing end -->
 	<target name="scp_send_file" description="ssh send file" depends="build_core_jar">
 		<echo message="---[ Try to create extlib directory ]---"/>
 		<sshexec host ="${ssh.server}" 

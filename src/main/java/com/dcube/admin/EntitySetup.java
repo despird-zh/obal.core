@@ -11,7 +11,7 @@ import com.dcube.meta.EntityConstants.GroupEnum;
 import com.dcube.meta.EntityConstants.RoleEnum;
 import com.dcube.meta.EntityConstants.UserEnum;
 import com.dcube.util.AccessorUtils;
-import com.dcube.util.EntitieUtils;
+import com.dcube.util.EntityUtils;
 
 /**
  * EntitySetup prepare the installation of doccube package.
@@ -44,11 +44,11 @@ public class EntitySetup {
 
 		try {
 
-			EntityMeta infoMeta = EntitieUtils
+			EntityMeta infoMeta = EntityUtils
 					.getEntityMeta(EntityConstants.ENTITY_META_INFO);
 			aa.createSchema(infoMeta.getEntityName(), infoMeta.getAllAttrs());
 
-			EntityMeta arrtMeta = EntitieUtils
+			EntityMeta arrtMeta = EntityUtils
 					.getEntityMeta(EntityConstants.ENTITY_META_ATTR);
 			aa.createSchema(arrtMeta.getEntityName(), arrtMeta.getAllAttrs());
 
