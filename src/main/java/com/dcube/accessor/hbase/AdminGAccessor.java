@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import com.dcube.accessor.IAdminGAccessor;
 import com.dcube.core.hbase.HAdminAware;
 import com.dcube.core.hbase.HGenericAccessor;
+import com.dcube.core.security.AclConstants;
 import com.dcube.exception.AccessorException;
 import com.dcube.meta.EntityAttr;
 import com.dcube.meta.EntityConstants;
@@ -75,7 +76,7 @@ public class AdminGAccessor extends HGenericAccessor implements IAdminGAccessor,
 			}
 			// acl entity create [acl] column family.
 			if(accessControllable){
-				tableDescriptor.addFamily(new HColumnDescriptor(EntityConstants.ATTR_ACL_COLUMN));
+				tableDescriptor.addFamily(new HColumnDescriptor(AclConstants.CF_ACL));
 			}
 			hadmin.createTable(tableDescriptor);  
 			

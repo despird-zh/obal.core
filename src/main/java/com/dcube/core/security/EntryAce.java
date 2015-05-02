@@ -9,7 +9,6 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import com.dcube.core.CoreConstants;
 import com.dcube.core.security.AclConstants.PrivilegeEnum;
 import com.dcube.core.security.AclConstants.TypeEnum;
-import com.dcube.meta.EntityConstants;
 
 /**
  * EntryAce is the access control setting for operator, it could be set at three levels.

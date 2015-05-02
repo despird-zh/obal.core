@@ -11,8 +11,6 @@ package com.dcube.meta;
  **/
 public class EntityConstants {
 
-	/** ACL column family */
-	public static final String ATTR_ACL_COLUMN = "acl";
 	/** default column family */
 	public static final String ATTR_DFT_COLUMN = "c0";
 	/** blind cell qualifier */

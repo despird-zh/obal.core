@@ -45,6 +45,7 @@ import com.dcube.core.EntryKey;
 import com.dcube.core.accessor.AccessControlEntry;
 import com.dcube.core.accessor.AccessorContext;
 import com.dcube.core.accessor.EntityAccessor;
+import com.dcube.core.security.AclConstants;
 import com.dcube.core.security.AclConstants.PrivilegeEnum;
 import com.dcube.core.security.AclConstants.TypeEnum;
 import com.dcube.core.security.EntryAce;
@@ -243,7 +244,7 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
         	Get get = new Get(entryKey.getBytes());           
         	Result result = table.get(get);
         	
-    		NavigableMap<byte[], byte[]> acemap = result.getFamilyMap(EntityConstants.ATTR_ACL_COLUMN.getBytes());
+    		NavigableMap<byte[], byte[]> acemap = result.getFamilyMap(AclConstants.CF_ACL.getBytes());
     		for(Map.Entry<byte[], byte[]> entry: acemap.entrySet()){
     			
     			String[] parts = StringUtils.split( Bytes.toString(entry.getKey()), ":");
@@ -328,7 +329,7 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
     			String qualifier = type.abbr
     					+ CoreConstants.KEYS_SEPARATOR
     					+ name;
-    			cf = EntityConstants.ATTR_ACL_COLUMN.getBytes();
+    			cf = AclConstants.CF_ACL.getBytes();
 
     			String permQualifier = qualifier 
     					+ CoreConstants.KEYS_SEPARATOR
@@ -368,7 +369,7 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
     			String qualifier = type.abbr
     					+ CoreConstants.KEYS_SEPARATOR
     					+ name;
-    			cf = EntityConstants.ATTR_ACL_COLUMN.getBytes();
+    			cf = AclConstants.CF_ACL.getBytes();
 
     			String permQualifier = qualifier 
     					+ CoreConstants.KEYS_SEPARATOR
@@ -406,7 +407,7 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
         	Get get = new Get(entryKey.getBytes());           
         	Result result = table.get(get);
         	
-    		NavigableMap<byte[], byte[]> acemap = result.getFamilyMap(EntityConstants.ATTR_ACL_COLUMN.getBytes());
+    		NavigableMap<byte[], byte[]> acemap = result.getFamilyMap(AclConstants.CF_ACL.getBytes());
     		for(Map.Entry<byte[], byte[]> entry: acemap.entrySet()){
     			
     			String[] parts = StringUtils.split( Bytes.toString(entry.getKey()), ":");
@@ -451,12 +452,12 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
         try {  
             table = getConnection().getTable(entitySchema.getSchema(getContext().getPrincipal(),entryKey));
             Get get = new Get(entryKey.getBytes());
-        	get.addFamily(EntityConstants.ATTR_ACL_COLUMN.getBytes());
+        	get.addFamily(AclConstants.CF_ACL.getBytes());
         	Result result = table.get(get);
         	String qualifier = type.abbr
     					+ CoreConstants.KEYS_SEPARATOR
     					+ name;
-        	byte[] cf = EntityConstants.ATTR_ACL_COLUMN.getBytes();
+        	byte[] cf = AclConstants.CF_ACL.getBytes();
         	Cell cell = result.getColumnLatestCell(cf, qualifier.getBytes());
         	String val = Bytes.toString(cell.getValueArray());
         	
@@ -492,12 +493,12 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
         try {  
             table = getConnection().getTable(entitySchema.getSchema(getContext().getPrincipal(),entryKey));
             Get get = new Get(entryKey.getBytes());
-        	get.addFamily(EntityConstants.ATTR_ACL_COLUMN.getBytes());
+        	get.addFamily(AclConstants.CF_ACL.getBytes());
         	Result result = table.get(get);
         	String qualifier = type.abbr
     					+ CoreConstants.KEYS_SEPARATOR
     					+ name;
-        	byte[] cf = EntityConstants.ATTR_ACL_COLUMN.getBytes();
+        	byte[] cf = AclConstants.CF_ACL.getBytes();
         	Cell cell = result.getColumnLatestCell(cf, qualifier.getBytes());
         	String val = Bytes.toString(cell.getValueArray());
         	
@@ -539,7 +540,7 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
     		String qualifier = type.abbr
     					+ CoreConstants.KEYS_SEPARATOR
     					+ name;
-    		cf = EntityConstants.ATTR_ACL_COLUMN.getBytes();
+    		cf = AclConstants.CF_ACL.getBytes();
 
     		put.add(cf, qualifier.getBytes(), privilege.toString().getBytes());
             table.put(put);
@@ -570,10 +571,10 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
         	table = getConnection().getTable(entitySchema.getSchema(getContext().getPrincipal(),entryKey));
 
         	Get get = new Get(entryKey.getBytes());
-        	get.addFamily(EntityConstants.ATTR_ACL_COLUMN.getBytes());
+        	get.addFamily(AclConstants.CF_ACL.getBytes());
         	Result result = table.get(get);
         	
-    		NavigableMap<byte[], byte[]> acemap = result.getFamilyMap(EntityConstants.ATTR_ACL_COLUMN.getBytes());
+    		NavigableMap<byte[], byte[]> acemap = result.getFamilyMap(AclConstants.CF_ACL.getBytes());
     		for(Map.Entry<byte[], byte[]> entry: acemap.entrySet()){
     			
     			String[] parts = StringUtils.split( Bytes.toString(entry.getKey()), ":");
@@ -612,7 +613,7 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
 	 **/
 	private EntryAcl wrapEntryAcl(Result rawEntry){
 		
-		NavigableMap<byte[], byte[]> acemap = rawEntry.getFamilyMap(EntityConstants.ATTR_ACL_COLUMN.getBytes());
+		NavigableMap<byte[], byte[]> acemap = rawEntry.getFamilyMap(AclConstants.CF_ACL.getBytes());
 		EntryAcl acl = new EntryAcl();
 		for(Map.Entry<byte[], byte[]> entry: acemap.entrySet()){
 			
@@ -656,7 +657,7 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
 			String qualifier = ace.getType().abbr
 					+ CoreConstants.KEYS_SEPARATOR
 					+ ace.getName();
-			cf = EntityConstants.ATTR_ACL_COLUMN.getBytes();
+			cf = AclConstants.CF_ACL.getBytes();
 			put.add(cf, qualifier.getBytes(), ace.getPrivilege().toString().getBytes());
 			
 			Set<String> permissionSet = ace.getPermissions();
