@@ -6,8 +6,8 @@ import java.util.List;
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
 
-import com.dcube.core.security.EntryAce.PrivilegeEnum;
-import com.dcube.core.security.EntryAce.TypeEnum;
+import com.dcube.core.security.AclConstants.PrivilegeEnum;
+import com.dcube.core.security.AclConstants.TypeEnum;
 /**
  * EntryAcl is the entry access control list, item of it is access control setting for visitor
  * 

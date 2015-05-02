@@ -4,8 +4,8 @@ import java.util.Set;
 
 import com.dcube.core.IEntityAccessor;
 import com.dcube.core.IEntityEntry;
-import com.dcube.core.security.EntryAce.PrivilegeEnum;
-import com.dcube.core.security.EntryAce.TypeEnum;
+import com.dcube.core.security.AclConstants.PrivilegeEnum;
+import com.dcube.core.security.AclConstants.TypeEnum;
 import com.dcube.exception.AccessorException;
 
 public interface IAccessControlAccessor<GB extends IEntityEntry> extends IEntityAccessor<GB> {

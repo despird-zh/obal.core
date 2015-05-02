@@ -5,7 +5,11 @@ import org.apache.hadoop.hbase.CellUtil;
 import org.apache.hadoop.hbase.exceptions.DeserializationException;
 import org.apache.hadoop.hbase.filter.FilterBase;
 import org.apache.hadoop.hbase.util.Bytes;
+
 import com.dcube.common.SimpleConverter;
+import com.dcube.core.security.AclConstants;
+import com.dcube.core.security.AclConstants.PrivilegeEnum;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,32 +32,15 @@ import java.util.Map;
  *  
  **/
 public class HAclBrowseFilter extends FilterBase {
-
-	public static enum PrivilegeAbbr {
-
-		n(0), // none
-		b(1), // browse
-		r(2), // read
-		w(3), // write
-		d(4); // delete
-		
-		public final int priority;		
-		/**
-		 * Hide Rtype default constructor 
-		 **/
-		private PrivilegeAbbr(int priority){  
-			this.priority = priority;
-	    }		
-	}
 	
 	/** column family */
-	protected byte[] aclColumnFamily = "acl".getBytes();
-	protected byte[] ownerPrefix = "u:".getBytes();
-	protected byte[] groupPrefix = "g:".getBytes();
-	protected byte[] otherPrefix = "o:".getBytes();
+	protected byte[] aclColumnFamily = AclConstants.CF_ACL.getBytes();
+	protected byte[] ownerPrefix = AclConstants.QL_USER_PREFIX.getBytes();
+	protected byte[] groupPrefix = AclConstants.QL_GROUP_PREFIX.getBytes();
+	protected byte[] otherPrefix = AclConstants.QL_OTHER_PREFIX.getBytes();
 	
 	/** owner qualifier */
-	private byte[] ownerQualifier = "owner".getBytes();
+	private byte[] ownerQualifier = AclConstants.QL_OWNRER.getBytes();
 	/** user */
 	private byte[] account = new byte[0];
 	/** group */
@@ -148,16 +135,16 @@ public class HAclBrowseFilter extends FilterBase {
 		// check owner's privilege , only one cell
 		if(ownerbrowse == null && CellUtil.matchingColumn(cell, this.aclColumnFamily, this.ownerPrefix) ){
 			// set if could be browse
-			PrivilegeAbbr v = PrivilegeAbbr.valueOf(new String(value));
-			ownerbrowse = v.priority >= PrivilegeAbbr.b.priority;
+			PrivilegeEnum v = AclConstants.convert(new String(value));
+			ownerbrowse = v.priority >= PrivilegeEnum.BROWSE.priority;
 			
 			return ReturnCode.INCLUDE;
 		}		
 		// check other's privilege , only one cell
 		if(otherbrowse == null && CellUtil.matchingColumn(cell, this.aclColumnFamily, this.otherPrefix) ){
 			// set if could be browse
-			PrivilegeAbbr v = PrivilegeAbbr.valueOf(new String(value));
-			otherbrowse = v.priority >= PrivilegeAbbr.b.priority;
+			PrivilegeEnum v = AclConstants.convert(new String(value));
+			otherbrowse = v.priority >= PrivilegeEnum.BROWSE.priority;
 			return ReturnCode.INCLUDE;
 		}
 		
@@ -170,8 +157,8 @@ public class HAclBrowseFilter extends FilterBase {
 			if(!groups.contains(new String(groupname))) return ReturnCode.INCLUDE;
 			
 			// set if could be browse
-			PrivilegeAbbr v = PrivilegeAbbr.valueOf(new String(value));			
-			groupbrowse = v.priority >= PrivilegeAbbr.b.priority;
+			PrivilegeEnum v = AclConstants.convert(new String(value));		
+			groupbrowse = v.priority >= PrivilegeEnum.BROWSE.priority;
 			return ReturnCode.INCLUDE;
 		}
 		
@@ -182,8 +169,8 @@ public class HAclBrowseFilter extends FilterBase {
 			if(!Bytes.equals(account, namedaccount)) return ReturnCode.INCLUDE;
 			
 			// set if could be browse
-			PrivilegeAbbr v = PrivilegeAbbr.valueOf(new String(value));			
-			namedbrowse = v.priority >= PrivilegeAbbr.b.priority;
+			PrivilegeEnum v = AclConstants.convert(new String(value));			
+			namedbrowse = v.priority >= PrivilegeEnum.BROWSE.priority;
 			return ReturnCode.INCLUDE;
 		}
 		

@@ -7,6 +7,8 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import com.dcube.core.CoreConstants;
+import com.dcube.core.security.AclConstants.PrivilegeEnum;
+import com.dcube.core.security.AclConstants.TypeEnum;
 import com.dcube.meta.EntityConstants;
 
 /**
@@ -30,53 +32,7 @@ import com.dcube.meta.EntityConstants;
  * 
  **/
 public class EntryAce implements Comparable<EntryAce> {
-	
-	public static enum PrivilegeEnum {
-
-		NONE("n",0),
-		BROWSE("b",1),
-		READ("r",2),
-		WRITE("w",3),
-		DELETE("d",4);
 		
-		public final String abbr;
-		public final int priority;
-		
-		/**
-		 * Hide Rtype default constructor 
-		 **/
-		private PrivilegeEnum(String abbr,int priority){  
-			this.abbr = abbr;
-			this.priority = priority;
-	    }
-				
-		@Override
-		public String toString(){
-			return this.abbr;
-		}
-		
-	}
-	
-	/**
-	 * The Acl info enumerator 
-	 **/
-	public static enum TypeEnum{
-
-		User( "u",3),
-		Group( "g",1);
-
-		public final String abbr;
-		public final int priority;
-		/**
-		 * Hide default constructor 
-		 **/
-		private TypeEnum( String abbr, int priority){  
-			this.abbr = abbr;
-			this.priority = priority;
-	    }
-		
-	}
-	
 	/** the role name */
 	private String name;
 	

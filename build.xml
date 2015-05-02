@@ -50,6 +50,7 @@
 			<fileset dir="${dir.java.class}">
 				<include name="com/dcube/core/hbase/HAclBrowseFilter*.*"/>
 				<include name="com/dcube/common/SimpleConverter*.*"/>
+				<include name="com/dcube/core/security/AclConstants*.*"/>
 			</fileset>
 			<manifest>
 				<attribute name="Application-Name" value="obal.core.library"/>
