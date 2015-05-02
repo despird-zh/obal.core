@@ -57,7 +57,7 @@ public class HAclBrowseFilter extends FilterBase {
 	/** user */
 	private byte[] account = new byte[0];
 	/** group */
-	private List<byte[]> groups = new ArrayList<byte[]>();
+	private List<String> groups = new ArrayList<String>();
 	/** is owner account */
 	protected Boolean isowner = null;
 	/** is named account */
@@ -71,34 +71,37 @@ public class HAclBrowseFilter extends FilterBase {
 	/** group could browse */
 	protected Boolean groupbrowse = false;
 	
-	/** indicate if current row could be read */
-	protected boolean foundColumn = false;
-	protected boolean matchedColumn = false;
 	public HAclBrowseFilter(String account, String[] groups) {
 
 		this.account = account == null? this.account:account.getBytes();
 		if(groups == null) return;
 		for (int i = 0; i < groups.length; i++) {
-			this.groups.add(groups[i].getBytes());
+			this.groups.add(groups[i]);
 		}
 	}
 
 	public HAclBrowseFilter(byte[] account, List<byte[]> groups) {
-
 		this.account = account == null? this.account: account;
-		this.groups = groups == null? this.groups: groups;
+		if(groups == null) return;
+		for(byte[] grp:groups){
+			this.groups.add(new String(grp));
+		}
 	}
 
 	@Override
 	public boolean filterRow() {
+		
 		// if account is owner , check owner and groups
 		if(isowner == true){
+			System.out.println("---=== isowner=true ===---");
 			// return false select current row, true ignore it.
 			return !(ownerbrowse || groupbrowse);
 		}else if(isnamed == true){
+			System.out.println("---=== isnamed=true ===---");
 			// return false select current row, true ignore it.
 			return !(namedbrowse || groupbrowse);
 		}else{
+			System.out.println("---=== other=true ===---");
 			// return false select current row, true ignore it.
 			return !(otherbrowse || groupbrowse);			
 		}
@@ -126,11 +129,9 @@ public class HAclBrowseFilter extends FilterBase {
 		if (Bytes.equals(aclColumnFamily, 0, aclColumnFamily.length,
 						kv.getFamilyArray(), kv.getFamilyOffset(),
 						kv.getFamilyLength())) {
-
 			// only compare column family [acl]
 			return filterReadable(kv);
 		} else {
-
 			return ReturnCode.INCLUDE;
 		}
 	}
@@ -164,8 +165,9 @@ public class HAclBrowseFilter extends FilterBase {
 		// check owner's privilege, intercept all g:xxx qualifier/value pairs
 		if(!groupbrowse && Bytes.startsWith(qualifier, groupPrefix) && groups.size()>0){
 			byte[] groupname = Bytes.copy(qualifier, groupPrefix.length, qualifier.length - groupPrefix.length);
+			System.out.println("group == " + new String(groupname));
 			// not query user's group, then return include.
-			if(!groups.contains(groupname)) return ReturnCode.INCLUDE;
+			if(!groups.contains(new String(groupname))) return ReturnCode.INCLUDE;
 			
 			// set if could be browse
 			PrivilegeAbbr v = PrivilegeAbbr.valueOf(new String(value));			
@@ -186,12 +188,12 @@ public class HAclBrowseFilter extends FilterBase {
 		}
 		
 		// owner mode only, not browse support, next row
-		if(isowner == true && groups.size()==0 && ownerbrowse == false){
+		if(isowner == Boolean.TRUE && ( groups == null || groups.size()==0) && ownerbrowse == Boolean.FALSE){
 			return ReturnCode.NEXT_ROW;	
 		}
 		
 		// other mode only, not browse support, next row
-		if(isowner == false && groups.size()==0 && otherbrowse == false){
+		if(isowner == Boolean.FALSE && ( groups == null || groups.size()==0) && otherbrowse == Boolean.FALSE){
 			return ReturnCode.NEXT_ROW;	
 		}
 		return ReturnCode.INCLUDE;
@@ -206,7 +208,7 @@ public class HAclBrowseFilter extends FilterBase {
 		records.add(account);
 		Map<byte[], byte[]> gmap = new HashMap<byte[], byte[]>();
 		for (int i = 0; i < groups.size(); i++) {
-			gmap.put(Bytes.toBytes(i), groups.get(i));
+			gmap.put(Bytes.toBytes(i), groups.get(i).getBytes());
 		}
 		records.add(SimpleConverter.groupMapToBytes(gmap));
 		return SimpleConverter.recordListToBytes(records);
@@ -233,11 +235,6 @@ public class HAclBrowseFilter extends FilterBase {
 
 	@Override
 	public String toString() {
-
-		List<String> groups = new ArrayList<String>();
-		for (byte[] e : this.groups) {
-			groups.add(Bytes.toString(e));
-		}
 
 		return this.getClass().getSimpleName() + ":" + Bytes.toString(account)
 				+ ":" + groups + ":";

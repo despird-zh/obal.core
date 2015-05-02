@@ -70,8 +70,8 @@ public class HTester extends BaseTester{
     public static void main(String[] args) {  
     	
     	initLog4j();
-        // createTable("wujintao");  
-       //  insertData("wujintao");  
+        createTable("dcube.demo.doc");  
+        insertData("dcube.demo.doc");  
        //  QueryAll("wujintao");  
          QueryByCondition1("obal.meta.attr");  
         // QueryByCondition2("wujintao");  
@@ -96,9 +96,8 @@ public class HTester extends BaseTester{
                 System.out.println(tableName + " is exist,detele....");  
             }  
             HTableDescriptor tableDescriptor = new HTableDescriptor(tableName);  
-            tableDescriptor.addFamily(new HColumnDescriptor("column1"));  
-            tableDescriptor.addFamily(new HColumnDescriptor("column2"));  
-            tableDescriptor.addFamily(new HColumnDescriptor("column3"));  
+            tableDescriptor.addFamily(new HColumnDescriptor("c0"));  
+            tableDescriptor.addFamily(new HColumnDescriptor("acl"));  
             hBaseAdmin.createTable(tableDescriptor);  
         } catch (MasterNotRunningException e) {  
             e.printStackTrace();  
@@ -122,12 +121,57 @@ public class HTester extends BaseTester{
         try {  
             connection = HConnectionManager.createConnection(configuration);
             table = connection.getTable(tableName);
-            //HTable table = (HTable) pool.getTable(tableName);  
-            Put put = new Put("112233bbbcccc".getBytes());// 一个PUT代表一行数据，再NEW一个PUT表示第二行数据,每行一个唯一的ROWKEY，此处rowkey为put构造方法中传入的值  
-            put.add("column1".getBytes(), null, "aaa".getBytes());// 本行数据的第一列  
-            put.add("column2".getBytes(), null, "bbb".getBytes());// 本行数据的第三列  
-            put.add("column3".getBytes(), null, "ccc".getBytes());// 本行数据的第三列  
-        	table.put(put);  
+            //HTable table = (HTable) pool.getTable(tableName); 
+            for(int i = 0; i< 6;i++){
+	            Put put = new Put(("a"+i).getBytes());// 一个PUT代表一行数据，再NEW一个PUT表示第二行数据,每行一个唯一的ROWKEY，此处rowkey为put构造方法中传入的值  
+	            put.add("c0".getBytes(), "q1".getBytes(), "aaa".getBytes());// 本行数据的第一列  
+	            put.add("c0".getBytes(), "q2".getBytes(), "bbb".getBytes());// 本行数据的第三列  
+	            put.add("c0".getBytes(), "q3".getBytes(), "ccc".getBytes());// 本行数据的第三列  
+	        	table.put(put);
+	        	table.flushCommits();
+            }
+            Put put = new Put(("a0").getBytes());
+            put.add("acl".getBytes(), "owner".getBytes(), "usr1".getBytes());
+            put.add("acl".getBytes(), "u:".getBytes(), "b".getBytes());
+            put.add("acl".getBytes(), "o:".getBytes(), "n".getBytes());
+            table.put(put);
+            
+            put = new Put(("a1").getBytes());
+            put.add("acl".getBytes(), "owner".getBytes(), "usr2".getBytes());
+            put.add("acl".getBytes(), "u:".getBytes(), "b".getBytes());
+            put.add("acl".getBytes(), "o:".getBytes(), "b".getBytes());
+            table.put(put);
+            
+            put = new Put(("a2").getBytes());
+            put.add("acl".getBytes(), "owner".getBytes(), "usr2".getBytes());
+            put.add("acl".getBytes(), "u:".getBytes(), "n".getBytes());
+            put.add("acl".getBytes(), "u:usr3".getBytes(), "b".getBytes());
+            put.add("acl".getBytes(), "o:".getBytes(), "n".getBytes());
+            table.put(put);
+            
+            put = new Put(("a3").getBytes());
+            put.add("acl".getBytes(), "owner".getBytes(), "usr1".getBytes());
+            put.add("acl".getBytes(), "u:".getBytes(), "n".getBytes());
+            put.add("acl".getBytes(), "u:usr4".getBytes(), "b".getBytes());
+            put.add("acl".getBytes(), "o:".getBytes(), "n".getBytes());
+            table.put(put);
+            
+            put = new Put(("a4").getBytes());
+            put.add("acl".getBytes(), "owner".getBytes(), "usr1".getBytes());
+            put.add("acl".getBytes(), "u:".getBytes(), "n".getBytes());
+            put.add("acl".getBytes(), "g:grp1".getBytes(), "b".getBytes());
+            put.add("acl".getBytes(), "g:grp2".getBytes(), "b".getBytes());
+            put.add("acl".getBytes(), "o:".getBytes(), "n".getBytes());
+            table.put(put);
+            
+            put = new Put(("a5").getBytes());
+            put.add("acl".getBytes(), "owner".getBytes(), "usr1".getBytes());
+            put.add("acl".getBytes(), "u:".getBytes(), "n".getBytes());
+            put.add("acl".getBytes(), "g:grp1".getBytes(), "b".getBytes());
+            put.add("acl".getBytes(), "g:grp2".getBytes(), "b".getBytes());
+            put.add("acl".getBytes(), "o:".getBytes(), "n".getBytes());
+            table.put(put);
+            
         } catch (IOException e) {  
             e.printStackTrace();  
         }finally{

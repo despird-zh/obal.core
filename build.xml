@@ -24,7 +24,9 @@
 		<echo message="---[ Building Core jar ]---"/>
         <jar jarfile="${dir.java.ext}/${obal.core.jar}" >
 			<fileset dir="${dir.java.class}">
-				<include name="**/doccube/**/*.*"/>
+				<include name="**/dcube/**/*.*"/>
+				<include name="**/META-INF/**/*.*"/>
+				<exclude name="**/META-INF/maven/**/*.*"/>
 			</fileset>
 			<manifest>
 				<attribute name="Application-Name" value="obal.core.library"/>
@@ -46,8 +48,8 @@
 		<echo message="---[ Building Hbase Side Core jar ]---"/>
         <jar jarfile="${dir.java.ext}/${obal.ext.jar}" >
 			<fileset dir="${dir.java.class}">
-				<include name="**/doccube/core/hbase/HAclBrowseFilter.class"/>
-				<include name="**/doccube/common/SimpleConverter.class"/>
+				<include name="com/dcube/core/hbase/HAclBrowseFilter*.*"/>
+				<include name="com/dcube/common/SimpleConverter*.*"/>
 			</fileset>
 			<manifest>
 				<attribute name="Application-Name" value="obal.core.library"/>
@@ -62,7 +64,7 @@
         </jar>
     </target>
 	<!-- ============ hbase side ext.jar Processing end -->
-	<target name="scp_send_file" description="ssh send file" depends="build_core_jar">
+	<target name="scp_send_file" description="ssh send file" depends="build_ext_jar">
 		<echo message="---[ Try to create extlib directory ]---"/>
 		<sshexec host ="${ssh.server}" 
 		username ="${ssh.user}" 
@@ -82,13 +84,13 @@
 		trust ="true" 
 		verbose ="false"
 		command ="
-				if [ -f ${server.target.path}/${obal.core.jar} ]; then
-                    rm ${server.target.path}/${obal.core.jar};
+				if [ -f ${server.target.path}/${obal.ext.jar} ]; then
+                    rm ${server.target.path}/${obal.ext.jar};
                 fi;
 		"> 
         </sshexec> 
 		<echo message="---[ Copy local file to server ]---"/>
-		<scp file ="${dir.java.ext}/${obal.core.jar}"
+		<scp file ="${dir.java.ext}/${obal.ext.jar}"
 		todir ="${ssh.user}:${ssh.password}@${ssh.server}:${server.target.path}"
 		trust ="true"
 		verbose ="false"/>
