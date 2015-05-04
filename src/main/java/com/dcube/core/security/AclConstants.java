@@ -90,7 +90,9 @@ public class AclConstants {
 	}
 	
 	/**
-	 * Convert abbr into type enum 
+	 * Convert abbr into type enum, because owner don't have special abbr.
+	 * for [u] we only return TypeEnum.User.
+	 * 
 	 **/
 	public static TypeEnum convertType(String abbr){
 		

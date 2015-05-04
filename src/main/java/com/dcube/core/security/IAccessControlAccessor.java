@@ -89,9 +89,5 @@ public interface IAccessControlAccessor<GB extends IEntityEntry> extends IEntity
 	 * @param name the subject name
 	 **/
 	public PrivilegeEnum getPrivilege(String key, TypeEnum type, String name)throws AccessorException;
-
-	public void setOwner(String key, String account)throws AccessorException;
-	
-	public String getOwner(String key)throws AccessorException;
 	
 }

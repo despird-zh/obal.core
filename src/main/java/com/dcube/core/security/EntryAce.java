@@ -134,6 +134,14 @@ public class EntryAce implements Comparable<EntryAce> {
 	}
 	
 	/**
+	 * Set the name of user or group
+	 **/
+	public void setName(String name){
+		
+		this.name = name;
+	}
+	
+	/**
 	 * Get the type the acl entry: user or group 
 	 **/
 	public TypeEnum getType(){
