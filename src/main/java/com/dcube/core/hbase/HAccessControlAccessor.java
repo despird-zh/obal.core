@@ -65,9 +65,9 @@ import com.dcube.meta.EntityConstants;
  * column family -> acl
  * 
  * qualifier -> owner             value: demouser
- * qualifier -> u:                value: b          // owner basic privilege
- * qualifier -> u:download        value: foo value  // owner extend business operation
- * qualifier -> u:upload          value: foo value  // owner extend business operation
+ * qualifier -> o:                value: b          // owner basic privilege
+ * qualifier -> o:download        value: foo value  // owner extend business operation
+ * qualifier -> o:upload          value: foo value  // owner extend business operation
  * 
  * qualifier -> u:usr1:           value: b          // normal user privilege
  * qualifier -> u:usr1:download   value: foo value  // normal user extend business operation
@@ -76,9 +76,9 @@ import com.dcube.meta.EntityConstants;
  * qualifier -> g:grp1:download   value: foo value  // group extend business operation
  * qualifier -> g:grp1:upload     value: foo value  // group extend business operation
  * 
- * qualifier -> o:                value: b          // other basic privilege
- * qualifier -> o:download        value: foo value  // other extend business operation
- * qualifier -> o:upload          value: foo value  // other extend business operation
+ * qualifier -> e:                value: b          // other basic privilege
+ * qualifier -> e:download        value: foo value  // other extend business operation
+ * qualifier -> e:upload          value: foo value  // other extend business operation
  * </pre>
  * 
  * @author despird
@@ -278,23 +278,26 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
     			// if no keys separator ignore it.
     			if(!Bytes.contains(entry.getKey(), CoreConstants.KEYS_SEPARATOR.getBytes()))
     				continue;
+    			
     			String qualifier = Bytes.toString(entry.getKey());
     			// entry key is the qualifier, here we parse it into string array
     			String[] parts = StringUtils.split( qualifier, CoreConstants.KEYS_SEPARATOR);// separator->[:]
+    			AceType type = AclConstants.convertType(parts[0]);
+    			if(etype != type) continue;
+    			
     			String value = Bytes.toString(entry.getValue());
     			
     			if(parts.length == 1 && (etype == AceType.Owner || etype == AceType.Other )){
     				// only owner and other basic privilege match this
-    				AcePrivilege priv = AclConstants.convertPrivilege(value);
-    				AceType type = AclConstants.convertType(parts[0]);
-    				if(type != AceType.Other){
+    				AcePrivilege priv = AclConstants.convertPrivilege(value);    				
+    				if(type == AceType.Owner){
     					
     					rtv.setName(owner);
     				}
     				rtv.setPrivilege(priv);
     			}
     			else if(parts.length == 2){
-    				if(qualifier.endsWith(CoreConstants.KEYS_SEPARATOR) && (etype == AceType.User || etype == AceType.Group )){
+    				if(qualifier.endsWith(CoreConstants.KEYS_SEPARATOR) && StringUtils.equals(name, parts[1])){
     					// normal or group basic privilege ,eg. u:usr1: / g:grp1:
     					AcePrivilege priv = AclConstants.convertPrivilege(value);
     					rtv.setPrivilege(priv);
@@ -302,11 +305,11 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
     					// owner or other extend permission ,eg. u:download / o:upload    					
     					rtv.grant(parts[1]);
     				}				
-    			}else if(parts.length == 3){
+    			}else if(parts.length == 3 && StringUtils.equals(name, parts[1])){
     				// normal user and group extend permission
     				// u:usr1:download
     				// g:grp1:upload
-    				rtv.grant(parts[1]);    				
+    				rtv.grant(parts[2]);    				
     			}
     		}        	
         } catch (IOException e) {          	
@@ -383,7 +386,7 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
     			cf = AclConstants.CF_ACL.getBytes();
     			String permQualifier = null;
     			if(type == AceType.Owner || type == AceType.Other){
-    				//owner or other extend permission ,eg. u:download / o:upload    
+    				//owner or other extend permission ,eg. e:download / o:upload    
     				permQualifier = type.abbr
         					+ CoreConstants.KEYS_SEPARATOR
         					+ perm;
@@ -441,7 +444,7 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
 
     			String permQualifier = null;
     			if(type == AceType.Owner || type == AceType.Other){
-    				//owner or other extend permission ,eg. u:download / o:upload    
+    				//owner or other extend permission ,eg. o:download / e:upload    
     				permQualifier = type.abbr
         					+ CoreConstants.KEYS_SEPARATOR
         					+ perm;
@@ -503,24 +506,26 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
     			if(!Bytes.contains(entry.getKey(), CoreConstants.KEYS_SEPARATOR.getBytes()))
     				continue;
     			
-    			String[] parts = StringUtils.split( Bytes.toString(entry.getKey()), CoreConstants.KEYS_SEPARATOR);
-    			String qualifier = Bytes.toString(entry.getKey());
+    			String qualifier = Bytes.toString(entry.getKey());   
+    			// ignore map entry of privilege qualifier o:/e:/u:usr1:/g:grp1:
+    			if(qualifier.endsWith(CoreConstants.KEYS_SEPARATOR)) 
+    				continue;
+    			
+    			String[] parts = StringUtils.split( qualifier, CoreConstants.KEYS_SEPARATOR);
+    			
     			AceType typeTemp = AceType.valueOf(parts[0]);
-    			if(parts.length == 2 && !qualifier.endsWith(CoreConstants.KEYS_SEPARATOR)){
-    				//owner or other extend permission ,eg. u:download / o:upload   
-    				if(type == AceType.Owner && typeTemp == AceType.User){
-    					rtv.add(parts[1]);
-    				}
-    				if(typeTemp == AceType.Other){
+    			if(parts.length == 2){
+    				//owner or other extend permission ,eg. o:download / e:upload   
+    				if(typeTemp == type){
     					rtv.add(parts[1]);
     				}    				
-    			}else if(parts.length == 3 && !qualifier.endsWith(CoreConstants.KEYS_SEPARATOR)){
+    			}else if(parts.length == 3){
     				// normal user and group extend permission
     				// u:usr1:download
     				// g:grp1:upload
-    				if(typeTemp == AceType.Group && parts[1].equals(name))
+    				if(typeTemp == type && parts[1].equals(name))
     					rtv.add(parts[2]);   
-    				if(typeTemp == AceType.User && parts[1].equals(name))
+    				if(typeTemp == type && parts[1].equals(name))
     					rtv.add(parts[2]);   
     			}
 
@@ -771,7 +776,7 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
 			EntryAce ace = null;
 			
 			if(parts.length == 1){
-				// only owner and other basic privilege match this
+				// only owner and other basic privilege match this o: / e:
 				AcePrivilege priv = AclConstants.convertPrivilege(value);
 				AceType type = AclConstants.convertType(parts[0]);
 				if(type == AceType.Other){
@@ -787,7 +792,7 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
 					AceType type = AclConstants.convertType(parts[0]);
 					ace = new EntryAce(type,parts[1],priv);
 				}else{
-					// owner or other extend permission ,eg. u:download / o:upload
+					// owner or other extend permission ,eg. o:download / e:upload
 					AceType type = AclConstants.convertType(parts[0]);
 					if(type == AceType.Other){
 						ace = new EntryAce(type,AceType.Other.name(),parts[1]);
@@ -817,7 +822,7 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
 		
 		List<EntryAce> aces = acl.getAllAces();
 		byte[] cf = null;
-		byte[] enable = "enable".getBytes();
+		byte[] enable = EntityConstants.BLANK_VALUE.getBytes();
 		for(EntryAce ace: aces){
 			
 			String qualifier = ace.getType().abbr
@@ -833,7 +838,7 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
 				put.add(cf, qualifier.getBytes(), ace.getPrivilege().toString().getBytes());				
 			}else {
 				// normal user and group
-				qualifier += ace.getName();
+				qualifier += ace.getName() + CoreConstants.KEYS_SEPARATOR;
 				put.add(cf, qualifier.getBytes(), ace.getPrivilege().toString().getBytes());
 			}
 			
@@ -841,7 +846,6 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
 			for(String permission : permissionSet){
 				
 				String permQualifier = qualifier 
-						+ (qualifier.endsWith(CoreConstants.KEYS_SEPARATOR)? "":CoreConstants.KEYS_SEPARATOR)
 						+ permission;
 				put.add(cf, permQualifier.getBytes(), enable);
 			}

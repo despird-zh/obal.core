@@ -35,8 +35,14 @@ public class HAclBrowseFilter extends FilterBase {
 	
 	/** column family */
 	protected byte[] aclColumnFamily = AclConstants.CF_ACL.getBytes();
-	protected byte[] ownerPrefix = AclConstants.QL_USER_PREFIX.getBytes();
+	
+	protected byte[] ownerPrivQL = AclConstants.AceType.Owner.abbr.getBytes();
+	//protected byte[] ownerPrefix = AclConstants.QL_OWNER_PREFIX.getBytes();
+	
+	protected byte[] userPrefix  = AclConstants.QL_USER_PREFIX.getBytes();
 	protected byte[] groupPrefix = AclConstants.QL_GROUP_PREFIX.getBytes();
+	
+	protected byte[] otherPrivQL = AclConstants.AceType.Other.abbr.getBytes();
 	protected byte[] otherPrefix = AclConstants.QL_OTHER_PREFIX.getBytes();
 	
 	/** owner qualifier */
@@ -133,7 +139,7 @@ public class HAclBrowseFilter extends FilterBase {
 			return ReturnCode.INCLUDE;
 		}
 		// check owner's privilege , only one cell
-		if(ownerbrowse == null && CellUtil.matchingColumn(cell, this.aclColumnFamily, this.ownerPrefix) ){
+		if(ownerbrowse == null && CellUtil.matchingColumn(cell, this.aclColumnFamily, this.ownerPrivQL) ){
 			// set if could be browse
 			AcePrivilege v = AclConstants.convertPrivilege(new String(value));
 			ownerbrowse = v.priority >= AcePrivilege.BROWSE.priority;
@@ -141,7 +147,7 @@ public class HAclBrowseFilter extends FilterBase {
 			return ReturnCode.INCLUDE;
 		}		
 		// check other's privilege , only one cell
-		if(otherbrowse == null && CellUtil.matchingColumn(cell, this.aclColumnFamily, this.otherPrefix) ){
+		if(otherbrowse == null && CellUtil.matchingColumn(cell, this.aclColumnFamily, this.otherPrivQL) ){
 			// set if could be browse
 			AcePrivilege v = AclConstants.convertPrivilege(new String(value));
 			otherbrowse = v.priority >= AcePrivilege.BROWSE.priority;
@@ -149,10 +155,10 @@ public class HAclBrowseFilter extends FilterBase {
 		}
 		
 		byte[] qualifier = CellUtil.cloneQualifier(cell);		
-		// check owner's privilege, intercept all g:xxx qualifier/value pairs
+		// check group's privilege, intercept all g:xxx qualifier/value pairs
 		if(!groupbrowse && Bytes.startsWith(qualifier, groupPrefix) && groups.size()>0){
 			byte[] groupname = Bytes.copy(qualifier, groupPrefix.length, qualifier.length - groupPrefix.length);
-			System.out.println("group == " + new String(groupname));
+			
 			// not query user's group, then return include.
 			if(!groups.contains(new String(groupname))) return ReturnCode.INCLUDE;
 			
@@ -163,8 +169,8 @@ public class HAclBrowseFilter extends FilterBase {
 		}
 		
 		// check account's privilege, intercept all u:xxx qualifier/value pairs until sure isnamed= ture
-		if(!isnamed && Bytes.startsWith(qualifier, ownerPrefix)){
-			byte[] namedaccount = Bytes.copy(qualifier, ownerPrefix.length, qualifier.length - ownerPrefix.length);
+		if(!isnamed && Bytes.startsWith(qualifier, userPrefix)){
+			byte[] namedaccount = Bytes.copy(qualifier, userPrefix.length, qualifier.length - userPrefix.length);
 			// not query user's group, then return include.
 			if(!Bytes.equals(account, namedaccount)) return ReturnCode.INCLUDE;
 			

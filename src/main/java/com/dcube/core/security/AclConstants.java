@@ -9,12 +9,14 @@ public class AclConstants {
 	public static final String OWNER_NAME = "";
 	/** ACL column family */
 	public static final String CF_ACL = "acl";
+	/** owner qualifier prefix  */
+	public static final String QL_OWNER_PREFIX = "o:";
 	/** user qualifier prefix  */
 	public static final String QL_USER_PREFIX = "u:";
 	/** group qualifier prefix  */
 	public static final String QL_GROUP_PREFIX = "g:";
 	/** other qualifier prefix  */
-	public static final String QL_OTHER_PREFIX = "o:";
+	public static final String QL_OTHER_PREFIX = "e:";
 	/** owner qualifier  */
 	public static final String QL_OWNRER = "owner";
 	
@@ -24,9 +26,10 @@ public class AclConstants {
 	private static String ABBR_WRITE = "w";
 	private static String ABBR_DELETE = "d";
 	
+	private static String ABBR_OWNER = "o";
 	private static String ABBR_USER = "u";
 	private static String ABBR_GROUP = "g";
-	private static String ABBR_OTHER = "o";
+	private static String ABBR_OTHER = "e";
 	
 	/** privilege enum  */
 	public static enum AcePrivilege {
@@ -72,10 +75,10 @@ public class AclConstants {
 	/** The Ace type enumerator */
 	public static enum AceType{
 
-		User( "u",3),
-		Owner( "u",3),
-		Other( "o",3),
-		Group( "g",1);
+		User( ABBR_USER,2),
+		Owner( ABBR_OWNER,1),
+		Other( ABBR_OTHER,4),
+		Group( ABBR_GROUP,3);
 
 		public final String abbr;
 		public final int priority;
@@ -96,6 +99,7 @@ public class AclConstants {
 	 **/
 	public static AceType convertType(String abbr){
 		
+		if(ABBR_OWNER.equals(abbr)) return AceType.Owner;
 		if(ABBR_USER.equals(abbr)) return AceType.User;
 		if(ABBR_GROUP.equals(abbr)) return AceType.Group;
 		if(ABBR_OTHER.equals(abbr)) return AceType.Other;
