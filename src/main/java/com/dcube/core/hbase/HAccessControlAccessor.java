@@ -67,7 +67,7 @@ import com.dcube.meta.EntityConstants;
 public abstract class HAccessControlAccessor<GB extends AccessControlEntry> extends HEntityAccessor<GB> implements IAccessControlAccessor<GB> {
 
 	Logger LOGGER = LoggerFactory.getLogger(HAccessControlAccessor.class);
-
+	
 	/**
 	 * Constructor with EntityAccessor name and context.
 	 * @param accessorName the name of EntityAccessor
@@ -97,10 +97,8 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
         	
         	table = getConnection().getTable(entitySchema.getSchema(getContext().getPrincipal(),entryKey));
 
-        	Get get = new Get(entryKey.getBytes());
-           
-        	Result result = table.get(get);
-           
+        	Get get = new Get(entryKey.getBytes());           
+        	Result result = table.get(get);           
         	wrap(entitySchema.getEntityMeta().getAllAttrs(),result, rtv);
         	// extract the acl information
         	if(entitySchema.getEntityMeta().getAccessControllable()){
@@ -250,7 +248,7 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
     			String[] parts = StringUtils.split( Bytes.toString(entry.getKey()), ":");
     			String value = Bytes.toString(entry.getValue());
     			
-    			TypeEnum typeTemp = TypeEnum.valueOf(parts[0]);
+    			TypeEnum typeTemp = AclConstants.convertType(parts[0]);
     			if(parts.length == 2 && type == typeTemp && parts[1].equals(name)){
     				// eg. acl:group:001001 -> WRITE
     				//     CF | TYPE| KEY     Privilege
@@ -326,12 +324,13 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
     		byte[] cf = null;
     		for(String perm: permissions){
     			
-    			String qualifier = type.abbr
-    					+ CoreConstants.KEYS_SEPARATOR
-    					+ name;
+    			if(perm == null) continue;
+    			
     			cf = AclConstants.CF_ACL.getBytes();
 
-    			String permQualifier = qualifier 
+    			String permQualifier = type.abbr
+    					+ CoreConstants.KEYS_SEPARATOR
+    					+ name
     					+ CoreConstants.KEYS_SEPARATOR
     					+ perm;
     			put.add(cf, permQualifier.getBytes(), EntityConstants.BLANK_VALUE.getBytes());
@@ -366,12 +365,11 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
     		byte[] cf = null;
     		for(String perm: permissions){
     			
-    			String qualifier = type.abbr
-    					+ CoreConstants.KEYS_SEPARATOR
-    					+ name;
     			cf = AclConstants.CF_ACL.getBytes();
 
-    			String permQualifier = qualifier 
+    			String permQualifier = type.abbr
+    					+ CoreConstants.KEYS_SEPARATOR
+    					+ name 
     					+ CoreConstants.KEYS_SEPARATOR
     					+ perm;
     			del.deleteColumns(cf, permQualifier.getBytes());
@@ -404,7 +402,8 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
         	
         	table = getConnection().getTable(entitySchema.getSchema(getContext().getPrincipal(),entryKey));
 
-        	Get get = new Get(entryKey.getBytes());           
+        	Get get = new Get(entryKey.getBytes());   
+        	get.addFamily(AclConstants.CF_ACL.getBytes());
         	Result result = table.get(get);
         	
     		NavigableMap<byte[], byte[]> acemap = result.getFamilyMap(AclConstants.CF_ACL.getBytes());
@@ -414,14 +413,14 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
 
     			TypeEnum typeTemp = TypeEnum.valueOf(parts[0]);
     			if(parts.length == 2 && type == typeTemp && parts[1].equals(name)){
-    				// eg. acl:group:001001 -> WRITE
+    				// eg. acl:g:001001 -> WRITE
     				//     CF | TYPE| KEY     Privilege
-    				// here group:001001 is the qualifier name
+    				// here g:001001 is the qualifier name
     				// ignore
     			}else if(parts.length == 3 && type == typeTemp && parts[1].equals(name)){
-    				// eg. acl:group:001001:upgrade -> WRITE
+    				// eg. acl:g:001001:upgrade -> WRITE
     				//     CF | TYPE| KEY  | ACTION   Privilege
-    				// here group:001001:upgrade is the qualifier name
+    				// here g:001001:upgrade is the qualifier name
     				rtv.add(parts[2]);
     				
     			}
@@ -461,7 +460,7 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
         	Cell cell = result.getColumnLatestCell(cf, qualifier.getBytes());
         	String val = Bytes.toString(cell.getValueArray());
         	
-        	PrivilegeEnum current = PrivilegeEnum.valueOf(val);
+        	PrivilegeEnum current = AclConstants.convertPrivilege(val);
         	
         	if(current.priority > privilege.priority)// 
         		return false;
@@ -502,7 +501,7 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
         	Cell cell = result.getColumnLatestCell(cf, qualifier.getBytes());
         	String val = Bytes.toString(cell.getValueArray());
         	
-        	PrivilegeEnum current = PrivilegeEnum.valueOf(val);
+        	PrivilegeEnum current = AclConstants.convertPrivilege(val);
         	
         	if(current.priority < privilege.priority)// 
         		return false;
@@ -608,31 +607,72 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
 	}
 	
 	/**
-	 * Wrap the Acl information from acl column family.
+	 * Wrap the Access control list information from acl column family.
+	 * <pre>
+	 * column family -> acl
 	 * 
+	 * qualifier -> owner             value: demouser
+	 * qualifier -> u:                value: b          // owner basic privilege
+	 * qualifier -> u:download        value: foo value  // owner extend business operation
+	 * qualifier -> u:upload          value: foo value  // owner extend business operation
+	 * 
+	 * qualifier -> u:usr1:           value: b          // normal user privilege
+	 * qualifier -> u:usr1:download   value: foo value  // normal user extend business operation
+	 * 
+	 * qualifier -> g:grp1:           value: r          // group privilege
+	 * qualifier -> g:grp1:download   value: foo value  // group extend business operation
+	 * qualifier -> g:grp1:upload     value: foo value  // group extend business operation
+	 * 
+	 * qualifier -> o:                value: b          // other basic privilege
+	 * qualifier -> o:download        value: foo value  // other extend business operation
+	 * qualifier -> o:upload          value: foo value  // other extend business operation
+	 * </pre>
 	 **/
 	private EntryAcl wrapEntryAcl(Result rawEntry){
 		
 		NavigableMap<byte[], byte[]> acemap = rawEntry.getFamilyMap(AclConstants.CF_ACL.getBytes());
 		EntryAcl acl = new EntryAcl();
+		String owner = Bytes.toString(acemap.get(AclConstants.QL_OWNRER.getBytes()));
 		for(Map.Entry<byte[], byte[]> entry: acemap.entrySet()){
-			
-			String[] parts = StringUtils.split( Bytes.toString(entry.getKey()), ":");
+			// if no keys separator ignore it.
+			if(!Bytes.contains(entry.getKey(), CoreConstants.KEYS_SEPARATOR.getBytes()))
+				continue;
+			String qualifier = Bytes.toString(entry.getKey());
+			// entry key is the qualifier, here we parse it into string array
+			String[] parts = StringUtils.split( qualifier, CoreConstants.KEYS_SEPARATOR);// separator->[:]
 			String value = Bytes.toString(entry.getValue());
 			EntryAce ace = null;
-			if(parts.length == 2){
-				// eg. acl:group:001001 -> WRITE
-				//     CF | TYPE| KEY     Privilege
-				// here group:001001 is the qualifier name
-				PrivilegeEnum priv = PrivilegeEnum.valueOf(value);
-				TypeEnum type = TypeEnum.valueOf(parts[0]);
-				ace = new EntryAce(type,parts[1],priv);
-				
+			
+			if(parts.length == 1){
+				// only owner and other basic privilege match this
+				PrivilegeEnum priv = AclConstants.convertPrivilege(value);
+				TypeEnum type = AclConstants.convertType(parts[0]);
+				if(type == TypeEnum.Other){
+					ace = new EntryAce(type,TypeEnum.Other.name(),priv);
+				}else{
+					ace = new EntryAce(TypeEnum.Owner,owner,priv);
+				}
+			}
+			else if(parts.length == 2){
+				if(qualifier.endsWith(CoreConstants.KEYS_SEPARATOR)){
+					// normal or group basic privilege ,eg. u:usr1: / g:grp1:
+					PrivilegeEnum priv = AclConstants.convertPrivilege(value);
+					TypeEnum type = AclConstants.convertType(parts[0]);
+					ace = new EntryAce(type,parts[1],priv);
+				}else{
+					// owner or other extend permission ,eg. u:download / o:upload
+					TypeEnum type = AclConstants.convertType(parts[0]);
+					if(type == TypeEnum.Other){
+						ace = new EntryAce(type,TypeEnum.Other.name(),parts[1]);
+					}else{
+						ace = new EntryAce(TypeEnum.Owner,owner,parts[1]);
+					}
+				}				
 			}else if(parts.length == 3){
-				// eg. acl:group:001001:upgrade -> WRITE
-				//     CF | TYPE| KEY  | ACTION   Privilege
-				// here group:001001:upgrade is the qualifier name
-				TypeEnum type = TypeEnum.valueOf(parts[0]);
+				// normal user and group extend permission
+				// u:usr1:download
+				// g:grp1:upload
+				TypeEnum type = AclConstants.convertType(parts[0]);
 				ace = new EntryAce(type,parts[1],parts[2]);
 				
 			}
@@ -644,8 +684,7 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
 	}
 	
 	/**
-	 * Parse the acl information to Put
-	 *  
+	 * Parse the acl information to Put  
 	 **/
 	private void parseEntryAcl(Put put,  EntryAcl acl){
 		
@@ -655,19 +694,46 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
 		for(EntryAce ace: aces){
 			
 			String qualifier = ace.getType().abbr
-					+ CoreConstants.KEYS_SEPARATOR
-					+ ace.getName();
+					+ CoreConstants.KEYS_SEPARATOR;
 			cf = AclConstants.CF_ACL.getBytes();
-			put.add(cf, qualifier.getBytes(), ace.getPrivilege().toString().getBytes());
+			if(TypeEnum.Owner == ace.getType()){
+				// owner
+				put.add(cf, qualifier.getBytes(), ace.getPrivilege().toString().getBytes());
+				// save owner name
+				put.add(cf, AclConstants.QL_OWNRER.getBytes(), ace.getName().getBytes()); 
+			}else if(TypeEnum.Other == ace.getType()){
+				// owner
+				put.add(cf, qualifier.getBytes(), ace.getPrivilege().toString().getBytes());				
+			}else {
+				// normal user and group
+				qualifier += ace.getName();
+				put.add(cf, qualifier.getBytes(), ace.getPrivilege().toString().getBytes());
+			}
 			
 			Set<String> permissionSet = ace.getPermissions();
 			for(String permission : permissionSet){
 				
 				String permQualifier = qualifier 
-						+ CoreConstants.KEYS_SEPARATOR
+						+ (qualifier.endsWith(CoreConstants.KEYS_SEPARATOR)? "":CoreConstants.KEYS_SEPARATOR)
 						+ permission;
 				put.add(cf, permQualifier.getBytes(), enable);
 			}
 		}
+	}
+	
+	/** test only */
+	public static void main(String[] arg){
+		
+		String[] r = StringUtils.split("u", ":");
+		for(int i = 0; i< r.length; i++)
+			System.out.println(i+" = "+ r[i]);
+		
+		String[] r1 = StringUtils.split("u:m", ":");
+		for(int i = 0; i< r1.length; i++)
+			System.out.println(i+" = "+ r1[i]);
+		
+		String[] r2 = StringUtils.split("u:m:", ":");
+		for(int i = 0; i< r2.length; i++)
+			System.out.println(i+" = "+ r2[i]);
 	}
 }

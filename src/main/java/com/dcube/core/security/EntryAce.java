@@ -15,7 +15,6 @@ import com.dcube.core.security.AclConstants.TypeEnum;
  * <pre>
  * 1 - Person 
  * 2 - Group
- * 3 - Role
  * </pre> 
  * <p>
  * The setting include privilege and Permission for operation.
@@ -27,20 +26,15 @@ import com.dcube.core.security.AclConstants.TypeEnum;
  *   permissionSet:MOVE,AUDIT,APPROVE
  * </pre>
  * 
- * group name:g1/g2/g3
- * 
  **/
 public class EntryAce implements Comparable<EntryAce> {
 		
-	/** the role name */
-	private String name;
-	
+	/** the group/user name */
+	private String name;	
 	/** the privilege of role*/
-	private PrivilegeEnum privilege;
-	
+	private PrivilegeEnum privilege;	
 	/** the entry type */
-	private TypeEnum type;
-	
+	private TypeEnum type;	
 	/** the permission set */
 	private Set<String> permissionSet;
 	
@@ -131,26 +125,41 @@ public class EntryAce implements Comparable<EntryAce> {
 		}
 	}
 	
+	/**
+	 * Get the name of user or group
+	 **/
 	public String getName(){
 		
 		return this.name;
 	}
 	
+	/**
+	 * Get the type the acl entry: user or group 
+	 **/
 	public TypeEnum getType(){
 		
 		return this.type;
 	}
 	
+	/**
+	 * Get the privilege : none, browse, read, write, delete 
+	 **/
 	public PrivilegeEnum getPrivilege(){
 		
 		return this.privilege;
 	}
 	
+	/**
+	 * Set the privilege 
+	 **/
 	public void setPrivilege(PrivilegeEnum privilege){
 		
 		this.privilege = privilege;
 	}
 	
+	/**
+	 * Get the permission set 
+	 **/
 	public Set<String> getPermissions(){
 		
 		return this.permissionSet;

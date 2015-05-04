@@ -5,6 +5,8 @@ package com.dcube.core.security;
  **/
 public class AclConstants {
 	
+	/** owner name */
+	public static final String OWNER_NAME = "";
 	/** ACL column family */
 	public static final String CF_ACL = "acl";
 	/** user qualifier prefix  */
@@ -21,6 +23,10 @@ public class AclConstants {
 	private static String ABBR_READ = "r";
 	private static String ABBR_WRITE = "w";
 	private static String ABBR_DELETE = "d";
+	
+	private static String ABBR_USER = "u";
+	private static String ABBR_GROUP = "g";
+	private static String ABBR_OTHER = "o";
 	
 	/** privilege enum  */
 	public static enum PrivilegeEnum {
@@ -52,7 +58,7 @@ public class AclConstants {
 	/**
 	 * Convert the privilege string into Privilege Enum 
 	 **/
-	public static PrivilegeEnum convert(String abbr){
+	public static PrivilegeEnum convertPrivilege(String abbr){
 		
 		if(ABBR_NONE.equals(abbr)) return PrivilegeEnum.NONE;
 		if(ABBR_BROWSE.equals(abbr)) return PrivilegeEnum.BROWSE;
@@ -67,6 +73,8 @@ public class AclConstants {
 	public static enum TypeEnum{
 
 		User( "u",3),
+		Owner( "u",3),
+		Other( "o",3),
 		Group( "g",1);
 
 		public final String abbr;
@@ -79,5 +87,17 @@ public class AclConstants {
 			this.priority = priority;
 	    }
 		
+	}
+	
+	/**
+	 * Convert abbr into type enum 
+	 **/
+	public static TypeEnum convertType(String abbr){
+		
+		if(ABBR_USER.equals(abbr)) return TypeEnum.User;
+		if(ABBR_GROUP.equals(abbr)) return TypeEnum.Group;
+		if(ABBR_OTHER.equals(abbr)) return TypeEnum.Other;
+
+		return TypeEnum.User;
 	}
 }

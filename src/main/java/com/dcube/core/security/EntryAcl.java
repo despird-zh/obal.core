@@ -3,9 +3,6 @@ package com.dcube.core.security;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.codehaus.jackson.annotate.JsonCreator;
-import org.codehaus.jackson.annotate.JsonProperty;
-
 import com.dcube.core.security.AclConstants.PrivilegeEnum;
 import com.dcube.core.security.AclConstants.TypeEnum;
 /**
@@ -36,7 +33,6 @@ public class EntryAcl {
 	 * @param aclName the acl name
 	 * @param aceArray the ace array
 	 **/
-	@JsonCreator
 	public EntryAcl(EntryAce ... aceArray){
 		aces = new ArrayList<EntryAce>();
 		if(null == aceArray)
@@ -79,7 +75,6 @@ public class EntryAcl {
 	/**
 	 * Get all ace list
 	 **/
-	@JsonProperty("acelist")
 	public List<EntryAce> getAllAces(){
 		
 		return aces;
