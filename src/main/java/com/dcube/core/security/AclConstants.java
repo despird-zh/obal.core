@@ -29,7 +29,7 @@ public class AclConstants {
 	private static String ABBR_OTHER = "o";
 	
 	/** privilege enum  */
-	public static enum PrivilegeEnum {
+	public static enum AcePrivilege {
 
 		NONE(ABBR_NONE,0),
 		BROWSE(ABBR_BROWSE,1),
@@ -43,7 +43,7 @@ public class AclConstants {
 		/**
 		 * Hide Rtype default constructor 
 		 **/
-		private PrivilegeEnum(String abbr,int priority){  
+		private AcePrivilege(String abbr,int priority){  
 			this.abbr = abbr;
 			this.priority = priority;
 	    }
@@ -58,19 +58,19 @@ public class AclConstants {
 	/**
 	 * Convert the privilege string into Privilege Enum 
 	 **/
-	public static PrivilegeEnum convertPrivilege(String abbr){
+	public static AcePrivilege convertPrivilege(String abbr){
 		
-		if(ABBR_NONE.equals(abbr)) return PrivilegeEnum.NONE;
-		if(ABBR_BROWSE.equals(abbr)) return PrivilegeEnum.BROWSE;
-		if(ABBR_READ.equals(abbr)) return PrivilegeEnum.READ;
-		if(ABBR_WRITE.equals(abbr)) return PrivilegeEnum.WRITE;
-		if(ABBR_DELETE.equals(abbr)) return PrivilegeEnum.DELETE;
+		if(ABBR_NONE.equals(abbr)) return AcePrivilege.NONE;
+		if(ABBR_BROWSE.equals(abbr)) return AcePrivilege.BROWSE;
+		if(ABBR_READ.equals(abbr)) return AcePrivilege.READ;
+		if(ABBR_WRITE.equals(abbr)) return AcePrivilege.WRITE;
+		if(ABBR_DELETE.equals(abbr)) return AcePrivilege.DELETE;
 		
-		return PrivilegeEnum.NONE;
+		return AcePrivilege.NONE;
 	}
 	
 	/** The Ace type enumerator */
-	public static enum TypeEnum{
+	public static enum AceType{
 
 		User( "u",3),
 		Owner( "u",3),
@@ -82,7 +82,7 @@ public class AclConstants {
 		/**
 		 * Hide default constructor 
 		 **/
-		private TypeEnum( String abbr, int priority){  
+		private AceType( String abbr, int priority){  
 			this.abbr = abbr;
 			this.priority = priority;
 	    }
@@ -94,12 +94,12 @@ public class AclConstants {
 	 * for [u] we only return TypeEnum.User.
 	 * 
 	 **/
-	public static TypeEnum convertType(String abbr){
+	public static AceType convertType(String abbr){
 		
-		if(ABBR_USER.equals(abbr)) return TypeEnum.User;
-		if(ABBR_GROUP.equals(abbr)) return TypeEnum.Group;
-		if(ABBR_OTHER.equals(abbr)) return TypeEnum.Other;
+		if(ABBR_USER.equals(abbr)) return AceType.User;
+		if(ABBR_GROUP.equals(abbr)) return AceType.Group;
+		if(ABBR_OTHER.equals(abbr)) return AceType.Other;
 
-		return TypeEnum.User;
+		return AceType.User;
 	}
 }

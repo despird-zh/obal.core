@@ -8,7 +8,7 @@ import org.apache.hadoop.hbase.util.Bytes;
 
 import com.dcube.common.SimpleConverter;
 import com.dcube.core.security.AclConstants;
-import com.dcube.core.security.AclConstants.PrivilegeEnum;
+import com.dcube.core.security.AclConstants.AcePrivilege;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -135,16 +135,16 @@ public class HAclBrowseFilter extends FilterBase {
 		// check owner's privilege , only one cell
 		if(ownerbrowse == null && CellUtil.matchingColumn(cell, this.aclColumnFamily, this.ownerPrefix) ){
 			// set if could be browse
-			PrivilegeEnum v = AclConstants.convertPrivilege(new String(value));
-			ownerbrowse = v.priority >= PrivilegeEnum.BROWSE.priority;
+			AcePrivilege v = AclConstants.convertPrivilege(new String(value));
+			ownerbrowse = v.priority >= AcePrivilege.BROWSE.priority;
 			
 			return ReturnCode.INCLUDE;
 		}		
 		// check other's privilege , only one cell
 		if(otherbrowse == null && CellUtil.matchingColumn(cell, this.aclColumnFamily, this.otherPrefix) ){
 			// set if could be browse
-			PrivilegeEnum v = AclConstants.convertPrivilege(new String(value));
-			otherbrowse = v.priority >= PrivilegeEnum.BROWSE.priority;
+			AcePrivilege v = AclConstants.convertPrivilege(new String(value));
+			otherbrowse = v.priority >= AcePrivilege.BROWSE.priority;
 			return ReturnCode.INCLUDE;
 		}
 		
@@ -157,8 +157,8 @@ public class HAclBrowseFilter extends FilterBase {
 			if(!groups.contains(new String(groupname))) return ReturnCode.INCLUDE;
 			
 			// set if could be browse
-			PrivilegeEnum v = AclConstants.convertPrivilege(new String(value));		
-			groupbrowse = v.priority >= PrivilegeEnum.BROWSE.priority;
+			AcePrivilege v = AclConstants.convertPrivilege(new String(value));		
+			groupbrowse = v.priority >= AcePrivilege.BROWSE.priority;
 			return ReturnCode.INCLUDE;
 		}
 		
@@ -169,8 +169,8 @@ public class HAclBrowseFilter extends FilterBase {
 			if(!Bytes.equals(account, namedaccount)) return ReturnCode.INCLUDE;
 			
 			// set if could be browse
-			PrivilegeEnum v = AclConstants.convertPrivilege(new String(value));			
-			namedbrowse = v.priority >= PrivilegeEnum.BROWSE.priority;
+			AcePrivilege v = AclConstants.convertPrivilege(new String(value));			
+			namedbrowse = v.priority >= AcePrivilege.BROWSE.priority;
 			return ReturnCode.INCLUDE;
 		}
 		

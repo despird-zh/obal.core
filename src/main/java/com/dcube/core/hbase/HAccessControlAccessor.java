@@ -46,8 +46,8 @@ import com.dcube.core.accessor.AccessControlEntry;
 import com.dcube.core.accessor.AccessorContext;
 import com.dcube.core.accessor.EntityAccessor;
 import com.dcube.core.security.AclConstants;
-import com.dcube.core.security.AclConstants.PrivilegeEnum;
-import com.dcube.core.security.AclConstants.TypeEnum;
+import com.dcube.core.security.AclConstants.AcePrivilege;
+import com.dcube.core.security.AclConstants.AceType;
 import com.dcube.core.security.EntryAce;
 import com.dcube.core.security.EntryAcl;
 import com.dcube.core.security.IAccessControlAccessor;
@@ -259,7 +259,7 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
 	 * @return EntryAce 
 	 **/
 	@Override
-	public EntryAce getEntryAce(String entryKey, TypeEnum etype, String name)throws AccessorException{
+	public EntryAce getEntryAce(String entryKey, AceType etype, String name)throws AccessorException{
 
 		HTableInterface table = null;
 		EntryAce rtv = new EntryAce(etype, name);
@@ -283,22 +283,22 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
     			String[] parts = StringUtils.split( qualifier, CoreConstants.KEYS_SEPARATOR);// separator->[:]
     			String value = Bytes.toString(entry.getValue());
     			
-    			if(parts.length == 1 && (etype == TypeEnum.Owner || etype == TypeEnum.Other )){
+    			if(parts.length == 1 && (etype == AceType.Owner || etype == AceType.Other )){
     				// only owner and other basic privilege match this
-    				PrivilegeEnum priv = AclConstants.convertPrivilege(value);
-    				TypeEnum type = AclConstants.convertType(parts[0]);
-    				if(type != TypeEnum.Other){
+    				AcePrivilege priv = AclConstants.convertPrivilege(value);
+    				AceType type = AclConstants.convertType(parts[0]);
+    				if(type != AceType.Other){
     					
     					rtv.setName(owner);
     				}
     				rtv.setPrivilege(priv);
     			}
     			else if(parts.length == 2){
-    				if(qualifier.endsWith(CoreConstants.KEYS_SEPARATOR) && (etype == TypeEnum.User || etype == TypeEnum.Group )){
+    				if(qualifier.endsWith(CoreConstants.KEYS_SEPARATOR) && (etype == AceType.User || etype == AceType.Group )){
     					// normal or group basic privilege ,eg. u:usr1: / g:grp1:
-    					PrivilegeEnum priv = AclConstants.convertPrivilege(value);
+    					AcePrivilege priv = AclConstants.convertPrivilege(value);
     					rtv.setPrivilege(priv);
-    				}else if(etype == TypeEnum.Owner || etype == TypeEnum.Other ){
+    				}else if(etype == AceType.Owner || etype == AceType.Other ){
     					// owner or other extend permission ,eg. u:download / o:upload    					
     					rtv.grant(parts[1]);
     				}				
@@ -367,7 +367,7 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
 	 * @param name the subject name
 	 * @param permissions 
 	 **/
-	public void grantPermission(String entryKey, TypeEnum type, String name, String ... permissions)throws AccessorException{
+	public void grantPermission(String entryKey, AceType type, String name, String ... permissions)throws AccessorException{
 
 		HTableInterface table = null;
 		BaseEntity entitySchema = (BaseEntity)getEntitySchema();
@@ -382,7 +382,7 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
     			
     			cf = AclConstants.CF_ACL.getBytes();
     			String permQualifier = null;
-    			if(type == TypeEnum.Owner || type == TypeEnum.Other){
+    			if(type == AceType.Owner || type == AceType.Other){
     				//owner or other extend permission ,eg. u:download / o:upload    
     				permQualifier = type.abbr
         					+ CoreConstants.KEYS_SEPARATOR
@@ -427,7 +427,7 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
 	 * @param name the subject name
 	 * @param permissions 
 	 **/
-	public void revokePermissions(String entryKey, TypeEnum type, String name, String ... permissions)throws AccessorException{
+	public void revokePermissions(String entryKey, AceType type, String name, String ... permissions)throws AccessorException{
 		HTableInterface table = null;
 		BaseEntity entitySchema = (BaseEntity)getEntitySchema();
         try {  
@@ -440,7 +440,7 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
     			cf = AclConstants.CF_ACL.getBytes();
 
     			String permQualifier = null;
-    			if(type == TypeEnum.Owner || type == TypeEnum.Other){
+    			if(type == AceType.Owner || type == AceType.Other){
     				//owner or other extend permission ,eg. u:download / o:upload    
     				permQualifier = type.abbr
         					+ CoreConstants.KEYS_SEPARATOR
@@ -482,7 +482,7 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
 	 * @param type the type of ace
 	 * @param name the subject name
 	 **/
-	public Set<String> getPermissions(String entryKey, TypeEnum type, String name)throws AccessorException{
+	public Set<String> getPermissions(String entryKey, AceType type, String name)throws AccessorException{
 
 		HTableInterface table = null;
 		Set<String> rtv = new HashSet<String>();
@@ -505,22 +505,22 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
     			
     			String[] parts = StringUtils.split( Bytes.toString(entry.getKey()), CoreConstants.KEYS_SEPARATOR);
     			String qualifier = Bytes.toString(entry.getKey());
-    			TypeEnum typeTemp = TypeEnum.valueOf(parts[0]);
+    			AceType typeTemp = AceType.valueOf(parts[0]);
     			if(parts.length == 2 && !qualifier.endsWith(CoreConstants.KEYS_SEPARATOR)){
     				//owner or other extend permission ,eg. u:download / o:upload   
-    				if(type == TypeEnum.Owner && typeTemp == TypeEnum.User){
+    				if(type == AceType.Owner && typeTemp == AceType.User){
     					rtv.add(parts[1]);
     				}
-    				if(typeTemp == TypeEnum.Other){
+    				if(typeTemp == AceType.Other){
     					rtv.add(parts[1]);
     				}    				
     			}else if(parts.length == 3 && !qualifier.endsWith(CoreConstants.KEYS_SEPARATOR)){
     				// normal user and group extend permission
     				// u:usr1:download
     				// g:grp1:upload
-    				if(typeTemp == TypeEnum.Group && parts[1].equals(name))
+    				if(typeTemp == AceType.Group && parts[1].equals(name))
     					rtv.add(parts[2]);   
-    				if(typeTemp == TypeEnum.User && parts[1].equals(name))
+    				if(typeTemp == AceType.User && parts[1].equals(name))
     					rtv.add(parts[2]);   
     			}
 
@@ -551,7 +551,7 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
 	 * @param name the subject name
 	 * @param privilege the privilege none/browse/read/write/delete
 	 **/
-	public boolean promote(String entryKey, TypeEnum type, String name, PrivilegeEnum privilege)throws AccessorException{
+	public boolean promote(String entryKey, AceType type, String name, AcePrivilege privilege)throws AccessorException{
 		HTableInterface table = null;
 		BaseEntity entitySchema = (BaseEntity)getEntitySchema();
         try {  
@@ -561,7 +561,7 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
         	get.addFamily(cf);
         	Result result = table.get(get);
         	String qualifier ;
-        	if(type == TypeEnum.Other || type == TypeEnum.Owner){
+        	if(type == AceType.Other || type == AceType.Owner){
         		qualifier = type.abbr
     					+ CoreConstants.KEYS_SEPARATOR;
         	}else{
@@ -574,7 +574,7 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
         	Cell cell = result.getColumnLatestCell(cf, qualifier.getBytes());
         	String val = Bytes.toString(cell.getValueArray());
         	
-        	PrivilegeEnum current = AclConstants.convertPrivilege(val);
+        	AcePrivilege current = AclConstants.convertPrivilege(val);
         	
         	if(current.priority > privilege.priority)// 
         		return false;
@@ -607,7 +607,7 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
 	 * @param name the subject name
 	 * @param privilege the privilege none/browse/read/write/delete
 	 **/
-	public boolean demote(String entryKey, TypeEnum type, String name, PrivilegeEnum privilege)throws AccessorException{
+	public boolean demote(String entryKey, AceType type, String name, AcePrivilege privilege)throws AccessorException{
 		HTableInterface table = null;
 		BaseEntity entitySchema = (BaseEntity)getEntitySchema();
         try {  
@@ -617,7 +617,7 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
         	get.addFamily(cf);
         	Result result = table.get(get);
         	String qualifier ;
-        	if(type == TypeEnum.Other || type == TypeEnum.Owner){
+        	if(type == AceType.Other || type == AceType.Owner){
         		qualifier = type.abbr
     					+ CoreConstants.KEYS_SEPARATOR;
         	}else{
@@ -630,7 +630,7 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
         	Cell cell = result.getColumnLatestCell(cf, qualifier.getBytes());
         	String val = Bytes.toString(cell.getValueArray());
         	
-        	PrivilegeEnum current = AclConstants.convertPrivilege(val);
+        	AcePrivilege current = AclConstants.convertPrivilege(val);
         	
         	if(current.priority < privilege.priority)// 
         		return false;
@@ -663,7 +663,7 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
 	 * @param name the subject name
 	 * @param privilege the privilege none/browse/read/write/delete
 	 **/
-	public void setPrivilege(String entryKey, TypeEnum type, String name, PrivilegeEnum privilege)throws AccessorException{
+	public void setPrivilege(String entryKey, AceType type, String name, AcePrivilege privilege)throws AccessorException{
 		HTableInterface table = null;
 		BaseEntity entitySchema = (BaseEntity)getEntitySchema();
         try {  
@@ -673,7 +673,7 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
     		byte[] cf = null;
     		
         	String qualifier ;
-        	if(type == TypeEnum.Other || type == TypeEnum.Owner){
+        	if(type == AceType.Other || type == AceType.Owner){
         		qualifier = type.abbr
     					+ CoreConstants.KEYS_SEPARATOR;
         	}else{
@@ -709,7 +709,7 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
 	 * @param type the type of ace
 	 * @param name the subject name
 	 **/
-	public PrivilegeEnum getPrivilege(String entryKey, TypeEnum type, String name)throws AccessorException{
+	public AcePrivilege getPrivilege(String entryKey, AceType type, String name)throws AccessorException{
 		
 		HTableInterface table = null;
 
@@ -724,7 +724,7 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
         	
     		NavigableMap<byte[], byte[]> acemap = result.getFamilyMap(AclConstants.CF_ACL.getBytes());
         	String qualifier ;
-        	if(type == TypeEnum.Other || type == TypeEnum.Owner){
+        	if(type == AceType.Other || type == AceType.Owner){
         		qualifier = type.abbr
     					+ CoreConstants.KEYS_SEPARATOR;
         	}else{
@@ -772,34 +772,34 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
 			
 			if(parts.length == 1){
 				// only owner and other basic privilege match this
-				PrivilegeEnum priv = AclConstants.convertPrivilege(value);
-				TypeEnum type = AclConstants.convertType(parts[0]);
-				if(type == TypeEnum.Other){
-					ace = new EntryAce(type,TypeEnum.Other.name(),priv);
+				AcePrivilege priv = AclConstants.convertPrivilege(value);
+				AceType type = AclConstants.convertType(parts[0]);
+				if(type == AceType.Other){
+					ace = new EntryAce(type,AceType.Other.name(),priv);
 				}else{
-					ace = new EntryAce(TypeEnum.Owner,owner,priv);
+					ace = new EntryAce(AceType.Owner,owner,priv);
 				}
 			}
 			else if(parts.length == 2){
 				if(qualifier.endsWith(CoreConstants.KEYS_SEPARATOR)){
 					// normal or group basic privilege ,eg. u:usr1: / g:grp1:
-					PrivilegeEnum priv = AclConstants.convertPrivilege(value);
-					TypeEnum type = AclConstants.convertType(parts[0]);
+					AcePrivilege priv = AclConstants.convertPrivilege(value);
+					AceType type = AclConstants.convertType(parts[0]);
 					ace = new EntryAce(type,parts[1],priv);
 				}else{
 					// owner or other extend permission ,eg. u:download / o:upload
-					TypeEnum type = AclConstants.convertType(parts[0]);
-					if(type == TypeEnum.Other){
-						ace = new EntryAce(type,TypeEnum.Other.name(),parts[1]);
+					AceType type = AclConstants.convertType(parts[0]);
+					if(type == AceType.Other){
+						ace = new EntryAce(type,AceType.Other.name(),parts[1]);
 					}else{
-						ace = new EntryAce(TypeEnum.Owner,owner,parts[1]);
+						ace = new EntryAce(AceType.Owner,owner,parts[1]);
 					}
 				}				
 			}else if(parts.length == 3){
 				// normal user and group extend permission
 				// u:usr1:download
 				// g:grp1:upload
-				TypeEnum type = AclConstants.convertType(parts[0]);
+				AceType type = AclConstants.convertType(parts[0]);
 				ace = new EntryAce(type,parts[1],parts[2]);
 				
 			}
@@ -823,12 +823,12 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
 			String qualifier = ace.getType().abbr
 					+ CoreConstants.KEYS_SEPARATOR;
 			cf = AclConstants.CF_ACL.getBytes();
-			if(TypeEnum.Owner == ace.getType()){
+			if(AceType.Owner == ace.getType()){
 				// owner
 				put.add(cf, qualifier.getBytes(), ace.getPrivilege().toString().getBytes());
 				// save owner name
 				put.add(cf, AclConstants.QL_OWNRER.getBytes(), ace.getName().getBytes()); 
-			}else if(TypeEnum.Other == ace.getType()){
+			}else if(AceType.Other == ace.getType()){
 				// owner
 				put.add(cf, qualifier.getBytes(), ace.getPrivilege().toString().getBytes());				
 			}else {

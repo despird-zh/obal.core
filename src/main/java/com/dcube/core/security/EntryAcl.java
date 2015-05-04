@@ -3,8 +3,8 @@ package com.dcube.core.security;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dcube.core.security.AclConstants.PrivilegeEnum;
-import com.dcube.core.security.AclConstants.TypeEnum;
+import com.dcube.core.security.AclConstants.AcePrivilege;
+import com.dcube.core.security.AclConstants.AceType;
 /**
  * EntryAcl is the entry access control list, item of it is access control setting for visitor
  * 
@@ -89,7 +89,7 @@ public class EntryAcl {
 		
 		for(EntryAce e:aces){
 			
-			if(TypeEnum.User == e.getType())
+			if(AceType.User == e.getType())
 				uaces.add(e);
 		}
 		
@@ -106,14 +106,14 @@ public class EntryAcl {
 		
 		for(EntryAce e:aces){
 			
-			if(TypeEnum.Group == e.getType())
+			if(AceType.Group == e.getType())
 				gaces.add(e);
 		}
 		
 		return gaces;
 	}
 
-	public EntryAce getEntryAce(TypeEnum type, String name){
+	public EntryAce getEntryAce(AceType type, String name){
 		
 		for(EntryAce e:aces){
 			
@@ -131,21 +131,21 @@ public class EntryAcl {
 	 **/
 	public boolean checkReadable(Principal principal){
 		
-		PrivilegeEnum readPriv = PrivilegeEnum.NONE;
+		AcePrivilege readPriv = AcePrivilege.NONE;
 		
 		for(EntryAce ace:aces){
 			
-			if(TypeEnum.User == ace.getType() && ace.getName().equals(principal.getAccount())){
+			if(AceType.User == ace.getType() && ace.getName().equals(principal.getAccount())){
 				
 				readPriv = readPriv.priority < ace.getPrivilege().priority ? ace.getPrivilege():readPriv;
 				
-			}else if(TypeEnum.Group == ace.getType() && principal.inGroup(ace.getName())){
+			}else if(AceType.Group == ace.getType() && principal.inGroup(ace.getName())){
 				
 				readPriv = readPriv.priority < ace.getPrivilege().priority ? ace.getPrivilege():readPriv;
 					
 			}
 			
-			if(readPriv != PrivilegeEnum.NONE)
+			if(readPriv != AcePrivilege.NONE)
 				return true;
 		}
 		

@@ -4,8 +4,8 @@ import java.util.Set;
 
 import com.dcube.core.IEntityAccessor;
 import com.dcube.core.IEntityEntry;
-import com.dcube.core.security.AclConstants.PrivilegeEnum;
-import com.dcube.core.security.AclConstants.TypeEnum;
+import com.dcube.core.security.AclConstants.AcePrivilege;
+import com.dcube.core.security.AclConstants.AceType;
 import com.dcube.exception.AccessorException;
 
 /**
@@ -20,7 +20,7 @@ public interface IAccessControlAccessor<GB extends IEntityEntry> extends IEntity
 	 * @param name the subject of ace
 	 * @return EntryAce 
 	 **/
-	public EntryAce getEntryAce(String key, TypeEnum type, String name) throws AccessorException;
+	public EntryAce getEntryAce(String key, AceType type, String name) throws AccessorException;
 	
 	/**
 	 * Get the entry acl
@@ -36,7 +36,7 @@ public interface IAccessControlAccessor<GB extends IEntityEntry> extends IEntity
 	 * @param name the subject name
 	 * @param permissions 
 	 **/
-	public void grantPermission(String key, TypeEnum type, String name, String ... permissions)throws AccessorException;
+	public void grantPermission(String key, AceType type, String name, String ... permissions)throws AccessorException;
 	
 	/**
 	 * Revoke the permission from specified subject on entry
@@ -45,7 +45,7 @@ public interface IAccessControlAccessor<GB extends IEntityEntry> extends IEntity
 	 * @param name the subject name
 	 * @param permissions 
 	 **/
-	public void revokePermission(String key, TypeEnum type, String name, String ... permissions)throws AccessorException;
+	public void revokePermission(String key, AceType type, String name, String ... permissions)throws AccessorException;
 	
 	/**
 	 * Get the permissions of specified subject on entry
@@ -53,7 +53,7 @@ public interface IAccessControlAccessor<GB extends IEntityEntry> extends IEntity
 	 * @param type the type of ace
 	 * @param name the subject name
 	 **/
-	public Set<String> getPermissions(String key, TypeEnum type, String name)throws AccessorException;
+	public Set<String> getPermissions(String key, AceType type, String name)throws AccessorException;
 	
 	/**
 	 * Promote the privilege
@@ -62,7 +62,7 @@ public interface IAccessControlAccessor<GB extends IEntityEntry> extends IEntity
 	 * @param name the subject name
 	 * @param privilege the privilege none/browse/read/write/delete
 	 **/
-	public boolean promote(String key, TypeEnum type, String name, PrivilegeEnum privilege)throws AccessorException;
+	public boolean promote(String key, AceType type, String name, AcePrivilege privilege)throws AccessorException;
 	
 	/**
 	 * Demote the privilege
@@ -71,7 +71,7 @@ public interface IAccessControlAccessor<GB extends IEntityEntry> extends IEntity
 	 * @param name the subject name
 	 * @param privilege the privilege none/browse/read/write/delete
 	 **/
-	public boolean demote(String key, TypeEnum type, String name, PrivilegeEnum privilege)throws AccessorException;
+	public boolean demote(String key, AceType type, String name, AcePrivilege privilege)throws AccessorException;
 	
 	/**
 	 * Set the privilege
@@ -80,7 +80,7 @@ public interface IAccessControlAccessor<GB extends IEntityEntry> extends IEntity
 	 * @param name the subject name
 	 * @param privilege the privilege none/browse/read/write/delete
 	 **/
-	public void setPrivilege(String key, TypeEnum type, String name, PrivilegeEnum privilege)throws AccessorException;
+	public void setPrivilege(String key, AceType type, String name, AcePrivilege privilege)throws AccessorException;
 	
 	/**
 	 * Get the privilege
@@ -88,6 +88,6 @@ public interface IAccessControlAccessor<GB extends IEntityEntry> extends IEntity
 	 * @param type the type of ace
 	 * @param name the subject name
 	 **/
-	public PrivilegeEnum getPrivilege(String key, TypeEnum type, String name)throws AccessorException;
+	public AcePrivilege getPrivilege(String key, AceType type, String name)throws AccessorException;
 	
 }

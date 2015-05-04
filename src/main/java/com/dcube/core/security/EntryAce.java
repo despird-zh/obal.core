@@ -7,8 +7,8 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import com.dcube.core.CoreConstants;
-import com.dcube.core.security.AclConstants.PrivilegeEnum;
-import com.dcube.core.security.AclConstants.TypeEnum;
+import com.dcube.core.security.AclConstants.AcePrivilege;
+import com.dcube.core.security.AclConstants.AceType;
 
 /**
  * EntryAce is the access control setting for operator, it could be set at three levels.
@@ -32,9 +32,9 @@ public class EntryAce implements Comparable<EntryAce> {
 	/** the group/user name */
 	private String name;	
 	/** the privilege of role*/
-	private PrivilegeEnum privilege;	
+	private AcePrivilege privilege;	
 	/** the entry type */
-	private TypeEnum type;	
+	private AceType type;	
 	/** the permission set */
 	private Set<String> permissionSet;
 	
@@ -44,11 +44,11 @@ public class EntryAce implements Comparable<EntryAce> {
 	 * @param combinedValue
 	 *  
 	 **/
-	public EntryAce(TypeEnum TypeEnum, String name){
+	public EntryAce(AceType TypeEnum, String name){
 		
 		this.type = TypeEnum;
 		this.name = name;
-		this.privilege = PrivilegeEnum.NONE;
+		this.privilege = AcePrivilege.NONE;
 
 	}
 	
@@ -59,9 +59,9 @@ public class EntryAce implements Comparable<EntryAce> {
 	 * @param privilege the access control privilege
 	 *  
 	 **/
-	public EntryAce(String name, PrivilegeEnum privilege){
+	public EntryAce(String name, AcePrivilege privilege){
 		
-		this.type = TypeEnum.User;
+		this.type = AceType.User;
 		this.name = name;
 		this.privilege = privilege;
 
@@ -75,7 +75,7 @@ public class EntryAce implements Comparable<EntryAce> {
 	 * @param privilege the access control privilege
 	 *  
 	 **/
-	public EntryAce(TypeEnum TypeEnum, String name, PrivilegeEnum privilege){
+	public EntryAce(AceType TypeEnum, String name, AcePrivilege privilege){
 		
 		this.type = TypeEnum;
 		this.name = name;
@@ -92,7 +92,7 @@ public class EntryAce implements Comparable<EntryAce> {
 	 *  
 	 **/
 
-	public EntryAce(TypeEnum TypeEnum,  String name, PrivilegeEnum privilege, String ... permissions){
+	public EntryAce(AceType TypeEnum,  String name, AcePrivilege privilege, String ... permissions){
 		
 		this.type = TypeEnum;
 		this.name = name;
@@ -109,7 +109,7 @@ public class EntryAce implements Comparable<EntryAce> {
 		}
 	}
 	
-	public EntryAce(TypeEnum TypeEnum,  String name, String ... permissions){
+	public EntryAce(AceType TypeEnum,  String name, String ... permissions){
 		
 		this.type = TypeEnum;
 		this.name = name;
@@ -144,7 +144,7 @@ public class EntryAce implements Comparable<EntryAce> {
 	/**
 	 * Get the type the acl entry: user or group 
 	 **/
-	public TypeEnum getType(){
+	public AceType getType(){
 		
 		return this.type;
 	}
@@ -152,7 +152,7 @@ public class EntryAce implements Comparable<EntryAce> {
 	/**
 	 * Get the privilege : none, browse, read, write, delete 
 	 **/
-	public PrivilegeEnum getPrivilege(){
+	public AcePrivilege getPrivilege(){
 		
 		return this.privilege;
 	}
@@ -160,7 +160,7 @@ public class EntryAce implements Comparable<EntryAce> {
 	/**
 	 * Set the privilege 
 	 **/
-	public void setPrivilege(PrivilegeEnum privilege){
+	public void setPrivilege(AcePrivilege privilege){
 		
 		this.privilege = privilege;
 	}
