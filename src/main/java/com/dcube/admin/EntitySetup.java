@@ -35,6 +35,9 @@ public class EntitySetup {
 		setupRoleSchema();
 	}
 
+	/**
+	 * Set up the meta info&attribute schema 
+	 **/
 	private void setupMetaSchema() {
 
 		EntityAdmin ea = EntityAdmin.getInstance();
@@ -61,6 +64,9 @@ public class EntitySetup {
 		}
 	}
 
+	/**
+	 * set up the user schema 
+	 **/
 	private void setupUserSchema() {
 
 		EntityAdmin eadmin = EntityAdmin.getInstance();
@@ -121,6 +127,9 @@ public class EntitySetup {
 
 	}
 
+	/**
+	 * set up the group schema 
+	 **/
 	private void setupGroupSchema() {
 
 		EntityAdmin eadmin = EntityAdmin.getInstance();
@@ -140,25 +149,19 @@ public class EntitySetup {
 				GroupEnum.Description.colfamily, 
 				GroupEnum.Description.qualifier);
 		meta.addAttr(attr);
-		
-		attr = new EntityAttr(GroupEnum.Parent.attribute,
-				GroupEnum.Parent.colfamily, 
-				GroupEnum.Parent.qualifier);
-		meta.addAttr(attr);
-		
+				
 		attr = new EntityAttr(GroupEnum.Users.attribute, EntityAttr.AttrMode.MAP, EntityAttr.AttrType.STRING, 
 				GroupEnum.Users.colfamily, 
 				GroupEnum.Users.qualifier);
 		meta.addAttr(attr);
-		
-		attr = new EntityAttr(GroupEnum.Groups.attribute, EntityAttr.AttrMode.MAP, EntityAttr.AttrType.STRING, 
-				GroupEnum.Groups.colfamily, 
-				GroupEnum.Groups.qualifier);
-		meta.addAttr(attr);
-		
+				
 		eadmin.setupSchema(meta);
 	}
 
+	/**
+	 * setup role schema
+	 * role will be used as per the business logic 
+	 **/
 	private void setupRoleSchema() {
 
 		EntityAdmin eadmin = EntityAdmin.getInstance();

@@ -10,6 +10,7 @@ import com.dcube.core.TraceInfo;
 import com.dcube.core.accessor.TraceableEntry;
 import com.dcube.core.hbase.HEntityAccessor;
 import com.dcube.core.security.UserGroup;
+import com.dcube.core.security.UserRole;
 import com.dcube.exception.BaseException;
 import com.dcube.meta.EntityConstants;
 import com.dcube.meta.EntityConstants.GroupEnum;
@@ -40,27 +41,8 @@ public class GroupInfoEAccessor extends HEntityAccessor<TraceableEntry>{
 				public UserGroup toTarget(TraceableEntry fromObject)
 						throws BaseException {
 					
-					String name = fromObject.getAttrValue(GroupEnum.Name.attribute, String.class);
-					EntryKey key = fromObject.getEntryKey();
-					UserGroup group = new UserGroup(name,key.getKey());
-					
-					TraceInfo tinfo = fromObject.getTraceInfo();
-					group.setTraceInfo(tinfo);
-					group.setDescription(fromObject.getAttrValue(GroupEnum.Description.attribute, String.class));
-					
-					Map<String, String> mapAttr = fromObject.getAttrValue(GroupEnum.Users.attribute, Map.class);
-					if(mapAttr != null){
-						Set<String> userset = mapAttr.keySet();
-						group.setUsers(userset);
-					}
-					mapAttr = fromObject.getAttrValue(GroupEnum.Groups.attribute, Map.class);
-					if(mapAttr != null){
-						Set<String> groupset = mapAttr.keySet();
-						group.setGroups(groupset);
-					}
-					
-					group.setParent(fromObject.getAttrValue(GroupEnum.Parent.attribute, String.class));
-					
+					UserGroup group = new UserGroup();
+					group.setGenericEntry(fromObject);
 					return group;
 				}
 
@@ -68,37 +50,7 @@ public class GroupInfoEAccessor extends HEntityAccessor<TraceableEntry>{
 				public TraceableEntry toSource(UserGroup toObject)
 						throws BaseException {
 					
-					String id = toObject.getKey();
-					
-					TraceableEntry entry = new TraceableEntry(EntityConstants.ENTITY_USER_GROUP,id);
-					
-					EntityMeta meta = EntityManager.getInstance().getEntityMeta(EntityConstants.ENTITY_USER_GROUP);
-					entry.setAttrValue(meta.getAttr(GroupEnum.Name.attribute), toObject.name());
-					entry.setAttrValue(meta.getAttr(GroupEnum.Description.attribute), toObject.getDescription());
-					
-					Set<String> uset = toObject.getUsers();
-					if(uset != null){
-						Map<String, String> attrMap = new HashMap<String, String>();
-						for(String t:uset){
-							attrMap.put(t, EntityConstants.BLANK_VALUE);
-						}
-						entry.setAttrValue(meta.getAttr(GroupEnum.Users.attribute), attrMap);
-					}else{
-						entry.setAttrValue(meta.getAttr(GroupEnum.Users.attribute), null);
-					}
-					Set<String> gset = toObject.getGroups();
-					if(gset != null){
-						Map<String, String> attrMap = new HashMap<String, String>();
-						for(String t:gset){
-							attrMap.put(t, EntityConstants.BLANK_VALUE);
-						}
-						entry.setAttrValue(meta.getAttr(GroupEnum.Groups.attribute), attrMap);
-					}else{
-						entry.setAttrValue(meta.getAttr(GroupEnum.Groups.attribute), null);
-					}
-					entry.setAttrValue(meta.getAttr(GroupEnum.Parent.attribute), toObject.getParent());
-					
-					entry.setTraceInfo(toObject.getTraceInfo());
+					TraceableEntry entry = (TraceableEntry)toObject.getGenericEntry();
 					return entry;
 				}
 				

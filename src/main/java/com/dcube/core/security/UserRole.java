@@ -74,9 +74,9 @@ public class UserRole extends EntryParser{
 				if(!attrMap.containsKey(t))
 					attrMap.put(t, EntityConstants.BLANK_VALUE);
 			}
-			this.setAttrValue(UserEnum.Groups.attribute, attrMap);
+			this.setAttrValue(RoleEnum.Users.attribute, attrMap);
 		}else
-			this.setAttrValue(UserEnum.Groups.attribute, null);
+			this.setAttrValue(RoleEnum.Users.attribute, null);
 	}
 
 	public Set<String> getGroups() {

@@ -174,9 +174,7 @@ public class EntityConstants {
 
 		Name("i_group_name","groupname"),
 		Description("i_description","description"),
-		Parent("i_parent","parent"),
-		Users("i_users" , "users"),
-		Groups("i_groups","groups");
+		Users("i_users" , "users");
 		
 		public final String attribute;
 		public final String qualifier;
