@@ -49,7 +49,7 @@ public class EntryParser {
 		if(rawEntry instanceof EntityEntry)
 			return ((EntityEntry)rawEntry).getEntryKey();
 		else
-			throw new UnsupportedOperationException("Only EntityEntry provide EntryKey"); 
+			throw new UnsupportedOperationException("Only EntityEntry support EntryKey"); 
 	}
 	
 	/**
@@ -60,7 +60,7 @@ public class EntryParser {
 		if(rawEntry instanceof EntityEntry)
 			((EntityEntry)rawEntry).setEntryKey(entryKey);
 		else
-			throw new UnsupportedOperationException("Only EntityEntry provide EntryKey"); 
+			throw new UnsupportedOperationException("Only EntityEntry support EntryKey"); 
 	}
 	
 	/**
@@ -111,7 +111,7 @@ public class EntryParser {
 	/**
 	 * Get attribute of Entity
 	 **/
-	public EntityAttr getAttr(String entityname, String attrname){
+	public EntityAttr getEntityAttr(String entityname, String attrname){
 		
 		AttributeItem item = rawEntry.getAttrItem(entityname ,attrname);
 		EntityAttr attr = null;
@@ -139,7 +139,7 @@ public class EntryParser {
 		if(rawEntry instanceof TraceableEntry)
 			return ((TraceableEntry)rawEntry).getTraceInfo();
 		else
-			throw new UnsupportedOperationException("Only TraceableEntry provide TraceInfo"); 
+			throw new UnsupportedOperationException("Only TraceableEntry support TraceInfo"); 
 		
 	}
 	
@@ -151,7 +151,7 @@ public class EntryParser {
 		if(rawEntry instanceof TraceableEntry)
 			((TraceableEntry)rawEntry).setTraceInfo(traceInfo);
 		else
-			throw new UnsupportedOperationException("Only EntityEntry provide TraceInfo"); 
+			throw new UnsupportedOperationException("Only TraceableEntry support TraceInfo"); 
 	}
 	
 	/**
@@ -161,7 +161,7 @@ public class EntryParser {
 		if(rawEntry instanceof AccessControlEntry)
 			return ((AccessControlEntry)rawEntry).getEntryAcl();
 		else
-			throw new UnsupportedOperationException("Only EntityEntry provide EntryAcl"); 
+			throw new UnsupportedOperationException("Only AccessControlEntry support EntryAcl"); 
 	}
 	
 	/**
@@ -172,7 +172,7 @@ public class EntryParser {
 		if(rawEntry instanceof AccessControlEntry)
 			((AccessControlEntry)rawEntry).setEntryAcl(acl);
 		else
-			throw new UnsupportedOperationException("Only EntityEntry provide EntryAcl"); 
+			throw new UnsupportedOperationException("Only AccessControlEntry support EntryAcl"); 
 	}
 	
 	/**
@@ -189,5 +189,35 @@ public class EntryParser {
 	public boolean isTraceable(){
 		
 		return (rawEntry instanceof TraceableEntry);
+	}
+	
+	/**
+	 * Get access control entry object, it just cast the GenericEntry into  AccessControlEntry
+	 **/
+	public AccessControlEntry getAccessControlEntry(){
+		if(rawEntry instanceof AccessControlEntry)
+			return (AccessControlEntry)rawEntry;
+		else
+			throw new UnsupportedOperationException("the rawentry object is not AccessControlEntry"); 
+	}
+	
+	/**
+	 * Get trace entry object, it just cast the GenericEntry into  TraceableEntry
+	 **/
+	public TraceableEntry getTraceableEntry(){
+		if(rawEntry instanceof TraceableEntry)
+			return (TraceableEntry)rawEntry;
+		else
+			throw new UnsupportedOperationException("the rawentry object is not TraceableEntry"); 
+	}
+	
+	/**
+	 * Get entity entry object, it just cast the GenericEntry into  EntityEntry
+	 **/
+	public EntityEntry getEntityEntry(){
+		if(rawEntry instanceof EntityEntry)
+			return (EntityEntry)rawEntry;
+		else
+			throw new UnsupportedOperationException("the rawentry object is not EntityEntry"); 
 	}
 }

@@ -18,16 +18,22 @@ public class TraceableEntry extends EntityEntry implements ITraceable{
 	public TraceableEntry (){
 		
 		super();
+		setNewCreate(new Date(System.currentTimeMillis()));
+		setLastModify(new Date(System.currentTimeMillis()));
 	}
 	
 	public TraceableEntry (String entityName,String key){
 		
 		super(entityName, key);
+		setNewCreate(new Date(System.currentTimeMillis()));
+		setLastModify(new Date(System.currentTimeMillis()));
 	}
 	
 	public TraceableEntry (EntryKey entryKey){
 		
 		super(entryKey);
+		setNewCreate(new Date(System.currentTimeMillis()));
+		setLastModify(new Date(System.currentTimeMillis()));
 	}
 	
 	@Override

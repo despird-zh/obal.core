@@ -25,6 +25,8 @@ public class AccessControlEntry extends EntityEntry implements ITraceable ,IAcce
 	public AccessControlEntry (){
 		
 		super();
+		setNewCreate(new Date(System.currentTimeMillis()));
+		setLastModify(new Date(System.currentTimeMillis()));
 	}
 	
 	/**
@@ -35,6 +37,8 @@ public class AccessControlEntry extends EntityEntry implements ITraceable ,IAcce
 	public AccessControlEntry (String entityName,String key){
 		
 		super(entityName, key);
+		setNewCreate(new Date(System.currentTimeMillis()));
+		setLastModify(new Date(System.currentTimeMillis()));
 	}
 	
 	/**
@@ -43,6 +47,8 @@ public class AccessControlEntry extends EntityEntry implements ITraceable ,IAcce
 	public AccessControlEntry (EntryKey entryKey){
 		
 		super(entryKey);
+		setNewCreate(new Date(System.currentTimeMillis()));
+		setLastModify(new Date(System.currentTimeMillis()));
 	}
 
 	/**
