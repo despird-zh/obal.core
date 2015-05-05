@@ -71,7 +71,7 @@ public class EntityAttr{
 		LONG("LONG"),
 		STRING("STRING"),
 		DATE("DATE"),
-		BOOL("BOOLEAN");
+		BOOLEAN("BOOLEAN");
 		
 		private String type = null;
 		/**

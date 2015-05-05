@@ -48,7 +48,7 @@ public class HWrapperUtils {
 			case INTEGER:
 				rtv = Bytes.toInt(value);
 				break;
-			case BOOL:
+			case BOOLEAN:
 				rtv = Bytes.toBoolean(value);
 				break;
 			case DOUBLE:
@@ -94,7 +94,7 @@ public class HWrapperUtils {
 					map = oReader.readValue(jsonStr);	
 			
 					break;
-				case BOOL:
+				case BOOLEAN:
 					oReader=objectMapper.reader(new TypeReference<HashMap<String,Boolean>>(){});					
 					map = oReader.readValue(jsonStr);	
 					
@@ -157,7 +157,7 @@ public class HWrapperUtils {
 					list = (jsonStr == null)? new ArrayList<Integer>() : (List<?>)oReader.readValue(jsonStr);					
 					break;
 					
-				case BOOL:
+				case BOOLEAN:
 					oReader=objectMapper.reader(new TypeReference<ArrayList<Boolean>>(){});					
 					list = (jsonStr == null)? new ArrayList<Boolean>() : (List<?>)oReader.readValue(jsonStr);	
 					
@@ -221,7 +221,7 @@ public class HWrapperUtils {
 					set = (jsonStr == null)? new HashSet<Integer>() : (Set<?>) oReader.readValue(jsonStr);
 					
 					break;
-				case BOOL:
+				case BOOLEAN:
 					oReader=objectMapper.reader(new TypeReference<HashSet<Boolean>>(){});					
 					set = (jsonStr == null)? new HashSet<Boolean>() : (Set<?>) oReader.readValue(jsonStr);
 					
@@ -388,7 +388,7 @@ public class HWrapperUtils {
 			case INTEGER:
 				bval = (value == null) ? NULL_VAL:Bytes.toBytes((Integer)value);
 				break;
-			case BOOL:
+			case BOOLEAN:
 				bval = (value == null) ? NULL_VAL:Bytes.toBytes((Boolean)value);
 				break;
 			case DOUBLE:
@@ -505,7 +505,7 @@ public class HWrapperUtils {
 			case INTEGER:
 				bval = (value == null) ? NULL_VAL:Bytes.toBytes((Integer)value);
 				break;
-			case BOOL:
+			case BOOLEAN:
 				bval = (value == null) ? NULL_VAL:Bytes.toBytes((Boolean)value);
 				break;
 			case DOUBLE:

@@ -221,22 +221,22 @@ public class EntityManager {
 				AttrEnum.Qualifier.qualifier);
 		meta.addAttr(attr);
 		
-		attr = new EntityAttr(AttrEnum.Hidden.attribute, EntityAttr.AttrType.BOOL, 
+		attr = new EntityAttr(AttrEnum.Hidden.attribute, EntityAttr.AttrType.BOOLEAN, 
 				AttrEnum.Hidden.colfamily, 
 				AttrEnum.Hidden.qualifier);
 		meta.addAttr(attr);
 		
-		attr = new EntityAttr(AttrEnum.Readonly.attribute, EntityAttr.AttrType.BOOL, 				
+		attr = new EntityAttr(AttrEnum.Readonly.attribute, EntityAttr.AttrType.BOOLEAN, 				
 				AttrEnum.Readonly.colfamily, 
 				AttrEnum.Readonly.qualifier);
 		meta.addAttr(attr);
 		
-		attr = new EntityAttr(AttrEnum.Required.attribute, EntityAttr.AttrType.BOOL, 
+		attr = new EntityAttr(AttrEnum.Required.attribute, EntityAttr.AttrType.BOOLEAN, 
 				AttrEnum.Required.colfamily, 
 				AttrEnum.Required.qualifier);
 		meta.addAttr(attr);
 		
-		attr = new EntityAttr(AttrEnum.Indexable.attribute, EntityAttr.AttrType.BOOL, 				
+		attr = new EntityAttr(AttrEnum.Indexable.attribute, EntityAttr.AttrType.BOOLEAN, 				
 				AttrEnum.Indexable.colfamily, 
 				AttrEnum.Indexable.qualifier);
 		meta.addAttr(attr);
@@ -290,7 +290,7 @@ public class EntityManager {
 		meta.addAttr(attr);
 		
 		attr = new EntityAttr(MetaEnum.Traceable.attribute, 
-				EntityAttr.AttrType.BOOL, 
+				EntityAttr.AttrType.BOOLEAN, 
 				MetaEnum.Traceable.colfamily, 
 				MetaEnum.Traceable.qualifier);
 		meta.addAttr(attr);

@@ -37,7 +37,7 @@ public class RWrapperUtils {
 			case INTEGER:
 				rtv = Bytes.toInt(value);
 				break;
-			case BOOL:
+			case BOOLEAN:
 				rtv = Bytes.toBoolean(value);
 				break;
 			case DOUBLE:
@@ -83,7 +83,7 @@ public class RWrapperUtils {
 					case INTEGER:
 						map.put(new String(key), Bytes.toInt(bytes));
 						break;
-					case BOOL:
+					case BOOLEAN:
 						map.put(new String(key), Bytes.toBoolean(bytes));
 						break;
 					case DOUBLE:
@@ -133,7 +133,7 @@ public class RWrapperUtils {
 					case INTEGER:
 						list.add(Bytes.toInt(bytes));
 						break;
-					case BOOL:
+					case BOOLEAN:
 						list.add(Bytes.toBoolean(bytes));
 						break;
 					case DOUBLE:
@@ -184,7 +184,7 @@ public class RWrapperUtils {
 					case INTEGER:
 						set.add(Bytes.toInt(bytes));
 						break;
-					case BOOL:
+					case BOOLEAN:
 						set.add(Bytes.toBoolean(bytes));
 						break;
 					case DOUBLE:
@@ -231,7 +231,7 @@ public class RWrapperUtils {
 			case INTEGER:
 				bval = Bytes.toBytes((Integer)value);
 				break;
-			case BOOL:
+			case BOOLEAN:
 				bval = Bytes.toBytes((Boolean)value);
 				break;
 			case DOUBLE:
@@ -276,7 +276,7 @@ public class RWrapperUtils {
 				case INTEGER:
 					bval = Bytes.toBytes((Integer)pe.getValue());
 					break;
-				case BOOL:
+				case BOOLEAN:
 					bval = Bytes.toBytes((Boolean)pe.getValue());
 					break;
 				case DOUBLE:
@@ -319,7 +319,7 @@ public class RWrapperUtils {
 				case INTEGER:
 					bval = Bytes.toBytes((Integer)listVal.get(i));
 					break;
-				case BOOL:
+				case BOOLEAN:
 					bval = Bytes.toBytes((Boolean)listVal.get(i));
 					break;
 				case DOUBLE:
@@ -367,7 +367,7 @@ public class RWrapperUtils {
 				case INTEGER:
 					bval = Bytes.toBytes((Integer)val);
 					break;
-				case BOOL:
+				case BOOLEAN:
 					bval = Bytes.toBytes((Boolean)val);
 					break;
 				case DOUBLE:
