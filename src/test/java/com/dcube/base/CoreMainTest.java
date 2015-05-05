@@ -1,13 +1,10 @@
 package com.dcube.base;
 
-import java.util.List;
-
 import org.junit.FixMethodOrder;
 import org.junit.runners.MethodSorters;
 
 import com.dcube.admin.EntityAdmin;
 import com.dcube.admin.EntitySetup;
-import com.dcube.core.AccessorDetector;
 import com.dcube.core.AccessorFactory;
 import com.dcube.exception.BaseException;
 import com.dcube.launcher.CoreFacade;
