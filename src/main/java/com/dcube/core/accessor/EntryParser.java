@@ -6,6 +6,7 @@ import java.util.List;
 import com.dcube.core.EntryKey;
 import com.dcube.core.TraceInfo;
 import com.dcube.core.IGenericEntry.AttributeItem;
+import com.dcube.core.security.EntryAcl;
 import com.dcube.exception.MetaException;
 import com.dcube.meta.EntityAttr;
 import com.dcube.meta.EntityManager;
@@ -48,7 +49,7 @@ public class EntryParser {
 		if(rawEntry instanceof EntityEntry)
 			return ((EntityEntry)rawEntry).getEntryKey();
 		else
-			throw new UnsupportedOperationException("Only EntityEntry proveide EntryKey"); 
+			throw new UnsupportedOperationException("Only EntityEntry provide EntryKey"); 
 	}
 	
 	/**
@@ -59,7 +60,7 @@ public class EntryParser {
 		if(rawEntry instanceof EntityEntry)
 			((EntityEntry)rawEntry).setEntryKey(entryKey);
 		else
-			throw new UnsupportedOperationException("Only EntityEntry proveide EntryKey"); 
+			throw new UnsupportedOperationException("Only EntityEntry provide EntryKey"); 
 	}
 	
 	/**
@@ -82,8 +83,7 @@ public class EntryParser {
 		}
 		return rtv;
 	}
-	
-	
+		
 	/**
 	 * Get EntityAttr list, in fact it convert AttributeItem into EntityAttr 
 	 **/
@@ -139,7 +139,7 @@ public class EntryParser {
 		if(rawEntry instanceof TraceableEntry)
 			return ((TraceableEntry)rawEntry).getTraceInfo();
 		else
-			throw new UnsupportedOperationException("Only EntityEntry proveide EntryKey"); 
+			throw new UnsupportedOperationException("Only TraceableEntry provide TraceInfo"); 
 		
 	}
 	
@@ -151,6 +151,43 @@ public class EntryParser {
 		if(rawEntry instanceof TraceableEntry)
 			((TraceableEntry)rawEntry).setTraceInfo(traceInfo);
 		else
-			throw new UnsupportedOperationException("Only EntityEntry proveide EntryKey"); 
+			throw new UnsupportedOperationException("Only EntityEntry provide TraceInfo"); 
+	}
+	
+	/**
+	 * Get the EntryAcl object 
+	 **/
+	public EntryAcl getEntryAcl(){
+		if(rawEntry instanceof AccessControlEntry)
+			return ((AccessControlEntry)rawEntry).getEntryAcl();
+		else
+			throw new UnsupportedOperationException("Only EntityEntry provide EntryAcl"); 
+	}
+	
+	/**
+	 * Set the EntryAcl object 
+	 **/
+	public void setEntryAcl(EntryAcl acl){
+		
+		if(rawEntry instanceof AccessControlEntry)
+			((AccessControlEntry)rawEntry).setEntryAcl(acl);
+		else
+			throw new UnsupportedOperationException("Only EntityEntry provide EntryAcl"); 
+	}
+	
+	/**
+	 * Check if the rawEntry support access control setting 
+	 **/
+	public boolean isAcccessControllable(){
+		
+		return (rawEntry instanceof AccessControlEntry);
+	}
+	
+	/**
+	 * Check if the rawEntry support trace setting 
+	 **/
+	public boolean isTraceable(){
+		
+		return (rawEntry instanceof TraceableEntry);
 	}
 }

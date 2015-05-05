@@ -65,7 +65,7 @@ public class EntryAcl {
 				if(e.getPrivilege().priority < ace.getPrivilege().priority)
 					e.setPrivilege(ace.getPrivilege());
 				
-				e.grant((String[])ace.getPermissions().toArray());
+				e.grant((String[])ace.getPermissions().toArray(new String[0]));
 			}else{// replace original
 				aces.remove(i);
 				aces.add(ace);

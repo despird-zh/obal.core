@@ -843,6 +843,7 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
 			}
 			
 			Set<String> permissionSet = ace.getPermissions();
+			if(permissionSet == null) continue;
 			for(String permission : permissionSet){
 				
 				String permQualifier = qualifier 
