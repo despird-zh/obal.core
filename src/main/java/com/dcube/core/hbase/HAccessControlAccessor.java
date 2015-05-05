@@ -430,7 +430,7 @@ public abstract class HAccessControlAccessor<GB extends AccessControlEntry> exte
 	 * @param name the subject name
 	 * @param permissions 
 	 **/
-	public void revokePermissions(String entryKey, AceType type, String name, String ... permissions)throws AccessorException{
+	public void revokePermission(String entryKey, AceType type, String name, String ... permissions)throws AccessorException{
 		HTableInterface table = null;
 		BaseEntity entitySchema = (BaseEntity)getEntitySchema();
         try {  
