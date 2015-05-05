@@ -16,19 +16,23 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 
- *  column family = acl<br>
- *  -= basic account and group information <br>
- *  owner qualifier: owner / value :[owner account]<br>
+ * <pre>
+ *  column family = acl
+ *  -= basic account and group information 
+ *  owner qualifier: owner / value :[owner account]
  *  
- *  -= basic privilege information <br>
- *  owner privilege qualifier : u: /value :[privilege]<br>
- *  other privilege qualifier : o: /value :[privilege]<br>
+ *  -= basic privilege information 
+ *  owner privilege qualifier : o: /value :[privilege]
+ *  owner privilege qualifier : o:xxxx /value :blank val
+ *  other privilege qualifier : e: /value :[privilege]
+ *  other privilege qualifier : e:xxxx /value :blank val
  *  
- *  -= extend privilege information <br>
- *  user privilege qualifier : u:[xx1]  / value :[privilege]<br>
- *  group privilege qualifier : g:[xx2]  / value :[privilege]<br>
- *  
+ *  -= extend privilege information 
+ *  user privilege qualifier : u:[xx1]:  / value :[privilege]
+ *  user privilege qualifier : u:[xx1]:xxx  / value :blank val
+ *  group privilege qualifier : g:[xx2]:  / value :[privilege]
+ *  group privilege qualifier : g:[xx2]:xxx  / value :blank val
+ *  </pre>
  *  
  **/
 public class HAclBrowseFilter extends FilterBase {
@@ -36,13 +40,11 @@ public class HAclBrowseFilter extends FilterBase {
 	/** column family */
 	protected byte[] aclColumnFamily = AclConstants.CF_ACL.getBytes();
 	
-	protected byte[] ownerPrivQL = AclConstants.AceType.Owner.abbr.getBytes();
-	//protected byte[] ownerPrefix = AclConstants.QL_OWNER_PREFIX.getBytes();
+	protected byte[] ownerPrefix = AclConstants.QL_OWNER_PREFIX.getBytes();
 	
 	protected byte[] userPrefix  = AclConstants.QL_USER_PREFIX.getBytes();
 	protected byte[] groupPrefix = AclConstants.QL_GROUP_PREFIX.getBytes();
 	
-	protected byte[] otherPrivQL = AclConstants.AceType.Other.abbr.getBytes();
 	protected byte[] otherPrefix = AclConstants.QL_OTHER_PREFIX.getBytes();
 	
 	/** owner qualifier */
@@ -139,7 +141,7 @@ public class HAclBrowseFilter extends FilterBase {
 			return ReturnCode.INCLUDE;
 		}
 		// check owner's privilege , only one cell
-		if(ownerbrowse == null && CellUtil.matchingColumn(cell, this.aclColumnFamily, this.ownerPrivQL) ){
+		if(ownerbrowse == null && CellUtil.matchingColumn(cell, this.aclColumnFamily, this.ownerPrefix) ){
 			// set if could be browse
 			AcePrivilege v = AclConstants.convertPrivilege(new String(value));
 			ownerbrowse = v.priority >= AcePrivilege.BROWSE.priority;
@@ -147,7 +149,7 @@ public class HAclBrowseFilter extends FilterBase {
 			return ReturnCode.INCLUDE;
 		}		
 		// check other's privilege , only one cell
-		if(otherbrowse == null && CellUtil.matchingColumn(cell, this.aclColumnFamily, this.otherPrivQL) ){
+		if(otherbrowse == null && CellUtil.matchingColumn(cell, this.aclColumnFamily, this.otherPrefix) ){
 			// set if could be browse
 			AcePrivilege v = AclConstants.convertPrivilege(new String(value));
 			otherbrowse = v.priority >= AcePrivilege.BROWSE.priority;
