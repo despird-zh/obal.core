@@ -13,7 +13,7 @@ import com.dcube.exception.BaseException;
 import com.dcube.launcher.CoreFacade;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING) 
-public class MainTest extends BaseTester{
+public class CoreMainTest extends BaseTester{
 	
 	static{
 		debug("---==: initial log4j");
