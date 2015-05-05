@@ -72,6 +72,7 @@ public class MetaInfoEAccessor extends HEntityAccessor<EntityEntry>{
 					meta.setSchema(fromObject.getAttrValue(MetaEnum.Schema.attribute,String.class));	
 					meta.setTraceable(fromObject.getAttrValue(MetaEnum.Traceable.attribute,Boolean.class));
 					meta.setCategory(fromObject.getAttrValue(MetaEnum.Category.attribute,String.class));
+					meta.setAccessControllable(fromObject.getAttrValue(MetaEnum.AccessControllable.attribute,Boolean.class));
 					// here not set the EntityAttr yet, they'll be set outside.					
 					return meta;
 				}
@@ -91,7 +92,7 @@ public class MetaInfoEAccessor extends HEntityAccessor<EntityEntry>{
 					minfo.setAttrValue(emeta.getAttr(MetaEnum.Traceable.attribute), toObject.getTraceable());
 					minfo.setAttrValue(emeta.getAttr(MetaEnum.Schema.attribute), toObject.getSchema());
 					minfo.setAttrValue(emeta.getAttr(MetaEnum.Category.attribute), toObject.getCategory());
-					
+					minfo.setAttrValue(emeta.getAttr(MetaEnum.AccessControllable.attribute), toObject.getAccessControllable());
 					return minfo;
 				}
 				

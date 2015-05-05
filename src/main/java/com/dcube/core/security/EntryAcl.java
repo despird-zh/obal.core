@@ -25,6 +25,10 @@ public class EntryAcl {
 	 **/
 	public EntryAcl(){
 		aces = new ArrayList<EntryAce>();
+		EntryAce owner = new EntryAce(AceType.Owner, null, AcePrivilege.DELETE);
+		aces.add(owner);
+		EntryAce other = new EntryAce(AceType.Other, AceType.Other.name(), AcePrivilege.BROWSE);
+		aces.add(other);
 	}
 	
 	/**
@@ -116,30 +120,38 @@ public class EntryAcl {
 	public EntryAce getEntryAce(AceType type, String name){
 		
 		for(EntryAce e:aces){
-			
-			if(type == e.getType() && e.getName().equals(name))
+			if(type == e.getType() && (type == AceType.Owner || type == AceType.Other)){
 				return e;
+			}else if(type == e.getType() && e.getName().equals(name)){
+				return e;
+			}
 		}
 		
 		return null;
 	}
+	
 	/**
-	 * CheckObject is readable or not
+	 * CheckObject is readable or not ??????? need modification
 	 * 
 	 * @param principal the principal object
 	 * @return boolean true:object could be read on behalf of principal; false:not readable
 	 **/
+	@Deprecated 
 	public boolean checkReadable(Principal principal){
 		
 		AcePrivilege readPriv = AcePrivilege.NONE;
 		
 		for(EntryAce ace:aces){
 			
-			if(AceType.User == ace.getType() && ace.getName().equals(principal.getAccount())){
+			if((AceType.User == ace.getType() || AceType.Owner == ace.getType()) && ace.getName().equals(principal.getAccount())){
 				
 				readPriv = readPriv.priority < ace.getPrivilege().priority ? ace.getPrivilege():readPriv;
 				
 			}else if(AceType.Group == ace.getType() && principal.inGroup(ace.getName())){
+				
+				readPriv = readPriv.priority < ace.getPrivilege().priority ? ace.getPrivilege():readPriv;
+					
+			}else if(AceType.Other == ace.getType()){
 				
 				readPriv = readPriv.priority < ace.getPrivilege().priority ? ace.getPrivilege():readPriv;
 					

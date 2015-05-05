@@ -39,23 +39,22 @@ public class EntryAce implements Comparable<EntryAce> {
 	private Set<String> permissionSet;
 	
 	/**
-	 * Constructor for user ACE item.
+	 * Constructor for user ACE item. default privilege is AcePrivilege.WRITE
 	 * 
-	 * @param combinedValue
-	 *  
+	 * @param type the AceType
+	 * @param name the ace subject name, owner name/user name/ group name/ AclConstants.AceType.Other.name()
 	 **/
-	public EntryAce(AceType TypeEnum, String name){
+	public EntryAce(AceType type, String name){
 		
-		this.type = TypeEnum;
+		this.type = type;
 		this.name = name;
-		this.privilege = AcePrivilege.NONE;
-
+		this.privilege = AcePrivilege.WRITE;
 	}
 	
 	/**
-	 * Constructor for user ACE item.
+	 * Constructor for user ACE item. default AceType.User type
 	 * 
-	 * @param roleName the role name
+	 * @param name the ace subject name, owner name/user name/ group name/ AclConstants.AceType.Other.name()
 	 * @param privilege the access control privilege
 	 *  
 	 **/
@@ -71,7 +70,7 @@ public class EntryAce implements Comparable<EntryAce> {
 	 * Constructor 
 	 * 
 	 * @param TypeEnum the ace type
-	 * @param role the role name
+	 * @param name the ace subject name, owner name/user name/ group name/ AclConstants.AceType.Other.name()
 	 * @param privilege the access control privilege
 	 *  
 	 **/
@@ -86,15 +85,14 @@ public class EntryAce implements Comparable<EntryAce> {
 	/**
 	 * Constructor 
 	 * 
-	 * @param TypeEnum the ace type
-	 * @param role the role name
+	 * @param type the ace type
+	 * @param name the ace subject name, owner name/user name/ group name/ AclConstants.AceType.Other.name()
 	 * @param privilege the access control privilege
-	 *  
+	 * @param permissions the extend business permission
 	 **/
-
-	public EntryAce(AceType TypeEnum,  String name, AcePrivilege privilege, String ... permissions){
+	public EntryAce(AceType type,  String name, AcePrivilege privilege, String ... permissions){
 		
-		this.type = TypeEnum;
+		this.type = type;
 		this.name = name;
 		this.privilege = privilege;
 		
@@ -109,11 +107,18 @@ public class EntryAce implements Comparable<EntryAce> {
 		}
 	}
 	
-	public EntryAce(AceType TypeEnum,  String name, String ... permissions){
+	/**
+	 * Constructor default privilege is AcePrivilege.WRITE
+	 * 
+	 * @param type the ace type
+	 * @param name the ace subject name, owner name/user name/ group name/ AclConstants.AceType.Other.name()
+	 * @param permissions the extend business permission
+	 **/
+	public EntryAce(AceType type,  String name, String ... permissions){
 		
-		this.type = TypeEnum;
+		this.type = type;
 		this.name = name;
-		
+		this.privilege = AcePrivilege.WRITE;
 		if(permissions == null || permissions.length ==0)
 			return;
 		else

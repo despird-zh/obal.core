@@ -89,7 +89,7 @@
 	       <version>2.10</version>
 	      <configuration>    
 	        <includes>    
-	          <include>**/HScanTest.java</include> 
+	          <include>**/HScanTestxxx.java</include> 
 	        </includes>    
 	      </configuration>    
 	  </plugin>

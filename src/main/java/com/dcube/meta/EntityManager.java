@@ -295,6 +295,12 @@ public class EntityManager {
 				MetaEnum.Traceable.qualifier);
 		meta.addAttr(attr);
 		
+		attr = new EntityAttr(MetaEnum.AccessControllable.attribute, 
+				EntityAttr.AttrType.BOOLEAN, 
+				MetaEnum.AccessControllable.colfamily, 
+				MetaEnum.AccessControllable.qualifier);
+		meta.addAttr(attr);
+		
 		attr = new EntityAttr(MetaEnum.Attributes.attribute, 
 				EntityAttr.AttrMode.MAP, 
 				EntityAttr.AttrType.STRING, 

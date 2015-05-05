@@ -71,6 +71,7 @@ public class EntityConstants {
 		Attributes("i_attributes","attributes"),
 		Schema("i_schema","schema"),
 		AccessorName("i_accessor_name","accessorname"),
+		AccessControllable("i_accessor_control","accessorcontrol"),
 		Category("i_category","category");
 		
 		public final String attribute;
