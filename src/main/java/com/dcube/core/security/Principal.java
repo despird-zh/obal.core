@@ -226,18 +226,6 @@ public class Principal extends EntryParser{
 		
 		return rolemap == null? null:rolemap.keySet();
 	}
-		
-	/** get the attribute value */
-	private <K> K getAttrValue(String attribute, Class<K> type){
-		EntityEntry temp = (EntityEntry)rawEntry;
-		return temp.getAttrValue(attribute, type);
-	}
-	
-	/** set the attribute value */
-	private void setAttrValue(String attribute, Object value){
-		EntityEntry temp = (EntityEntry)rawEntry;		
-		temp.changeAttrValue(attribute, value);
-	}
 	
 	/**
 	 * Set raw generic entry 

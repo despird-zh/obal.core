@@ -220,4 +220,24 @@ public class EntryParser {
 		else
 			throw new UnsupportedOperationException("the rawentry object is not EntityEntry"); 
 	}
+	
+	/** 
+	 * Get the attribute value 
+	 * @param attribute the attribute name
+	 * @param type the class object to target value data
+	 **/
+	protected <K> K getAttrValue(String attribute, Class<K> type){
+		EntityEntry temp = (EntityEntry)rawEntry;
+		return temp.getAttrValue(attribute, type);
+	}
+	
+	/** 
+	 * Set the attribute value, via this method the attribute will be set changed flag
+	 * @param attribute the attribute name
+	 * @param type the class object to target value data
+	 * */
+	protected void setAttrValue(String attribute, Object value){
+		EntityEntry temp = (EntityEntry)rawEntry;		
+		temp.changeAttrValue(attribute, value);
+	}
 }
