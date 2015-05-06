@@ -1,6 +1,5 @@
 package com.dcube.accessor.hbase;
 
-import com.dcube.core.EntryKey;
 import com.dcube.core.IEntryConverter;
 import com.dcube.core.accessor.TraceableEntry;
 import com.dcube.core.hbase.HEntityAccessor;
@@ -31,9 +30,9 @@ public class UserInfoEAccessor extends HEntityAccessor<TraceableEntry> {
 				@Override
 				public Principal toTarget(TraceableEntry fromObject)
 						throws BaseException {
-					EntryKey key = fromObject.getEntryKey();
-					Principal principal = new Principal(key.getKey());
-					principal.setGenericEntry(fromObject);
+					
+					Principal principal = new Principal(fromObject);
+					
 					return principal;
 				}
 

@@ -19,8 +19,6 @@
  */
 package com.dcube.accessor.hbase;
 
-import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +28,6 @@ import com.dcube.core.accessor.EntityEntry;
 import com.dcube.core.accessor.TraceableEntry;
 import com.dcube.core.hbase.HEntityAccessor;
 import com.dcube.exception.BaseException;
-import com.dcube.meta.EntityAttr;
 import com.dcube.meta.EntityConstants;
 import com.dcube.meta.EntityManager;
 import com.dcube.meta.EntityMeta;

@@ -158,6 +158,7 @@ public class MetaGAccessor extends HGenericAccessor implements IMetaGAccessor{
 			IEntryConverter<EntityEntry,EntityMeta> converter = metaAccr.getEntryConverter(EntityMeta.class);
 			EntityEntry minfo = metaAccr.doGetEntry(entityName);
 			meta = converter.toTarget(minfo);
+			@SuppressWarnings("unchecked")
 			Map<String, String> attrMap =(minfo.getAttrValue(MetaEnum.Attributes.attribute,Map.class));
 			
 			for(Map.Entry<String, String> et:attrMap.entrySet()){

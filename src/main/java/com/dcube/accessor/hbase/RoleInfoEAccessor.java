@@ -31,8 +31,8 @@ public class RoleInfoEAccessor extends HEntityAccessor<TraceableEntry>{
 				public UserRole toTarget(TraceableEntry fromObject)
 						throws BaseException {
 					
-					UserRole role = new UserRole();
-					role.setGenericEntry(fromObject);
+					UserRole role = new UserRole(fromObject);
+				
 					return role;
 				}
 

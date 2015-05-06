@@ -1,21 +1,11 @@
 package com.dcube.accessor.hbase;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
-import com.dcube.core.EntryKey;
 import com.dcube.core.IEntryConverter;
-import com.dcube.core.TraceInfo;
 import com.dcube.core.accessor.TraceableEntry;
 import com.dcube.core.hbase.HEntityAccessor;
 import com.dcube.core.security.UserGroup;
-import com.dcube.core.security.UserRole;
 import com.dcube.exception.BaseException;
 import com.dcube.meta.EntityConstants;
-import com.dcube.meta.EntityConstants.GroupEnum;
-import com.dcube.meta.EntityManager;
-import com.dcube.meta.EntityMeta;
 
 public class GroupInfoEAccessor extends HEntityAccessor<TraceableEntry>{
 
@@ -41,8 +31,7 @@ public class GroupInfoEAccessor extends HEntityAccessor<TraceableEntry>{
 				public UserGroup toTarget(TraceableEntry fromObject)
 						throws BaseException {
 					
-					UserGroup group = new UserGroup();
-					group.setGenericEntry(fromObject);
+					UserGroup group = new UserGroup(fromObject);
 					return group;
 				}
 

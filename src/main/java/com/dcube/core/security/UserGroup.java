@@ -7,15 +7,10 @@ import java.util.Set;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-import com.dcube.core.EntryKey;
-import com.dcube.core.TraceInfo;
-import com.dcube.core.accessor.EntityEntry;
 import com.dcube.core.accessor.EntryParser;
 import com.dcube.core.accessor.TraceableEntry;
 import com.dcube.meta.EntityConstants;
 import com.dcube.meta.EntityConstants.GroupEnum;
-import com.dcube.meta.EntityConstants.RoleEnum;
-import com.dcube.meta.EntityConstants.UserEnum;
 
 /**
  * UserGroup collects users from same business entity or organization,
@@ -37,9 +32,19 @@ import com.dcube.meta.EntityConstants.UserEnum;
  **/
 public class UserGroup extends EntryParser{
 	
+	/**
+	 * Default constructor 
+	 **/
 	public UserGroup(){
 		super();
 		rawEntry = new TraceableEntry(EntityConstants.ENTITY_USER_GROUP,null);
+	}
+	
+	/**
+	 * Constructor with TraceableEntry
+	 **/
+	public UserGroup(TraceableEntry rawEntry){
+		super(rawEntry);
 	}
 	/**
 	 * the constructor 

@@ -7,7 +7,6 @@ import java.util.Set;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-import com.dcube.core.accessor.EntityEntry;
 import com.dcube.core.accessor.EntryParser;
 import com.dcube.core.accessor.TraceableEntry;
 import com.dcube.meta.EntityConstants;
@@ -26,9 +25,19 @@ import com.dcube.meta.EntityConstants.UserEnum;
  **/
 public class UserRole extends EntryParser{
 
+	/**
+	 * Default constructor 
+	 **/
 	public UserRole(){
 		super();
 		rawEntry = new TraceableEntry(EntityConstants.ENTITY_USER_ROLE,null);
+	}
+	
+	/**
+	 * Constructor with TraceableEntry
+	 **/
+	public UserRole(TraceableEntry rawEntry){
+		super(rawEntry);
 	}
 	
 	/**

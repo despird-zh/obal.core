@@ -45,6 +45,13 @@ import com.dcube.meta.EntityConstants.UserEnum;
 public class Principal extends EntryParser{
 
 	/**
+	 * Constructor with TraceableEntry
+	 **/
+	public Principal(TraceableEntry rawEntry){
+		super(rawEntry);
+	}
+	
+	/**
 	 * Constructor for new Principal
 	 * 
 	 * @param key the key information
