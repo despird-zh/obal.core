@@ -225,6 +225,8 @@ public class EntryParser {
 	 * Get the attribute value 
 	 * @param attribute the attribute name
 	 * @param type the class object to target value data
+	 * 
+	 * @return K the attribute value
 	 **/
 	protected <K> K getAttrValue(String attribute, Class<K> type){
 		EntityEntry temp = (EntityEntry)rawEntry;
@@ -232,7 +234,9 @@ public class EntryParser {
 	}
 	
 	/** 
-	 * Set the attribute value, via this method the attribute will be set changed flag
+	 * Set the attribute value, via this method the attribute will be 
+	 * set whit changed flag
+	 * 
 	 * @param attribute the attribute name
 	 * @param type the class object to target value data
 	 * */
