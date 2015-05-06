@@ -229,8 +229,11 @@ public class EntryParser {
 	 * @return K the attribute value
 	 **/
 	protected <K> K getAttrValue(String attribute, Class<K> type){
-		EntityEntry temp = (EntityEntry)rawEntry;
-		return temp.getAttrValue(attribute, type);
+		if(rawEntry instanceof EntityEntry){
+			EntityEntry temp = (EntityEntry)rawEntry;
+			return temp.getAttrValue(attribute, type);
+		}else
+			throw new UnsupportedOperationException("Not EntityEntry, not support this method"); 
 	}
 	
 	/** 
@@ -241,7 +244,10 @@ public class EntryParser {
 	 * @param type the class object to target value data
 	 * */
 	protected void setAttrValue(String attribute, Object value){
-		EntityEntry temp = (EntityEntry)rawEntry;		
-		temp.changeAttrValue(attribute, value);
+		if(rawEntry instanceof EntityEntry){
+			EntityEntry temp = (EntityEntry)rawEntry;		
+			temp.changeAttrValue(attribute, value);
+		}else
+			throw new UnsupportedOperationException("Not EntityEntry, not support this method"); 
 	}
 }
