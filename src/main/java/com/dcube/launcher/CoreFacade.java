@@ -1,11 +1,7 @@
 package com.dcube.launcher;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.ServiceLoader;
-import java.util.concurrent.locks.ReentrantLock;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,7 +11,7 @@ import com.dcube.core.accessor.EntityEntry;
 import com.dcube.disruptor.EventDispatcher;
 import com.dcube.exception.BaseException;
 import com.dcube.index.IndexHooker;
-import com.dcube.launcher.ILifecycle.LifeState;
+import com.dcube.launcher.Lifecycle.LifeState;
 
 /**
  * CoreLauncher is the core start entrance.
@@ -56,17 +52,17 @@ public class CoreFacade{
 	/**
 	 * Start core and fire ILifecycle.State.START
 	 **/
-	public static void start() throws BaseException{
+	public static void startup() throws BaseException{
 		
-		coreDelegator.start();
+		coreDelegator.startup();
 	}
 	
 	/**
 	 * Stop core and fire ILifecycle.State.STOP
 	 **/
-	public static void stop()throws BaseException{
+	public static void shutdown()throws BaseException{
 		
-		coreDelegator.stop();
+		coreDelegator.shutdown();
 	}
 	
 	/**
@@ -106,17 +102,9 @@ public class CoreFacade{
 	/**
 	 * Delegate class to implements the ILifecycle method support. 
 	 **/
-	private static class CoreDelegator implements ILifecycle{
+	private static class CoreDelegator extends Lifecycle{
 		
 		static Logger LOGGER = LoggerFactory.getLogger(CoreFacade.class);
-		/** current state */
-		private LifeState state = LifeState.UNKNOWN;
-		/** entrant lock */
-		private ReentrantLock lock = new ReentrantLock(); // lock
-		/** hooker list*/
-		private ArrayList<LifecycleHooker> hookers = new ArrayList<LifecycleHooker>();
-		/** message list */
-		private List<LifeCycleMessage> messageList = new ArrayList<LifeCycleMessage>();
 		
 		/**
 		 * Default constructor 
@@ -140,7 +128,7 @@ public class CoreFacade{
 		@Override
 		public void initial() throws BaseException{
 			
-			dispatchEvent(LifeState.INITIAL);
+			fireEvent(LifeState.INITIAL);
 			
 			// register audit event hooker
 			AuditHooker auditHooker = new AuditHooker();
@@ -157,92 +145,20 @@ public class CoreFacade{
 		}
 		
 		@Override
-		public void start() throws BaseException{
+		public void startup() throws BaseException{
 			
-			this.state = LifeState.STARTUP;
-			dispatchEvent(LifeState.STARTUP);
+			state = LifeState.STARTUP;
+			fireEvent(LifeState.STARTUP);
 			this.state = LifeState.RUNNING;
 		}
 		
 		@Override
-		public void stop()throws BaseException{
+		public void shutdown()throws BaseException{
 			
-			dispatchEvent(LifeState.SHUTDOWN);
-			this.state = LifeState.SHUTDOWN;
+			fireEvent(LifeState.SHUTDOWN);
+			state = LifeState.SHUTDOWN;
 		}
-		
-		@Override
-		public LifeState state() {
 			
-			return this.state;
-		}
-
-		@Override
-		public void regLifecycleHooker(LifecycleHooker hooker) {
-			
-			lock.lock();
-			int count = hookers.size()-1;
-			
-			if(count < 0){
-				hookers.add( hooker);
-				hooker.setLauncher(this);
-			}else{
-				while(count >=0){
-					
-					if( hookers.get(count).priority() == hooker.priority() ){
-						hookers.add(count, hooker);
-						break;
-					}					
-					else if( hookers.get(count).priority() > hooker.priority() ){
-						hookers.add(count +1, hooker);
-						break;
-					}					
-					else if(count == 0){
-						hookers.add(count, hooker);
-						break;
-					}
-					count--;
-				}
-				hooker.setLauncher(this);
-			}
-			lock.unlock();
-		}
-
-		@Override
-		public void unregLifecycleHooker(LifecycleHooker listener) {
-			lock.lock();
-			hookers.remove(listener);
-			lock.unlock();
-		}
-
-		@Override
-		public void clearLifecycleHooker() {
-			lock.lock();
-			hookers.clear();
-			lock.unlock();
-		}
-
-		/**
-		 * Send event to different listener. 
-		 **/
-		private void dispatchEvent(LifeState state){
-			lock.lock();
-			int count = this.hookers.size();
-			for(int i = 0 ; i < count ; i++){
-				
-				hookers.get(i).onEvent(state);
-			}
-			lock.unlock();
-		}
-
-		@Override
-		public void receiveFeedback(String hookerName, boolean errorFlag,
-				Date time, String message) {
-			LifeCycleMessage msg = new LifeCycleMessage(time, errorFlag, message);
-			LOGGER.debug("Feedback -> {} - {} - {}", new Object[]{time,errorFlag?"ERROR":"NORMAL",message});
-			messageList.add(msg);
-		}
-	
 	}
 	
 	/** Inner Message class */

@@ -5,7 +5,7 @@ import java.util.Date;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-import com.dcube.launcher.ILifecycle.LifeState;
+import com.dcube.launcher.Lifecycle.LifeState;
 
 public abstract class LifecycleHooker {
 	
@@ -15,7 +15,7 @@ public abstract class LifecycleHooker {
 		this.priority = priority;
 	}
 	/** The ILifecycle launcher */
-	private ILifecycle launcher;
+	private Lifecycle launcher;
 	/** default name */
 	private String name = "listener";
 	/** the priority of hooker */
@@ -76,7 +76,7 @@ public abstract class LifecycleHooker {
 	 * Set the ILifecycle launcher
 	 * @param launcher the launcher of application
 	 **/
-	public void setLauncher(ILifecycle launcher){
+	public void setLauncher(Lifecycle launcher){
 		
 		this.launcher = launcher;
 	}
@@ -88,7 +88,7 @@ public abstract class LifecycleHooker {
 	 **/
 	public void sendFeedback(boolean errorFlag, String message){
 		
-		launcher.receiveFeedback(this.name, errorFlag, new Date(), message);
+		launcher.feedback(this.name, errorFlag, new Date(), message);
 	}
 	
 	@Override

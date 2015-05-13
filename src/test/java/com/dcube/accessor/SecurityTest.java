@@ -29,7 +29,7 @@ public class SecurityTest extends BaseTester{
 
 	public void test000Initial() throws Exception{
 		CoreFacade.initial();
-		CoreFacade.start();
+		CoreFacade.startup();
 	}
 	
 	public static String groupname = "demogroup";
@@ -166,7 +166,7 @@ public class SecurityTest extends BaseTester{
 	
 	public void test999End() throws Exception{
 		
-		  CoreFacade.stop();
+		  CoreFacade.shutdown();
 	}
 	
 	protected void setUp() throws Exception {  

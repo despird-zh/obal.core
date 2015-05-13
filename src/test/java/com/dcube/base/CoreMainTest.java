@@ -31,7 +31,7 @@ public class CoreMainTest extends BaseTester{
 		
 		try {
 			CoreFacade.initial();
-			CoreFacade.start();
+			CoreFacade.startup();
 		} catch (BaseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
