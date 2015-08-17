@@ -23,15 +23,15 @@ import java.util.Map;
  *  
  *  -= basic privilege information 
  *  owner privilege qualifier : o: /value :[privilege]
- *  owner privilege qualifier : o:xxxx /value :blank val
- *  other privilege qualifier : e: /value :[privilege]
- *  other privilege qualifier : e:xxxx /value :blank val
+ *  owner privilege qualifier : o:xxxx /value :blank val -- owner operation
+ *  other privilege qualifier : e: /value :[privilege] -- every one's privilege
+ *  other privilege qualifier : e:xxxx /value :blank val -- everyone's operation
  *  
  *  -= extend privilege information 
- *  user privilege qualifier : u:[xx1]:  / value :[privilege]
- *  user privilege qualifier : u:[xx1]:xxx  / value :blank val
- *  group privilege qualifier : g:[xx2]:  / value :[privilege]
- *  group privilege qualifier : g:[xx2]:xxx  / value :blank val
+ *  user privilege qualifier : u:[xx1]:  / value :[privilege] user's privilege
+ *  user privilege qualifier : u:[xx1]:xxx  / value :blank val user's operation
+ *  group privilege qualifier : g:[xx2]:  / value :[privilege] group's privilege
+ *  group privilege qualifier : g:[xx2]:xxx  / value :blank val group's operation
  *  </pre>
  *  
  **/
